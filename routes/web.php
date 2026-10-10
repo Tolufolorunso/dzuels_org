@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\GalleryAlbumController as AdminGalleryAlbumController;
 use App\Http\Controllers\Admin\InquiryController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\ProgrammeController as AdminProgrammeController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\TeamMemberController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DonateController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GalleryController;
@@ -36,6 +38,8 @@ Route::get('/get-involved', [GetInvolvedController::class, 'index'])->name('get-
 Route::post('/get-involved/volunteer', [GetInvolvedController::class, 'storeVolunteer'])->middleware('throttle:6,1')->name('get-involved.volunteer');
 Route::post('/get-involved/partner', [GetInvolvedController::class, 'storePartner'])->middleware('throttle:6,1')->name('get-involved.partner');
 Route::redirect('/partner', '/get-involved', 301);
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:6,1')->name('contact.submit');
 
 /*
 |--------------------------------------------------------------------------
@@ -86,6 +90,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/inquiries/volunteers/{volunteer}', [InquiryController::class, 'destroyVolunteer'])->name('inquiries.volunteers.destroy');
         Route::patch('/inquiries/partners/{partner}', [InquiryController::class, 'updatePartnerStatus'])->name('inquiries.partners.status');
         Route::delete('/inquiries/partners/{partner}', [InquiryController::class, 'destroyPartner'])->name('inquiries.partners.destroy');
+
+        // Contact Messages Management
+        Route::get('/messages', [ContactMessageController::class, 'index'])->name('messages.index');
+        Route::patch('/messages/{message}/status', [ContactMessageController::class, 'updateStatus'])->name('messages.status');
+        Route::delete('/messages/{message}', [ContactMessageController::class, 'destroy'])->name('messages.destroy');
 
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     });
