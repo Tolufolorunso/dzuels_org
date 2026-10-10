@@ -3,11 +3,13 @@
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
+use App\Http\Controllers\Admin\GalleryAlbumController as AdminGalleryAlbumController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\ProgrammeController as AdminProgrammeController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\TeamMemberController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProgrammeController;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +26,8 @@ Route::get('/programmes/{slug}', [ProgrammeController::class, 'show'])->name('pr
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/{slug}', [EventController::class, 'show'])->name('events.show');
 Route::post('/events/{slug}/register', [EventController::class, 'register'])->name('events.register');
+Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
+Route::get('/gallery/{slug}', [GalleryController::class, 'album'])->name('gallery.album');
 
 /*
 |--------------------------------------------------------------------------
@@ -60,6 +64,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/events/{event}/registrations', [AdminEventController::class, 'registrations'])->name('events.registrations');
         Route::delete('/events/{event}/registrations/{registration}', [AdminEventController::class, 'destroyRegistration'])->name('events.registrations.destroy');
         Route::resource('events', AdminEventController::class)->except(['show']);
+
+        // Gallery Management
+        Route::patch('/gallery/{album}/toggle', [AdminGalleryAlbumController::class, 'toggleActive'])->name('gallery.toggle');
+        Route::get('/gallery/{album}/photos', [AdminGalleryAlbumController::class, 'photos'])->name('gallery.photos');
+        Route::post('/gallery/{album}/photos', [AdminGalleryAlbumController::class, 'uploadPhotos'])->name('gallery.photos.upload');
+        Route::delete('/gallery/{album}/photos/{photo}', [AdminGalleryAlbumController::class, 'destroyPhoto'])->name('gallery.photos.destroy');
+        Route::resource('gallery', AdminGalleryAlbumController::class)->parameters(['gallery' => 'album'])->except(['show']);
 
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     });

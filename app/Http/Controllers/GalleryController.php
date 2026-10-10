@@ -1,0 +1,51 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\GalleryAlbum;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
+
+class GalleryController extends Controller
+{
+    /**
+     * Display the public gallery index with interactive collections and photo masonry.
+     */
+    public function index(Request $request): View
+    {
+        $albums = GalleryAlbum::active()
+            ->ordered()
+            ->with(['photos' => function ($query) {
+                $query->orderBy('sort_order', 'asc')->orderBy('id', 'asc');
+            }])
+            ->get();
+
+        $activeSlug = $request->query('collection');
+
+        return view('gallery.index', compact('albums', 'activeSlug'));
+    }
+
+    /**
+     * Display a specific gallery album / collection.
+     */
+    public function album(string $slug): View
+    {
+        $selectedAlbum = GalleryAlbum::active()
+            ->where('slug', $slug)
+            ->with(['photos' => function ($query) {
+                $query->orderBy('sort_order', 'asc')->orderBy('id', 'asc');
+            }])
+            ->firstOrFail();
+
+        $albums = GalleryAlbum::active()
+            ->ordered()
+            ->with(['photos' => function ($query) {
+                $query->orderBy('sort_order', 'asc')->orderBy('id', 'asc');
+            }])
+            ->get();
+
+        $activeSlug = $selectedAlbum->slug;
+
+        return view('gallery.index', compact('albums', 'activeSlug', 'selectedAlbum'));
+    }
+}

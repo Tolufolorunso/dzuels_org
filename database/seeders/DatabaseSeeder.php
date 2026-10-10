@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             PartnerSeeder::class,
             ProgrammeSeeder::class,
             EventSeeder::class,
+            GallerySeeder::class,
         ]);
     }
 }

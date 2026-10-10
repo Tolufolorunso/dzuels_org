@@ -1,0 +1,61 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class GalleryPhoto extends Model
+{
+    use HasFactory;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        'gallery_album_id',
+        'image_path',
+        'caption',
+        'alt_text',
+        'sort_order',
+    ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'sort_order' => 'integer',
+        ];
+    }
+
+    /**
+     * Get the album this photo belongs to.
+     */
+    public function album(): BelongsTo
+    {
+        return $this->belongsTo(GalleryAlbum::class, 'gallery_album_id');
+    }
+
+    /**
+     * Get the resolved public URL for the photo.
+     */
+    public function getImageUrlAttribute(): string
+    {
+        if (str_starts_with($this->image_path, 'http://') || str_starts_with($this->image_path, 'https://')) {
+            return $this->image_path;
+        }
+
+        if (str_starts_with($this->image_path, 'front/') || str_starts_with($this->image_path, 'uploads/')) {
+            return asset($this->image_path);
+        }
+
+        return asset('uploads/gallery/'.$this->image_path);
+    }
+}
