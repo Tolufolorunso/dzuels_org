@@ -1,27 +1,409 @@
 <x-layout>
-    <section class="py-20 px-4 sm:px-6 lg:px-8 bg-linear-to-b from-[var(--bg-alt)] to-[var(--bg)] transition-colors">
-        <div class="max-w-5xl mx-auto text-center space-y-6">
-            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--accent-cream)] text-maroon shadow-xs">
-                Dzuels Educational Foundation
+    {{-- 1. Hero Section --}}
+    <section class="relative bg-maroon text-white py-20 sm:py-28 lg:py-36 overflow-hidden">
+        {{-- Background Image with Gradient Overlay --}}
+        <div class="absolute inset-0 z-0">
+            <img src="{{ asset('front/images/home_1.webp') }}" 
+                 alt="Dzuels Educational Foundation students in a classroom" 
+                 class="w-full h-full object-cover object-center opacity-30" />
+            <div class="absolute inset-0 bg-linear-to-r from-maroon/95 via-maroon/90 to-[#242F40]/80"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl space-y-6">
+                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--accent-cream)]/20 text-[var(--accent-cream)] border border-[var(--accent-cream)]/30 backdrop-blur-xs">
+                    Dzuels Educational Foundation
+                </span>
+                
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
+                    Addressing poverty through quality <span class="script-accent text-[var(--accent-cream)] text-5xl sm:text-6xl lg:text-7xl font-normal">education</span> and skills acquisition
+                </h1>
+
+                <p class="text-lg sm:text-xl text-white/90 leading-relaxed max-w-2xl">
+                    Empowering indigent Nigerian children, youth, and educators with free digital literacy, school support, leadership mentoring, and community welfare.
+                </p>
+
+                <div class="flex flex-wrap items-center gap-4 pt-4">
+                    <a href="{{ url('/donate') }}" 
+                       class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-bold bg-white text-maroon hover:bg-[var(--accent-cream)] transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer">
+                        Donate Now
+                    </a>
+                    <a href="{{ url('/get-involved') }}" 
+                       class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-semibold border-2 border-white/80 text-white hover:bg-white/10 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer">
+                        Become a Volunteer
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- 2. Floating Impact Statistics Band --}}
+    <section class="relative z-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 sm:-mt-16 mb-8">
+        <div class="bg-[var(--surface)] border border-[var(--border)] rounded-2xl sm:rounded-3xl p-6 sm:p-10 shadow-xl transition-colors">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-0 divide-y md:divide-y-0 md:divide-x divide-[var(--border)]">
+                {{-- Stat 1: ICT Students --}}
+                <div class="flex flex-col gap-2 pt-4 first:pt-0 md:pt-0 md:px-6 first:md:pl-0">
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-4xl sm:text-5xl font-black text-[var(--heading)] tracking-tight">
+                            {{ number_format($stats['ict_students'] ?? 165) }}
+                        </span>
+                        <span class="text-sm font-bold text-mint font-sans">+</span>
+                    </div>
+                    <span class="text-sm sm:text-base font-medium text-[var(--text)]">
+                        Ekiti students in ICT training
+                    </span>
+                    <div class="w-full bg-[var(--border-subtle)] h-1.5 rounded-full overflow-hidden mt-3">
+                        <div class="bg-mint h-full rounded-full w-[85%]"></div>
+                    </div>
+                </div>
+
+                {{-- Stat 2: Literacy Intervention --}}
+                <div class="flex flex-col gap-2 pt-6 md:pt-0 md:px-6">
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-4xl sm:text-5xl font-black text-[var(--heading)] tracking-tight">
+                            {{ number_format($stats['literacy_students'] ?? 591) }}
+                        </span>
+                        <span class="text-sm font-bold text-crimson font-sans">+</span>
+                    </div>
+                    <span class="text-sm sm:text-base font-medium text-[var(--text)]">
+                        Ekiti students in literacy intervention
+                    </span>
+                    <div class="w-full bg-[var(--border-subtle)] h-1.5 rounded-full overflow-hidden mt-3">
+                        <div class="bg-maroon dark:bg-crimson h-full rounded-full w-[92%]"></div>
+                    </div>
+                </div>
+
+                {{-- Stat 3: Schools Supported --}}
+                <div class="flex flex-col gap-2 pt-6 md:pt-0 md:px-6 last:md:pr-0">
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-4xl sm:text-5xl font-black text-[var(--heading)] tracking-tight">
+                            {{ number_format($stats['schools_supported'] ?? 15) }}
+                        </span>
+                        <span class="text-sm font-bold text-amber-500 font-sans">+</span>
+                    </div>
+                    <span class="text-sm sm:text-base font-medium text-[var(--text)]">
+                        Schools Supported
+                    </span>
+                    <div class="w-full bg-[var(--border-subtle)] h-1.5 rounded-full overflow-hidden mt-3">
+                        <div class="bg-[var(--accent-cream)] dark:bg-amber-400 h-full rounded-full w-[75%]"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- 3. Who We Are Section --}}
+    <section class="py-16 sm:py-24 bg-[var(--bg)] transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                {{-- Image Frame with Offset Cream Border --}}
+                <div class="relative mx-auto lg:mx-0 w-full max-w-lg lg:max-w-none">
+                    <div class="absolute -top-3 -left-3 sm:-top-4 sm:-left-4 w-full h-full border-3 border-[var(--accent-cream)] rounded-3xl z-0 pointer-events-none"></div>
+                    <img src="{{ asset('front/images/about_1.webp') }}" 
+                         alt="Dzuels foundation teachers and beneficiaries in an interactive session" 
+                         class="relative z-10 w-full h-[360px] sm:h-[420px] object-cover rounded-3xl shadow-xl border border-[var(--border)]" />
+                </div>
+
+                {{-- Text Content --}}
+                <div class="space-y-6">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-widest text-crimson dark:text-[var(--accent-cream)]">
+                            Who We Are
+                        </span>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-[var(--heading)] tracking-tight mt-2">
+                            Transforming lives page by page
+                        </h2>
+                    </div>
+
+                    <p class="text-base sm:text-lg text-[var(--text)] leading-relaxed">
+                        Founded on 22nd June 2015 and registered as a charity in Nigeria, Dzuels Educational Foundation is dedicated to breaking the cycle of poverty by unlocking potential through education and practical skills.
+                    </p>
+
+                    <p class="text-base sm:text-lg text-[var(--text)] leading-relaxed">
+                        Ours is an integrated approach to the total well-being of the child: paying school fees, providing educational materials, equipping non-profit schools, mentoring beneficiaries, facilitating transformational leadership training, feeding families, and enabling health services.
+                    </p>
+
+                    <div class="pt-2">
+                        <a href="{{ url('/about') }}" 
+                           class="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold border-2 border-maroon text-maroon hover:bg-maroon hover:text-white dark:border-[var(--accent-cream)] dark:text-[var(--accent-cream)] dark:hover:bg-[var(--accent-cream)] dark:hover:text-maroon transition-all duration-200">
+                            Read Our Full Story <span aria-hidden="true">&rarr;</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- 4. Vision & Mission Section --}}
+    <section class="py-16 sm:py-20 bg-[var(--bg-alt)] transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {{-- Vision Card --}}
+                <div class="bg-[var(--surface)] border border-[var(--border)] rounded-2xl sm:rounded-3xl p-8 sm:p-10 shadow-sm hover:shadow-md transition-all duration-200 flex gap-6 items-start">
+                    <div class="w-14 h-14 rounded-2xl bg-[var(--accent-cream-light)] dark:bg-[var(--surface-alt)] flex items-center justify-center shrink-0 text-2xl text-maroon dark:text-[var(--accent-cream)] shadow-xs">
+                        👁️
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-2xl font-bold text-[var(--heading)]">Our Vision</h3>
+                        <p class="text-[var(--text)] leading-relaxed text-base sm:text-lg">
+                            To alleviate poverty through quality education and lifelong skills acquisition.
+                        </p>
+                    </div>
+                </div>
+
+                {{-- Mission Card --}}
+                <div class="bg-[var(--surface)] border border-[var(--border)] rounded-2xl sm:rounded-3xl p-8 sm:p-10 shadow-sm hover:shadow-md transition-all duration-200 flex gap-6 items-start">
+                    <div class="w-14 h-14 rounded-2xl bg-[var(--accent-cream-light)] dark:bg-[var(--surface-alt)] flex items-center justify-center shrink-0 text-2xl text-maroon dark:text-[var(--accent-cream)] shadow-xs">
+                        🎯
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-2xl font-bold text-[var(--heading)]">Our Mission</h3>
+                        <p class="text-[var(--text)] leading-relaxed text-base sm:text-lg">
+                            To make quality education accessible to every child within reach, regardless of circumstance.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- 5. DRNICER Values Band --}}
+    <section class="py-16 sm:py-20 bg-maroon text-white transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12 space-y-2">
+                <h3 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                    The DRNICER Principles
+                </h3>
+                <p class="text-[var(--accent-cream)] text-sm sm:text-base">
+                    The core values that guide our mentors, volunteers, and beneficiaries
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-4">
+                {{-- D --}}
+                <div class="bg-white/10 hover:bg-white/15 border border-white/15 hover:border-[var(--accent-cream)] rounded-2xl p-5 text-center transition-all duration-200 hover:-translate-y-1">
+                    <div class="text-3xl sm:text-4xl font-black text-[var(--accent-cream)] leading-none mb-2">D</div>
+                    <div class="text-xs sm:text-sm font-semibold tracking-wide text-white">Discipline</div>
+                </div>
+                {{-- R --}}
+                <div class="bg-white/10 hover:bg-white/15 border border-white/15 hover:border-[var(--accent-cream)] rounded-2xl p-5 text-center transition-all duration-200 hover:-translate-y-1">
+                    <div class="text-3xl sm:text-4xl font-black text-[var(--accent-cream)] leading-none mb-2">R</div>
+                    <div class="text-xs sm:text-sm font-semibold tracking-wide text-white">Responsibility</div>
+                </div>
+                {{-- N --}}
+                <div class="bg-white/10 hover:bg-white/15 border border-white/15 hover:border-[var(--accent-cream)] rounded-2xl p-5 text-center transition-all duration-200 hover:-translate-y-1">
+                    <div class="text-3xl sm:text-4xl font-black text-[var(--accent-cream)] leading-none mb-2">N</div>
+                    <div class="text-xs sm:text-sm font-semibold tracking-wide text-white">No-Excuse</div>
+                </div>
+                {{-- I --}}
+                <div class="bg-white/10 hover:bg-white/15 border border-white/15 hover:border-[var(--accent-cream)] rounded-2xl p-5 text-center transition-all duration-200 hover:-translate-y-1">
+                    <div class="text-3xl sm:text-4xl font-black text-[var(--accent-cream)] leading-none mb-2">I</div>
+                    <div class="text-xs sm:text-sm font-semibold tracking-wide text-white">Integrity</div>
+                </div>
+                {{-- C --}}
+                <div class="bg-white/10 hover:bg-white/15 border border-white/15 hover:border-[var(--accent-cream)] rounded-2xl p-5 text-center transition-all duration-200 hover:-translate-y-1">
+                    <div class="text-3xl sm:text-4xl font-black text-[var(--accent-cream)] leading-none mb-2">C</div>
+                    <div class="text-xs sm:text-sm font-semibold tracking-wide text-white">Compassion</div>
+                </div>
+                {{-- E --}}
+                <div class="bg-white/10 hover:bg-white/15 border border-white/15 hover:border-[var(--accent-cream)] rounded-2xl p-5 text-center transition-all duration-200 hover:-translate-y-1">
+                    <div class="text-3xl sm:text-4xl font-black text-[var(--accent-cream)] leading-none mb-2">E</div>
+                    <div class="text-xs sm:text-sm font-semibold tracking-wide text-white">Excellence</div>
+                </div>
+                {{-- R --}}
+                <div class="bg-white/10 hover:bg-white/15 border border-white/15 hover:border-[var(--accent-cream)] rounded-2xl p-5 text-center transition-all duration-200 hover:-translate-y-1">
+                    <div class="text-3xl sm:text-4xl font-black text-[var(--accent-cream)] leading-none mb-2">R</div>
+                    <div class="text-xs sm:text-sm font-semibold tracking-wide text-white">Respect</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- 6. Our Causes Section --}}
+    <section class="py-20 lg:py-28 bg-[var(--bg)] transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+                <span class="text-xs font-bold uppercase tracking-widest text-crimson dark:text-[var(--accent-cream)]">
+                    Our Causes
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-[var(--heading)] tracking-tight">
+                    Holistic support for youth & community development
+                </h2>
+                <p class="text-[var(--text-muted)] text-base sm:text-lg">
+                    We combine direct education sponsorship with family stability and health awareness.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                {{-- Image Column --}}
+                <div class="lg:col-span-5">
+                    <img src="{{ asset('front/images/cause.webp') }}" 
+                         alt="Nigerian children and community beneficiaries supported by Dzuels Foundation" 
+                         class="w-full h-[380px] sm:h-[440px] object-cover rounded-3xl shadow-xl border border-[var(--border)]" />
+                </div>
+
+                {{-- Checklist Column --}}
+                <div class="lg:col-span-7 space-y-6">
+                    <span class="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-bold bg-[var(--accent-cream)] text-maroon">
+                        Integrated Intervention
+                    </span>
+
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-[var(--heading)] leading-snug">
+                        We empower indigent children across 8 key pillars
+                    </h3>
+
+                    <p class="text-[var(--text)] text-base leading-relaxed">
+                        Every intervention is targeted to keep children in classrooms and give youth real 21st-century earning capabilities.
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <div class="flex items-center gap-3">
+                            <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0">✓</span>
+                            <span class="text-sm sm:text-base font-medium text-[var(--text)]">Paying school fees</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0">✓</span>
+                            <span class="text-sm sm:text-base font-medium text-[var(--text)]">Supplying books & kits</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0">✓</span>
+                            <span class="text-sm sm:text-base font-medium text-[var(--text)]">Equipping non-profit labs</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0">✓</span>
+                            <span class="text-sm sm:text-base font-medium text-[var(--text)]">Mentoring beneficiaries</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0">✓</span>
+                            <span class="text-sm sm:text-base font-medium text-[var(--text)]">Transformational leadership</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0">✓</span>
+                            <span class="text-sm sm:text-base font-medium text-[var(--text)]">Feeding indigent families</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0">✓</span>
+                            <span class="text-sm sm:text-base font-medium text-[var(--text)]">Enabling health services</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0">✓</span>
+                            <span class="text-sm sm:text-base font-medium text-[var(--text)]">Social vices awareness</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- 7. Featured Project Card --}}
+    <section class="py-16 sm:py-20 bg-[var(--bg-alt)] transition-colors">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl overflow-hidden shadow-xl grid grid-cols-1 lg:grid-cols-12 transition-colors">
+                <div class="lg:col-span-6 relative min-h-[300px] lg:min-h-full">
+                    <img src="{{ asset('front/images/dzuelsCollage.webp') }}" 
+                         alt="Dzuels Ijero-Ekiti digital literacy lab and students" 
+                         class="w-full h-full object-cover object-center absolute inset-0" />
+                </div>
+                <div class="lg:col-span-6 p-8 sm:p-12 flex flex-col justify-center space-y-6">
+                    <div>
+                        <span class="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-bold bg-mint/20 text-emerald-800 dark:text-emerald-300">
+                            Featured Project
+                        </span>
+                        <h3 class="text-2xl sm:text-3xl font-extrabold text-[var(--heading)] leading-snug mt-3">
+                            Digital Infrastructure & Literacy in Ijero-Ekiti
+                        </h3>
+                    </div>
+
+                    <p class="text-[var(--text)] leading-relaxed text-base">
+                        Free literacy interventions and digital skills training for teachers and students in Ijero-Ekiti, Southwest Nigeria, in active partnership with the Information Technology Seed Development Initiative (SeedDev).
+                    </p>
+
+                    <div class="flex flex-wrap items-center gap-4 pt-2">
+                        <a href="{{ url('/programmes') }}" 
+                           class="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-semibold bg-maroon text-white hover:bg-crimson transition-all duration-200 shadow-md">
+                            Learn More About Project
+                        </a>
+                        <a href="{{ url('/get-involved') }}" 
+                           class="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-semibold border border-[var(--border)] text-[var(--text-strong)] hover:border-maroon transition-all duration-200">
+                            Volunteer for ITD
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- 8. Upcoming Event Callout / Teaser --}}
+    <section class="py-16 sm:py-20 bg-[var(--bg)] transition-colors">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="rounded-3xl p-8 sm:p-12 bg-linear-to-r from-maroon to-crimson text-white shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="space-y-3">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[var(--accent-cream)]/20 text-[var(--accent-cream)] border border-[var(--accent-cream)]/30">
+                        Upcoming Milestone Event
+                    </span>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-white">
+                        Ijero Tech Day & 10th Anniversary
+                    </h3>
+                    <p class="text-white/90 text-sm sm:text-base max-w-xl leading-relaxed">
+                        Celebrating 10 years of purpose, innovation, and impact in Ijero-Ekiti. Join students, educators, and leaders for a day of hands-on technology demos and celebrations.
+                    </p>
+                </div>
+                <div class="shrink-0">
+                    <a href="{{ url('/events') }}" 
+                       class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-sm font-bold bg-white text-maroon hover:bg-[var(--accent-cream)] transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+                        Register to Attend &rarr;
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- 9. Partners Strip --}}
+    <section class="py-16 sm:py-20 bg-[var(--bg-alt)] text-center transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <span class="text-xs font-bold uppercase tracking-widest text-crimson dark:text-[var(--accent-cream)]">
+                Our Valued Partners
             </span>
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[var(--heading)] tracking-tight leading-tight">
-                Addressing poverty through <span class="script-accent text-crimson text-5xl sm:text-6xl lg:text-7xl">quality education</span> and skills acquisition
-            </h1>
-            <p class="text-lg sm:text-xl text-[var(--text)] max-w-3xl mx-auto leading-relaxed">
-                Empowering children, youths, and communities in Ekiti State and across Nigeria with foundational literacy, digital access, and lifelong opportunities.
+            <h3 class="text-2xl sm:text-3xl font-bold text-[var(--heading)] mt-2 mb-10">
+                Collaborating for greater impact
+            </h3>
+
+            <div class="flex flex-wrap items-center justify-center gap-8 sm:gap-14 max-w-5xl mx-auto">
+                <img src="{{ asset('front/images/ascend.jpg') }}" 
+                     alt="ASCEND Education Foundation" 
+                     class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
+                <img src="{{ asset('front/images/SAA.jpg') }}" 
+                     alt="Solape Adesuyi Associates" 
+                     class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
+                <img src="{{ asset('front/images/helpmeetaneed.png') }}" 
+                     alt="Help Meet A Need" 
+                     class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
+                <img src="{{ asset('front/images/intinternational.png') }}" 
+                     alt="Int International" 
+                     class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
+            </div>
+        </div>
+    </section>
+
+    {{-- 10. Final Call to Action Banner --}}
+    <section class="py-20 lg:py-28 text-white text-center relative overflow-hidden bg-radial from-crimson/40 via-maroon to-[#2B0203]">
+        <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+                You too can make a difference
+            </h2>
+            <p class="text-base sm:text-lg text-[var(--accent-cream)] max-w-2xl mx-auto leading-relaxed">
+                Whether by sponsoring a child's tuition, volunteering your skills, or partnering with our training labs, your support creates lasting change.
             </p>
             <div class="flex flex-wrap items-center justify-center gap-4 pt-4">
-                <a href="{{ url('/donate') }}" class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-semibold bg-maroon text-white hover:bg-crimson transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 cursor-pointer">
-                    Support Our Cause — Donate
+                <a href="{{ url('/donate') }}" 
+                   class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-bold bg-white text-maroon hover:bg-[var(--accent-cream)] transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer">
+                    Make a Donation
                 </a>
-                <a href="{{ url('/about') }}" class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-semibold border-2 border-maroon text-maroon hover:bg-maroon hover:text-white transition-all duration-200 dark:border-[var(--accent-cream)] dark:text-[var(--accent-cream)] dark:hover:bg-[var(--accent-cream)] dark:hover:text-maroon cursor-pointer">
-                    Discover Our Story
+                <a href="{{ url('/get-involved') }}" 
+                   class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-semibold border-2 border-white/80 text-white hover:bg-white/10 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer">
+                    Join as a Volunteer
                 </a>
             </div>
-            <!-- Homepage placeholder marker for backward test compatibility -->
-            <p class="text-xs text-[var(--text-muted)] pt-8">
-                Welcome to the Dzuels Educational Foundation Homepage.
-            </p>
         </div>
     </section>
 </x-layout>

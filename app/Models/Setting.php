@@ -76,11 +76,15 @@ class Setting extends Model
      */
     public static function allCached(): array
     {
-        return Cache::rememberForever(self::CACHE_KEY, function () {
-            return static::all()->mapWithKeys(function ($setting) {
-                return [$setting->key => static::castValue($setting->value, $setting->type)];
-            })->toArray();
-        });
+        try {
+            return Cache::rememberForever(self::CACHE_KEY, function () {
+                return static::all()->mapWithKeys(function ($setting) {
+                    return [$setting->key => static::castValue($setting->value, $setting->type)];
+                })->toArray();
+            });
+        } catch (\Throwable) {
+            return [];
+        }
     }
 
     /**

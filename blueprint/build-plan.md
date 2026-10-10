@@ -4,7 +4,7 @@
 
 - [x] 1. **Public layout and brand theme** - every page shares the header (logo, nav, Donate button, theme toggle), utility bar and footer, using Poppins and Great Vibes and the brand colour tokens, light mode by default with a saved dark mode toggle that never flashes the wrong theme
 - [x] 2. **Admin login and site settings** - staff sign in at `/admin` and edit impact numbers (165 ICT students, 591 literacy students, 15 schools supported - with manual entry or API feed), contact details, social links, Flutterwave link, bank details and registration number without touching code
-- [ ] 3. **Home page** - hero with Donate and Volunteer buttons, impact stats, who we are, vision and mission, DRNICER values band, our causes (`cause.png` / `cause.webp`), featured project (`dzuelsCollage.webp`), upcoming event teaser, partners strip and final call to action
+- [x] 3. **Home page** - hero with Donate and Volunteer buttons, impact stats, who we are, vision and mission, DRNICER values band, our causes (`cause.png` / `cause.webp`), featured project (`dzuelsCollage.webp`), upcoming event teaser, partners strip and final call to action
 - [ ] 4. **Team and partners** - staff can add, edit, order and hide trustees, management, advisors and partner logos in the admin panel
 - [ ] 5. **About page** - story, approach, Board of Trustees, Management, Advisory Board with LinkedIn links, partners and call to action, powered by the team and partner records
 - [ ] 6. **Programmes** - staff manage programmes in the admin panel; visitors see a programmes index and a page for each programme, including the Ijero-Ekiti Digital Infrastructure and Literacy project that replaces the old Drive PDF link
