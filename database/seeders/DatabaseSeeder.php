@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             SettingSeeder::class,
             TeamMemberSeeder::class,
             PartnerSeeder::class,
+            ProgrammeSeeder::class,
         ]);
     }
 }

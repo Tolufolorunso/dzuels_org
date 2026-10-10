@@ -319,7 +319,7 @@
                     </p>
 
                     <div class="flex flex-wrap items-center gap-4 pt-2">
-                        <a href="{{ url('/programmes') }}" 
+                        <a href="{{ url('/programmes/ijero-digital-literacy') }}" 
                            class="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-semibold bg-maroon text-white hover:bg-crimson transition-all duration-200 shadow-md">
                             Learn More About Project
                         </a>

@@ -1,0 +1,105 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\Programme;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class ProgrammePublicTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_programmes_index_renders_successfully_with_active_programmes(): void
+    {
+        Programme::create([
+            'title' => 'Digital Literacy Project',
+            'slug' => 'digital-literacy-project',
+            'summary' => 'Comprehensive digital training for students.',
+            'body' => 'Full narrative description of the initiative.',
+            'partner_name' => 'SeedDev',
+            'is_featured' => true,
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        Programme::create([
+            'title' => 'Spelling Bee Challenge',
+            'slug' => 'spelling-bee-challenge',
+            'summary' => 'Inter-school language competition.',
+            'body' => 'Full narrative for spelling bee challenge.',
+            'is_featured' => false,
+            'is_active' => true,
+            'sort_order' => 2,
+        ]);
+
+        $response = $this->get('/programmes');
+
+        $response->assertOk();
+        $response->assertSeeText('Our Impact');
+        $response->assertSeeText('Programmes');
+        $response->assertSeeText('Digital Literacy Project');
+        $response->assertSeeText('Featured Initiative');
+        $response->assertSeeText('Spelling Bee Challenge');
+        $response->assertSeeText('SeedDev');
+        $response->assertSee('href="'.url('/programmes/digital-literacy-project').'"', false);
+    }
+
+    public function test_programmes_detail_page_renders_successfully(): void
+    {
+        $programme = Programme::create([
+            'title' => 'Digital Infrastructure and Literacy in Ijero-Ekiti',
+            'slug' => 'ijero-digital-literacy',
+            'summary' => 'Free literacy and computer skills for Ijero schools.',
+            'body' => "This is paragraph one of the project narrative.\n\nThis is paragraph two explaining technical equipment.",
+            'partner_name' => 'Information Technology Seed Development Initiative (SeedDev)',
+            'is_featured' => true,
+            'is_active' => true,
+            'seo_title' => 'Custom SEO Title | Dzuels',
+            'seo_description' => 'Custom SEO description of Ijero literacy project.',
+        ]);
+
+        $response = $this->get('/programmes/ijero-digital-literacy');
+
+        $response->assertOk();
+        $response->assertSeeText('Digital Infrastructure and Literacy in Ijero-Ekiti');
+        $response->assertSeeText('This is paragraph one of the project narrative.');
+        $response->assertSeeText('This is paragraph two explaining technical equipment.');
+        $response->assertSeeText('SeedDev');
+        $response->assertSeeText('Project Quick Facts');
+        $response->assertSeeText('Ekiti State, Nigeria');
+        $response->assertSeeText('Donate to this Project');
+        $response->assertSeeText('Volunteer With Us');
+        $response->assertSee('Custom SEO Title | Dzuels');
+    }
+
+    public function test_inactive_programme_returns_404_on_detail_page(): void
+    {
+        Programme::create([
+            'title' => 'Hidden Programme',
+            'slug' => 'hidden-programme',
+            'summary' => 'Draft summary',
+            'body' => 'Draft body',
+            'is_active' => false,
+        ]);
+
+        $response = $this->get('/programmes/hidden-programme');
+
+        $response->assertNotFound();
+    }
+
+    public function test_non_existent_slug_returns_404(): void
+    {
+        $response = $this->get('/programmes/non-existent-programme-slug');
+
+        $response->assertNotFound();
+    }
+
+    public function test_programmes_index_handles_empty_database_gracefully(): void
+    {
+        $response = $this->get('/programmes');
+
+        $response->assertOk();
+        $response->assertSeeText('Programme details are currently being updated.');
+    }
+}

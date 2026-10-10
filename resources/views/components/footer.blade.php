@@ -47,7 +47,7 @@
                 <h3 class="text-sm font-bold uppercase tracking-wider text-white mb-5">Programmes & Giving</h3>
                 <ul class="space-y-3 text-sm text-[var(--footer-muted)]">
                     <li>
-                        <a href="{{ url('/programmes') }}" class="hover:text-[var(--accent-cream)] transition-colors">Ijero Digital Literacy</a>
+                        <a href="{{ url('/programmes/ijero-digital-literacy') }}" class="hover:text-[var(--accent-cream)] transition-colors">Ijero Digital Literacy</a>
                     </li>
                     <li>
                         <a href="{{ url('/events') }}" class="hover:text-[var(--accent-cream)] transition-colors">Innovation & Tech Day</a>

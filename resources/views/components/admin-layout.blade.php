@@ -30,6 +30,9 @@
                     <a href="{{ route('admin.settings') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors {{ request()->routeIs('admin.settings*') ? 'bg-white/15 text-white' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
                         Site Settings
                     </a>
+                    <a href="{{ route('admin.programmes.index') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors {{ request()->routeIs('admin.programmes*') ? 'bg-white/15 text-white' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
+                        Programmes
+                    </a>
                     <a href="{{ route('admin.team.index') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors {{ request()->routeIs('admin.team*') ? 'bg-white/15 text-white' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
                         Team Members
                     </a>
