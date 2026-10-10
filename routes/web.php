@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\ProgrammeController as AdminProgrammeController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\TeamMemberController;
+use App\Http\Controllers\DonateController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\HomeController;
@@ -28,6 +29,7 @@ Route::get('/events/{slug}', [EventController::class, 'show'])->name('events.sho
 Route::post('/events/{slug}/register', [EventController::class, 'register'])->name('events.register');
 Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
 Route::get('/gallery/{slug}', [GalleryController::class, 'album'])->name('gallery.album');
+Route::get('/donate', DonateController::class)->name('donate');
 
 /*
 |--------------------------------------------------------------------------
