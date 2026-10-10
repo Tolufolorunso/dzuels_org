@@ -76,24 +76,69 @@
                 <p class="text-sm text-[var(--footer-muted)] leading-relaxed mb-4">
                     Subscribe for quarterly community impact stories, student achievements, and event invitations.
                 </p>
-                <form id="footerNewsletterForm" class="flex flex-col sm:flex-row gap-2" onsubmit="event.preventDefault(); document.getElementById('footerNewsletterMsg').classList.remove('hidden'); this.reset();">
-                    <input 
-                        type="email" 
-                        required 
-                        placeholder="Enter email address" 
-                        aria-label="Email for newsletter"
-                        class="w-full px-3.5 py-2.5 rounded-lg bg-white/10 text-white placeholder-white/50 text-sm border border-white/20 focus:outline-none focus:ring-2 focus:ring-[var(--accent-cream)] focus:border-transparent transition-all"
-                    >
-                    <button 
-                        type="submit" 
-                        class="px-5 py-2.5 rounded-lg bg-crimson hover:bg-crimson-hover text-white text-sm font-semibold transition-colors duration-200 cursor-pointer shrink-0 shadow-xs"
-                    >
-                        Join
-                    </button>
-                </form>
-                <p id="footerNewsletterMsg" class="hidden text-xs text-[var(--accent-mint)] mt-2 font-medium">
-                    ✓ Thank you for subscribing to Dzuels updates!
-                </p>
+                <div x-data="{
+                    email: '',
+                    hp: '',
+                    loading: false,
+                    msg: '',
+                    isError: false,
+                    async submitForm() {
+                        if (!this.email) return;
+                        this.loading = true;
+                        this.msg = '';
+                        this.isError = false;
+                        try {
+                            const res = await fetch('{{ route('newsletter.subscribe') }}', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                body: JSON.stringify({ email: this.email, _dzuels_hp: this.hp })
+                            });
+                            const data = await res.json();
+                            if (res.ok) {
+                                this.msg = data.message || '✓ Thank you for subscribing to Dzuels updates!';
+                                this.email = '';
+                            } else {
+                                this.isError = true;
+                                this.msg = data.message || (data.errors?.email ? data.errors.email[0] : 'Please enter a valid email address.');
+                            }
+                        } catch (err) {
+                            this.isError = true;
+                            this.msg = 'An error occurred. Please try again.';
+                        } finally {
+                            this.loading = false;
+                        }
+                    }
+                }">
+                    <form @submit.prevent="submitForm" method="POST" action="{{ route('newsletter.subscribe') }}" class="flex flex-col sm:flex-row gap-2">
+                        @csrf
+                        <input type="text" name="_dzuels_hp" x-model="hp" class="hidden" tabindex="-1" autocomplete="off">
+                        <input 
+                            type="email" 
+                            name="email"
+                            x-model="email"
+                            required 
+                            placeholder="Enter email address" 
+                            aria-label="Email for newsletter"
+                            class="w-full px-3.5 py-2.5 rounded-lg bg-white/10 text-white placeholder-white/50 text-sm border border-white/20 focus:outline-none focus:ring-2 focus:ring-[var(--accent-cream)] focus:border-transparent transition-all"
+                        >
+                        <button 
+                            type="submit" 
+                            :disabled="loading"
+                            class="px-5 py-2.5 rounded-lg bg-crimson hover:bg-crimson-hover text-white text-sm font-semibold transition-colors duration-200 cursor-pointer shrink-0 shadow-xs disabled:opacity-50"
+                        >
+                            <span x-show="!loading">Join</span>
+                            <span x-show="loading" x-cloak>...</span>
+                        </button>
+                    </form>
+                    <p x-show="msg" x-cloak :class="isError ? 'text-rose-400' : 'text-[var(--accent-mint)]'" class="text-xs mt-2 font-medium" x-text="msg"></p>
+                    @if(session('newsletter_success'))
+                        <p class="text-xs text-[var(--accent-mint)] mt-2 font-medium">✓ {{ session('newsletter_success') }}</p>
+                    @endif
+                </div>
             </div>
         </div>
 

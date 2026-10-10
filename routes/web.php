@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\GalleryAlbumController as AdminGalleryAlbumController;
 use App\Http\Controllers\Admin\InquiryController;
+use App\Http\Controllers\Admin\NewsletterSubscriberController as AdminNewsletterSubscriberController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\ProgrammeController as AdminProgrammeController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\GetInvolvedController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ProgrammeController;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +46,9 @@ Route::post('/get-involved/partner', [GetInvolvedController::class, 'storePartne
 Route::redirect('/partner', '/get-involved', 301);
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:6,1')->name('contact.submit');
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->middleware('throttle:6,1')->name('newsletter.subscribe');
+Route::get('/newsletter/unsubscribe/{token}', [NewsletterController::class, 'showUnsubscribe'])->name('newsletter.unsubscribe');
+Route::post('/newsletter/unsubscribe/{token}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe.confirm');
 
 /*
 |--------------------------------------------------------------------------
@@ -103,6 +108,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/messages', [ContactMessageController::class, 'index'])->name('messages.index');
         Route::patch('/messages/{message}/status', [ContactMessageController::class, 'updateStatus'])->name('messages.status');
         Route::delete('/messages/{message}', [ContactMessageController::class, 'destroy'])->name('messages.destroy');
+
+        // Newsletter Subscribers Management
+        Route::get('/subscribers/export', [AdminNewsletterSubscriberController::class, 'exportCsv'])->name('subscribers.export');
+        Route::get('/subscribers', [AdminNewsletterSubscriberController::class, 'index'])->name('subscribers.index');
+        Route::delete('/subscribers/{subscriber}', [AdminNewsletterSubscriberController::class, 'destroy'])->name('subscribers.destroy');
 
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     });

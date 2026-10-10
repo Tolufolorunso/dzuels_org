@@ -54,6 +54,9 @@
                     <a href="{{ route('admin.messages.index') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors {{ request()->routeIs('admin.messages*') ? 'bg-white/15 text-white' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
                         Messages
                     </a>
+                    <a href="{{ route('admin.subscribers.index') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors {{ request()->routeIs('admin.subscribers*') ? 'bg-white/15 text-white' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
+                        Subscribers
+                    </a>
                 </nav>
 
                 <!-- User Profile & Actions -->
