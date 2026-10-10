@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Partner;
 use App\Services\ImpactStatsService;
 use Illuminate\Contracts\View\View;
 
@@ -14,8 +15,15 @@ class HomeController extends Controller
     {
         $stats = $statsService->getStats();
 
+        try {
+            $partners = Partner::active()->ordered()->get();
+        } catch (\Throwable) {
+            $partners = collect();
+        }
+
         return view('home', [
             'stats' => $stats,
+            'partners' => $partners,
         ]);
     }
 }

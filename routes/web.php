@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\TeamMemberController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +30,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/settings', [SettingController::class, 'index'])->name('settings');
         Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
         Route::post('/settings/sync', [SettingController::class, 'syncApi'])->name('settings.sync');
+
+        // Team Management
+        Route::patch('/team/{team}/toggle', [TeamMemberController::class, 'toggleActive'])->name('team.toggle');
+        Route::resource('team', TeamMemberController::class)->except(['show']);
+
+        // Partner Management
+        Route::patch('/partners/{partner}/toggle', [PartnerController::class, 'toggleActive'])->name('partners.toggle');
+        Route::resource('partners', PartnerController::class)->except(['show']);
+
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     });
 });

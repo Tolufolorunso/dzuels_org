@@ -369,18 +369,34 @@
             </h3>
 
             <div class="flex flex-wrap items-center justify-center gap-8 sm:gap-14 max-w-5xl mx-auto">
-                <img src="{{ asset('front/images/ascend.jpg') }}" 
-                     alt="ASCEND Education Foundation" 
-                     class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
-                <img src="{{ asset('front/images/SAA.jpg') }}" 
-                     alt="Solape Adesuyi Associates" 
-                     class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
-                <img src="{{ asset('front/images/helpmeetaneed.png') }}" 
-                     alt="Help Meet A Need" 
-                     class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
-                <img src="{{ asset('front/images/intinternational.png') }}" 
-                     alt="Int International" 
-                     class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
+                @if (isset($partners) && $partners->isNotEmpty())
+                    @foreach ($partners as $partner)
+                        @if ($partner->website_url)
+                            <a href="{{ $partner->website_url }}" target="_blank" rel="noopener noreferrer" class="inline-block transition-transform hover:scale-105" title="{{ $partner->name }}">
+                                <img src="{{ $partner->logo_url }}" 
+                                     alt="{{ $partner->name }}" 
+                                     class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 transition-all duration-300 opacity-80 hover:opacity-100" />
+                            </a>
+                        @else
+                            <img src="{{ $partner->logo_url }}" 
+                                 alt="{{ $partner->name }}" 
+                                 class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
+                        @endif
+                    @endforeach
+                @else
+                    <img src="{{ asset('front/images/ascend.jpg') }}" 
+                         alt="ASCEND Education Foundation" 
+                         class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
+                    <img src="{{ asset('front/images/SAA.jpg') }}" 
+                         alt="Solape Adesuyi Associates" 
+                         class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
+                    <img src="{{ asset('front/images/helpmeetaneed.png') }}" 
+                         alt="Help Meet A Need" 
+                         class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
+                    <img src="{{ asset('front/images/intinternational.png') }}" 
+                         alt="Int International" 
+                         class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
+                @endif
             </div>
         </div>
     </section>
