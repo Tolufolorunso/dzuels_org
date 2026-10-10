@@ -1,9 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
 @import 'tailwindcss';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
+@source '../views/**/*.blade.php';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-script: 'Great Vibes', cursive;
+
+    --color-maroon: #6A0406;
+    --color-maroon-dark: #2B0203;
+    --color-crimson: #B4070A;
+    --color-crimson-hover: #D1141A;
+    --color-cream: #F9DEC9;
+    --color-cream-light: #FDF4EC;
+    --color-mint: #56E39F;
+    --color-mint-bg: #E8FAF2;
+    --color-dark-bg: #140607;
+    --color-dark-surface: #241012;
+    --color-dark-surface-raised: #2D1618;
+    --color-dark-border: #4A2A2C;
+}
+
+/* Theme variables matching the approved prototype */
+:root {
+    --bg: #FFFFFF;
+    --bg-alt: #FFF5ED;
+    --surface: #FFFFFF;
+    --surface-alt: #FDF8F5;
+    --surface-raised: #FFFFFF;
+    --border: #ECE4DC;
+    --border-subtle: #F3ECE5;
+
+    --heading: #6A0406;
+    --text: #3B4456;
+    --text-strong: #242F40;
+    --text-muted: #6B7385;
+    --text-on-dark: #FFFFFF;
+
+    --primary: #B4070A;
+    --primary-hover: #D1141A;
+    --primary-strong: #6A0406;
+    --primary-light: #FCE8E8;
+    --accent-cream: #F9DEC9;
+    --accent-cream-light: #FDF4EC;
+    --accent-mint: #56E39F;
+    --accent-mint-bg: #E8FAF2;
+
+    --utility-bg: #2B0203;
+    --footer-bg: #2B0203;
+    --footer-text: #F1E6E0;
+    --footer-muted: #C4ADAA;
+
+    --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+    --font-script: 'Great Vibes', cursive;
+}
+
+html.dark {
+    --bg: #140607;
+    --bg-alt: #1C0A0B;
+    --surface: #241012;
+    --surface-alt: #2D1618;
+    --surface-raised: #2D1618;
+    --border: #4A2A2C;
+    --border-subtle: #3A1E20;
+
+    --heading: #F9DEC9;
+    --text: #F1E6E0;
+    --text-strong: #FFFFFF;
+    --text-muted: #C4ADAA;
+
+    --primary: #FF9B97;
+    --primary-hover: #FFB3B0;
+    --primary-strong: #B4070A;
+    --primary-light: #3A1E20;
+    --accent-cream: #F9DEC9;
+    --accent-cream-light: #331A1C;
+    --accent-mint: #56E39F;
+    --accent-mint-bg: #173826;
+
+    --utility-bg: #0E0405;
+    --footer-bg: #0E0405;
+    --footer-text: #F1E6E0;
+    --footer-muted: #A38C8A;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.script-accent {
+    font-family: var(--font-script);
 }

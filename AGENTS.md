@@ -1,148 +1,322 @@
-<laravel-boost-guidelines>
-=== foundation rules ===
+# AGENTS.md
 
-# Laravel Boost Guidelines
+Instructions for AI coding agents working in this project. This is the cross-tool
+entry point. Codex, Google Antigravity, and OpenCode read `AGENTS.md`. Other
+compatible tools do too. Claude Code reads `CLAUDE.md`, which imports this file,
+so there is a single source of truth.
 
-## Foundational Context
+Claude Code, Codex, and every other AI tool must not add AI attribution to
+commits or pull requests, including AI `Co-Authored-By` trailers or generated-by
+signatures. Preserve genuine human attribution. See
+[Commit and PR attribution](blueprint/context/ai-interaction.md#commit-and-pr-attribution)
+for optional tool settings.
 
-This application is a Laravel application running on PHP 8.4. Always use the APIs that match the installed major version of each package — do not assume a version.
+## What this is
 
-Before relying on a package's API, confirm its installed version:
-- PHP packages: run `composer show --direct` to list direct dependencies with versions, or `composer show <vendor/package>` for a single package.
-- JS packages: check `package.json` for the installed versions.
+Dzuels web application, built with Laravel, Blade, Vite, and Tailwind CSS.
 
-## Skills Activation
+The workflow is defined by the local skills and context files below.
 
-This project has domain-specific skills available in `**/skills/**`. You MUST activate the relevant skill whenever you work in that domain—don't wait until you're stuck.
+## Proportional engineering
 
-## Conventions
+Build for established requirements, not hypothetical scale, threats, or future
+flexibility. Reuse existing code, the standard library, native platform features,
+and installed dependencies before adding machinery.
 
-- You must follow all existing code conventions used in this application. When creating or editing a file, check sibling files for the correct structure, approach, and naming.
-- Use descriptive names for variables and methods. For example, `isRegisteredForDiscounts`, not `discount()`.
-- Check for existing components to reuse before writing a new one.
+- Unknown scale or extensibility defaults to the smaller reversible design. Do
+  not infer enterprise, multi-tenant, hostile-user, or compliance requirements.
+- Derive trust and data-integrity boundaries from actual reachability: untrusted
+  input, auth/session/ownership, shared persisted data, destructive operations,
+  payments, secrets, and sensitive data.
+- Ask only when an unknown materially changes behavior, architecture, persisted
+  data, interoperability, a real security boundary, or cost. Otherwise choose the
+  simplest repository-native implementation.
+- Add an abstraction, dependency, service, configuration surface, compatibility
+  layer, or security mechanism only for a current requirement.
+- Simplicity never removes real trust-boundary validation, data-loss prevention,
+  accessibility, explicit security requirements, configured tests, or project rules.
+- Stack-specific template standards apply only when the project uses that stack.
 
-## Verification Scripts
+## Read these when relevant
 
-- Do not create verification scripts or tinker when tests cover that functionality and prove they work. Unit and feature tests are more important.
+- `blueprint/config.json` - deterministic project workflow settings
+- `blueprint/context/project-overview.md` - the project's source of truth
+- `blueprint/context/coding-standards.md` - read before changing code
+- `blueprint/context/ai-interaction.md` - read when running the Blueprint workflow
+- `blueprint/context/current-feature.md` - the one feature, fix, or rollback being built in this checkout
 
-## Application Structure & Architecture
+Reuse relevant context already loaded in the session. Claude Code imports only
+this file; its Blueprint skills load the other files on demand.
 
-- Stick to existing directory structure; don't create new base folders without approval.
-- Do not change the application's dependencies without approval.
+## Project configuration
 
-## Frontend Bundling
+`blueprint/config.json` is the user-owned, machine-readable workflow policy for
+this project. Workflow skills read the relevant settings before acting. A
+missing file means built-in defaults. An invalid file falls back to defaults for
+read-only status reporting, but mutating workflow commands stop and point to
+`/doctor` instead of guessing.
 
-- If a frontend change doesn't show in the UI or you get a "Unable to locate file in Vite manifest" error, run `npm run build` or ask the user to run `npm run dev` or `composer run dev`.
+Configuration can make review or verification stricter and can tune local
+branch names and automated-mode limits. It never grants permission to commit,
+merge, push, deploy, publish, send, delete data, waive a failing check, or accept
+a finding. Those approval and safety boundaries are not configurable.
 
-## Documentation Files
+`qualityGates.regular` controls automatic audit, independent-review, check, and
+try-guide behavior for the normal workflow and Autopilot.
+`qualityGates.continuous` controls the same per-feature gates for Continuous
+Mode. The existing `tryGuide` keys select `/check guide`, which generates
+instructions without performing verification or recording acceptance.
+Independent review defaults to `when-sensitive` in both workflows, while
+audit, check, and try guide default to `manual`. Sensitive or unusually broad
+work therefore selects independent review automatically; ordinary small work
+does not. Setting a workflow's independent review to `manual` disables that
+automatic selection, while an explicit `/audit independent current` remains
+available. The other conditional modes are `when-sensitive` for audit,
+`when-behavioral` for check, and `when-user-facing` for try guides. `always`
+runs the gate for every work item in that workflow.
 
-- You must only create documentation files if explicitly requested by the user.
+`review.independentExecution` controls how a selected independent-review gate
+runs. Its default, `automatic`, uses a fresh isolated reviewer child when the
+active adapter can prove isolation, exact reviewer identity and model, and
+completion. Otherwise it preserves the request and falls back to the manual
+handoff. This setting changes execution only; the quality-gate policy still
+decides whether review is selected.
+The automatic path spawns a generic child through the current runtime and gives
+it the installed project-local Audit skill and review contract. It never requires
+or discovers global agent roles, skills, prompts, or TraversyFlow components.
+New review requests record requested execution and completed receipts record
+actual execution. Manual uses `fresh session`; automatic uses `fresh subagent`;
+an explicit automatic fallback records actual manual with `fresh session`.
 
-=== boost rules ===
+`git.landing` controls only how `/complete` offers to land finished regular
+work. Its default, `local-merge`, keeps the local squash-merge flow. Set it to
+`pull-request` when completed branches should be pushed and opened as pull
+requests for provider review and squash merge. Configuration never supplies the
+required push, pull-request, or merge approvals. Continuous Mode remains
+local-only and ignores this setting.
 
-# Laravel Boost
+New projects default to one review packet after all small implementation steps
+(`workflow.stepReview: "feature"`) with step checkpoint commits disabled. This
+keeps the normal loop reviewable without repeating the full session context after
+every step. Set `stepReview` to `every` when teaching, pairing closely, or working
+on a high-risk change. That restores the per-step approval pauses. To fully
+restore the previous workflow, including optional checkpoint prompts after an
+approved step, also set `checkpointCommits` to `enabled`. Onboarding presents
+these pairs as Efficient and Guided choices, but stores only the two low-level
+settings. They can be changed at any time. Both styles end with an optional
+read-only code walkthrough. Review cadence controls approval pauses, not whether
+the user can ask for an explanation of the finished implementation.
 
-## Tools
+## Workflow
 
-- Laravel Boost is an MCP server with tools designed specifically for this application. Prefer Boost tools over manual alternatives like shell commands or file reads.
-- Use `database-query` to run read-only queries against the database instead of writing raw SQL in tinker.
-- Use `database-schema` to inspect table structure before writing migrations or models.
-- Use `get-absolute-url` to resolve the correct scheme, domain, and port for project URLs. Always use this before sharing a URL with the user.
-- Use `browser-logs` to read browser logs, errors, and exceptions. Only recent logs are useful, ignore old entries.
+Build one feature, fix, or rollback at a time, behind review gates. Each step's instructions
+are plain markdown skills any capable agent can read and follow. The workflow is
+exposed through tool-specific adapters:
 
-## Searching Documentation (IMPORTANT)
+- Codex: `.agents/skills/<skill>/SKILL.md`
+- Claude Code: `.claude/skills/<skill>/SKILL.md`
+- GitHub Copilot: `AGENTS.md` plus `.agents/skills/<skill>/SKILL.md`
+- Google Antigravity: `AGENTS.md` plus `.agents/skills/<skill>/SKILL.md`
+- OpenCode: `AGENTS.md` plus the compatible `.agents/skills/` or
+  `.claude/skills/` tree already installed for the selected tools
 
-- Use `search-docs` before changes that depend on Laravel ecosystem APIs, behavior, configuration, or version-specific syntax. Skip it for copy-only edits and other changes where package documentation is irrelevant. Reuse sufficient results already in context instead of searching again.
-- Pass a `packages` array to scope results when you know which packages are relevant.
-- Use multiple broad, topic-based queries: `['rate limiting', 'routing rate limiting', 'routing']`. Expect the most relevant results first.
-- Do not add package names to queries because package info is already shared. Use `test resource table`, not `filament 4 test resource table`.
+Unused adapters can be removed. Codex and GitHub Copilot share `.agents/`, and
+Google Antigravity uses that tree too. OpenCode can reuse `.agents/` or
+`.claude/`. Projects without Claude Code can delete `CLAUDE.md` and `.claude/`.
+Claude Code-only projects can delete `.agents/`, but should keep `AGENTS.md`
+because `CLAUDE.md` imports it. Do not create `.opencode/skills/` or an
+Antigravity-specific skill tree. Both tools use the supported shared trees.
 
-### Search Syntax
+When changing shared workflow behavior, update the matching skill in both
+adapter folders so every supported tool stays aligned.
 
-1. Use words for auto-stemmed AND logic: `rate limit` matches both "rate" AND "limit".
-2. Use `"quoted phrases"` for exact position matching: `"infinite scroll"` requires adjacent words in order.
-3. Combine words and phrases for mixed queries: `middleware "rate limit"`.
-4. Use multiple queries for OR logic: `queries=["authentication", "middleware"]`.
+### Parallel work
 
-## Project Rules
+Blueprint supports parallel work through isolated Git checkouts, without a
+separate team mode. Give each developer or agent its own clone or Git worktree
+and one dedicated branch before starting `/feature` or `/fix`. The branch must
+use the configured prefix and the work item's lowercase kebab-case title. Each
+checkout keeps its own
+`blueprint/context/current-feature.md`, findings, and review state. Never run two
+active work items in the same working directory or replace another worker's
+active spec.
 
-- This project contains committed, area-grouped rules in `.ai/rules` when that directory exists, including path-scoped framework guidelines under `.ai/rules/boost`. Before you enter plan mode or create/edit any file, you MUST first: open @.ai/rules/index.md (it maps file globs to rule files), read every rule file whose globs cover the path(s) in scope, and run `grep -rin 'keyword' .ai/rules` to catch what a path match alone misses. Do not write code until you have read and are following every matching rule. If `.ai/rules` does not exist, continue without it.
+Parallel branches may both update `blueprint/build-plan.md`; resolve any normal
+Git conflict when the later branch lands. Use `git.landing: "pull-request"` when
+the default branch is protected or several isolated checkouts are active. This
+model intentionally does not add per-item state folders or automatic agent
+coordination.
 
-## Artisan
+Learn the feature loop: `/feature` -> `/implement` -> `/check` -> `/audit current` ->
+`/complete`. Approve the Feature spec before Implement. Check proves behavior;
+Audit reviews code and records findings. Showing both in this path does not
+change configured gates or make Audit mandatory. `/check guide` only generates
+manual instructions and never performs verification or records acceptance.
 
-- Run Artisan commands directly via the command line (e.g., `php artisan route:list`). Use `php artisan list` to discover available commands and `php artisan [command] --help` to check parameters.
-- Inspect routes with `php artisan route:list`. Filter with: `--method=GET`, `--name=users`, `--path=api`, `--except-vendor`, `--only-vendor`.
-- Read configuration values using dot notation: `php artisan config:show app.name`, `php artisan config:show database.default`. Or read config files directly from the `config/` directory.
+Core skills:
 
-## Tinker
+### Build
 
-- Execute PHP in app context for debugging and testing code. Do not create models without user approval, prefer tests with factories instead. Prefer existing Artisan commands over custom tinker code.
-- Always use single quotes to prevent shell expansion: `php artisan tinker --execute 'Your::code();'`
-  - Double quotes for PHP strings inside: `php artisan tinker --execute 'User::where("active", true)->count();'`
+- `feature` - turn a build-plan item into a spec, or propose a reviewed plan addition for a genuinely new feature
+- `implement` - build the current spec one small, reviewed step at a time
+- `check` - prove the current spec against the running app, or use `check guide`
+  for a read-only manual review guide: where to go, what to click, what to expect
+- `complete` - run the final safety pass, log features, fixes, or rollbacks under `blueprint/history/`, then request approval for the configured local merge or pull-request landing
 
-=== php rules ===
+### Understand and review
 
-# PHP
+- `explore` - investigate an idea against the actual code without writing files or requiring plans
+- `brief` - read-only briefing on an upcoming build-plan feature (scope, dependencies, size) before you spec it
+- `status` - read-only progress summary, workflow drift warning, and suggested next action
+- `debug` - reproduce and isolate a failure without editing code, then hand the evidence to `fix` or `implement`
+- `audit` - branch-aware or full-project review across all concerns or a focused quality, security, performance, or tests lens; `audit independent current` prepares an immutable checkpoint for a fresh reviewer session or configured isolated reviewer child; records findings in `blueprint/context/findings.md` and independent receipts in `blueprint/context/review.md`, where blocking findings or stale review state stop `complete`
+- `doctor` - Blueprint health check for setup, adapters, plans, overview freshness, dashboard state, and workflow drift; it may offer to reset only malformed generated dashboard state after approval
 
-- Always use curly braces for control structures, even for single-line bodies.
-- Use PHP 8 constructor property promotion: `public function __construct(public GitHub $github) { }`. Do not leave empty zero-parameter `__construct()` methods unless the constructor is private.
-- Use explicit return type declarations and type hints for all method parameters: `function isAccessible(User $user, ?string $path = null): bool`
-- Use TitleCase for Enum keys: `FavoritePerson`, `BestLake`, `Monthly`.
-- Prefer PHPDoc blocks over inline comments. Only add inline comments for exceptionally complex logic.
-- Use array shape type definitions in PHPDoc blocks.
+### Plan and set up
 
-=== deployments rules ===
+- `onboard` - tune commands, standards, visibility, ignore rules, and tool adapters after overlaying the Blueprint onto a freshly scaffolded or early project
+- `adopt` - bootstrap the Blueprint into an existing brownfield app with shipped features
+- `discovery` - optional deep, multi-turn planning conversation that drafts the two user-owned plans only after review and approval; direct plan writing remains fully supported
+- `overview` - distill the two planning docs into
+  `blueprint/context/project-overview.md`, then offer a reviewed initial planning
+  baseline commit before Feature 1
+- `prototype` - optional, pre-build static mockups to lock the look
+- `tests` - set up unit testing by default, or a repeatable browser harness with `tests browser`
+- `ci` - explicitly set up one project-specific Verify command and matching automatic GitHub checks, with an optional local pre-push hook
 
-# Deployment
+### Recover and release
 
-- Laravel can be deployed using [Laravel Cloud](https://cloud.laravel.com/), which is the fastest way to deploy and scale production Laravel applications.
-- Activate the `deploying-to-cloud` skill whenever deploying to Laravel Cloud, configuring Cloud environments or resources, using the Cloud CLI, or troubleshooting Cloud deployments.
+- `fix` - document an ad-hoc bug or change into `blueprint/context/current-feature.md`
+- `rollback` - plan a safe reversal of a completed feature from its archive and exact git commit, with later-dependency review before code changes
+- `release` - optional Render or Vercel deployment readiness, local config, env review, and smoke-test planning
 
-=== laravel/core rules ===
+In Codex, invoke these as skills (`$onboard`, `$discovery`, `$overview`, `$feature`,
+`$implement`, and so on) or ask naturally, such as "run the overview." In Claude
+Code and Google Antigravity, use slash commands such as `/onboard` or `/feature`.
+These are AI chat commands, not terminal commands. In OpenCode or other tools
+without a dedicated invocation syntax, ask the agent to run the matching skill
+or follow its `SKILL.md` manually. The
+conventions in `blueprint/context/` apply however a step is invoked. `/discovery`
+is never required: users may write detailed plans directly or develop them
+through any conversation before running `/overview`.
 
-# Do Things the Laravel Way
+### Automation
 
-- Use `php artisan make:` commands to create new files (i.e. migrations, controllers, models, etc.). You can list available Artisan commands using `php artisan list` and check their parameters with `php artisan [command] --help`.
-- If you're creating a generic PHP class, use `php artisan make:class`.
-- Pass `--no-interaction` to all Artisan commands to ensure they work without user input. You should also pass the correct `--options` to ensure correct behavior.
+Optional explicit-only skill: `autopilot` combines `feature` or `fix` with
+`implement` in one bounded pass when directly invoked, including the configured
+regular quality gates. The normal workflow stops for human approval of the spec
+before implementation; Autopilot continues through that review point. It may
+create checkpoint commits on the feature or fix branch after passing steps and
+repair confirmed P0/P1 findings when its audit gate runs. It stops before
+`/complete`, merge, push, deploy, or destructive actions.
 
-### Model Creation
+Optional explicit-only skill: `continuous` can resume or select the next planned
+feature and repeat the complete local feature lifecycle through the configured
+limit or end of the build plan. It creates one branch and one local main commit
+per feature, applies the Continuous quality gates, archives and merges serially,
+and stops on decisions or failed safety gates. It never pushes, deploys,
+publishes, sends, or performs destructive actions.
 
-- When creating new models, create useful factories and seeders for them too. Ask the user if they need any other things, using `php artisan make:model --help` to check the available options.
+Deployment is also explicit. `/release` can prepare local Render or Vercel config
+and run readiness checks, but it must stop before deploy, remote service changes,
+push, or publish unless the user gives a separate yes in the current chat.
 
-## APIs & Eloquent Resources
+## Dashboard activity
 
-- For APIs, default to using Eloquent API Resources and API versioning unless existing API routes do not, then you should follow existing application convention.
+The dashboard can show the active or most recent substantial Blueprint command
+from `blueprint/.state/run.json`. This file is generated local state, ignored by
+Git, and never part of a feature commit.
 
-## URL Generation
+Commands with meaningful progress or a durable handoff should write it when the
+state directory exists: `onboard`, `adopt`, `discovery`, `overview`, `feature`,
+`fix`, `rollback`, `implement`, `debug`, `check`, `audit`, `tests`,
+`ci`, `prototype`, `autopilot`, `continuous`, `complete`, and
+`release`. Short orientation commands such as `explore`, `brief`, `status`, and `doctor`
+do not write activity state. The `check guide` mode also never writes activity
+state; select the Check mode before any activity call. Doctor's optional
+approved reset removes malformed activity instead of recording another run.
 
-- When generating links to other pages, prefer named routes and the `route()` function.
+Writing the initial activity record is the first action of a tracked command,
+before project inspection, preflight, or other tool calls. This one generated
+state write does not authorize product changes or bypass any safety check.
 
-## Testing
+Never create or edit `run.json` directly. From the project root, use the first
+helper that exists:
 
-- When creating models for tests, use the factories for the models. Check if the factory has custom states that can be used before manually setting up the model.
-- Faker: Use methods such as `$this->faker->word()` or `fake()->randomDigit()`. Follow existing conventions whether to use `$this->faker` or `fake()`.
-- When creating tests, make use of `php artisan make:test [options] {name}` to create a feature test, and pass `--unit` to create a unit test. Most tests should be feature tests.
+```text
+node .agents/skills/doctor/scripts/run-state.mjs <action> <options>
+node .claude/skills/doctor/scripts/run-state.mjs <action> <options>
+```
 
-=== pint/core rules ===
+Start with `start --command <skill> --summary <truthful-summary> --boundary
+<boundary>`. Use `update` at meaningful milestones or for a blocker, with
+`--status blocked` and `--resume <exact-command>` when recovery is needed. End
+with `finish --status ready|completed --summary <truthful-summary>`. The helper
+validates every field before atomically replacing the generated file. If it is
+missing or fails, report the activity warning and continue the workflow without
+writing a manual fallback.
 
-# Laravel Pint Code Formatter
+The helper writes this schema:
 
-- If you have modified any PHP files, you must run `vendor/bin/pint --dirty --format agent` before finalizing changes to ensure your code matches the project's expected style.
-- Do not run `vendor/bin/pint --test --format agent`, simply run `vendor/bin/pint --format agent` to fix any formatting issues.
+```json
+{
+  "schemaVersion": 1,
+  "command": "continuous",
+  "status": "running",
+  "summary": "Completing the remaining build plan",
+  "detail": "Implementing feature 3.",
+  "boundary": "local-only",
+  "startedAt": "<ISO-8601 timestamp>",
+  "updatedAt": "<ISO-8601 timestamp>",
+  "resumeCommand": "/continuous resume",
+  "progress": { "current": 2, "total": 5, "label": "features" },
+  "feature": { "id": "3", "title": "Export reports" }
+}
+```
 
-=== phpunit/core rules ===
+`status` must be `running`, `blocked`, `ready`, or `completed`. Use `ready` when
+the command reached its intended review handoff, such as Autopilot waiting for
+review before `/complete`. Use `blocked` with the exact recovery command when
+work can resume. `boundary` must be `read-only`, `reviewed`, or `local-only`.
+The progress, feature, detail, boundary, and resume fields are optional. Never
+put secrets, raw logs, prompts, or user content in this file. Activity tracking
+must not change a command's approval boundaries or turn a reporting failure into
+a workflow failure.
 
-# PHPUnit
+## Automatic verification
 
-- This project uses PHPUnit. Create tests with `php artisan make:test --phpunit {name}`.
-- Do not include the test suite directory in `{name}`. Use `SomeFeatureTest`, not `Feature/SomeFeatureTest`.
-- Read the `testing-best-practices` skill for guidance on coverage, naming, structure, dependency isolation, and review.
+Automatic GitHub checks are a separate explicit setup. `/onboard` and `/adopt`
+only report existing checks and point to `/ci` or `$ci` when none exist. Running
+`/ci` inspects the real project and defines one `Verify` command from checks that
+already exist. Use this order when available: typecheck, tests, then build. Never
+invent a test runner or another check just to fill the command.
 
-## Running Tests
+For JavaScript and TypeScript projects, prefer a package script such as `verify`
+and use the detected package manager. For other stacks, use the native task
+runner or exact combined command. Record the exact command under Commands below.
 
-- Run the narrowest set of tests that covers the change. Pass a file path or `--filter=testName` to `php artisan test --compact`.
-- Rerun a test after each change to it.
-- Run `vendor/bin/phpunit` to call the test runner directly. It accepts the same file path and `--filter=testName` arguments.
+The optional `.github/workflows/verify.yml` must run that same command for pull
+requests and pushes to the default branch. Preserve existing workflows, use the
+project's real runtime and install command, and grant only `contents: read` by
+default. This setup does not add coverage, browser tests, security scans, or
+version matrices; those remain later project choices. A local pre-push hook that
+runs the same `Verify` command is offered as an opt-in at the end of `/ci`, and
+`git push --no-verify` still bypasses it, so the remote ruleset stays the lock.
 
-</laravel-boost-guidelines>
+GitHub branch protection or a ruleset can require the check after the repository
+is pushed, but that is a separate remote setting. Missing automatic GitHub
+checks do not make the Blueprint unusable.
+
+## Commands
+- App dev server: `php artisan serve` (http://localhost:8000)
+- Asset dev server: `npm run dev` (http://localhost:5173)
+- Combined dev server: `composer run dev`
+- Build assets: `npm run build`
+- Tests: `php artisan test`
+- Lint & Code formatting: `php vendor/bin/pint` (check: `php vendor/bin/pint --test`)
+- Artisan CLI: `php artisan`
+
+Browser testing is opt-in. Run `/tests browser` or `$tests browser` to add
+or normalize a browser harness and document its exact command as `Browser
+tests`. Check and Continuous Mode can then reuse it without installing tooling
+mid-feature.
