@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\ProgrammeController as AdminProgrammeController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\TeamMemberController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProgrammeController;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +21,9 @@ Route::get('/', HomeController::class)->name('home');
 Route::get('/about', AboutController::class)->name('about');
 Route::get('/programmes', [ProgrammeController::class, 'index'])->name('programmes.index');
 Route::get('/programmes/{slug}', [ProgrammeController::class, 'show'])->name('programmes.show');
+Route::get('/events', [EventController::class, 'index'])->name('events.index');
+Route::get('/events/{slug}', [EventController::class, 'show'])->name('events.show');
+Route::post('/events/{slug}/register', [EventController::class, 'register'])->name('events.register');
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +53,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Programme Management
         Route::patch('/programmes/{programme}/toggle', [AdminProgrammeController::class, 'toggleActive'])->name('programmes.toggle');
         Route::resource('programmes', AdminProgrammeController::class)->except(['show']);
+
+        // Event Management
+        Route::patch('/events/{event}/toggle-active', [AdminEventController::class, 'toggleActive'])->name('events.toggle-active');
+        Route::patch('/events/{event}/toggle-registration', [AdminEventController::class, 'toggleRegistration'])->name('events.toggle-registration');
+        Route::get('/events/{event}/registrations', [AdminEventController::class, 'registrations'])->name('events.registrations');
+        Route::delete('/events/{event}/registrations/{registration}', [AdminEventController::class, 'destroyRegistration'])->name('events.registrations.destroy');
+        Route::resource('events', AdminEventController::class)->except(['show']);
 
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     });

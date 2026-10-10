@@ -1,0 +1,133 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Event extends Model
+{
+    use HasFactory;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        'title',
+        'slug',
+        'summary',
+        'description',
+        'event_date',
+        'end_date',
+        'venue',
+        'banner_image',
+        'schedule',
+        'is_registration_open',
+        'is_active',
+        'sort_order',
+        'seo_title',
+        'seo_description',
+    ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'event_date' => 'datetime',
+            'end_date' => 'datetime',
+            'schedule' => 'array',
+            'is_registration_open' => 'boolean',
+            'is_active' => 'boolean',
+            'sort_order' => 'integer',
+        ];
+    }
+
+    /**
+     * Get the registrations for the event.
+     */
+    public function registrations(): HasMany
+    {
+        return $this->hasMany(EventRegistration::class);
+    }
+
+    /**
+     * Scope a query to only include active events.
+     */
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope a query to only include upcoming events.
+     */
+    public function scopeUpcoming(Builder $query): Builder
+    {
+        return $query->where(function (Builder $sub) {
+            $sub->where('event_date', '>=', now()->startOfDay())
+                ->orWhereNull('event_date');
+        });
+    }
+
+    /**
+     * Scope a query to sort events by sort_order and event_date.
+     */
+    public function scopeOrdered(Builder $query): Builder
+    {
+        return $query->orderBy('sort_order', 'asc')
+            ->orderBy('event_date', 'asc')
+            ->orderBy('id', 'asc');
+    }
+
+    /**
+     * Get the resolved public URL for the banner image.
+     */
+    public function getBannerImageUrlAttribute(): string
+    {
+        if (! $this->banner_image) {
+            return asset('front/images/techday.webp');
+        }
+
+        if (str_starts_with($this->banner_image, 'http://') || str_starts_with($this->banner_image, 'https://')) {
+            return $this->banner_image;
+        }
+
+        if (str_starts_with($this->banner_image, 'front/') || str_starts_with($this->banner_image, 'uploads/')) {
+            return asset($this->banner_image);
+        }
+
+        return asset('uploads/events/'.$this->banner_image);
+    }
+
+    /**
+     * Determine if the event has already concluded.
+     */
+    public function getIsPastAttribute(): bool
+    {
+        return $this->event_date ? ($this->event_date->isPast() && ! $this->event_date->isToday()) : false;
+    }
+
+    /**
+     * Format the date nicely for displays.
+     */
+    public function getFormattedDateAttribute(): string
+    {
+        return $this->event_date ? $this->event_date->format('F j, Y') : 'Date to be announced';
+    }
+
+    /**
+     * Format the time for display.
+     */
+    public function getFormattedTimeAttribute(): string
+    {
+        return $this->event_date ? $this->event_date->format('g:i A') : 'TBA';
+    }
+}

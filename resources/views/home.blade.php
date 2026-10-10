@@ -349,7 +349,7 @@
                     </p>
                 </div>
                 <div class="shrink-0">
-                    <a href="{{ url('/events') }}" 
+                    <a href="{{ url('/events/ijero-tech-day-10th-anniversary') }}" 
                        class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-sm font-bold bg-white text-maroon hover:bg-[var(--accent-cream)] transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
                         Register to Attend &rarr;
                     </a>

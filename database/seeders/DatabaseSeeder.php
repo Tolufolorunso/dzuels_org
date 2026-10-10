@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             TeamMemberSeeder::class,
             PartnerSeeder::class,
             ProgrammeSeeder::class,
+            EventSeeder::class,
         ]);
     }
 }
