@@ -45,6 +45,9 @@
                     <a href="{{ route('admin.partners.index') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors {{ request()->routeIs('admin.partners*') ? 'bg-white/15 text-white' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
                         Partners
                     </a>
+                    <a href="{{ route('admin.inquiries.index') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors {{ request()->routeIs('admin.inquiries*') ? 'bg-white/15 text-white' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
+                        Inquiries
+                    </a>
                 </nav>
 
                 <!-- User Profile & Actions -->

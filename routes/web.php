@@ -4,6 +4,7 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\GalleryAlbumController as AdminGalleryAlbumController;
+use App\Http\Controllers\Admin\InquiryController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\ProgrammeController as AdminProgrammeController;
 use App\Http\Controllers\Admin\SettingController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Admin\TeamMemberController;
 use App\Http\Controllers\DonateController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\GetInvolvedController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProgrammeController;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +32,10 @@ Route::post('/events/{slug}/register', [EventController::class, 'register'])->na
 Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
 Route::get('/gallery/{slug}', [GalleryController::class, 'album'])->name('gallery.album');
 Route::get('/donate', DonateController::class)->name('donate');
+Route::get('/get-involved', [GetInvolvedController::class, 'index'])->name('get-involved');
+Route::post('/get-involved/volunteer', [GetInvolvedController::class, 'storeVolunteer'])->middleware('throttle:6,1')->name('get-involved.volunteer');
+Route::post('/get-involved/partner', [GetInvolvedController::class, 'storePartner'])->middleware('throttle:6,1')->name('get-involved.partner');
+Route::redirect('/partner', '/get-involved', 301);
 
 /*
 |--------------------------------------------------------------------------
@@ -73,6 +79,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/gallery/{album}/photos', [AdminGalleryAlbumController::class, 'uploadPhotos'])->name('gallery.photos.upload');
         Route::delete('/gallery/{album}/photos/{photo}', [AdminGalleryAlbumController::class, 'destroyPhoto'])->name('gallery.photos.destroy');
         Route::resource('gallery', AdminGalleryAlbumController::class)->parameters(['gallery' => 'album'])->except(['show']);
+
+        // Inquiry Management (Volunteers & Partners)
+        Route::get('/inquiries', [InquiryController::class, 'index'])->name('inquiries.index');
+        Route::patch('/inquiries/volunteers/{volunteer}', [InquiryController::class, 'updateVolunteerStatus'])->name('inquiries.volunteers.status');
+        Route::delete('/inquiries/volunteers/{volunteer}', [InquiryController::class, 'destroyVolunteer'])->name('inquiries.volunteers.destroy');
+        Route::patch('/inquiries/partners/{partner}', [InquiryController::class, 'updatePartnerStatus'])->name('inquiries.partners.status');
+        Route::delete('/inquiries/partners/{partner}', [InquiryController::class, 'destroyPartner'])->name('inquiries.partners.destroy');
 
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     });
