@@ -24,6 +24,9 @@
                 <a href="{{ url('/gallery') }}" class="px-3.5 py-2 rounded-full text-sm font-medium transition-colors duration-200 {{ request()->is('gallery*') ? 'text-maroon font-semibold bg-[var(--accent-cream-light)] dark:text-[var(--accent-cream)]' : 'text-[var(--text-strong)] hover:text-maroon hover:bg-[var(--accent-cream-light)] dark:hover:text-[var(--accent-cream)]' }}">
                     Gallery
                 </a>
+                <a href="{{ url('/news') }}" class="px-3.5 py-2 rounded-full text-sm font-medium transition-colors duration-200 {{ request()->is('news*') ? 'text-maroon font-semibold bg-[var(--accent-cream-light)] dark:text-[var(--accent-cream)]' : 'text-[var(--text-strong)] hover:text-maroon hover:bg-[var(--accent-cream-light)] dark:hover:text-[var(--accent-cream)]' }}">
+                    News
+                </a>
                 <a href="{{ url('/get-involved') }}" class="px-3.5 py-2 rounded-full text-sm font-medium transition-colors duration-200 {{ request()->is('get-involved*') ? 'text-maroon font-semibold bg-[var(--accent-cream-light)] dark:text-[var(--accent-cream)]' : 'text-[var(--text-strong)] hover:text-maroon hover:bg-[var(--accent-cream-light)] dark:hover:text-[var(--accent-cream)]' }}">
                     Get Involved
                 </a>
@@ -80,6 +83,9 @@
             </a>
             <a href="{{ url('/gallery') }}" class="px-4 py-2.5 rounded-lg text-base font-medium transition-colors {{ request()->is('gallery*') ? 'text-maroon font-semibold bg-[var(--accent-cream-light)] dark:text-[var(--accent-cream)]' : 'text-[var(--text-strong)] hover:bg-[var(--accent-cream-light)] hover:text-maroon' }}">
                 Gallery
+            </a>
+            <a href="{{ url('/news') }}" class="px-4 py-2.5 rounded-lg text-base font-medium transition-colors {{ request()->is('news*') ? 'text-maroon font-semibold bg-[var(--accent-cream-light)] dark:text-[var(--accent-cream)]' : 'text-[var(--text-strong)] hover:bg-[var(--accent-cream-light)] hover:text-maroon' }}">
+                News
             </a>
             <a href="{{ url('/get-involved') }}" class="px-4 py-2.5 rounded-lg text-base font-medium transition-colors {{ request()->is('get-involved*') ? 'text-maroon font-semibold bg-[var(--accent-cream-light)] dark:text-[var(--accent-cream)]' : 'text-[var(--text-strong)] hover:bg-[var(--accent-cream-light)] hover:text-maroon' }}">
                 Get Involved

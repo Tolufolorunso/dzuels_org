@@ -37,6 +37,9 @@
                         <a href="{{ url('/gallery') }}" class="hover:text-[var(--accent-cream)] transition-colors">Photo Gallery</a>
                     </li>
                     <li>
+                        <a href="{{ url('/news') }}" class="hover:text-[var(--accent-cream)] transition-colors">News & Updates</a>
+                    </li>
+                    <li>
                         <a href="{{ url('/contact') }}" class="hover:text-[var(--accent-cream)] transition-colors">Contact Us</a>
                     </li>
                 </ul>

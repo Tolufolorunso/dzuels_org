@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\GalleryAlbumController as AdminGalleryAlbumController;
 use App\Http\Controllers\Admin\InquiryController;
 use App\Http\Controllers\Admin\PartnerController;
+use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\ProgrammeController as AdminProgrammeController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\TeamMemberController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\GetInvolvedController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ProgrammeController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +35,8 @@ Route::get('/events/{slug}', [EventController::class, 'show'])->name('events.sho
 Route::post('/events/{slug}/register', [EventController::class, 'register'])->name('events.register');
 Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
 Route::get('/gallery/{slug}', [GalleryController::class, 'album'])->name('gallery.album');
+Route::get('/news', [NewsController::class, 'index'])->name('news.index');
+Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 Route::get('/donate', DonateController::class)->name('donate');
 Route::get('/get-involved', [GetInvolvedController::class, 'index'])->name('get-involved');
 Route::post('/get-involved/volunteer', [GetInvolvedController::class, 'storeVolunteer'])->middleware('throttle:6,1')->name('get-involved.volunteer');
@@ -83,6 +87,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/gallery/{album}/photos', [AdminGalleryAlbumController::class, 'uploadPhotos'])->name('gallery.photos.upload');
         Route::delete('/gallery/{album}/photos/{photo}', [AdminGalleryAlbumController::class, 'destroyPhoto'])->name('gallery.photos.destroy');
         Route::resource('gallery', AdminGalleryAlbumController::class)->parameters(['gallery' => 'album'])->except(['show']);
+
+        // News Management
+        Route::patch('/news/{news}/toggle', [AdminPostController::class, 'togglePublish'])->name('news.toggle');
+        Route::resource('news', AdminPostController::class)->except(['show']);
 
         // Inquiry Management (Volunteers & Partners)
         Route::get('/inquiries', [InquiryController::class, 'index'])->name('inquiries.index');

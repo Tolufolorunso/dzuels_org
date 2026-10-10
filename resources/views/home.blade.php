@@ -358,7 +358,79 @@
         </div>
     </section>
 
-    {{-- 9. Partners Strip --}}
+    {{-- 9. Latest News & Impact Updates --}}
+    @if (isset($latestPosts) && $latestPosts->isNotEmpty())
+        <section class="py-16 sm:py-24 bg-[var(--bg)] transition-colors">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-widest text-crimson dark:text-[var(--accent-cream)]">
+                            Latest Dispatches
+                        </span>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-[var(--heading)] tracking-tight mt-1">
+                            News & Impact Stories
+                        </h2>
+                    </div>
+                    <a href="{{ url('/news') }}" class="inline-flex items-center gap-1.5 text-sm font-bold text-maroon dark:text-[var(--accent-cream)] hover:underline">
+                        <span>View All News</span>
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    @foreach ($latestPosts as $post)
+                        <article class="flex flex-col bg-[var(--surface)] border border-[var(--border)] rounded-3xl overflow-hidden shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                            <a href="{{ route('news.show', $post->slug) }}" class="relative aspect-16/10 overflow-hidden bg-stone-100 block">
+                                <img src="{{ $post->cover_image_url }}" 
+                                     alt="{{ $post->title }}" 
+                                     loading="lazy"
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                
+                                @if ($post->programme)
+                                    <span class="absolute top-3 left-3 inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-white/95 text-maroon shadow-xs">
+                                        {{ $post->programme->title }}
+                                    </span>
+                                @endif
+                            </a>
+
+                            <div class="p-6 flex flex-col flex-grow">
+                                <div class="flex items-center gap-2 text-xs text-[var(--text-muted)] mb-2.5">
+                                    <span>{{ $post->published_at ? $post->published_at->format('M j, Y') : $post->created_at->format('M j, Y') }}</span>
+                                    <span>•</span>
+                                    <span>{{ $post->reading_time_minutes }} min read</span>
+                                </div>
+
+                                <h3 class="text-lg font-bold text-[var(--heading)] group-hover:text-maroon transition-colors line-clamp-2 leading-snug mb-2.5">
+                                    <a href="{{ route('news.show', $post->slug) }}">
+                                        {{ $post->title }}
+                                    </a>
+                                </h3>
+
+                                @if ($post->excerpt)
+                                    <p class="text-sm text-[var(--text)] line-clamp-2 leading-relaxed mb-4">
+                                        {{ $post->excerpt }}
+                                    </p>
+                                @endif
+
+                                <div class="mt-auto pt-3 border-t border-[var(--border-subtle)] flex items-center justify-between text-xs">
+                                    <a href="{{ route('news.show', $post->slug) }}" class="font-semibold text-maroon dark:text-[var(--accent-cream)] group-hover:underline inline-flex items-center gap-1">
+                                        <span>Read Story</span>
+                                        <svg class="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
+
+    {{-- 10. Partners Strip --}}
     <section class="py-16 sm:py-20 bg-[var(--bg-alt)] text-center transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <span class="text-xs font-bold uppercase tracking-widest text-crimson dark:text-[var(--accent-cream)]">
@@ -401,7 +473,7 @@
         </div>
     </section>
 
-    {{-- 10. Final Call to Action Banner --}}
+    {{-- 11. Final Call to Action Banner --}}
     <section class="py-20 lg:py-28 text-white text-center relative overflow-hidden bg-radial from-crimson/40 via-maroon to-[#2B0203]">
         <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
