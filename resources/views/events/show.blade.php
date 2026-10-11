@@ -337,6 +337,14 @@
                                               class="w-full px-4 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--bg)] text-sm text-[var(--text)] focus:border-maroon focus:ring-2 focus:ring-maroon/20 outline-none transition-all">{{ old('notes') }}</textarea>
                                 </div>
 
+                                {{-- Privacy Notice --}}
+                                <p class="text-[11px] text-[var(--text-muted)] flex items-start gap-1.5 leading-normal">
+                                    <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-mint shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                    </svg>
+                                    <span>We respect your privacy. Attendee details are protected under our <a href="{{ route('privacy-policy') }}" class="underline hover:text-maroon dark:hover:text-[var(--accent-cream)] font-medium">Privacy Policy</a>.</span>
+                                </p>
+
                                 {{-- Submit Button --}}
                                 <button type="submit" 
                                         class="w-full py-3.5 px-6 rounded-full text-sm font-bold bg-maroon text-white hover:bg-crimson transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer flex items-center justify-center gap-2">

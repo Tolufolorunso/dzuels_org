@@ -242,6 +242,14 @@
                                     @enderror
                                 </div>
 
+                                {{-- Privacy Notice --}}
+                                <p class="text-xs text-[var(--text-muted)] flex items-start gap-1.5 leading-relaxed">
+                                    <svg class="w-4 h-4 text-emerald-600 dark:text-mint shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                    </svg>
+                                    <span>We respect your privacy. Volunteer applications are processed strictly in accordance with our <a href="{{ route('privacy-policy') }}" class="underline hover:text-maroon dark:hover:text-[var(--accent-cream)] font-medium">Privacy Policy</a>.</span>
+                                </p>
+
                                 {{-- Submit Button --}}
                                 <div>
                                     <button type="submit" 
@@ -383,6 +391,14 @@
                                         <p class="mt-1.5 text-xs text-rose-500 font-medium">{{ $message }}</p>
                                     @enderror
                                 </div>
+
+                                {{-- Privacy Notice --}}
+                                <p class="text-xs text-[var(--text-muted)] flex items-start gap-1.5 leading-relaxed">
+                                    <svg class="w-4 h-4 text-emerald-600 dark:text-mint shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                    </svg>
+                                    <span>We respect your privacy. Partnership proposals are handled strictly in accordance with our <a href="{{ route('privacy-policy') }}" class="underline hover:text-maroon dark:hover:text-[var(--accent-cream)] font-medium">Privacy Policy</a>.</span>
+                                </p>
 
                                 {{-- Submit Button --}}
                                 <div>

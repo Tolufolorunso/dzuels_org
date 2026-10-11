@@ -26,6 +26,7 @@ class SitemapController extends Controller
             ['loc' => url('/donate'), 'changefreq' => 'monthly', 'priority' => 0.9],
             ['loc' => url('/get-involved'), 'changefreq' => 'monthly', 'priority' => 0.8],
             ['loc' => url('/contact'), 'changefreq' => 'monthly', 'priority' => 0.7],
+            ['loc' => url('/privacy-policy'), 'changefreq' => 'monthly', 'priority' => 0.5],
         ];
 
         foreach ($staticPages as $page) {

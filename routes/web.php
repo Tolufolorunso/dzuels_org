@@ -21,6 +21,7 @@ use App\Http\Controllers\GetInvolvedController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\PrivacyPolicyController;
 use App\Http\Controllers\ProgrammeController;
 use App\Http\Controllers\RobotsController;
 use App\Http\Controllers\SitemapController;
@@ -49,6 +50,7 @@ Route::post('/get-involved/partner', [GetInvolvedController::class, 'storePartne
 Route::redirect('/partner', '/get-involved', 301);
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:6,1')->name('contact.submit');
+Route::get('/privacy-policy', PrivacyPolicyController::class)->name('privacy-policy');
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->middleware('throttle:6,1')->name('newsletter.subscribe');
 Route::get('/newsletter/unsubscribe/{token}', [NewsletterController::class, 'showUnsubscribe'])->name('newsletter.unsubscribe');
 Route::post('/newsletter/unsubscribe/{token}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe.confirm');
