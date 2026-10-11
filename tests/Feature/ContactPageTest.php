@@ -30,6 +30,7 @@ class ContactPageTest extends TestCase
         $response->assertSeeText('+234 904 249 3883');
         $response->assertSeeText('info@dzuelsfoundation.org');
         $response->assertSeeText('Send Us a Message');
+        $response->assertSee('front/images/gallery/optimized/general-05.webp');
         $response->assertSee('https://www.google.com/maps/embed', false);
     }
 

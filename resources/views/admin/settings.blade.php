@@ -156,7 +156,7 @@
                             id="contact_phone_1" 
                             type="text" 
                             name="contact_phone_1" 
-                            value="{{ old('contact_phone_1', $settings['contact_phone_1'] ?? '+234 803 388 9576') }}" 
+                            value="{{ old('contact_phone_1', $settings['contact_phone_1'] ?? '+234 904 249 3883') }}" 
                             required 
                             class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon focus:border-transparent transition-all"
                         >

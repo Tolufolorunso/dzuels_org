@@ -106,7 +106,7 @@
                     Need urgent assistance or have questions regarding our educational programs?
                 </p>
                 <p class="font-medium text-[var(--text-strong)]">
-                    Email us directly at <a href="mailto:info@dzuelsfoundation.org" class="text-maroon dark:text-[var(--accent-cream)] underline">info@dzuelsfoundation.org</a> or call <a href="tel:+2348033889576" class="text-maroon dark:text-[var(--accent-cream)] underline">+234 803 388 9576</a>.
+                    Email us directly at <a href="mailto:info@dzuelsfoundation.org" class="text-maroon dark:text-[var(--accent-cream)] underline">info@dzuelsfoundation.org</a> or call <a href="tel:+2349042493883" class="text-maroon dark:text-[var(--accent-cream)] underline">+234 904 249 3883</a>.
                 </p>
             </div>
 

@@ -177,7 +177,7 @@
                         <p class="font-bold text-[var(--text-strong)]">Dzuels Educational Foundation</p>
                         <p class="text-[var(--text-muted)]"><strong>Office Address:</strong> AAoJ Memorial Learning Center, Ijero-Ekiti, Ekiti State, Nigeria</p>
                         <p class="text-[var(--text-muted)]"><strong>Email:</strong> <a href="mailto:info@dzuelsfoundation.org" class="text-maroon dark:text-[var(--accent-cream)] font-medium underline">info@dzuelsfoundation.org</a></p>
-                        <p class="text-[var(--text-muted)]"><strong>Telephone:</strong> <a href="tel:+2348033889576" class="text-maroon dark:text-[var(--accent-cream)] font-medium underline">+234 803 388 9576</a> / <a href="tel:+2347076646780" class="text-maroon dark:text-[var(--accent-cream)] font-medium underline">+234 707 664 6780</a></p>
+                        <p class="text-[var(--text-muted)]"><strong>Telephone:</strong> <a href="tel:+2349042493883" class="text-maroon dark:text-[var(--accent-cream)] font-medium underline">+234 904 249 3883</a> / <a href="tel:+2347076646780" class="text-maroon dark:text-[var(--accent-cream)] font-medium underline">+234 707 664 6780</a></p>
                     </div>
                 </div>
 

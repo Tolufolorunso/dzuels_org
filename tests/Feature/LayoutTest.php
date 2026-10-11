@@ -36,7 +36,7 @@ class LayoutTest extends TestCase
         $response = $this->get('/');
 
         $response->assertOk();
-        $response->assertSeeText('+234 803 388 9576');
+        $response->assertSeeText('+234 904 249 3883');
         $response->assertSeeText('info@dzuelsfoundation.org');
         $response->assertSeeText('Ijero-Ekiti, Ekiti State, Nigeria');
     }

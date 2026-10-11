@@ -48,7 +48,7 @@ class SettingSeeder extends Seeder
             // Contact Information
             [
                 'key' => 'contact_phone_1',
-                'value' => '+234 803 388 9576',
+                'value' => '+234 904 249 3883',
                 'type' => 'string',
                 'group' => 'contact',
             ],

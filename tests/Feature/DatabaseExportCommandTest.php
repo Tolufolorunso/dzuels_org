@@ -17,6 +17,8 @@ class DatabaseExportCommandTest extends TestCase
 
     protected ?string $savedDefaultDumpContent = null;
 
+    protected ?string $savedRootDumpContent = null;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -24,6 +26,11 @@ class DatabaseExportCommandTest extends TestCase
         $defaultDump = database_path('dumps/dzuels_database.sql');
         if (File::exists($defaultDump)) {
             $this->savedDefaultDumpContent = File::get($defaultDump);
+        }
+
+        $rootDump = base_path('dzuels_database.sql');
+        if (File::exists($rootDump)) {
+            $this->savedRootDumpContent = File::get($rootDump);
         }
     }
 
@@ -40,12 +47,17 @@ class DatabaseExportCommandTest extends TestCase
             File::put(database_path('dumps/dzuels_database.sql'), $this->savedDefaultDumpContent);
         }
 
+        if ($this->savedRootDumpContent !== null) {
+            File::put(base_path('dzuels_database.sql'), $this->savedRootDumpContent);
+        }
+
         parent::tearDown();
     }
 
     public function test_it_runs_db_export_sql_command_successfully_with_default_output(): void
     {
         $defaultDumpPath = database_path('dumps/dzuels_database.sql');
+        $rootDumpPath = base_path('dzuels_database.sql');
 
         $this->artisan('db:export-sql')
             ->expectsOutputToContain('Dzuels Foundation - MySQL Database Export Suite')
@@ -54,6 +66,8 @@ class DatabaseExportCommandTest extends TestCase
 
         $this->assertFileExists($defaultDumpPath);
         $this->assertGreaterThan(0, filesize($defaultDumpPath));
+        $this->assertFileExists($rootDumpPath);
+        $this->assertGreaterThan(0, filesize($rootDumpPath));
     }
 
     public function test_it_exports_to_custom_output_path(): void

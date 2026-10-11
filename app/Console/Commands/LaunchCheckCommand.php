@@ -108,9 +108,11 @@ class LaunchCheckCommand extends Command
         }
 
         $sqlDumpPath = database_path('dumps/dzuels_database.sql');
-        if (File::exists($sqlDumpPath) && filesize($sqlDumpPath) > 0) {
-            $dumpSize = round(filesize($sqlDumpPath) / 1024, 1);
-            $this->line("  <fg=green>✔</> Production MySQL database dump exists ({$dumpSize} KB).");
+        $rootDumpPath = base_path('dzuels_database.sql');
+        if ((File::exists($sqlDumpPath) && filesize($sqlDumpPath) > 0) || (File::exists($rootDumpPath) && filesize($rootDumpPath) > 0)) {
+            $checkedPath = (File::exists($rootDumpPath) && filesize($rootDumpPath) > 0) ? $rootDumpPath : $sqlDumpPath;
+            $dumpSize = round(filesize($checkedPath) / 1024, 1);
+            $this->line("  <fg=green>✔</> Production MariaDB/MySQL database dump exists ({$dumpSize} KB).");
         } else {
             $this->line('  <fg=yellow>⚠</> Production database dump missing. Generate with `php artisan db:export-sql`.');
             $warnings++;

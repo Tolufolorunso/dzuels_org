@@ -57,7 +57,7 @@ class ProgrammeSeeder extends Seeder
                 'slug' => 'spelling-bee-contests',
                 'summary' => 'A high-impact inter-school spelling championship enhancing linguistic confidence, memory retention, public poise, and academic camaraderie for young pupils.',
                 'body' => "The Dzuels Spelling Bee Contest brings together hundreds of eager pupils from diverse public and community schools to test their mastery of the English lexicon in a supportive, spirited tournament.\n\nBeyond teaching orthography and etymology, the Spelling Bee builds crucial non-cognitive skills: composure under pressure, mental agility, sportsmanship, and fearless public speaking. Finalists compete on stage before cheering peers, families, and education inspectors, competing for coveted school fee grants, complete textbook suites, and gold medals.\n\nThis initiative proves that with structured practice and compassionate encouragement, every child can achieve extraordinary linguistic and academic heights.",
-                'cover_image' => 'front/images/home_1.webp',
+                'cover_image' => 'front/images/gallery/optimized/spelling-01.webp',
                 'partner_name' => null,
                 'is_featured' => false,
                 'is_active' => true,

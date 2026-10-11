@@ -78,9 +78,13 @@
                         <span class="text-[var(--accent-cream)] font-semibold">Email:</span>
                         <a href="mailto:info@dzuelsfoundation.org" class="hover:text-white transition-colors">info@dzuelsfoundation.org</a>
                     </p>
+                    @php
+                        $footerPhone = \App\Models\Setting::get('contact_phone_1', '+234 904 249 3883');
+                        $footerPhoneClean = preg_replace('/[^0-9+]/', '', $footerPhone);
+                    @endphp
                     <p class="flex items-center gap-2">
                         <span class="text-[var(--accent-cream)] font-semibold">Phone:</span>
-                        <a href="tel:+2348033889576" class="hover:text-white transition-colors">+234 803 388 9576</a>
+                        <a href="tel:{{ $footerPhoneClean }}" class="hover:text-white transition-colors">{{ $footerPhone }}</a>
                     </p>
                     <div class="pt-2">
                         <a href="{{ url('/get-involved') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold bg-crimson hover:bg-crimson-hover text-white transition-colors shadow-xs">

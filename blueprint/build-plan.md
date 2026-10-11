@@ -26,6 +26,10 @@
 - [x] 19. **Site-wide page content management, user access control and password recovery** - WordPress-style page content editor in `/admin` allowing staff to update text and section images across all public pages; role-based user management where admins create and manage staff accounts with granular access levels; and password reset workflow (forgot password email links and in-dashboard password updates)
 - [x] 20. **MySQL database export and cPanel phpMyAdmin migration suite** - automated Artisan database export command (`php artisan db:export-sql`) generating a clean, MySQL/MariaDB-compliant `.sql` dump file with proper schemas and all seeded foundation data for 1-click import into cPanel phpMyAdmin, accompanied by a step-by-step cPanel deployment and `.env` credentials guide
 
+## Milestone 3: Production Server Readiness & Launch Refinements (Completed & Shipped)
+
+- [x] 21. **Production MariaDB configuration, root SQL dump, phone hotline update and hero imagery refinements** - configure `.env` and `.env.example` for local and production MariaDB/MySQL (`server161.web-hosting.com`); provide root `dzuels_database.sql` for 1-click phpMyAdmin import; ensure all layout and contact data is strictly driven from database settings; replace phone number with `+234 904 249 3883` site-wide; hide Diaspora & International Wire on `/donate`; add contextual background imagery to About, Programmes, and Contact hero sections; and fix Spelling Bee cover photo to an authentic contest image (`spelling-01.webp`)
+
 ## Deferred Ideas (Not Scheduled as Features)
 
 *(Preserved for future reference, completely removed from the active feature roadmap)*

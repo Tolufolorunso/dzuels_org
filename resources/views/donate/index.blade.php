@@ -184,7 +184,8 @@
                         </div>
                     </div>
 
-                    {{-- Channel 3: International & Diaspora Wire Transfers --}}
+                    {{-- Channel 3: International & Diaspora Wire Transfers (Hidden for now per launch requirements) --}}
+                    @if(false)
                     <div class="rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-xs p-6 sm:p-8 flex flex-col justify-between">
                         <div>
                             <div class="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 flex items-center justify-center text-2xl mb-4">
@@ -257,6 +258,7 @@
                             <span>Beneficiary Name: <strong>{{ $settings['bank_account_name'] }}</strong></span>
                         </div>
                     </div>
+                    @endif
 
                     {{-- Channel 4: In-Kind & Educational Equipment Support --}}
                     <div class="rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-xs p-6 sm:p-8 flex flex-col justify-between">

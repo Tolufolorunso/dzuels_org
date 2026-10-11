@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Services\DatabaseExportService;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File;
 
 class ExportDatabaseSql extends Command
 {
@@ -58,6 +59,13 @@ class ExportDatabaseSql extends Command
 
             $formattedSize = $this->formatBytes($result['bytes']);
             $tableCount = count($result['tables']);
+
+            // When exporting to default path, also copy directly to project root for convenient 1-click phpMyAdmin import
+            if (! $customPath) {
+                $rootDump = base_path('dzuels_database.sql');
+                File::copy($result['path'], $rootDump);
+                $this->line("  <fg=bright-cyan>✔ Synced to root:</> {$rootDump}");
+            }
 
             $this->newLine();
             $this->info("✔ Successfully exported {$tableCount} tables ({$totalRows} total rows) to:");

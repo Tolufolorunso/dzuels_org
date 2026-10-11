@@ -18,7 +18,7 @@ class DonatePageTest extends TestCase
         $response->assertSeeText('Your Generosity Powers');
         $response->assertSeeText('Instant Online Donation');
         $response->assertSeeText('Direct Bank Transfer');
-        $response->assertSeeText('Diaspora & International Wire');
+        $response->assertDontSeeText('Diaspora & International Wire');
         $response->assertSeeText('In-Kind & Equipment Donations');
         $response->assertSeeText('Where Your Contribution Goes');
         $response->assertSeeText('Frequently Asked Questions');

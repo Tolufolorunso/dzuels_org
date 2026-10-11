@@ -38,7 +38,7 @@ class SiteSettingsTest extends TestCase
         $response->assertSee('591');
         $response->assertSee('15');
         $response->assertSee('0450072850');
-        $response->assertSee('+234 803 388 9576');
+        $response->assertSee('+234 904 249 3883');
         $response->assertSee('info@dzuelsfoundation.org');
     }
 

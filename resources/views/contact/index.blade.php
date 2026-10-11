@@ -11,22 +11,42 @@
         {{-- 1. Hero Section --}}
         @php
             $heroSec = $sections['hero'] ?? null;
+            $heroBgImage = $heroSec?->image_url ? asset($heroSec->image_url) : asset('front/images/gallery/optimized/general-05.webp');
         @endphp
-        <section class="relative py-16 lg:py-24 bg-[var(--surface)] border-b border-[var(--border)] overflow-hidden transition-colors">
-            {{-- Decorative ambient background glows --}}
-            <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-maroon/5 dark:bg-maroon/10 blur-3xl pointer-events-none"></div>
-            <div class="absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-[var(--accent-cream)]/30 dark:bg-[var(--accent-cream)]/5 blur-3xl pointer-events-none"></div>
+        <section class="relative bg-maroon text-white py-16 sm:py-24 overflow-hidden">
+            {{-- Contextual Background Imagery --}}
+            <div class="absolute inset-0 z-0">
+                <img src="{{ $heroBgImage }}" alt="" class="w-full h-full object-cover object-center transform scale-105" aria-hidden="true">
+            </div>
+            {{-- Dark Maroon Gradient Overlays (WCAG 2.2 AA Contrast) --}}
+            <div class="absolute inset-0 z-0 bg-gradient-to-r from-[#2B0203]/95 via-maroon/90 to-[#2B0203]/85 mix-blend-multiply"></div>
+            <div class="absolute inset-0 z-0 bg-linear-to-b from-maroon/80 via-maroon/90 to-[#2B0203]/95"></div>
+            <div class="absolute inset-0 z-0 opacity-15">
+                <div class="absolute inset-0 bg-[radial-gradient(#F9DEC9_1px,transparent_1px)] [background-size:24px_24px]"></div>
+            </div>
 
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-mint border border-emerald-200 dark:border-emerald-800 mb-6">
+                {{-- Breadcrumbs --}}
+                <nav class="flex items-center justify-center gap-2 text-sm text-cream/80 mb-6" aria-label="Breadcrumb">
+                    <a href="{{ url('/') }}" class="hover:text-white transition-colors flex items-center gap-1.5 focus:outline-none focus:underline">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                        <span>Home</span>
+                    </a>
+                    <span class="text-cream/50" aria-hidden="true">/</span>
+                    <span class="text-white font-semibold" aria-current="page">Contact Us</span>
+                </nav>
+
+                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--accent-cream)]/20 text-[var(--accent-cream)] border border-[var(--accent-cream)]/30 backdrop-blur-xs mb-6">
                     <span>💬</span> {{ $heroSec?->subheadline ?: 'Get in Touch' }}
                 </span>
 
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-[var(--heading)] tracking-tight max-w-4xl mx-auto leading-tight">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight max-w-4xl mx-auto leading-tight">
                     {{ $heroSec?->headline ?: 'We Are Always Available to Connect With You' }}
                 </h1>
 
-                <p class="mt-6 text-lg sm:text-xl text-[var(--text-muted)] max-w-2xl mx-auto leading-relaxed">
+                <p class="mt-6 text-lg sm:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
                     {{ $heroSec?->body_text ?: 'Have a question regarding our youth literacy initiatives, school computer labs, or community partnerships? Send us a message or visit our headquarters in Ijero-Ekiti.' }}
                 </p>
             </div>

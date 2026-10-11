@@ -99,7 +99,7 @@ class PrivacyPolicyAndErrorPagesTest extends TestCase
         $this->assertStringContainsString(url('/donate'), $renderedView);
         $this->assertStringContainsString('Return to Homepage', $renderedView);
         $this->assertStringContainsString('info@dzuelsfoundation.org', $renderedView);
-        $this->assertStringContainsString('+234 803 388 9576', $renderedView);
+        $this->assertStringContainsString('+234 904 249 3883', $renderedView);
     }
 
     public function test_sitemap_xml_includes_privacy_policy(): void

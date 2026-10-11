@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Programme;
+use Database\Seeders\ProgrammeSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -101,5 +102,19 @@ class ProgrammePublicTest extends TestCase
 
         $response->assertOk();
         $response->assertSeeText('Programme details are currently being updated.');
+    }
+
+    public function test_spelling_bee_contest_programme_displays_authentic_cover_photo(): void
+    {
+        $this->seed(ProgrammeSeeder::class);
+
+        $response = $this->get('/programmes');
+        $response->assertOk();
+        $response->assertSee('front/images/gallery/optimized/spelling-01.webp');
+        $response->assertSee('front/images/gallery/optimized/itd-2025-05.webp');
+
+        $detailResponse = $this->get('/programmes/spelling-bee-contests');
+        $detailResponse->assertOk();
+        $detailResponse->assertSee('front/images/gallery/optimized/spelling-01.webp');
     }
 }

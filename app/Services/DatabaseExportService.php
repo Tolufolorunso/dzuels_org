@@ -114,7 +114,10 @@ class DatabaseExportService
 
         foreach (Schema::getTables() as $tableObj) {
             $name = is_array($tableObj) ? $tableObj['name'] : ($tableObj->name ?? (string) $tableObj);
-            if (! in_array($name, $this->excludedTables, true) && ! str_starts_with($name, 'sqlite_')) {
+            if (! in_array($name, $this->excludedTables, true)
+                && ! str_starts_with($name, 'sqlite_')
+                && ! str_starts_with($name, 'pma_')
+                && ! str_starts_with($name, 'pma__')) {
                 $allTables[] = $name;
             }
         }

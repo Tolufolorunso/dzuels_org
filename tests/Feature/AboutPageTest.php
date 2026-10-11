@@ -22,6 +22,7 @@ class AboutPageTest extends TestCase
         $response->assertSeeText('Home');
         $response->assertSeeText('Transforming Lives');
         $response->assertSeeText('Page by Page');
+        $response->assertSee('front/images/gallery/optimized/general-01.webp');
 
         // Story & 10-Year Narrative
         $response->assertSeeText('A Decade of Dedicated Service (Since 2015)');
