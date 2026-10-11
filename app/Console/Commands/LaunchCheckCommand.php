@@ -107,6 +107,15 @@ class LaunchCheckCommand extends Command
             $warnings++;
         }
 
+        $sqlDumpPath = database_path('dumps/dzuels_database.sql');
+        if (File::exists($sqlDumpPath) && filesize($sqlDumpPath) > 0) {
+            $dumpSize = round(filesize($sqlDumpPath) / 1024, 1);
+            $this->line("  <fg=green>✔</> Production MySQL database dump exists ({$dumpSize} KB).");
+        } else {
+            $this->line('  <fg=yellow>⚠</> Production database dump missing. Generate with `php artisan db:export-sql`.');
+            $warnings++;
+        }
+
         $this->newLine();
 
         // 3. Routing & Navigation Verification

@@ -24,7 +24,7 @@
 
 - [x] 18. **Brand assets, ITD 2026 event overhaul and gallery optimization** - full favicon suite generated from logo (`favicon.ico`, apple-touch-icon, webmanifest); ITD 2026 event page updated with backdrop image extracted from PDF, October 3 2026 date, revised AI empowerment objective, SeedDev and public registration form removed, 3 dynamic sponsors with extensible admin management, and distinct past event archives; gallery page repaired, server-rendered with responsive masonry, smooth filtering, and working modal lightbox
 - [x] 19. **Site-wide page content management, user access control and password recovery** - WordPress-style page content editor in `/admin` allowing staff to update text and section images across all public pages; role-based user management where admins create and manage staff accounts with granular access levels; and password reset workflow (forgot password email links and in-dashboard password updates)
-- [ ] 20. **MySQL database export and cPanel phpMyAdmin migration suite** - automated Artisan database export command (`php artisan db:export-sql`) generating a clean, MySQL/MariaDB-compliant `.sql` dump file with proper schemas and all seeded foundation data for 1-click import into cPanel phpMyAdmin, accompanied by a step-by-step cPanel deployment and `.env` credentials guide
+- [x] 20. **MySQL database export and cPanel phpMyAdmin migration suite** - automated Artisan database export command (`php artisan db:export-sql`) generating a clean, MySQL/MariaDB-compliant `.sql` dump file with proper schemas and all seeded foundation data for 1-click import into cPanel phpMyAdmin, accompanied by a step-by-step cPanel deployment and `.env` credentials guide
 
 ## Deferred Ideas (Not Scheduled as Features)
 
