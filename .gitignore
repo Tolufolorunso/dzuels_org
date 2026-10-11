@@ -28,3 +28,4 @@ Thumbs.db
 mcp_config.json
 .agents/mcp_config.json
 /gallery
+*.zip

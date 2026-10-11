@@ -17,11 +17,13 @@ class EventController extends Controller
         $upcomingEvents = Event::active()
             ->upcoming()
             ->ordered()
+            ->with('sponsors')
             ->get();
 
         $pastEvents = Event::active()
             ->where('event_date', '<', now()->startOfDay())
             ->orderBy('event_date', 'desc')
+            ->with('sponsors')
             ->get();
 
         // Flagship or next major event
@@ -37,6 +39,7 @@ class EventController extends Controller
     {
         $event = Event::active()
             ->where('slug', $slug)
+            ->with('sponsors')
             ->firstOrFail();
 
         $otherEvents = Event::active()

@@ -65,6 +65,20 @@
                 </div>
             @endif
 
+            @if ($event->objective)
+                <div class="max-w-4xl p-5 rounded-2xl bg-maroon/5 dark:bg-maroon/20 border border-maroon/20 text-maroon dark:text-[var(--accent-cream)] shadow-xs">
+                    <div class="flex items-start gap-3">
+                        <span class="text-2xl mt-0.5">🎯</span>
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-widest text-crimson dark:text-mint block mb-1">Key Event Objective</span>
+                            <p class="text-base sm:text-lg font-bold leading-relaxed text-[var(--heading)]">
+                                "{{ $event->objective }}"
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
             <div class="flex flex-wrap items-center gap-6 text-sm text-[var(--text-muted)] pt-2 border-t border-[var(--border)]">
                 <div class="flex items-center gap-2">
                     <span>📍</span>
@@ -204,40 +218,119 @@
                             </a>
                         </div>
                     </div>
+
+                    {{-- Event Sponsors & Supporters --}}
+                    @if ($event->sponsors && $event->sponsors->isNotEmpty())
+                        <div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-8 sm:p-10 shadow-sm space-y-6">
+                            <div class="flex items-center justify-between pb-4 border-b border-[var(--border)]">
+                                <div>
+                                    <span class="text-xs font-bold uppercase tracking-wider text-crimson dark:text-[var(--accent-cream)] block">
+                                        Community Supporters
+                                    </span>
+                                    <h2 class="text-2xl font-bold text-[var(--heading)] mt-0.5">
+                                        Official Event Sponsors
+                                    </h2>
+                                </div>
+                                <span class="text-xs font-semibold px-3 py-1 rounded-full bg-[var(--surface-alt)] text-[var(--text-muted)] border border-[var(--border)]">
+                                    {{ $event->sponsors->count() }} Sponsors
+                                </span>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                                @foreach ($event->sponsors as $sponsor)
+                                    <div class="p-6 rounded-2xl bg-[var(--surface-alt)] border border-[var(--border)] flex flex-col items-center text-center justify-center space-y-3 group hover:border-maroon/30 transition-all">
+                                        @if ($sponsor->logo_path)
+                                            <div class="h-16 w-full flex items-center justify-center">
+                                                <img src="{{ asset($sponsor->logo_path) }}" 
+                                                     alt="{{ $sponsor->name }}" 
+                                                     class="max-h-14 max-w-[120px] object-contain transition-transform group-hover:scale-105">
+                                            </div>
+                                        @else
+                                            <div class="w-12 h-12 rounded-full bg-maroon/10 text-maroon font-bold flex items-center justify-center text-lg">
+                                                {{ substr($sponsor->name, 0, 1) }}
+                                            </div>
+                                        @endif
+                                        <span class="text-xs font-bold text-[var(--heading)]">{{ $sponsor->name }}</span>
+                                        @if ($sponsor->website_url)
+                                            <a href="{{ $sponsor->website_url }}" target="_blank" rel="noopener noreferrer" class="text-[11px] text-maroon hover:underline font-medium">
+                                                Visit Partner &rarr;
+                                            </a>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
                 </div>
 
-                {{-- Right Column: Registration Card & Facts Sidebar (5 Cols) --}}
+                {{-- Right Column: Attendance & Facts Sidebar (5 Cols) --}}
                 <div class="lg:col-span-5 space-y-8 sticky top-28">
 
-                    {{-- Registration Card --}}
-                    <div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-8 sm:p-9 shadow-xl relative overflow-hidden" id="register">
-                        {{-- Top Accent Bar --}}
-                        <div class="absolute top-0 left-0 right-0 h-2 bg-linear-to-r from-maroon via-crimson to-mint"></div>
+                    {{-- Right Column Card: Attendance Delegation for ITD 2026, or Registration Form for other events --}}
+                    @if ($event->slug === 'ijero-tech-day-2026')
+                        {{-- ITD 2026 Attendance & Delegation Card (No public registration form) --}}
+                        <div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-8 sm:p-9 shadow-xl relative overflow-hidden">
+                            {{-- Top Accent Bar --}}
+                            <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-maroon via-crimson to-mint"></div>
 
-                        {{-- Flash Success Message --}}
-                        @if (session('success'))
-                            <div class="mb-6 p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-700 text-emerald-900 dark:text-emerald-200 text-sm font-medium flex items-start gap-3">
-                                <span class="text-emerald-600 text-lg">✓</span>
+                            <div class="flex items-center gap-3 pb-4 border-b border-[var(--border)]">
+                                <div class="w-10 h-10 rounded-full bg-maroon/10 text-maroon flex items-center justify-center font-bold text-lg">
+                                    👥
+                                </div>
                                 <div>
-                                    <h4 class="font-bold">Registration Confirmed!</h4>
-                                    <p class="text-xs mt-1">{{ session('success') }}</p>
+                                    <span class="text-xs font-bold uppercase tracking-wider text-crimson dark:text-[var(--accent-cream)] block">
+                                        Participant Information
+                                    </span>
+                                    <h3 class="text-xl font-bold text-[var(--heading)]">
+                                        Attendance & Access
+                                    </h3>
                                 </div>
                             </div>
-                        @endif
 
-                        {{-- Flash Error Message --}}
-                        @if (session('error'))
-                            <div class="mb-6 p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-700 text-rose-900 dark:text-rose-200 text-sm font-medium flex items-start gap-3">
-                                <span class="text-rose-600 text-lg">⚠️</span>
-                                <div>
-                                    <h4 class="font-bold">Notice</h4>
-                                    <p class="text-xs mt-1">{{ session('error') }}</p>
+                            <div class="space-y-4 text-sm text-[var(--text)] mt-6">
+                                <div class="flex items-start gap-3 p-4 rounded-2xl bg-[var(--surface-alt)] border border-[var(--border)]">
+                                    <span class="text-xl shrink-0">🏫</span>
+                                    <div>
+                                        <strong class="text-[var(--heading)] block font-semibold text-sm">School Delegations</strong>
+                                        <p class="text-xs text-[var(--text-muted)] mt-1 leading-relaxed">
+                                            Attendance for 300 student delegates is pre-allocated and coordinated directly with participating schools across Ijero-Ekiti in 10 rotating batches of 30.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-3 p-4 rounded-2xl bg-[var(--surface-alt)] border border-[var(--border)]">
+                                    <span class="text-xl shrink-0">🎓</span>
+                                    <div>
+                                        <strong class="text-[var(--heading)] block font-semibold text-sm">Cohort 2026 Certification</strong>
+                                        <p class="text-xs text-[var(--text-muted)] mt-1 leading-relaxed">
+                                            22 graduating cohort students will receive their official digital literacy certificates during the closing ceremony. Parents are invited for the presentation.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-3 p-4 rounded-2xl bg-[var(--surface-alt)] border border-[var(--border)]">
+                                    <span class="text-xl shrink-0">⏰</span>
+                                    <div>
+                                        <strong class="text-[var(--heading)] block font-semibold text-sm">Staggered Arrival Times</strong>
+                                        <p class="text-xs text-[var(--text-muted)] mt-1 leading-relaxed">
+                                            Each batch is assigned a specific reporting time to minimize wait times and maximize hands-on lab and garden station immersion.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                        @endif
 
-                        @if ($event->is_registration_open)
-                            <div class="space-y-2 mb-6">
+                            <div class="pt-6 border-t border-[var(--border)] mt-6">
+                                <a href="{{ url('/contact') }}" class="w-full py-3 px-4 rounded-full text-center text-xs font-bold bg-[var(--surface-alt)] hover:bg-maroon hover:text-white border border-[var(--border)] text-[var(--text)] transition-colors block cursor-pointer">
+                                    Have questions? Contact Event Desk &rarr;
+                                </a>
+                            </div>
+                        </div>
+                    @elseif ($event->is_registration_open)
+                        {{-- Public Registration Card for other active events --}}
+                        <div class="bg-[var(--surface)] border-2 border-maroon/20 rounded-3xl p-8 sm:p-9 shadow-xl relative overflow-hidden space-y-6">
+                            <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-maroon via-crimson to-mint"></div>
+
+                            <div class="space-y-2 pb-4 border-b border-[var(--border)]">
                                 <span class="text-xs font-bold uppercase tracking-wider text-crimson dark:text-[var(--accent-cream)] block">
                                     Reserve Your Spot
                                 </span>
@@ -249,70 +342,79 @@
                                 </p>
                             </div>
 
+                            @if (session('success'))
+                                <div class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-800 dark:text-emerald-300">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+
+                            @if (session('error'))
+                                <div class="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-xs text-rose-800 dark:text-rose-300">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
+
                             <form method="POST" action="{{ route('events.register', $event->slug) }}" class="space-y-4">
                                 @csrf
 
                                 {{-- Full Name --}}
                                 <div>
                                     <label for="full_name" class="block text-xs font-bold uppercase tracking-wider text-[var(--text-strong)] mb-1.5">
-                                        Full Name <span class="text-rose-500" aria-hidden="true">*</span>
+                                        Full Name <span class="text-rose-500">*</span>
                                     </label>
                                     <input type="text" 
                                            id="full_name" 
                                            name="full_name" 
-                                           value="{{ old('full_name') }}" 
                                            required 
                                            aria-required="true"
-                                           @error('full_name') aria-invalid="true" aria-describedby="reg_full_name_error" @enderror
-                                           placeholder="e.g. Adeola Olawale" 
+                                           value="{{ old('full_name') }}"
+                                           placeholder="e.g. Oluwaseun Adeleke" 
                                            class="w-full px-4 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--bg)] text-sm text-[var(--text)] focus:border-maroon focus:ring-2 focus:ring-maroon/20 outline-none transition-all">
                                     @error('full_name')
-                                        <p id="reg_full_name_error" class="text-rose-600 text-xs mt-1" role="alert">{{ $message }}</p>
+                                        <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
 
                                 {{-- Email Address --}}
                                 <div>
                                     <label for="email" class="block text-xs font-bold uppercase tracking-wider text-[var(--text-strong)] mb-1.5">
-                                        Email Address <span class="text-rose-500" aria-hidden="true">*</span>
+                                        Email Address <span class="text-rose-500">*</span>
                                     </label>
                                     <input type="email" 
                                            id="email" 
                                            name="email" 
-                                           value="{{ old('email') }}" 
                                            required 
                                            aria-required="true"
-                                           @error('email') aria-invalid="true" aria-describedby="reg_email_error" @enderror
-                                           placeholder="e.g. adeola@example.com" 
+                                           value="{{ old('email') }}"
+                                           placeholder="name@example.com" 
                                            class="w-full px-4 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--bg)] text-sm text-[var(--text)] focus:border-maroon focus:ring-2 focus:ring-maroon/20 outline-none transition-all">
                                     @error('email')
-                                        <p id="reg_email_error" class="text-rose-600 text-xs mt-1" role="alert">{{ $message }}</p>
+                                        <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
 
                                 {{-- Phone Number --}}
                                 <div>
                                     <label for="phone" class="block text-xs font-bold uppercase tracking-wider text-[var(--text-strong)] mb-1.5">
-                                        Phone Number <span class="text-rose-500" aria-hidden="true">*</span>
+                                        Phone Number <span class="text-rose-500">*</span>
                                     </label>
                                     <input type="tel" 
                                            id="phone" 
                                            name="phone" 
-                                           value="{{ old('phone') }}" 
                                            required 
                                            aria-required="true"
-                                           @error('phone') aria-invalid="true" aria-describedby="reg_phone_error" @enderror
-                                           placeholder="e.g. +234 803 123 4567" 
+                                           value="{{ old('phone') }}"
+                                           placeholder="+234 800 000 0000" 
                                            class="w-full px-4 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--bg)] text-sm text-[var(--text)] focus:border-maroon focus:ring-2 focus:ring-maroon/20 outline-none transition-all">
                                     @error('phone')
-                                        <p id="reg_phone_error" class="text-rose-600 text-xs mt-1" role="alert">{{ $message }}</p>
+                                        <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
 
-                                {{-- Category / Attendee Type --}}
+                                {{-- Attendee Role / Category --}}
                                 <div>
                                     <label for="attendee_type" class="block text-xs font-bold uppercase tracking-wider text-[var(--text-strong)] mb-1.5">
-                                        I am Attending As:
+                                        Attendee Category
                                     </label>
                                     <select id="attendee_type" 
                                             name="attendee_type" 
@@ -321,9 +423,6 @@
                                         <option value="teacher" {{ old('attendee_type') == 'teacher' ? 'selected' : '' }}>Teacher / School Representative</option>
                                         <option value="cohort_graduate" {{ old('attendee_type') == 'cohort_graduate' ? 'selected' : '' }}>Cohort Graduate (Certificate Recipient)</option>
                                         <option value="guest" {{ old('attendee_type') == 'guest' ? 'selected' : '' }}>Community Guest / Dignitary</option>
-                                        <option value="educator" {{ old('attendee_type') == 'educator' ? 'selected' : '' }}>Educator / School Administrator</option>
-                                        <option value="tech_enthusiast" {{ old('attendee_type') == 'tech_enthusiast' ? 'selected' : '' }}>Tech Enthusiast / Developer</option>
-                                        <option value="partner" {{ old('attendee_type') == 'partner' ? 'selected' : '' }}>Partner / Sponsor Representative</option>
                                         <option value="general" {{ old('attendee_type') == 'general' ? 'selected' : '' }}>General Guest</option>
                                     </select>
                                     @error('attendee_type')
@@ -334,18 +433,18 @@
                                 {{-- Notes / Expectations --}}
                                 <div>
                                     <label for="notes" class="block text-xs font-bold uppercase tracking-wider text-[var(--text-strong)] mb-1.5">
-                                        School / Batch / Special Notes (Optional)
+                                        School / Special Notes (Optional)
                                     </label>
                                     <textarea id="notes" 
                                               name="notes" 
                                               rows="2" 
-                                              placeholder="School name, class, batch or special notes (e.g. Batch participant, teacher, or cohort graduate)..." 
+                                              placeholder="School name, class, batch or special notes..." 
                                               class="w-full px-4 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--bg)] text-sm text-[var(--text)] focus:border-maroon focus:ring-2 focus:ring-maroon/20 outline-none transition-all">{{ old('notes') }}</textarea>
                                 </div>
 
                                 {{-- Privacy Notice --}}
                                 <p class="text-[11px] text-[var(--text-muted)] flex items-start gap-1.5 leading-normal">
-                                    <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-mint shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                    <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-mint shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                     </svg>
                                     <span>We respect your privacy. Attendee details are protected under our <a href="{{ route('privacy-policy') }}" class="underline hover:text-maroon dark:hover:text-[var(--accent-cream)] font-medium">Privacy Policy</a>.</span>
@@ -358,24 +457,24 @@
                                     <span>&rarr;</span>
                                 </button>
                             </form>
-                        @else
-                            {{-- Registration Closed State --}}
-                            <div class="text-center py-6 space-y-4">
-                                <div class="w-14 h-14 rounded-full bg-stone-100 dark:bg-stone-800 flex items-center justify-center mx-auto text-2xl">
-                                    🔒
-                                </div>
-                                <h3 class="text-xl font-bold text-[var(--heading)]">Registration is Closed</h3>
-                                <p class="text-xs text-[var(--text-muted)] leading-relaxed">
-                                    Registration for this event has reached capacity or concluded. If you have an inquiry, please contact our event coordinator.
-                                </p>
-                                <div class="pt-2">
-                                    <a href="{{ url('/contact') }}" class="inline-block text-xs font-bold text-maroon hover:underline">
-                                        Contact Us &rarr;
-                                    </a>
-                                </div>
+                        </div>
+                    @else
+                        {{-- Registration Closed State for other events --}}
+                        <div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-8 sm:p-9 shadow-sm relative overflow-hidden text-center py-8 space-y-4">
+                            <div class="w-14 h-14 rounded-full bg-stone-100 dark:bg-stone-800 flex items-center justify-center mx-auto text-2xl">
+                                🔒
                             </div>
-                        @endif
-                    </div>
+                            <h3 class="text-xl font-bold text-[var(--heading)]">Registration is Closed</h3>
+                            <p class="text-xs text-[var(--text-muted)] leading-relaxed">
+                                Registration for this event has reached capacity or concluded. If you have an inquiry, please contact our event coordinator.
+                            </p>
+                            <div class="pt-2">
+                                <a href="{{ url('/contact') }}" class="inline-block text-xs font-bold text-maroon hover:underline">
+                                    Contact Us &rarr;
+                                </a>
+                            </div>
+                        </div>
+                    @endif
 
                     {{-- Quick Event Facts Card --}}
                     <div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-8 shadow-sm space-y-5">
@@ -419,8 +518,8 @@
                             <li class="flex items-start gap-3">
                                 <span class="text-base text-maroon dark:text-[var(--accent-cream)]">🤝</span>
                                 <div>
-                                    <span class="font-bold text-[var(--text-strong)] block">Co-Organizers</span>
-                                    <span class="text-[var(--text-muted)]">Dzuels Educational Foundation & SeedDev Initiative</span>
+                                    <span class="font-bold text-[var(--text-strong)] block">Organizer</span>
+                                    <span class="text-[var(--text-muted)]">Dzuels Educational Foundation</span>
                                 </div>
                             </li>
                         </ul>

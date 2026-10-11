@@ -43,8 +43,8 @@ class EventPublicTest extends TestCase
     public function test_public_event_detail_renders_with_banner_schedule_and_registration_form(): void
     {
         $event = Event::create([
-            'title' => 'Ijero Tech Day 2026',
-            'slug' => 'ijero-tech-day-2026',
+            'title' => 'Annual Tech Summit 2026',
+            'slug' => 'annual-tech-summit-2026',
             'summary' => 'Celebrating 10 years of technology impact.',
             'description' => 'A gathering of over 200 secondary school students in Ijero-Ekiti.',
             'event_date' => now()->addMonth(),
@@ -58,10 +58,10 @@ class EventPublicTest extends TestCase
             'is_registration_open' => true,
         ]);
 
-        $response = $this->get('/events/ijero-tech-day-2026');
+        $response = $this->get('/events/annual-tech-summit-2026');
 
         $response->assertOk();
-        $response->assertSeeText('Ijero Tech Day 2026');
+        $response->assertSeeText('Annual Tech Summit 2026');
         $response->assertSeeText('A gathering of over 200 secondary school students in Ijero-Ekiti.');
         $response->assertSeeText('Dzuels Foundation Hub, Ijero-Ekiti');
         $response->assertSeeText('10:00 AM - 11:30 AM');

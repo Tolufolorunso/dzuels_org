@@ -47,6 +47,72 @@
         }
     @endphp
 
+    <script>
+        function galleryApp(allPhotos, initialAlbum) {
+            return {
+                allPhotos: allPhotos,
+                currentAlbum: initialAlbum || 'all',
+                lightboxOpen: false,
+                activePhotoIndex: 0,
+
+                init() {
+                    this.$watch('lightboxOpen', value => {
+                        if (value) {
+                            document.body.classList.add('overflow-hidden');
+                        } else {
+                            document.body.classList.remove('overflow-hidden');
+                        }
+                    });
+                },
+
+                get filteredPhotos() {
+                    if (this.currentAlbum === 'all') {
+                        return this.allPhotos;
+                    }
+                    return this.allPhotos.filter(p => p.album_slug === this.currentAlbum);
+                },
+
+                get currentPhoto() {
+                    if (this.filteredPhotos.length === 0) return null;
+                    return this.filteredPhotos[this.activePhotoIndex] || null;
+                },
+
+                setAlbum(slug) {
+                    this.currentAlbum = slug;
+                    this.activePhotoIndex = 0;
+                },
+
+                openLightboxByPhotoId(photoId) {
+                    const idx = this.filteredPhotos.findIndex(p => p.id === photoId);
+                    if (idx !== -1) {
+                        this.activePhotoIndex = idx;
+                        this.lightboxOpen = true;
+                    }
+                },
+
+                openLightbox(index) {
+                    this.activePhotoIndex = index;
+                    this.lightboxOpen = true;
+                },
+
+                closeLightbox() {
+                    this.lightboxOpen = false;
+                },
+
+                nextPhoto() {
+                    if (this.filteredPhotos.length === 0) return;
+                    this.activePhotoIndex = (this.activePhotoIndex + 1) % this.filteredPhotos.length;
+                },
+
+                prevPhoto() {
+                    if (this.filteredPhotos.length === 0) return;
+                    this.activePhotoIndex = (this.activePhotoIndex - 1 + this.filteredPhotos.length) % this.filteredPhotos.length;
+                }
+            };
+        }
+        window.galleryApp = galleryApp;
+    </script>
+
     <div x-data="galleryApp({{ Js::from($allPhotos) }}, '{{ $activeSlug ?? 'all' }}')" 
          x-init="init()" 
          class="min-h-screen bg-[var(--bg)] transition-colors">
@@ -169,24 +235,32 @@
                     </button>
                 </div>
 
-                {{-- Masonry Grid --}}
-                <div x-show="filteredPhotos.length > 0" 
-                     class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
-                    <template x-for="(photo, index) in filteredPhotos" :key="photo.id">
-                        <div class="break-inside-avoid rounded-2xl overflow-hidden bg-[var(--surface)] border border-[var(--border)] shadow-xs hover:shadow-xl transition-all duration-300 group cursor-pointer relative"
-                             @click="openLightbox(index)">
+                {{-- Masonry Grid (Server-Rendered for Instant Display, Filtered by Alpine) --}}
+                <div class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4" id="gallery-masonry-grid">
+                    @foreach ($allPhotos as $index => $photo)
+                        <div class="gallery-photo-item break-inside-avoid rounded-2xl overflow-hidden bg-[var(--surface)] border border-[var(--border)] shadow-xs hover:shadow-xl transition-all duration-300 group cursor-pointer relative"
+                             data-album="{{ $photo['album_slug'] }}"
+                             x-show="currentAlbum === 'all' || currentAlbum === '{{ $photo['album_slug'] }}'"
+                             x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0 scale-95"
+                             x-transition:enter-end="opacity-100 scale-100"
+                             @click="openLightboxByPhotoId({{ $photo['id'] }})">
                             
                             {{-- Image --}}
                             <div class="relative overflow-hidden bg-stone-100 dark:bg-stone-800">
-                                <img :src="photo.url" 
-                                     :alt="photo.alt" 
+                                <img src="{{ $photo['url'] }}" 
+                                     alt="{{ $photo['alt'] }}" 
                                      loading="lazy" 
                                      class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500 block">
                                 
                                 {{-- Dark Hover Gradient Overlay with Captions --}}
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 text-white">
-                                    <span class="text-[10px] uppercase font-bold tracking-wider text-[var(--accent-cream)] block" x-text="photo.album_title"></span>
-                                    <p class="text-xs font-semibold line-clamp-2 mt-0.5" x-text="photo.caption || photo.alt"></p>
+                                <div class="absolute inset-0 bg-linear-to-t from-black/85 via-black/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 text-white">
+                                    <span class="text-[10px] uppercase font-bold tracking-wider text-[var(--accent-cream)] block">
+                                        {{ $photo['album_title'] }}
+                                    </span>
+                                    <p class="text-xs font-semibold line-clamp-2 mt-0.5">
+                                        {{ $photo['caption'] ?: $photo['alt'] }}
+                                    </p>
                                     <div class="mt-2 flex items-center justify-between text-[10px] text-stone-300">
                                         <span class="flex items-center gap-1">
                                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -195,11 +269,12 @@
                                             </svg>
                                             View Fullscreen
                                         </span>
+                                        <span>🔍 Expand</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </template>
+                    @endforeach
                 </div>
             </div>
         </section>
@@ -310,63 +385,4 @@
         </section>
     </div>
 
-    @push('scripts')
-    <script>
-        function galleryApp(allPhotos, initialAlbum) {
-            return {
-                allPhotos: allPhotos,
-                currentAlbum: initialAlbum || 'all',
-                lightboxOpen: false,
-                activePhotoIndex: 0,
-
-                init() {
-                    // Lock body scroll when lightbox is opened
-                    this.$watch('lightboxOpen', value => {
-                        if (value) {
-                            document.body.classList.add('overflow-hidden');
-                        } else {
-                            document.body.classList.remove('overflow-hidden');
-                        }
-                    });
-                },
-
-                get filteredPhotos() {
-                    if (this.currentAlbum === 'all') {
-                        return this.allPhotos;
-                    }
-                    return this.allPhotos.filter(p => p.album_slug === this.currentAlbum);
-                },
-
-                get currentPhoto() {
-                    if (this.filteredPhotos.length === 0) return null;
-                    return this.filteredPhotos[this.activePhotoIndex] || null;
-                },
-
-                setAlbum(slug) {
-                    this.currentAlbum = slug;
-                    this.activePhotoIndex = 0;
-                },
-
-                openLightbox(index) {
-                    this.activePhotoIndex = index;
-                    this.lightboxOpen = true;
-                },
-
-                closeLightbox() {
-                    this.lightboxOpen = false;
-                },
-
-                nextPhoto() {
-                    if (this.filteredPhotos.length === 0) return;
-                    this.activePhotoIndex = (this.activePhotoIndex + 1) % this.filteredPhotos.length;
-                },
-
-                prevPhoto() {
-                    if (this.filteredPhotos.length === 0) return;
-                    this.activePhotoIndex = (this.activePhotoIndex - 1 + this.filteredPhotos.length) % this.filteredPhotos.length;
-                }
-            };
-        }
-    </script>
-    @endpush
 </x-layout>

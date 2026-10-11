@@ -25,6 +25,7 @@ class Event extends Model
         'end_date',
         'venue',
         'theme',
+        'objective',
         'banner_image',
         'schedule',
         'is_registration_open',
@@ -57,6 +58,14 @@ class Event extends Model
     public function registrations(): HasMany
     {
         return $this->hasMany(EventRegistration::class);
+    }
+
+    /**
+     * Get the sponsors for the event.
+     */
+    public function sponsors(): HasMany
+    {
+        return $this->hasMany(EventSponsor::class)->ordered();
     }
 
     /**

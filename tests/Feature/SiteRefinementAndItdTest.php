@@ -98,9 +98,8 @@ class SiteRefinementAndItdTest extends TestCase
         $response->assertSeeText('AAoJ Memorial Learning Center, Ijero-Ekiti (inside + garden)');
         $response->assertSeeText('October 17, 2026');
         $response->assertSeeText('Accreditation, Batch Allocation & Welcome Assembly');
-        $response->assertSeeText('Cohort Graduation: Presentation of 22 Certificates & Grand Finale');
-        $response->assertSee('Student / Youth (Batch Participant)');
-        $response->assertSee('Cohort Graduate (Certificate Recipient)');
+        $response->assertSee('School Delegations');
+        $response->assertSee('Cohort 2026 Certification');
     }
 
     public function test_attendee_can_register_for_itd_2026(): void

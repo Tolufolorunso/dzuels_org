@@ -57,6 +57,11 @@ Route::post('/newsletter/unsubscribe/{token}', [NewsletterController::class, 'un
 
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 Route::get('/robots.txt', RobotsController::class)->name('robots');
+Route::get('/site.webmanifest', function () {
+    return response(file_get_contents(public_path('site.webmanifest')), 200, [
+        'Content-Type' => 'application/manifest+json',
+    ]);
+})->name('webmanifest');
 
 /*
 |--------------------------------------------------------------------------

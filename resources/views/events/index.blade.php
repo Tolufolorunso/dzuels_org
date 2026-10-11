@@ -91,9 +91,31 @@
                                 </a>
                             </h3>
 
+                            @if ($featuredEvent->objective)
+                                <div class="p-3.5 rounded-2xl bg-maroon/5 dark:bg-maroon/20 border border-maroon/15 text-xs text-[var(--text)]">
+                                    <span class="font-bold text-maroon dark:text-[var(--accent-cream)] block mb-1">🎯 2026 Core Objective:</span>
+                                    {{ $featuredEvent->objective }}
+                                </div>
+                            @endif
+
                             <p class="text-[var(--text)] leading-relaxed text-sm sm:text-base">
                                 {{ $featuredEvent->summary }}
                             </p>
+
+                            @if ($featuredEvent->sponsors && $featuredEvent->sponsors->isNotEmpty())
+                                <div class="pt-2 border-t border-[var(--border)]">
+                                    <span class="text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)] block mb-2">
+                                        Official Sponsors & Partners
+                                    </span>
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        @foreach ($featuredEvent->sponsors as $sponsor)
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--surface-alt)] border border-[var(--border)] text-xs font-semibold text-[var(--heading)]">
+                                                <span class="text-maroon">🤝</span> {{ $sponsor->name }}
+                                            </span>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
 
                             {{-- Schedule Highlights Preview --}}
                             @if (!empty($featuredEvent->schedule))

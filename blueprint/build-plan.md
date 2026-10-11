@@ -1,6 +1,6 @@
 # Build Plan
 
-## MVP
+## MVP (Completed & Shipped)
 
 - [x] 1. **Public layout and brand theme** - every page shares the header (logo, nav, Donate button, theme toggle), utility bar and footer, using Poppins and Great Vibes and the brand colour tokens, light mode by default with a saved dark mode toggle that never flashes the wrong theme
 - [x] 2. **Admin login and site settings** - staff sign in at `/admin` and edit impact numbers (165 ICT students, 591 literacy students, 15 schools supported - with manual entry or API feed), contact details, social links, Flutterwave link, bank details and registration number without touching code
@@ -20,9 +20,15 @@
 - [x] 16. **Privacy policy and error pages** - readable privacy policy page linked from the footer and forms, and friendly 404 and 500 pages with links back to Home and Donate
 - [x] 17. **Accessibility and launch readiness** - WCAG 2.2 AA contrast verified in light and dark mode, visible focus and keyboard navigation, responsive images, Lighthouse performance checks, live server checks, domain pointing and Google Search Console submission
 
+## Milestone 2: Polish, Dynamic CMS, Access Control & cPanel Deployment
+
+- [x] 18. **Brand assets, ITD 2026 event overhaul and gallery optimization** - full favicon suite generated from logo (`favicon.ico`, apple-touch-icon, webmanifest); ITD 2026 event page updated with backdrop image extracted from PDF, October 3 2026 date, revised AI empowerment objective, SeedDev and public registration form removed, 3 dynamic sponsors with extensible admin management, and distinct past event archives; gallery page repaired, server-rendered with responsive masonry, smooth filtering, and working modal lightbox
+- [ ] 19. **Site-wide page content management, user access control and password recovery** - WordPress-style page content editor in `/admin` allowing staff to update text and section images across all public pages; role-based user management where admins create and manage staff accounts with granular access levels; and password reset workflow (forgot password email links and in-dashboard password updates)
+- [ ] 20. **MySQL database export and cPanel phpMyAdmin migration suite** - automated Artisan database export command (`php artisan db:export-sql`) generating a clean, MySQL/MariaDB-compliant `.sql` dump file with proper schemas and all seeded foundation data for 1-click import into cPanel phpMyAdmin, accompanied by a step-by-step cPanel deployment and `.env` credentials guide
+
 ## Deferred Ideas (Not Scheduled as Features)
 
-*(Preserved for future reference, completely removed from the feature roadmap)*
+*(Preserved for future reference, completely removed from the active feature roadmap)*
 - **Annual reports and downloads**: staff upload PDFs (annual reports, project updates) that appear on a public Reports page
 - **Impact stories and testimonials**: short beneficiary and partner quotes (with written permission) shown on Home and programme pages
 - **Diaspora donations**: donation option for USD or GBP givers alongside the Naira options

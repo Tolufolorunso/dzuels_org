@@ -4,116 +4,74 @@ Dzuels Educational Foundation website rebuild (https://dzuelsfoundation.org), bu
 
 ## 1. Problem - What problem are we solving?
 
-Dzuels Educational Foundation is a Nigerian charity, founded on 22 June 2015 and registered the same year. It provides education support and skills acquisition for indigent Nigerian children and youth, creates awareness of social vices and mitigating measures, and feeds poor families, among other social responsibilities. Its current work includes free literacy support and digital skills training for teachers and students in Ijero-Ekiti (Ekiti State, Southwest Nigeria), in partnership with the Information Technology Seed Development Initiative (SeedDev), plus yearly events such as Innovation and Tech Day (ITD), a Reading Competition and a Spelling Bee.
+Dzuels Educational Foundation is a Nigerian charity, founded on 22 June 2015 and registered the same year. It provides education support and skills acquisition for indigent Nigerian children and youth, creates awareness of social vices and mitigating measures, and feeds poor families, among other social responsibilities. Its current work includes free literacy support and digital skills training for teachers and students in Ijero-Ekiti (Ekiti State, Southwest Nigeria), plus yearly flagship events such as Innovation and Tech Day (ITD), a Reading Competition, and a Spelling Bee.
 
-The current website works but does not do justice to the organisation:
+### Milestone 1 (Completed & Shipped)
+The foundation's web presence was rebuilt into a modern, fast, accessible, SEO-optimized Laravel application with verified WCAG 2.2 AA compliance, brand color tokens, dynamic settings, team/partner/programme showcases, payment details, contact forms, and security safeguards across 17 completed features.
 
-- Every page has a generic title ("Dzuels Foundation") and there is no per-page SEO, so the foundation is hard to find in search.
-- The three impact counters on the homepage show "0" in the page text and depend on animation; the real figures need to be confirmed and made editable.
-- Donating is hidden on the Get Involved page instead of being one click from every page.
-- Programmes (Innovation and Tech Day, Reading Competition, Spelling Bee, Ijero-Ekiti digital literacy) have no pages of their own, so they cannot rank or be shared.
-- The featured project links to a Google Drive PDF instead of a real page.
-- The advisory board is a plain text list with no photos, and the About page is thin for an organisation with a board, management team and advisors.
-- Content is hard-coded, so staff cannot update the site themselves.
-- Horizontal scrolling and layout overflow on mobile screens hurt user experience.
-- The admin dashboard needs a clean, modern, professional layout that staff enjoy using.
-
-Goal: a professional, fast, good-looking, SEO-friendly website that builds trust and turns visitors into donors, volunteers and partners, and that non-technical staff can keep up to date. Keep the existing brand (same colours, same fonts, same logo).
+### Milestone 2: Polish, Dynamic CMS, Access Control & cPanel Deployment
+To make the platform completely independent, production-ready on shared cPanel hosting, and self-manageable by non-technical staff:
+- **Brand Identity & Favicons**: Complete the brand asset suite (multi-size `favicon.ico`, PNG touch icons, webmanifest) using the foundation logo.
+- **ITD 2026 Refinements & Historical Separation**: Update the flagship event page for October 3, 2026 with the backdrop extracted from the official PDF, the new AI empowerment objective, remove SeedDev and public registration forms, support 3 dynamic sponsors with flexible admin controls, and distinguish historical ITD editions.
+- **Gallery Stability & Polish**: Fix script loading and gallery rendering issues, ensuring photos are server-rendered with responsive masonry, filter chips, and a working keyboard lightbox.
+- **WordPress-Style Page Content Management**: Allow staff to edit text, headlines, vision/mission, values, and section imagery across all public pages directly from `/admin`.
+- **Role-Based Access Control & Password Recovery**: Allow Super Admins to create and manage staff accounts with granular access levels (Super Admin, Editor/Content Manager, Support/Viewer), alongside secure forgotten password email resets and in-dashboard password updates.
+- **cPanel phpMyAdmin Database Migration**: Provide an automated database export tool producing a clean, MySQL/MariaDB-compliant `.sql` file ready for 1-click import into cPanel phpMyAdmin, along with a deployment runbook.
 
 ## 2. Users - Who is this for?
 
-- **Prospective donors** in Nigeria and the diaspora (the foundation has a USA country manager), mostly on mobile phones and sometimes on slow connections.
-- **Volunteers**: students, employed and self-employed people, retirees. The current volunteer form already asks age band (under 18, 18 to 55, above 55) and work status (employed, self-employed, unemployed, student).
-- **Partners and funders**: companies, NGOs, schools and grant-makers who will look for credibility (registration, board, partners, programme results).
-- **Beneficiary communities**: schools, parents and community leaders in Ekiti who want to know what the foundation offers and how to reach it.
-- **Event participants and parents**: students attending ITD 2026, teachers, and parents of cohort graduates.
-- **Search visitors** who find the site by searching for programmes or topics (for example free ICT training in Ijero-Ekiti, spelling bee Ekiti, education charity Nigeria).
-- **Foundation staff (admin users)**: one to three non-technical editors who manage events, gallery photos, update team/partner lists, and read messages.
+- **Prospective donors**: In Nigeria and the diaspora, seeking transparency and quick donation methods.
+- **Volunteers & Partners**: Submitting applications and corporate partnership inquiries.
+- **Event participants & schools**: Attending ITD 2026 and browsing schedules, objectives, and sponsors.
+- **Beneficiaries & parents**: Accessing educational resources, reading competitions, and visual archives.
+- **Foundation Staff (Admin Users)**:
+  - **Super Admin**: Full platform control, managing staff users, access permissions, site settings, and database exports.
+  - **Editor / Content Manager**: Updating page content (WordPress-style), programmes, events, sponsors, and gallery albums.
+  - **Support / Viewer**: Viewing incoming contact messages, volunteer applications, and event attendee records.
 
-## 3. Features - What does the MVP need?
+## 3. Features & Milestones
 
-**Public site (all pages responsive, zero horizontal scrolling, light mode by default with a dark mode toggle):**
+### Milestone 1: Core Web Platform (Shipped, Features 1–17)
+- Public layout, brand theme, and dark mode engine.
+- Admin dashboard, dynamic site settings, and impact counters.
+- Home, About, Programmes, Events, Gallery, Donate, Get Involved, Contact, News, and Newsletter signup.
+- Site responsiveness overhaul and modern admin UI.
+- Comprehensive SEO foundation, privacy policy, and branded error pages.
+- WCAG 2.2 AA accessibility compliance, automated `app:launch-check`, and production runbook.
 
-- Home page that explains the mission in seconds and pushes Donate, Volunteer and Partner.
-- About page: story, approach, Board of Trustees, Management, Advisory Board, partners.
-- Programmes: an index page plus one page per programme (Ijero-Ekiti Digital Infrastructure and Literacy, Innovation and Tech Day, Reading Competition, Spelling Bee).
-- Gallery: five collections (ITD 2024, ITD 2025, Reading Competition, Spelling Bee, General) with filter chips, lazy-loaded masonry grid and a keyboard-friendly lightbox, using pre-optimized WebP photos.
-- Events: dedicated event page for **Ijero Tech-Day 2026 (ITD 2026)** on Saturday, October 17, 2026, at AAoJ Memorial Learning Center. Theme: *"Learning Today, Creating Tomorrow"*. Features objective, 300 participant / 10-batch schedule, activity stations (Inside AI workshop + Garden Image Booth / Quiz), and attendee registration form. Built with an extensible, reusable architecture for future annual editions.
-- Donate page: online donation (Flutterwave link), bank transfer details with copy buttons, and other donations (contact to arrange pick-up or delivery).
-- Get Involved page: volunteer application form, donate shortcut, partner enquiry.
-- Contact page: form, address, phone numbers, email and a lazy-loaded Google map.
-- Privacy policy page, custom 404 and 500 pages.
-
-**Dormant modules (code and database ready, hidden from UI for now):**
-- News (hidden from navigation, home, and admin).
-- Newsletter signup (hidden from footer and admin).
-
-**Admin panel (for staff):**
-
-- Secure login.
-- Professional, modern dashboard layout with dedicated sidebar navigation, clear KPI summary cards, and clean typography.
-- Manage events (create, edit, toggle registration, view registrations).
-- Manage gallery albums and photos (bulk upload, captions, ordering).
-- Manage team members (trustees, management, advisors), partners, and programmes.
-- Edit site settings without code: impact numbers, contact details, social links, donation links, bank details, registration number.
-- Inbox for contact messages and volunteer applications.
-
-**SEO & Redirects:**
-
-- Unique title and meta description on every page.
-- Canonical URLs, Open Graph and Twitter card tags.
-- JSON-LD structured data: Organization sitewide, BreadcrumbList on inner pages.
-- Auto-generated `sitemap.xml` and `robots.txt`.
-- Silent 301 redirect from old `/partner` to `/get-involved` so legacy links and bookmarks never hit a 404.
-
-**Not in the MVP:** online card payments handled on our own site, user accounts for the public, shop, member portal, active news or newsletter.
+### Milestone 2: Polish, Dynamic CMS, Access Control & cPanel Deployment (Features 18–20)
+- **18. Brand assets, ITD 2026 event overhaul, and gallery optimization**:
+  - Full favicon suite generated from `logo.png` (`favicon.ico`, `favicon-16x16.png`, `favicon-32x32.png`, `apple-touch-icon.png`, `android-chrome` icons, `site.webmanifest`).
+  - ITD 2026 updated with extracted 1390×1132 backdrop from PDF, date Saturday, October 3, 2026, objective *"Empowering children with AI tools to learn smarter, think creatively, and build the future"*, SeedDev removed for 2026, public registration form removed, 3 dynamic sponsors with extensible management, and past events clearly categorized.
+  - Gallery page fixed, server-rendered with responsive masonry grid, filter chips, and keyboard lightbox.
+- **19. Site-wide page content management, user access control, and password recovery**:
+  - WordPress-style visual page editor in `/admin/pages` for Home, About, Programmes, Contact, and Donate.
+  - Role-based user management (Super Admin, Editor, Support/Viewer) with granular route authorization.
+  - Forgotten password reset workflow via signed email tokens and in-dashboard password updates.
+- **20. MySQL database export and cPanel phpMyAdmin migration suite**:
+  - Automated `php artisan db:export-sql` Artisan command generating a MySQL/MariaDB-compliant `.sql` dump.
+  - Downloadable/exportable database dump ready for phpMyAdmin on cPanel.
+  - Comprehensive cPanel phpMyAdmin import and `.env` setup guide.
 
 ## 4. Data - What are we storing?
 
-- **users** - admin and editor accounts (name, email, password, role).
-- **settings** - key/value pairs for verified impact numbers (165 ICT students, 591 literacy students, 15 schools supported), contact details, social links, donation links, bank details, registration number.
-- **programmes** - title, slug, short summary, body, cover image, optional partner name, sort order, featured flag.
-- **events** - title, slug, summary, description, event date, venue, banner image, schedule details, registration enabled flag, sort order (supports ITD 2026 and future recurring annual editions).
-- **event_registrations** - event_id, full_name, email, phone, school/category, batch, created_at.
-- **gallery_albums** - title, slug, short description, kicker label, cover image, sort order.
-- **gallery_photos** - album, image (stored with WebP conversions), caption, alt text, sort order.
-- **team_members** - name, role, group (trustee, management, advisor), field, short bio, photo, LinkedIn URL, sort order.
-- **partners** - name, logo, website URL, sort order.
-- **contact_messages** - first name, last name, email, phone, subject, message, read flag, created_at.
-- **volunteer_applications** - full name, email, phone, age band, work status, skills, created_at, status.
-- **posts** & **newsletter_subscribers** - existing schemas preserved in database for future activation.
+- **users**: id, name, email, password, role (`super_admin`, `editor`, `support`), is_active, timestamps.
+- **password_reset_tokens**: email, token, created_at.
+- **pages** & **page_sections**: page key, section key, headline, subheadline, body_text, image_path, button_text, button_url, meta_data (JSON), sort_order.
+- **event_sponsors**: id, event_id, name, logo_path, tier, website_url, sort_order.
+- **settings**: key/value pairs for impact numbers, contacts, banking, registration, Flutterwave links.
+- **programmes**, **events**, **gallery_albums**, **gallery_photos**, **team_members**, **partners**, **contact_messages**, **volunteer_applications**.
 
 ## 5. Tech - What stack are we using?
 
-- **Backend:** Laravel 13 on PHP 8.3+, SQLite/MySQL.
-- **Frontend:** Blade templates, Tailwind CSS v4, Alpine.js. Strict viewport containment: `max-w-full`, percentage and fluid units, no horizontal scrolling.
-- **Admin:** Custom tailored Blade & Tailwind administrative UI at `/admin`, styled with professional SaaS dashboard aesthetics.
-- **SEO:** Reusable `<x-seo>` component, auto-sitemap, JSON-LD schema.
-- **Fonts:** Poppins and Great Vibes, self-hosted `.woff2`.
-- **Code style & tests:** Laravel Pint, 100% test pass rate.
+- **Backend:** Laravel 13 on PHP 8.3+, SQLite (development) and MySQL/MariaDB (cPanel production).
+- **Frontend:** Blade templates, Tailwind CSS v4, Alpine.js (robust inline/modular initialization).
+- **Authentication & RBAC:** Session guard with role-based policies and password reset brokers.
+- **Export Tooling:** Custom SQL dump generator supporting MySQL syntax (`CREATE TABLE`, `INSERT INTO` with `utf8mb4_unicode_ci`).
 
-## 6. Deferred Ideas (Non-Roadmap)
+## 6. Deployment - cPanel & Production
 
-The following items are preserved for potential future exploration but are not scheduled as active features:
-- Annual reports and downloads (PDF uploads on public page)
-- Impact stories and testimonials (beneficiary quotes)
-- Diaspora donations (USD/GBP payment links)
-- Donor receipts and recurring giving
-
-## 7. UI/UX - What should it look and feel like?
-
-### 7.1 Design principles
-- **Warm, credible, human.** Real photos of learners and events lead the design; maroon and cream give a warm, established feel.
-- **Zero horizontal scrolling.** Every screen size from 320px mobile to wide desktop must fit snugly without horizontal scrollbars.
-- **Light by default.** Always opens in light mode; optional dark mode toggle with persistent state.
-- **Professional Admin Dashboard.** Modern layout with high-contrast navigation, clean cards, readable data tables, and intuitive controls.
-
-### 7.2 Colour tokens
-- Brand colors preserved: Maroon `#6A0406`, Accent Crimson `#B4070A`, Soft Cream `#F9DEC9`, Mint highlight `#56E39F`.
-
-## 8. Deployment - Where and how will it ship?
-
-- VPS or modern cloud host running PHP 8.3+.
+- Hosted on cPanel VPS / shared hosting with PHP 8.3+.
 - Domain: `dzuelsfoundation.org`.
-- HTTPS enabled with automated Let's Encrypt certificates.
-- At launch: verify zero horizontal overflow on mobile devices, test all contact/volunteer/event registration forms, confirm silent redirects, and submit sitemap to Google Search Console.
+- Database imported via cPanel phpMyAdmin.
+- HTTPS secured via AutoSSL / Let's Encrypt.

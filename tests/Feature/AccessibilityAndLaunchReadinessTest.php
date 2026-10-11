@@ -97,8 +97,22 @@ class AccessibilityAndLaunchReadinessTest extends TestCase
 
     public function test_event_registration_form_has_accessible_labels_and_aria(): void
     {
-        $event = Event::first();
-        $this->assertNotNull($event);
+        $event = Event::where('slug', '!=', 'ijero-tech-day-2026')
+            ->where('is_registration_open', true)
+            ->first();
+
+        if (! $event) {
+            $event = Event::create([
+                'title' => 'Community Tech Clinic',
+                'slug' => 'community-tech-clinic',
+                'summary' => 'Open community clinic.',
+                'description' => 'Detailed clinic description.',
+                'event_date' => now()->addDays(20),
+                'venue' => 'Ijero-Ekiti',
+                'is_registration_open' => true,
+                'is_active' => true,
+            ]);
+        }
 
         $response = $this->get(route('events.show', $event->slug));
 
