@@ -9,6 +9,9 @@
         <div class="absolute inset-0 z-0">
             <img src="{{ asset('front/images/home_1.webp') }}" 
                  alt="Dzuels Educational Foundation students in a classroom" 
+                 loading="eager"
+                 fetchpriority="high"
+                 decoding="async"
                  class="w-full h-full object-cover object-center opacity-30" />
             <div class="absolute inset-0 bg-linear-to-r from-maroon/95 via-maroon/90 to-[#242F40]/80"></div>
         </div>
@@ -105,6 +108,8 @@
                     <div class="absolute -top-3 -left-3 sm:-top-4 sm:-left-4 w-full h-full border-3 border-[var(--accent-cream)] rounded-3xl z-0 pointer-events-none"></div>
                     <img src="{{ asset('front/images/about_1.webp') }}" 
                          alt="Dzuels foundation teachers and beneficiaries in an interactive session" 
+                         loading="lazy"
+                         decoding="async"
                          class="relative z-10 w-full h-[360px] sm:h-[420px] object-cover rounded-3xl shadow-xl border border-[var(--border)]" />
                 </div>
 
@@ -243,6 +248,8 @@
                 <div class="lg:col-span-5">
                     <img src="{{ asset('front/images/cause.webp') }}" 
                          alt="Nigerian children and community beneficiaries supported by Dzuels Foundation" 
+                         loading="lazy"
+                         decoding="async"
                          class="w-full h-[380px] sm:h-[440px] object-cover rounded-3xl shadow-xl border border-[var(--border)]" />
                 </div>
 
@@ -306,6 +313,8 @@
                 <div class="lg:col-span-6 relative min-h-[300px] lg:min-h-full">
                     <img src="{{ asset('front/images/dzuelsCollage.webp') }}" 
                          alt="Dzuels Ijero-Ekiti digital literacy lab and students" 
+                         loading="lazy"
+                         decoding="async"
                          class="w-full h-full object-cover object-center absolute inset-0" />
                 </div>
                 <div class="lg:col-span-6 p-8 sm:p-12 flex flex-col justify-center space-y-6">
@@ -384,26 +393,38 @@
                             <a href="{{ $partner->website_url }}" target="_blank" rel="noopener noreferrer" class="inline-block transition-transform hover:scale-105" title="{{ $partner->name }}">
                                 <img src="{{ $partner->logo_url }}" 
                                      alt="{{ $partner->name }}" 
+                                     loading="lazy"
+                                     decoding="async"
                                      class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 transition-all duration-300 opacity-80 hover:opacity-100" />
                             </a>
                         @else
                             <img src="{{ $partner->logo_url }}" 
                                  alt="{{ $partner->name }}" 
+                                 loading="lazy"
+                                 decoding="async"
                                  class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
                         @endif
                     @endforeach
                 @else
                     <img src="{{ asset('front/images/ascend.jpg') }}" 
                          alt="ASCEND Education Foundation" 
+                         loading="lazy"
+                         decoding="async"
                          class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
                     <img src="{{ asset('front/images/SAA.jpg') }}" 
                          alt="Solape Adesuyi Associates" 
+                         loading="lazy"
+                         decoding="async"
                          class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
                     <img src="{{ asset('front/images/helpmeetaneed.png') }}" 
                          alt="Help Meet A Need" 
+                         loading="lazy"
+                         decoding="async"
                          class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
                     <img src="{{ asset('front/images/intinternational.png') }}" 
                          alt="Int International" 
+                         loading="lazy"
+                         decoding="async"
                          class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
                 @endif
             </div>

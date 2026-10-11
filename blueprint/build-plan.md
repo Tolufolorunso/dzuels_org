@@ -18,7 +18,7 @@
 - [x] 14. **Site refinement & ITD 2026 overhaul** - hide News and Newsletter across public views and admin tabs (dormant for now); full mobile/tablet responsiveness pass eliminating all horizontal scrolling across all screens (320px–1024px) using `max-w-full`, `%` units and fluid constraints; redesign `/admin` into a modern, professional, usable dashboard layout; update the live event to ITD 2026 (Oct 17, 2026 at AAoJ Memorial Learning Center: "Learning Today, Creating Tomorrow", 300 participants in 10 batches of 30, inside/garden rotation) with a reusable annual structure
 - [x] 15. **SEO foundation** - every page has a unique title, meta description, canonical URL, Open Graph and Twitter tags, Organization and Breadcrumb structured data, auto-generated `sitemap.xml`, `robots.txt`, and silent 301 redirect from `/partner` to `/get-involved`
 - [x] 16. **Privacy policy and error pages** - readable privacy policy page linked from the footer and forms, and friendly 404 and 500 pages with links back to Home and Donate
-- [ ] 17. **Accessibility and launch readiness** - WCAG 2.2 AA contrast verified in light and dark mode, visible focus and keyboard navigation, responsive images, Lighthouse performance checks, live server checks, domain pointing and Google Search Console submission
+- [x] 17. **Accessibility and launch readiness** - WCAG 2.2 AA contrast verified in light and dark mode, visible focus and keyboard navigation, responsive images, Lighthouse performance checks, live server checks, domain pointing and Google Search Console submission
 
 ## Deferred Ideas (Not Scheduled as Features)
 

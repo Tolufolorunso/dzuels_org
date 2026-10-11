@@ -182,7 +182,7 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div>
                                     <label for="first_name" class="block text-sm font-semibold text-[var(--heading)] mb-2">
-                                        First Name <span class="text-crimson">*</span>
+                                        First Name <span class="text-crimson" aria-hidden="true">*</span>
                                     </label>
                                     <input type="text" 
                                            id="first_name" 
@@ -190,15 +190,17 @@
                                            value="{{ old('first_name') }}" 
                                            placeholder="e.g. Samuel"
                                            required
+                                           aria-required="true"
+                                           @error('first_name') aria-invalid="true" aria-describedby="first_name_error" @enderror
                                            class="w-full px-4 py-3 rounded-xl bg-[var(--bg)] border @error('first_name') border-rose-500 @else border-[var(--border)] @enderror text-[var(--text)] placeholder-[var(--text-muted)]/50 focus:outline-none focus:ring-2 focus:ring-maroon text-sm transition-colors">
                                     @error('first_name')
-                                        <p class="mt-1.5 text-xs text-rose-500 font-medium">{{ $message }}</p>
+                                        <p id="first_name_error" class="mt-1.5 text-xs text-rose-500 font-medium" role="alert">{{ $message }}</p>
                                     @enderror
                                 </div>
 
                                 <div>
                                     <label for="last_name" class="block text-sm font-semibold text-[var(--heading)] mb-2">
-                                        Last Name <span class="text-crimson">*</span>
+                                        Last Name <span class="text-crimson" aria-hidden="true">*</span>
                                     </label>
                                     <input type="text" 
                                            id="last_name" 
@@ -206,9 +208,11 @@
                                            value="{{ old('last_name') }}" 
                                            placeholder="e.g. Adeleke"
                                            required
+                                           aria-required="true"
+                                           @error('last_name') aria-invalid="true" aria-describedby="last_name_error" @enderror
                                            class="w-full px-4 py-3 rounded-xl bg-[var(--bg)] border @error('last_name') border-rose-500 @else border-[var(--border)] @enderror text-[var(--text)] placeholder-[var(--text-muted)]/50 focus:outline-none focus:ring-2 focus:ring-maroon text-sm transition-colors">
                                     @error('last_name')
-                                        <p class="mt-1.5 text-xs text-rose-500 font-medium">{{ $message }}</p>
+                                        <p id="last_name_error" class="mt-1.5 text-xs text-rose-500 font-medium" role="alert">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>
@@ -217,7 +221,7 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div>
                                     <label for="email" class="block text-sm font-semibold text-[var(--heading)] mb-2">
-                                        Email Address <span class="text-crimson">*</span>
+                                        Email Address <span class="text-crimson" aria-hidden="true">*</span>
                                     </label>
                                     <input type="email" 
                                            id="email" 
@@ -225,9 +229,11 @@
                                            value="{{ old('email') }}" 
                                            placeholder="you@example.com"
                                            required
+                                           aria-required="true"
+                                           @error('email') aria-invalid="true" aria-describedby="email_error" @enderror
                                            class="w-full px-4 py-3 rounded-xl bg-[var(--bg)] border @error('email') border-rose-500 @else border-[var(--border)] @enderror text-[var(--text)] placeholder-[var(--text-muted)]/50 focus:outline-none focus:ring-2 focus:ring-maroon text-sm transition-colors">
                                     @error('email')
-                                        <p class="mt-1.5 text-xs text-rose-500 font-medium">{{ $message }}</p>
+                                        <p id="email_error" class="mt-1.5 text-xs text-rose-500 font-medium" role="alert">{{ $message }}</p>
                                     @enderror
                                 </div>
 
@@ -240,9 +246,10 @@
                                            name="phone" 
                                            value="{{ old('phone') }}" 
                                            placeholder="e.g. 0802 123 4567"
+                                           @error('phone') aria-invalid="true" aria-describedby="phone_error" @enderror
                                            class="w-full px-4 py-3 rounded-xl bg-[var(--bg)] border @error('phone') border-rose-500 @else border-[var(--border)] @enderror text-[var(--text)] placeholder-[var(--text-muted)]/50 focus:outline-none focus:ring-2 focus:ring-maroon text-sm transition-colors">
                                     @error('phone')
-                                        <p class="mt-1.5 text-xs text-rose-500 font-medium">{{ $message }}</p>
+                                        <p id="phone_error" class="mt-1.5 text-xs text-rose-500 font-medium" role="alert">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>
@@ -250,7 +257,7 @@
                             {{-- Subject --}}
                             <div>
                                 <label for="subject" class="block text-sm font-semibold text-[var(--heading)] mb-2">
-                                    Subject <span class="text-crimson">*</span>
+                                    Subject <span class="text-crimson" aria-hidden="true">*</span>
                                 </label>
                                 <input type="text" 
                                        id="subject" 
@@ -258,31 +265,35 @@
                                        value="{{ old('subject') }}" 
                                        placeholder="e.g. Inquiry regarding school literacy sponsorship"
                                        required
+                                       aria-required="true"
+                                       @error('subject') aria-invalid="true" aria-describedby="subject_error" @enderror
                                        class="w-full px-4 py-3 rounded-xl bg-[var(--bg)] border @error('subject') border-rose-500 @else border-[var(--border)] @enderror text-[var(--text)] placeholder-[var(--text-muted)]/50 focus:outline-none focus:ring-2 focus:ring-maroon text-sm transition-colors">
                                 @error('subject')
-                                    <p class="mt-1.5 text-xs text-rose-500 font-medium">{{ $message }}</p>
+                                    <p id="subject_error" class="mt-1.5 text-xs text-rose-500 font-medium" role="alert">{{ $message }}</p>
                                 @enderror
                             </div>
 
                             {{-- Message Content --}}
                             <div>
                                 <label for="message" class="block text-sm font-semibold text-[var(--heading)] mb-2">
-                                    Message <span class="text-crimson">*</span>
+                                    Message <span class="text-crimson" aria-hidden="true">*</span>
                                 </label>
                                 <textarea id="message" 
                                           name="message" 
                                           rows="5" 
                                           required
+                                          aria-required="true"
                                           placeholder="Please write your message, question, or proposal in detail..."
+                                          @error('message') aria-invalid="true" aria-describedby="message_error" @enderror
                                           class="w-full px-4 py-3 rounded-xl bg-[var(--bg)] border @error('message') border-rose-500 @else border-[var(--border)] @enderror text-[var(--text)] placeholder-[var(--text-muted)]/50 focus:outline-none focus:ring-2 focus:ring-maroon text-sm transition-colors">{{ old('message') }}</textarea>
                                 @error('message')
-                                    <p class="mt-1.5 text-xs text-rose-500 font-medium">{{ $message }}</p>
+                                    <p id="message_error" class="mt-1.5 text-xs text-rose-500 font-medium" role="alert">{{ $message }}</p>
                                 @enderror
                             </div>
 
                             {{-- Privacy Notice --}}
                             <p class="text-xs text-[var(--text-muted)] flex items-start gap-1.5 leading-relaxed">
-                                <svg class="w-4 h-4 text-emerald-600 dark:text-mint shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg class="w-4 h-4 text-emerald-600 dark:text-mint shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                 </svg>
                                 <span>We respect your privacy. Information submitted is handled strictly in accordance with our <a href="{{ route('privacy-policy') }}" class="underline hover:text-maroon dark:hover:text-[var(--accent-cream)] font-medium">Privacy Policy</a>.</span>

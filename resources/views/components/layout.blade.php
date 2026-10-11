@@ -80,6 +80,12 @@
     @stack('styles')
 </head>
 <body class="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col font-sans antialiased text-[var(--text)] bg-[var(--bg)] selection:bg-[var(--accent-cream)] selection:text-maroon">
+    <!-- Accessible Skip to Content Link -->
+    <a href="#main-content" 
+       class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-5 focus:py-3 focus:bg-maroon focus:text-white focus:rounded-full focus:shadow-2xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-maroon font-semibold text-sm transition-transform">
+        Skip to main content
+    </a>
+
     <!-- Top Utility Bar -->
     <x-utility-bar />
 
@@ -87,7 +93,7 @@
     <x-header />
 
     <!-- Main Content Area -->
-    <main class="flex-grow w-full max-w-full overflow-x-hidden">
+    <main id="main-content" class="flex-grow w-full max-w-full overflow-x-hidden">
         {{ $slot }}
     </main>
 

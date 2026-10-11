@@ -255,51 +255,57 @@
                                 {{-- Full Name --}}
                                 <div>
                                     <label for="full_name" class="block text-xs font-bold uppercase tracking-wider text-[var(--text-strong)] mb-1.5">
-                                        Full Name <span class="text-rose-500">*</span>
+                                        Full Name <span class="text-rose-500" aria-hidden="true">*</span>
                                     </label>
                                     <input type="text" 
                                            id="full_name" 
                                            name="full_name" 
                                            value="{{ old('full_name') }}" 
                                            required 
+                                           aria-required="true"
+                                           @error('full_name') aria-invalid="true" aria-describedby="reg_full_name_error" @enderror
                                            placeholder="e.g. Adeola Olawale" 
                                            class="w-full px-4 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--bg)] text-sm text-[var(--text)] focus:border-maroon focus:ring-2 focus:ring-maroon/20 outline-none transition-all">
                                     @error('full_name')
-                                        <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                                        <p id="reg_full_name_error" class="text-rose-600 text-xs mt-1" role="alert">{{ $message }}</p>
                                     @enderror
                                 </div>
 
                                 {{-- Email Address --}}
                                 <div>
                                     <label for="email" class="block text-xs font-bold uppercase tracking-wider text-[var(--text-strong)] mb-1.5">
-                                        Email Address <span class="text-rose-500">*</span>
+                                        Email Address <span class="text-rose-500" aria-hidden="true">*</span>
                                     </label>
                                     <input type="email" 
                                            id="email" 
                                            name="email" 
                                            value="{{ old('email') }}" 
                                            required 
+                                           aria-required="true"
+                                           @error('email') aria-invalid="true" aria-describedby="reg_email_error" @enderror
                                            placeholder="e.g. adeola@example.com" 
                                            class="w-full px-4 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--bg)] text-sm text-[var(--text)] focus:border-maroon focus:ring-2 focus:ring-maroon/20 outline-none transition-all">
                                     @error('email')
-                                        <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                                        <p id="reg_email_error" class="text-rose-600 text-xs mt-1" role="alert">{{ $message }}</p>
                                     @enderror
                                 </div>
 
                                 {{-- Phone Number --}}
                                 <div>
                                     <label for="phone" class="block text-xs font-bold uppercase tracking-wider text-[var(--text-strong)] mb-1.5">
-                                        Phone Number <span class="text-rose-500">*</span>
+                                        Phone Number <span class="text-rose-500" aria-hidden="true">*</span>
                                     </label>
                                     <input type="tel" 
                                            id="phone" 
                                            name="phone" 
                                            value="{{ old('phone') }}" 
                                            required 
+                                           aria-required="true"
+                                           @error('phone') aria-invalid="true" aria-describedby="reg_phone_error" @enderror
                                            placeholder="e.g. +234 803 123 4567" 
                                            class="w-full px-4 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--bg)] text-sm text-[var(--text)] focus:border-maroon focus:ring-2 focus:ring-maroon/20 outline-none transition-all">
                                     @error('phone')
-                                        <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                                        <p id="reg_phone_error" class="text-rose-600 text-xs mt-1" role="alert">{{ $message }}</p>
                                     @enderror
                                 </div>
 
@@ -339,7 +345,7 @@
 
                                 {{-- Privacy Notice --}}
                                 <p class="text-[11px] text-[var(--text-muted)] flex items-start gap-1.5 leading-normal">
-                                    <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-mint shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-mint shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                     </svg>
                                     <span>We respect your privacy. Attendee details are protected under our <a href="{{ route('privacy-policy') }}" class="underline hover:text-maroon dark:hover:text-[var(--accent-cream)] font-medium">Privacy Policy</a>.</span>

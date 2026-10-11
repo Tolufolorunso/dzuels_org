@@ -8,6 +8,11 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body x-data="{ sidebarOpen: false }" class="h-full bg-stone-100 font-sans text-stone-800 antialiased max-w-full overflow-x-hidden">
+    <!-- Accessible Skip to Content Link -->
+    <a href="#main-content" 
+       class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-5 focus:py-3 focus:bg-maroon focus:text-white focus:rounded-full focus:shadow-2xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-maroon font-semibold text-sm transition-transform">
+        Skip to main content
+    </a>
     <div class="min-h-full flex flex-col lg:flex-row">
         <!-- Mobile Sidebar Backdrop Overlay -->
         <div x-show="sidebarOpen" 
@@ -330,7 +335,7 @@
             </header>
 
             <!-- Main Content Slot Container -->
-            <main class="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+            <main id="main-content" class="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
                 <!-- Flash Success Notification -->
                 @if (session('success'))
                     <div class="mb-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-sm font-medium flex items-center gap-3 shadow-2xs">

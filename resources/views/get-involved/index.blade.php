@@ -136,9 +136,8 @@
                                 </div>
 
                                 {{-- Full Name --}}
-                                <div>
-                                    <label for="vol_full_name" class="block text-sm font-semibold text-[var(--heading)] mb-2">
-                                        Full Name <span class="text-crimson">*</span>
+                                                    <label for="vol_full_name" class="block text-sm font-semibold text-[var(--heading)] mb-2">
+                                        Full Name <span class="text-crimson" aria-hidden="true">*</span>
                                     </label>
                                     <input type="text" 
                                            id="vol_full_name" 
@@ -146,9 +145,11 @@
                                            value="{{ old('full_name') }}" 
                                            placeholder="e.g. Adebayo Ogunlesi"
                                            required
+                                           aria-required="true"
+                                           @error('full_name') aria-invalid="true" aria-describedby="vol_full_name_error" @enderror
                                            class="w-full px-4 py-3 rounded-xl bg-[var(--bg)] border @error('full_name') border-rose-500 @else border-[var(--border)] @enderror text-[var(--text)] placeholder-[var(--text-muted)]/50 focus:outline-none focus:ring-2 focus:ring-maroon text-sm transition-colors">
                                     @error('full_name')
-                                        <p class="mt-1.5 text-xs text-rose-500 font-medium">{{ $message }}</p>
+                                        <p id="vol_full_name_error" class="mt-1.5 text-xs text-rose-500 font-medium" role="alert">{{ $message }}</p>
                                     @enderror
                                 </div>
 
@@ -156,7 +157,7 @@
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                     <div>
                                         <label for="vol_email" class="block text-sm font-semibold text-[var(--heading)] mb-2">
-                                            Email Address <span class="text-crimson">*</span>
+                                            Email Address <span class="text-crimson" aria-hidden="true">*</span>
                                         </label>
                                         <input type="email" 
                                                id="vol_email" 
@@ -164,15 +165,17 @@
                                                value="{{ old('email') }}" 
                                                placeholder="you@example.com"
                                                required
+                                               aria-required="true"
+                                               @error('email') aria-invalid="true" aria-describedby="vol_email_error" @enderror
                                                class="w-full px-4 py-3 rounded-xl bg-[var(--bg)] border @error('email') border-rose-500 @else border-[var(--border)] @enderror text-[var(--text)] placeholder-[var(--text-muted)]/50 focus:outline-none focus:ring-2 focus:ring-maroon text-sm transition-colors">
                                         @error('email')
-                                            <p class="mt-1.5 text-xs text-rose-500 font-medium">{{ $message }}</p>
+                                            <p id="vol_email_error" class="mt-1.5 text-xs text-rose-500 font-medium" role="alert">{{ $message }}</p>
                                         @enderror
                                     </div>
 
                                     <div>
                                         <label for="vol_phone" class="block text-sm font-semibold text-[var(--heading)] mb-2">
-                                            Phone Number <span class="text-crimson">*</span>
+                                            Phone Number <span class="text-crimson" aria-hidden="true">*</span>
                                         </label>
                                         <input type="tel" 
                                                id="vol_phone" 
@@ -180,9 +183,11 @@
                                                value="{{ old('phone') }}" 
                                                placeholder="e.g. 0801 234 5678"
                                                required
+                                               aria-required="true"
+                                               @error('phone') aria-invalid="true" aria-describedby="vol_phone_error" @enderror
                                                class="w-full px-4 py-3 rounded-xl bg-[var(--bg)] border @error('phone') border-rose-500 @else border-[var(--border)] @enderror text-[var(--text)] placeholder-[var(--text-muted)]/50 focus:outline-none focus:ring-2 focus:ring-maroon text-sm transition-colors">
                                         @error('phone')
-                                            <p class="mt-1.5 text-xs text-rose-500 font-medium">{{ $message }}</p>
+                                            <p id="vol_phone_error" class="mt-1.5 text-xs text-rose-500 font-medium" role="alert">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -191,11 +196,13 @@
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                     <div>
                                         <label for="vol_age_band" class="block text-sm font-semibold text-[var(--heading)] mb-2">
-                                            Age Group <span class="text-crimson">*</span>
+                                            Age Group <span class="text-crimson" aria-hidden="true">*</span>
                                         </label>
                                         <select id="vol_age_band" 
                                                 name="age_band" 
                                                 required
+                                                aria-required="true"
+                                                @error('age_band') aria-invalid="true" aria-describedby="vol_age_band_error" @enderror
                                                 class="w-full px-4 py-3 rounded-xl bg-[var(--bg)] border @error('age_band') border-rose-500 @else border-[var(--border)] @enderror text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-maroon text-sm transition-colors cursor-pointer">
                                             <option value="" disabled {{ old('age_band') ? '' : 'selected' }}>Select your age group</option>
                                             <option value="below_18" {{ old('age_band') === 'below_18' ? 'selected' : '' }}>Under 18 years</option>
@@ -203,17 +210,19 @@
                                             <option value="above_55" {{ old('age_band') === 'above_55' ? 'selected' : '' }}>Above 55 years</option>
                                         </select>
                                         @error('age_band')
-                                            <p class="mt-1.5 text-xs text-rose-500 font-medium">{{ $message }}</p>
+                                            <p id="vol_age_band_error" class="mt-1.5 text-xs text-rose-500 font-medium" role="alert">{{ $message }}</p>
                                         @enderror
                                     </div>
 
                                     <div>
                                         <label for="vol_work_status" class="block text-sm font-semibold text-[var(--heading)] mb-2">
-                                            Current Work Status <span class="text-crimson">*</span>
+                                            Current Work Status <span class="text-crimson" aria-hidden="true">*</span>
                                         </label>
                                         <select id="vol_work_status" 
                                                 name="work_status" 
                                                 required
+                                                aria-required="true"
+                                                @error('work_status') aria-invalid="true" aria-describedby="vol_work_status_error" @enderror
                                                 class="w-full px-4 py-3 rounded-xl bg-[var(--bg)] border @error('work_status') border-rose-500 @else border-[var(--border)] @enderror text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-maroon text-sm transition-colors cursor-pointer">
                                             <option value="" disabled {{ old('work_status') ? '' : 'selected' }}>Select work status</option>
                                             <option value="employed" {{ old('work_status') === 'employed' ? 'selected' : '' }}>Employed</option>
@@ -222,7 +231,7 @@
                                             <option value="student" {{ old('work_status') === 'student' ? 'selected' : '' }}>Student</option>
                                         </select>
                                         @error('work_status')
-                                            <p class="mt-1.5 text-xs text-rose-500 font-medium">{{ $message }}</p>
+                                            <p id="vol_work_status_error" class="mt-1.5 text-xs text-rose-500 font-medium" role="alert">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -236,15 +245,16 @@
                                               name="skills" 
                                               rows="4" 
                                               placeholder="e.g. Teaching mathematics, basic computer literacy, graphic design, debate coaching, event logistics, photography..."
+                                              @error('skills') aria-invalid="true" aria-describedby="vol_skills_error" @enderror
                                               class="w-full px-4 py-3 rounded-xl bg-[var(--bg)] border @error('skills') border-rose-500 @else border-[var(--border)] @enderror text-[var(--text)] placeholder-[var(--text-muted)]/50 focus:outline-none focus:ring-2 focus:ring-maroon text-sm transition-colors">{{ old('skills') }}</textarea>
                                     @error('skills')
-                                        <p class="mt-1.5 text-xs text-rose-500 font-medium">{{ $message }}</p>
+                                        <p id="vol_skills_error" class="mt-1.5 text-xs text-rose-500 font-medium" role="alert">{{ $message }}</p>
                                     @enderror
                                 </div>
 
                                 {{-- Privacy Notice --}}
                                 <p class="text-xs text-[var(--text-muted)] flex items-start gap-1.5 leading-relaxed">
-                                    <svg class="w-4 h-4 text-emerald-600 dark:text-mint shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg class="w-4 h-4 text-emerald-600 dark:text-mint shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                     </svg>
                                     <span>We respect your privacy. Volunteer applications are processed strictly in accordance with our <a href="{{ route('privacy-policy') }}" class="underline hover:text-maroon dark:hover:text-[var(--accent-cream)] font-medium">Privacy Policy</a>.</span>
@@ -290,7 +300,7 @@
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                     <div>
                                         <label for="part_org_name" class="block text-sm font-semibold text-[var(--heading)] mb-2">
-                                            Organization / Company Name <span class="text-crimson">*</span>
+                                            Organization / Company Name <span class="text-crimson" aria-hidden="true">*</span>
                                         </label>
                                         <input type="text" 
                                                id="part_org_name" 
@@ -298,15 +308,17 @@
                                                value="{{ old('organization_name') }}" 
                                                placeholder="e.g. TechCorp Nigeria Ltd"
                                                required
+                                               aria-required="true"
+                                               @error('organization_name') aria-invalid="true" aria-describedby="part_org_name_error" @enderror
                                                class="w-full px-4 py-3 rounded-xl bg-[var(--bg)] border @error('organization_name') border-rose-500 @else border-[var(--border)] @enderror text-[var(--text)] placeholder-[var(--text-muted)]/50 focus:outline-none focus:ring-2 focus:ring-maroon text-sm transition-colors">
                                         @error('organization_name')
-                                            <p class="mt-1.5 text-xs text-rose-500 font-medium">{{ $message }}</p>
+                                            <p id="part_org_name_error" class="mt-1.5 text-xs text-rose-500 font-medium" role="alert">{{ $message }}</p>
                                         @enderror
                                     </div>
 
                                     <div>
                                         <label for="part_contact_name" class="block text-sm font-semibold text-[var(--heading)] mb-2">
-                                            Representative / Contact Name <span class="text-crimson">*</span>
+                                            Representative / Contact Name <span class="text-crimson" aria-hidden="true">*</span>
                                         </label>
                                         <input type="text" 
                                                id="part_contact_name" 
@@ -314,9 +326,11 @@
                                                value="{{ old('contact_name') }}" 
                                                placeholder="e.g. Dr. Folake Adeleke"
                                                required
+                                               aria-required="true"
+                                               @error('contact_name') aria-invalid="true" aria-describedby="part_contact_name_error" @enderror
                                                class="w-full px-4 py-3 rounded-xl bg-[var(--bg)] border @error('contact_name') border-rose-500 @else border-[var(--border)] @enderror text-[var(--text)] placeholder-[var(--text-muted)]/50 focus:outline-none focus:ring-2 focus:ring-maroon text-sm transition-colors">
                                         @error('contact_name')
-                                            <p class="mt-1.5 text-xs text-rose-500 font-medium">{{ $message }}</p>
+                                            <p id="part_contact_name_error" class="mt-1.5 text-xs text-rose-500 font-medium" role="alert">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -325,7 +339,7 @@
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                     <div>
                                         <label for="part_email" class="block text-sm font-semibold text-[var(--heading)] mb-2">
-                                            Official Email Address <span class="text-crimson">*</span>
+                                            Official Email Address <span class="text-crimson" aria-hidden="true">*</span>
                                         </label>
                                         <input type="email" 
                                                id="part_email" 
@@ -333,9 +347,11 @@
                                                value="{{ old('email') }}" 
                                                placeholder="partnerships@company.com"
                                                required
+                                               aria-required="true"
+                                               @error('email') aria-invalid="true" aria-describedby="part_email_error" @enderror
                                                class="w-full px-4 py-3 rounded-xl bg-[var(--bg)] border @error('email') border-rose-500 @else border-[var(--border)] @enderror text-[var(--text)] placeholder-[var(--text-muted)]/50 focus:outline-none focus:ring-2 focus:ring-maroon text-sm transition-colors">
                                         @error('email')
-                                            <p class="mt-1.5 text-xs text-rose-500 font-medium">{{ $message }}</p>
+                                            <p id="part_email_error" class="mt-1.5 text-xs text-rose-500 font-medium" role="alert">{{ $message }}</p>
                                         @enderror
                                     </div>
 
@@ -348,9 +364,10 @@
                                                name="phone" 
                                                value="{{ old('phone') }}" 
                                                placeholder="e.g. +234 802 345 6789"
+                                               @error('phone') aria-invalid="true" aria-describedby="part_phone_error" @enderror
                                                class="w-full px-4 py-3 rounded-xl bg-[var(--bg)] border @error('phone') border-rose-500 @else border-[var(--border)] @enderror text-[var(--text)] placeholder-[var(--text-muted)]/50 focus:outline-none focus:ring-2 focus:ring-maroon text-sm transition-colors">
                                         @error('phone')
-                                            <p class="mt-1.5 text-xs text-rose-500 font-medium">{{ $message }}</p>
+                                            <p id="part_phone_error" class="mt-1.5 text-xs text-rose-500 font-medium" role="alert">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -358,11 +375,13 @@
                                 {{-- Partnership Type --}}
                                 <div>
                                     <label for="part_type" class="block text-sm font-semibold text-[var(--heading)] mb-2">
-                                        Type of Partnership <span class="text-crimson">*</span>
+                                        Type of Partnership <span class="text-crimson" aria-hidden="true">*</span>
                                     </label>
                                     <select id="part_type" 
                                             name="partnership_type" 
                                             required
+                                            aria-required="true"
+                                            @error('partnership_type') aria-invalid="true" aria-describedby="part_type_error" @enderror
                                             class="w-full px-4 py-3 rounded-xl bg-[var(--bg)] border @error('partnership_type') border-rose-500 @else border-[var(--border)] @enderror text-[var(--text)] focus:outline-none focus:ring-2 focus:ring-maroon text-sm transition-colors cursor-pointer">
                                         <option value="" disabled {{ old('partnership_type') ? '' : 'selected' }}>Select partnership interest</option>
                                         <option value="corporate_sponsor" {{ old('partnership_type') === 'corporate_sponsor' ? 'selected' : '' }}>Corporate Sponsorship / CSR Initiative</option>
@@ -372,29 +391,31 @@
                                         <option value="other" {{ old('partnership_type') === 'other' ? 'selected' : '' }}>Other Strategic Partnership</option>
                                     </select>
                                     @error('partnership_type')
-                                        <p class="mt-1.5 text-xs text-rose-500 font-medium">{{ $message }}</p>
+                                        <p id="part_type_error" class="mt-1.5 text-xs text-rose-500 font-medium" role="alert">{{ $message }}</p>
                                     @enderror
                                 </div>
 
                                 {{-- Partnership Proposal Message --}}
                                 <div>
                                     <label for="part_message" class="block text-sm font-semibold text-[var(--heading)] mb-2">
-                                        Proposal Overview / Message <span class="text-crimson">*</span>
+                                        Proposal Overview / Message <span class="text-crimson" aria-hidden="true">*</span>
                                     </label>
                                     <textarea id="part_message" 
                                               name="message" 
                                               rows="5" 
                                               required
+                                              aria-required="true"
                                               placeholder="Share key details about your organization, proposed initiatives, locations of interest, or how you would like to collaborate..."
+                                              @error('message') aria-invalid="true" aria-describedby="part_message_error" @enderror
                                               class="w-full px-4 py-3 rounded-xl bg-[var(--bg)] border @error('message') border-rose-500 @else border-[var(--border)] @enderror text-[var(--text)] placeholder-[var(--text-muted)]/50 focus:outline-none focus:ring-2 focus:ring-maroon text-sm transition-colors">{{ old('message') }}</textarea>
                                     @error('message')
-                                        <p class="mt-1.5 text-xs text-rose-500 font-medium">{{ $message }}</p>
+                                        <p id="part_message_error" class="mt-1.5 text-xs text-rose-500 font-medium" role="alert">{{ $message }}</p>
                                     @enderror
                                 </div>
 
                                 {{-- Privacy Notice --}}
                                 <p class="text-xs text-[var(--text-muted)] flex items-start gap-1.5 leading-relaxed">
-                                    <svg class="w-4 h-4 text-emerald-600 dark:text-mint shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg class="w-4 h-4 text-emerald-600 dark:text-mint shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                     </svg>
                                     <span>We respect your privacy. Partnership proposals are handled strictly in accordance with our <a href="{{ route('privacy-policy') }}" class="underline hover:text-maroon dark:hover:text-[var(--accent-cream)] font-medium">Privacy Policy</a>.</span>
