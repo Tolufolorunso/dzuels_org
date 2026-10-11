@@ -1,4 +1,9 @@
-<x-layout>
+<x-layout
+    :canonical="url('/programmes')"
+    :breadcrumbs="[
+        ['name' => 'Home', 'url' => url('/')],
+        ['name' => 'Programmes', 'url' => url('/programmes')]
+    ]">
     <x-slot:title>Programmes | Dzuels Educational Foundation - Educational & Literacy Initiatives</x-slot:title>
     <x-slot:description>Discover Dzuels Educational Foundation programmes: Digital Infrastructure in Ijero-Ekiti, Innovation & Tech Day, Reading Competitions, and Spelling Bee Contests.</x-slot:description>
 

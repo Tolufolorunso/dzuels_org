@@ -1,6 +1,11 @@
 <x-layout 
-    title="Get Involved | Dzuels Educational Foundation"
-    description="Join Dzuels Educational Foundation as a volunteer mentor or partner organization. Help us empower youth through education, digital literacy, and community development.">
+    title="Get Involved: Volunteer or Partner | Dzuels Educational Foundation"
+    description="Join Dzuels Educational Foundation as a volunteer mentor or partner organization. Help us empower youth through education, digital literacy, and community development."
+    :canonical="url('/get-involved')"
+    :breadcrumbs="[
+        ['name' => 'Home', 'url' => url('/')],
+        ['name' => 'Get Involved', 'url' => url('/get-involved')]
+    ]">
 
     <div x-data="{ 
             activeTab: (new URLSearchParams(window.location.search).get('tab') === 'partner' || '{{ old('_tab') }}' === 'partner') ? 'partner' : 'volunteer' 

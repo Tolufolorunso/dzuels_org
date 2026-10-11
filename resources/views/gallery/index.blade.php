@@ -1,6 +1,31 @@
+@php
+    $pageTitle = isset($selectedAlbum) && $selectedAlbum
+        ? $selectedAlbum->title . ' | Photo Gallery - Dzuels Educational Foundation'
+        : 'Gallery & Visual Archive | Dzuels Educational Foundation';
+    $pageDescription = isset($selectedAlbum) && $selectedAlbum && !empty($selectedAlbum->description)
+        ? $selectedAlbum->description
+        : (isset($selectedAlbum) && $selectedAlbum
+            ? 'Explore photos from ' . $selectedAlbum->title . ' celebrating student innovation and community outreach.'
+            : 'Explore moments of impact, student innovation, spelling bees, and community outreach from Dzuels Educational Foundation in Ijero-Ekiti, Nigeria.');
+    $pageCanonical = isset($selectedAlbum) && $selectedAlbum
+        ? route('gallery.album', $selectedAlbum->slug)
+        : url('/gallery');
+    $pageBreadcrumbs = [
+        ['name' => 'Home', 'url' => url('/')],
+        ['name' => 'Gallery', 'url' => url('/gallery')],
+    ];
+    if (isset($selectedAlbum) && $selectedAlbum) {
+        $pageBreadcrumbs[] = [
+            'name' => $selectedAlbum->title,
+            'url' => route('gallery.album', $selectedAlbum->slug),
+        ];
+    }
+@endphp
 <x-layout 
-    title="Gallery & Visual Archive | Dzuels Educational Foundation"
-    description="Explore moments of impact, student innovation, spelling bees, and community outreach from Dzuels Educational Foundation in Ijero-Ekiti, Nigeria.">
+    :title="$pageTitle"
+    :description="$pageDescription"
+    :canonical="$pageCanonical"
+    :breadcrumbs="$pageBreadcrumbs">
 
     @php
         $allPhotos = [];

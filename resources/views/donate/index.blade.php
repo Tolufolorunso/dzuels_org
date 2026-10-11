@@ -1,6 +1,12 @@
 <x-layout 
-    title="Donate & Support | Dzuels Educational Foundation"
-    description="Support digital literacy, student computer labs, and educational opportunities in Ekiti State, Nigeria. Donate online via Flutterwave or direct bank transfer.">
+    title="Donate & Support Quality Education | Dzuels Educational Foundation"
+    description="Support digital literacy, student computer labs, and educational opportunities in Ekiti State, Nigeria. Donate online via Flutterwave or direct bank transfer."
+    :canonical="url('/donate')"
+    :og-image="asset('front/images/cause.png')"
+    :breadcrumbs="[
+        ['name' => 'Home', 'url' => url('/')],
+        ['name' => 'Donate', 'url' => url('/donate')]
+    ]">
 
     <div x-data="donateHelper()" class="min-h-screen bg-[var(--bg)] transition-colors">
         {{-- 1. Hero Section --}}

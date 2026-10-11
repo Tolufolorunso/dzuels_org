@@ -1,6 +1,11 @@
 <x-layout 
-    title="Contact Us | Dzuels Educational Foundation"
-    description="Get in touch with Dzuels Educational Foundation. Visit our headquarters in Ijero-Ekiti, call our hotlines, or send an inquiry directly to our team.">
+    title="Contact Us | Get in Touch with Dzuels Educational Foundation"
+    description="Get in touch with Dzuels Educational Foundation. Visit our headquarters in Ijero-Ekiti, call our hotlines, or send an inquiry directly to our team."
+    :canonical="url('/contact')"
+    :breadcrumbs="[
+        ['name' => 'Home', 'url' => url('/')],
+        ['name' => 'Contact Us', 'url' => url('/contact')]
+    ]">
 
     <div class="min-h-screen bg-[var(--bg)] transition-colors">
         {{-- 1. Hero Section --}}

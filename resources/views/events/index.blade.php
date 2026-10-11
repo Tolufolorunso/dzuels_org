@@ -1,6 +1,11 @@
 <x-layout 
     title="Events & Gatherings | Dzuels Educational Foundation"
-    description="Join Dzuels Educational Foundation for upcoming technology events, student workshops, and community celebrations in Ijero-Ekiti, Nigeria.">
+    description="Join Dzuels Educational Foundation for upcoming technology events, student workshops, and community celebrations in Ijero-Ekiti, Nigeria."
+    :canonical="url('/events')"
+    :breadcrumbs="[
+        ['name' => 'Home', 'url' => url('/')],
+        ['name' => 'Events', 'url' => url('/events')]
+    ]">
 
     {{-- 1. Hero Section --}}
     <section class="relative py-20 lg:py-28 bg-[var(--surface)] border-b border-[var(--border)] overflow-hidden transition-colors">

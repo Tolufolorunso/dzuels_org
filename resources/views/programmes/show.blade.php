@@ -1,4 +1,12 @@
-<x-layout>
+<x-layout
+    :canonical="route('programmes.show', $programme->slug)"
+    :og-image="$programme->featured_image_url ?? asset('front/images/cause.png')"
+    og-type="article"
+    :breadcrumbs="[
+        ['name' => 'Home', 'url' => url('/')],
+        ['name' => 'Programmes', 'url' => route('programmes.index')],
+        ['name' => $programme->title, 'url' => route('programmes.show', $programme->slug)]
+    ]">
     <x-slot:title>{{ $programme->seo_title ?: $programme->title . ' | Dzuels Educational Foundation' }}</x-slot:title>
     <x-slot:description>{{ $programme->seo_description ?: $programme->summary }}</x-slot:description>
 

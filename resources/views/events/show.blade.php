@@ -1,6 +1,14 @@
 <x-layout 
     :title="$event->seo_title ?? ($event->title . ' | Dzuels Educational Foundation')"
-    :description="$event->seo_description ?? $event->summary">
+    :description="$event->seo_description ?? $event->summary"
+    :canonical="route('events.show', $event->slug)"
+    :og-image="$event->featured_image_url ?? asset('front/images/techday.webp')"
+    og-type="article"
+    :breadcrumbs="[
+        ['name' => 'Home', 'url' => url('/')],
+        ['name' => 'Events', 'url' => route('events.index')],
+        ['name' => $event->title, 'url' => route('events.show', $event->slug)]
+    ]">
 
     {{-- Breadcrumb Navigation --}}
     <div class="bg-[var(--surface)] border-b border-[var(--border)] transition-colors">

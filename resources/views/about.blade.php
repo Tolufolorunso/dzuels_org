@@ -1,4 +1,9 @@
-<x-layout>
+<x-layout
+    :canonical="url('/about')"
+    :breadcrumbs="[
+        ['name' => 'Home', 'url' => url('/')],
+        ['name' => 'About Us', 'url' => url('/about')]
+    ]">
     <x-slot:title>About Us | Dzuels Educational Foundation - A Decade of Transforming Lives</x-slot:title>
     <x-slot:description>Learn about Dzuels Educational Foundation, established in 2015 to alleviate poverty through quality education, youth literacy interventions, and digital skills acquisition in Nigeria.</x-slot:description>
 

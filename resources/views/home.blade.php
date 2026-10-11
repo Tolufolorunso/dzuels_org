@@ -1,4 +1,8 @@
-<x-layout>
+<x-layout
+    title="Dzuels Educational Foundation | Quality Education and Digital Skills in Nigeria"
+    description="Dzuels Educational Foundation is a Nigerian non-profit organisation transforming lives through quality education, youth literacy interventions, and digital skills acquisition in Ekiti State."
+    :canonical="url('/')"
+    :og-image="asset('front/images/dzuelsCollage.webp')">
     {{-- 1. Hero Section --}}
     <section class="relative bg-maroon text-white py-20 sm:py-28 lg:py-36 overflow-hidden">
         {{-- Background Image with Gradient Overlay --}}
