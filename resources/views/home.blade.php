@@ -16,7 +16,8 @@
                  fetchpriority="high"
                  decoding="async"
                  class="w-full h-full object-cover object-center opacity-45" />
-            <div class="absolute inset-0 bg-linear-to-r from-[#2B0203]/90 via-maroon/75 to-[#242F40]/65"></div>
+            <div class="absolute inset-0 pointer-events-none" 
+                 style="background: linear-gradient(135deg, rgba(43, 2, 3, 0.90) 0%, rgba(106, 4, 6, 0.78) 55%, rgba(36, 47, 64, 0.65) 100%);"></div>
         </div>
 
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
