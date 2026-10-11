@@ -31,7 +31,7 @@ class ProgrammeSeeder extends Seeder
                 'slug' => 'innovation-and-tech-day',
                 'summary' => 'Our annual flagship technology festival celebrating youth innovation, hands-on digital exhibitions, robotics demos, and keynote mentorship from tech industry leaders.',
                 'body' => "Innovation and Tech Day (ITD) is our marquee annual showcase where young beneficiaries from across Ekiti State demonstrate their technological inventions, creative software projects, and digital literacy milestones before parents, community leaders, and visiting industry executives.\n\nEach edition features high-energy student hackathons, coding exhibitions, digital art showcases, and inspirational keynote panels hosted by software engineers, healthcare leaders, and academic consultants from Nigeria and the diaspora. Outstanding teams and student innovators receive educational scholarships, laptops, and direct mentorship placement to foster their continued growth.\n\nITD serves as both a celebration of community resilience and a launchpad for the next generation of African technology creators.",
-                'cover_image' => 'front/images/event_1.jpg',
+                'cover_image' => 'front/images/gallery/optimized/itd-2025-05.webp',
                 'partner_name' => 'SeedDev & Corporate Tech Allies',
                 'is_featured' => true,
                 'is_active' => true,

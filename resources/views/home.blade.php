@@ -15,8 +15,8 @@
                  loading="eager"
                  fetchpriority="high"
                  decoding="async"
-                 class="w-full h-full object-cover object-center opacity-30" />
-            <div class="absolute inset-0 bg-linear-to-r from-maroon/95 via-maroon/90 to-[#242F40]/80"></div>
+                 class="w-full h-full object-cover object-center opacity-45" />
+            <div class="absolute inset-0 bg-linear-to-r from-[#2B0203]/90 via-maroon/75 to-[#242F40]/65"></div>
         </div>
 
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

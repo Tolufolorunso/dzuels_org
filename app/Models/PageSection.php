@@ -90,14 +90,26 @@ class PageSection extends Model
             return $this->image_path;
         }
 
-        if (str_starts_with($this->image_path, 'front/')) {
-            return asset($this->image_path);
+        if (str_starts_with($this->image_path, 'front/') || str_starts_with($this->image_path, 'uploads/')) {
+            if (file_exists(public_path($this->image_path))) {
+                return asset($this->image_path);
+            }
+
+            return null;
         }
 
-        if (str_starts_with($this->image_path, 'uploads/')) {
-            return asset($this->image_path);
+        if (Storage::disk('public')->exists($this->image_path)) {
+            return Storage::disk('public')->url($this->image_path);
         }
 
-        return Storage::disk('public')->url($this->image_path);
+        return null;
+    }
+
+    /**
+     * Accessor for $section->image_url attribute.
+     */
+    public function getImageUrlAttribute(): ?string
+    {
+        return $this->getImageUrl();
     }
 }

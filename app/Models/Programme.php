@@ -83,9 +83,15 @@ class Programme extends Model
         }
 
         if (str_starts_with($this->cover_image, 'front/') || str_starts_with($this->cover_image, 'uploads/')) {
-            return asset($this->cover_image);
+            if (file_exists(public_path($this->cover_image))) {
+                return asset($this->cover_image);
+            }
         }
 
-        return asset('uploads/programmes/'.$this->cover_image);
+        if ($this->cover_image && file_exists(public_path('uploads/programmes/'.$this->cover_image))) {
+            return asset('uploads/programmes/'.$this->cover_image);
+        }
+
+        return asset('front/images/dzuelsCollage.webp');
     }
 }

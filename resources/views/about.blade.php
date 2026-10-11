@@ -11,17 +11,17 @@
     @php
         $heroSec = $sections['hero'] ?? null;
         $storySec = $sections['story'] ?? null;
-        $heroBgImage = $heroSec?->image_url ? asset($heroSec->image_url) : asset('front/images/gallery/optimized/general-01.webp');
+        $heroBgImage = $heroSec?->image_url ?: asset('front/images/gallery/optimized/general-01.webp');
     @endphp
     <section class="relative bg-maroon text-white py-16 sm:py-24 overflow-hidden">
         {{-- Contextual Background Imagery --}}
         <div class="absolute inset-0 z-0">
             <img src="{{ $heroBgImage }}" alt="" class="w-full h-full object-cover object-center transform scale-105" aria-hidden="true">
         </div>
-        {{-- Dark Maroon Gradient Overlays (WCAG 2.2 AA Contrast) --}}
-        <div class="absolute inset-0 z-0 bg-gradient-to-r from-[#2B0203]/95 via-maroon/90 to-[#2B0203]/85 mix-blend-multiply"></div>
-        <div class="absolute inset-0 z-0 bg-linear-to-b from-maroon/80 via-maroon/90 to-[#2B0203]/95"></div>
-        <div class="absolute inset-0 z-0 opacity-15">
+        {{-- Refined Overlays: Clearer imagery while preserving WCAG 2.2 AA text contrast --}}
+        <div class="absolute inset-0 z-0 bg-gradient-to-r from-[#2B0203]/85 via-maroon/70 to-[#2B0203]/60"></div>
+        <div class="absolute inset-0 z-0 bg-linear-to-t from-[#2B0203]/80 via-transparent to-black/35"></div>
+        <div class="absolute inset-0 z-0 opacity-10">
             <div class="absolute inset-0 bg-[radial-gradient(#F9DEC9_1px,transparent_1px)] [background-size:24px_24px]"></div>
         </div>
 
