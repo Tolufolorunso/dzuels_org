@@ -5,14 +5,19 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
+use App\Http\Controllers\Admin\ForgotPasswordController as AdminForgotPasswordController;
 use App\Http\Controllers\Admin\GalleryAlbumController as AdminGalleryAlbumController;
 use App\Http\Controllers\Admin\InquiryController;
 use App\Http\Controllers\Admin\NewsletterSubscriberController as AdminNewsletterSubscriberController;
+use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Admin\ProgrammeController as AdminProgrammeController;
+use App\Http\Controllers\Admin\ResetPasswordController as AdminResetPasswordController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\TeamMemberController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DonateController;
 use App\Http\Controllers\EventController;
@@ -69,16 +74,37 @@ Route::get('/site.webmanifest', function () {
 |--------------------------------------------------------------------------
 */
 Route::prefix('admin')->name('admin.')->group(function () {
-    // Guest Authentication
+    // Guest Authentication & Password Recovery
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
+    Route::get('/forgot-password', [AdminForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+    Route::post('/forgot-password', [AdminForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::get('/reset-password/{token}', [AdminResetPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/reset-password', [AdminResetPasswordController::class, 'reset'])->name('password.update');
 
     // Protected Administration
     Route::middleware(['admin'])->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-        Route::get('/settings', [SettingController::class, 'index'])->name('settings');
-        Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
-        Route::post('/settings/sync', [SettingController::class, 'syncApi'])->name('settings.sync');
+
+        // Staff Profile & Password Security
+        Route::get('/profile', [AdminProfileController::class, 'edit'])->name('profile.password');
+        Route::put('/profile/password', [AdminProfileController::class, 'updatePassword'])->name('profile.password.update');
+
+        // CMS Page Content Management
+        Route::get('/pages', [AdminPageController::class, 'index'])->name('pages.index');
+        Route::get('/pages/{page}', [AdminPageController::class, 'edit'])->name('pages.edit');
+        Route::put('/pages/{page}/sections/{section}', [AdminPageController::class, 'updateSection'])->name('pages.sections.update');
+
+        // Super Admin Restricted Routes (Settings & Users)
+        Route::middleware(['super_admin'])->group(function () {
+            Route::get('/settings', [SettingController::class, 'index'])->name('settings');
+            Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
+            Route::post('/settings/sync', [SettingController::class, 'syncApi'])->name('settings.sync');
+
+            // Staff User Management
+            Route::patch('/users/{user}/toggle', [AdminUserController::class, 'toggleActive'])->name('users.toggle');
+            Route::resource('users', AdminUserController::class)->except(['show']);
+        });
 
         // Team Management
         Route::patch('/team/{team}/toggle', [TeamMemberController::class, 'toggleActive'])->name('team.toggle');

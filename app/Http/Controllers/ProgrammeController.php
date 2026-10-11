@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PageSection;
 use App\Models\Programme;
 use Illuminate\Contracts\View\View;
 
@@ -12,6 +13,8 @@ class ProgrammeController extends Controller
      */
     public function index(): View
     {
+        $sections = PageSection::getPageSections('programmes');
+
         try {
             $programmes = Programme::active()->ordered()->get();
             $featured = $programmes->where('is_featured', true)->first();
@@ -21,6 +24,7 @@ class ProgrammeController extends Controller
         }
 
         return view('programmes.index', [
+            'sections' => $sections,
             'programmes' => $programmes,
             'featured' => $featured,
         ]);

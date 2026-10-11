@@ -6,6 +6,7 @@ use App\Http\Requests\StorePartnerEnquiryRequest;
 use App\Http\Requests\StoreVolunteerApplicationRequest;
 use App\Mail\NewPartnerEnquiryMail;
 use App\Mail\NewVolunteerApplicationMail;
+use App\Models\PageSection;
 use App\Models\PartnerEnquiry;
 use App\Models\Setting;
 use App\Models\VolunteerApplication;
@@ -21,7 +22,9 @@ class GetInvolvedController extends Controller
      */
     public function index(): View
     {
-        return view('get-involved.index');
+        $sections = PageSection::getPageSections('get_involved');
+
+        return view('get-involved.index', compact('sections'));
     }
 
     /**

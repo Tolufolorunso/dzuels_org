@@ -27,17 +27,52 @@
 
                 <!-- Navigation Tabs -->
                 <nav class="hidden md:flex items-center gap-1" aria-label="Admin Navigation">
-                    <a href="{{ route('admin.settings') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors {{ request()->routeIs('admin.settings*') ? 'bg-white/15 text-white' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
-                        Site Settings
+                    <a href="{{ route('admin.dashboard') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors {{ request()->routeIs('admin.dashboard') ? 'bg-white/15 text-white' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
+                        Dashboard
                     </a>
+                    @if(auth()->user()->canManageContent())
+                    <a href="{{ route('admin.pages.index') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors {{ request()->routeIs('admin.pages*') ? 'bg-white/15 text-white' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
+                        Pages CMS
+                    </a>
+                    <a href="{{ route('admin.programmes.index') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors {{ request()->routeIs('admin.programmes*') ? 'bg-white/15 text-white' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
+                        Programmes
+                    </a>
+                    <a href="{{ route('admin.events.index') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors {{ request()->routeIs('admin.events*') ? 'bg-white/15 text-white' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
+                        Events
+                    </a>
+                    <a href="{{ route('admin.gallery.index') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors {{ request()->routeIs('admin.gallery*') ? 'bg-white/15 text-white' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
+                        Gallery
+                    </a>
+                    @endif
+                    <a href="{{ route('admin.inquiries.index') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors {{ request()->routeIs('admin.inquiries*') ? 'bg-white/15 text-white' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
+                        Inquiries
+                    </a>
+                    <a href="{{ route('admin.messages.index') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors {{ request()->routeIs('admin.messages*') ? 'bg-white/15 text-white' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
+                        Messages
+                    </a>
+                    @if(auth()->user()->isSuperAdmin())
+                    <a href="{{ route('admin.users.index') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors {{ request()->routeIs('admin.users*') ? 'bg-white/15 text-white' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
+                        Users
+                    </a>
+                    <a href="{{ route('admin.settings') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors {{ request()->routeIs('admin.settings*') ? 'bg-white/15 text-white' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
+                        Settings
+                    </a>
+                    @endif
                 </nav>
 
                 <!-- User Profile & Actions -->
-                <div class="flex items-center gap-4">
-                    <div class="text-right hidden sm:block text-xs">
-                        <span class="font-semibold text-white block">{{ auth()->user()->name }}</span>
-                        <span class="text-[10px] uppercase font-bold text-[var(--accent-cream)]">{{ auth()->user()->role }}</span>
-                    </div>
+                <div class="flex items-center gap-3">
+                    <a href="{{ route('admin.profile.password') }}" class="text-right hidden sm:block text-xs group" title="Change Password & Profile">
+                        <span class="font-semibold text-white block group-hover:text-[var(--accent-cream)] transition-colors">{{ auth()->user()->name }}</span>
+                        <span class="text-[10px] uppercase font-bold text-[var(--accent-cream)]">{{ str_replace('_', ' ', auth()->user()->role) }}</span>
+                    </a>
+
+                    <a href="{{ route('admin.profile.password') }}" class="text-xs text-stone-300 hover:text-white transition-colors border border-white/20 rounded-lg px-2.5 py-1.5 flex items-center gap-1.5" title="Manage Profile & Security">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        <span class="hidden sm:inline">Profile</span>
+                    </a>
 
                     <a href="{{ url('/') }}" target="_blank" class="text-xs text-stone-300 hover:text-white transition-colors border border-white/20 rounded-lg px-2.5 py-1.5 flex items-center gap-1.5" title="View live public website">
                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

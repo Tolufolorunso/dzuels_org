@@ -8,6 +8,10 @@
     <x-slot:description>Learn about Dzuels Educational Foundation, established in 2015 to alleviate poverty through quality education, youth literacy interventions, and digital skills acquisition in Nigeria.</x-slot:description>
 
     {{-- 1. Hero & Breadcrumb Banner --}}
+    @php
+        $heroSec = $sections['hero'] ?? null;
+        $storySec = $sections['story'] ?? null;
+    @endphp
     <section class="relative bg-maroon text-white py-16 sm:py-24 overflow-hidden">
         {{-- Background Texture & Overlay --}}
         <div class="absolute inset-0 z-0 opacity-20">
@@ -30,15 +34,15 @@
 
             <div class="max-w-3xl space-y-4">
                 <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--accent-cream)]/20 text-[var(--accent-cream)] border border-[var(--accent-cream)]/30 backdrop-blur-xs">
-                    About Dzuels Educational Foundation
+                    {{ $heroSec?->subheadline ?: 'About Dzuels Educational Foundation' }}
                 </span>
                 
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
-                    Transforming Lives <span class="script-accent text-[var(--accent-cream)] text-5xl sm:text-6xl lg:text-7xl font-normal block sm:inline">Page by Page</span>
+                    {{ $heroSec?->headline ?: 'Transforming Lives Page by Page' }}
                 </h1>
 
                 <p class="text-lg sm:text-xl text-white/90 leading-relaxed max-w-2xl pt-2">
-                    A decade of dedicated service alleviating poverty through quality education, youth literacy interventions, and digital empowerment in Nigeria.
+                    {{ $heroSec?->body_text ?: 'A decade of dedicated service alleviating poverty through quality education, youth literacy interventions, and digital empowerment in Nigeria.' }}
                 </p>
             </div>
         </div>
@@ -52,24 +56,30 @@
                 <div class="lg:col-span-7 space-y-6">
                     <div class="space-y-2">
                         <span class="text-xs font-bold uppercase tracking-widest text-crimson dark:text-mint">
-                            Our Heritage & Purpose
+                            {{ $storySec?->subheadline ?: 'Our Heritage & Purpose' }}
                         </span>
                         <h2 class="text-3xl sm:text-4xl font-extrabold text-[var(--heading)] tracking-tight">
-                            A Decade of Dedicated Service (Since 2015)
+                            {{ $storySec?->headline ?: 'A Decade of Dedicated Service (Since 2015)' }}
                         </h2>
                     </div>
 
-                    <p class="text-base sm:text-lg text-[var(--text)] leading-relaxed">
-                        <strong class="font-semibold text-[var(--heading)]">Dzuels Educational Foundation</strong> is a registered non-profit charity founded on <span class="font-semibold text-crimson dark:text-mint">22nd June 2015</span>. Established with an unwavering commitment to child welfare, we exist to provide comprehensive educational support, life skills, and digital literacy for indigent Nigerian children and youth.
-                    </p>
+                    @if ($storySec?->body_text)
+                        <div class="text-base sm:text-lg text-[var(--text)] leading-relaxed space-y-4">
+                            {!! nl2br(e($storySec->body_text)) !!}
+                        </div>
+                    @else
+                        <p class="text-base sm:text-lg text-[var(--text)] leading-relaxed">
+                            <strong class="font-semibold text-[var(--heading)]">Dzuels Educational Foundation</strong> is a registered non-profit charity founded on <span class="font-semibold text-crimson dark:text-mint">22nd June 2015</span>. Established with an unwavering commitment to child welfare, we exist to provide comprehensive educational support, life skills, and digital literacy for indigent Nigerian children and youth.
+                        </p>
 
-                    <p class="text-base sm:text-lg text-[var(--text)] leading-relaxed">
-                        Over the last ten years, our programs have operated directly within public and community schools in Ekiti State and beyond. We believe every child deserves the tools, dignity, and encouragement to pursue knowledge without the burden of unpaid tuition fees or missing textbooks.
-                    </p>
+                        <p class="text-base sm:text-lg text-[var(--text)] leading-relaxed">
+                            Over the last ten years, our programs have operated directly within public and community schools in Ekiti State and beyond. We believe every child deserves the tools, dignity, and encouragement to pursue knowledge without the burden of unpaid tuition fees or missing textbooks.
+                        </p>
 
-                    <p class="text-base sm:text-lg text-[var(--text)] leading-relaxed">
-                        Recognizing that learning does not happen in isolation, our work also reaches vulnerable households: providing nutritional assistance to indigent families through widows, creating deep awareness of social vices, and fostering transformational leadership in every classroom we touch.
-                    </p>
+                        <p class="text-base sm:text-lg text-[var(--text)] leading-relaxed">
+                            Recognizing that learning does not happen in isolation, our work also reaches vulnerable households: providing nutritional assistance to indigent families through widows, creating deep awareness of social vices, and fostering transformational leadership in every classroom we touch.
+                        </p>
+                    @endif
 
                     {{-- Quick Milestone Highlights --}}
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4 border-t border-[var(--border)]">
@@ -96,13 +106,10 @@
 
                         {{-- Main About Image --}}
                         <div class="rounded-3xl overflow-hidden border-4 border-[var(--surface)] shadow-2xl bg-[var(--surface)]">
-                            <picture>
-                                <source srcset="{{ asset('front/images/about_1.webp') }}" type="image/webp">
-                                <img src="{{ asset('front/images/about_1.jpg') }}" 
-                                     alt="Dzuels Educational Foundation beneficiaries in Ekiti State" 
-                                     class="w-full h-96 sm:h-[460px] object-cover object-center" 
-                                     loading="lazy">
-                            </picture>
+                            <img src="{{ $storySec?->getImageUrl() ?: asset('front/images/about_1.webp') }}" 
+                                 alt="Dzuels Educational Foundation beneficiaries in Ekiti State" 
+                                 class="w-full h-96 sm:h-[460px] object-cover object-center" 
+                                 loading="lazy">
                         </div>
 
                         {{-- Floating 10-Year Impact Card --}}

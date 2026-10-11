@@ -10,6 +10,9 @@
 
     <div x-data="donateHelper()" class="min-h-screen bg-[var(--bg)] transition-colors">
         {{-- 1. Hero Section --}}
+        @php
+            $heroSec = $sections['hero'] ?? null;
+        @endphp
         <section class="relative py-16 lg:py-24 bg-[var(--surface)] border-b border-[var(--border)] overflow-hidden transition-colors">
             {{-- Decorative ambient background glows --}}
             <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-maroon/5 dark:bg-maroon/10 blur-3xl pointer-events-none"></div>
@@ -17,15 +20,15 @@
 
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
                 <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-mint border border-emerald-200 dark:border-emerald-800 mb-6">
-                    <span>💚</span> Every Gift Creates Lasting Impact
+                    <span>💚</span> {{ $heroSec?->subheadline ?: 'Every Gift Creates Lasting Impact' }}
                 </span>
 
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-[var(--heading)] tracking-tight max-w-4xl mx-auto leading-tight">
-                    Your Generosity Powers <span class="font-serif italic font-normal text-crimson dark:text-[var(--accent-cream)]">Real Transformation</span>
+                    {{ $heroSec?->headline ?: 'Your Generosity Powers Real Transformation' }}
                 </h1>
 
                 <p class="mt-6 text-lg sm:text-xl text-[var(--text-muted)] max-w-2xl mx-auto leading-relaxed">
-                    Help us bridge Nigeria's digital divide. 100% of public contributions directly equip community computer labs, sponsor youth literacy tournaments, and provide educational materials in Ijero-Ekiti and rural public schools.
+                    {{ $heroSec?->body_text ?: "Help us bridge Nigeria's digital divide. 100% of public contributions directly equip community computer labs, sponsor youth literacy tournaments, and provide educational materials in Ijero-Ekiti and rural public schools." }}
                 </p>
 
                 {{-- Trust Badges Strip --}}

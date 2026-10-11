@@ -82,6 +82,10 @@
                         <input type="checkbox" name="remember" class="rounded text-maroon focus:ring-maroon">
                         <span>Remember this device</span>
                     </label>
+
+                    <a href="{{ route('admin.password.request') }}" class="text-maroon hover:underline font-semibold">
+                        Forgot password?
+                    </a>
                 </div>
 
                 <button 

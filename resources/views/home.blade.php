@@ -4,10 +4,13 @@
     :canonical="url('/')"
     :og-image="asset('front/images/dzuelsCollage.webp')">
     {{-- 1. Hero Section --}}
+    @php
+        $heroSec = $sections['hero'] ?? null;
+    @endphp
     <section class="relative bg-maroon text-white py-20 sm:py-28 lg:py-36 overflow-hidden">
         {{-- Background Image with Gradient Overlay --}}
         <div class="absolute inset-0 z-0">
-            <img src="{{ asset('front/images/home_1.webp') }}" 
+            <img src="{{ $heroSec?->getImageUrl() ?: asset('front/images/home_1.webp') }}" 
                  alt="Dzuels Educational Foundation students in a classroom" 
                  loading="eager"
                  fetchpriority="high"
@@ -19,21 +22,21 @@
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-3xl space-y-6">
                 <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--accent-cream)]/20 text-[var(--accent-cream)] border border-[var(--accent-cream)]/30 backdrop-blur-xs">
-                    Dzuels Educational Foundation
+                    {{ $heroSec?->subheadline ?: 'Dzuels Educational Foundation' }}
                 </span>
                 
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
-                    Addressing poverty through quality <span class="script-accent text-[var(--accent-cream)] text-5xl sm:text-6xl lg:text-7xl font-normal">education</span> and skills acquisition
+                    {{ $heroSec?->headline ?: 'Addressing poverty through quality education and skills acquisition' }}
                 </h1>
 
                 <p class="text-lg sm:text-xl text-white/90 leading-relaxed max-w-2xl">
-                    Empowering indigent Nigerian children, youth, and educators with free digital literacy, school support, leadership mentoring, and community welfare.
+                    {{ $heroSec?->body_text ?: 'Empowering indigent Nigerian children, youth, and educators with free digital literacy, school support, leadership mentoring, and community welfare.' }}
                 </p>
 
                 <div class="flex flex-wrap items-center gap-4 pt-4">
-                    <a href="{{ url('/donate') }}" 
+                    <a href="{{ $heroSec?->button_url ?: url('/donate') }}" 
                        class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-bold bg-white text-maroon hover:bg-[var(--accent-cream)] transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer">
-                        Donate Now
+                        {{ $heroSec?->button_text ?: 'Donate Now' }}
                     </a>
                     <a href="{{ url('/get-involved') }}" 
                        class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-semibold border-2 border-white/80 text-white hover:bg-white/10 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer">
@@ -100,13 +103,16 @@
     </section>
 
     {{-- 3. Who We Are Section --}}
+    @php
+        $whoSec = $sections['who_we_are'] ?? null;
+    @endphp
     <section class="py-16 sm:py-24 bg-[var(--bg)] transition-colors overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                 {{-- Image Frame with Offset Cream Border --}}
                 <div class="relative mx-auto lg:mx-0 w-full max-w-lg lg:max-w-none">
                     <div class="absolute -top-3 -left-3 sm:-top-4 sm:-left-4 w-full h-full border-3 border-[var(--accent-cream)] rounded-3xl z-0 pointer-events-none"></div>
-                    <img src="{{ asset('front/images/about_1.webp') }}" 
+                    <img src="{{ $whoSec?->getImageUrl() ?: asset('front/images/about_1.webp') }}" 
                          alt="Dzuels foundation teachers and beneficiaries in an interactive session" 
                          loading="lazy"
                          decoding="async"
@@ -117,25 +123,31 @@
                 <div class="space-y-6">
                     <div>
                         <span class="text-xs font-bold uppercase tracking-widest text-crimson dark:text-[var(--accent-cream)]">
-                            Who We Are
+                            {{ $whoSec?->subheadline ?: 'Who We Are' }}
                         </span>
                         <h2 class="text-3xl sm:text-4xl font-extrabold text-[var(--heading)] tracking-tight mt-2">
-                            Transforming lives page by page
+                            {{ $whoSec?->headline ?: 'Transforming lives page by page' }}
                         </h2>
                     </div>
 
-                    <p class="text-base sm:text-lg text-[var(--text)] leading-relaxed">
-                        Founded on 22nd June 2015 and registered as a charity in Nigeria, Dzuels Educational Foundation is dedicated to breaking the cycle of poverty by unlocking potential through education and practical skills.
-                    </p>
+                    @if ($whoSec?->body_text)
+                        <div class="text-base sm:text-lg text-[var(--text)] leading-relaxed space-y-4">
+                            {!! nl2br(e($whoSec->body_text)) !!}
+                        </div>
+                    @else
+                        <p class="text-base sm:text-lg text-[var(--text)] leading-relaxed">
+                            Founded on 22nd June 2015 and registered as a charity in Nigeria, Dzuels Educational Foundation is dedicated to breaking the cycle of poverty by unlocking potential through education and practical skills.
+                        </p>
 
-                    <p class="text-base sm:text-lg text-[var(--text)] leading-relaxed">
-                        Ours is an integrated approach to the total well-being of the child: paying school fees, providing educational materials, equipping non-profit schools, mentoring beneficiaries, facilitating transformational leadership training, feeding families, and enabling health services.
-                    </p>
+                        <p class="text-base sm:text-lg text-[var(--text)] leading-relaxed">
+                            Ours is an integrated approach to the total well-being of the child: paying school fees, providing educational materials, equipping non-profit schools, mentoring beneficiaries, facilitating transformational leadership training, feeding families, and enabling health services.
+                        </p>
+                    @endif
 
                     <div class="pt-2">
-                        <a href="{{ url('/about') }}" 
+                        <a href="{{ $whoSec?->button_url ?: url('/about') }}" 
                            class="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold border-2 border-maroon text-maroon hover:bg-maroon hover:text-white dark:border-[var(--accent-cream)] dark:text-[var(--accent-cream)] dark:hover:bg-[var(--accent-cream)] dark:hover:text-maroon transition-all duration-200">
-                            Read Our Full Story <span aria-hidden="true">&rarr;</span>
+                            {{ $whoSec?->button_text ?: 'Read Our Full Story' }} <span aria-hidden="true">&rarr;</span>
                         </a>
                     </div>
                 </div>
@@ -229,24 +241,27 @@
     </section>
 
     {{-- 6. Our Causes Section --}}
+    @php
+        $causeSec = $sections['causes'] ?? null;
+    @endphp
     <section class="py-20 lg:py-28 bg-[var(--bg)] transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
                 <span class="text-xs font-bold uppercase tracking-widest text-crimson dark:text-[var(--accent-cream)]">
-                    Our Causes
+                    {{ $causeSec?->subheadline ?: 'Our Causes' }}
                 </span>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-[var(--heading)] tracking-tight">
-                    Holistic support for youth & community development
+                    {{ $causeSec?->headline ?: 'Holistic support for youth & community development' }}
                 </h2>
                 <p class="text-[var(--text-muted)] text-base sm:text-lg">
-                    We combine direct education sponsorship with family stability and health awareness.
+                    {{ $causeSec?->body_text ?: 'We combine direct education sponsorship with family stability and health awareness.' }}
                 </p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 {{-- Image Column --}}
                 <div class="lg:col-span-5">
-                    <img src="{{ asset('front/images/cause.webp') }}" 
+                    <img src="{{ $causeSec?->getImageUrl() ?: asset('front/images/cause.webp') }}" 
                          alt="Nigerian children and community beneficiaries supported by Dzuels Foundation" 
                          loading="lazy"
                          decoding="async"
@@ -307,11 +322,14 @@
     </section>
 
     {{-- 7. Featured Project Card --}}
+    @php
+        $featSec = $sections['featured_project'] ?? null;
+    @endphp
     <section class="py-16 sm:py-20 bg-[var(--bg-alt)] transition-colors">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl overflow-hidden shadow-xl grid grid-cols-1 lg:grid-cols-12 transition-colors">
                 <div class="lg:col-span-6 relative min-h-[300px] lg:min-h-full">
-                    <img src="{{ asset('front/images/dzuelsCollage.webp') }}" 
+                    <img src="{{ $featSec?->getImageUrl() ?: asset('front/images/dzuelsCollage.webp') }}" 
                          alt="Dzuels Ijero-Ekiti digital literacy lab and students" 
                          loading="lazy"
                          decoding="async"
@@ -320,21 +338,21 @@
                 <div class="lg:col-span-6 p-8 sm:p-12 flex flex-col justify-center space-y-6">
                     <div>
                         <span class="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-bold bg-mint/20 text-emerald-800 dark:text-emerald-300">
-                            Featured Project
+                            {{ $featSec?->subheadline ?: 'Featured Project' }}
                         </span>
                         <h3 class="text-2xl sm:text-3xl font-extrabold text-[var(--heading)] leading-snug mt-3">
-                            Digital Infrastructure & Literacy in Ijero-Ekiti
+                            {{ $featSec?->headline ?: 'Digital Infrastructure & Literacy in Ijero-Ekiti' }}
                         </h3>
                     </div>
 
                     <p class="text-[var(--text)] leading-relaxed text-base">
-                        Free literacy interventions and digital skills training for teachers and students in Ijero-Ekiti, Southwest Nigeria, in active partnership with the Information Technology Seed Development Initiative (SeedDev).
+                        {{ $featSec?->body_text ?: 'Free literacy interventions and digital skills training for teachers and students in Ijero-Ekiti, Southwest Nigeria, in active partnership with the Information Technology Seed Development Initiative (SeedDev).' }}
                     </p>
 
                     <div class="flex flex-wrap items-center gap-4 pt-2">
-                        <a href="{{ url('/programmes/ijero-digital-literacy') }}" 
+                        <a href="{{ $featSec?->button_url ?: url('/programmes/ijero-digital-literacy') }}" 
                            class="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-semibold bg-maroon text-white hover:bg-crimson transition-all duration-200 shadow-md">
-                            Learn More About Project
+                            {{ $featSec?->button_text ?: 'Learn More About Project' }}
                         </a>
                         <a href="{{ url('/get-involved') }}" 
                            class="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-semibold border border-[var(--border)] text-[var(--text-strong)] hover:border-maroon transition-all duration-200">
@@ -432,18 +450,21 @@
     </section>
 
     {{-- 11. Final Call to Action Banner --}}
+    @php
+        $ctaSec = $sections['cta'] ?? null;
+    @endphp
     <section class="py-20 lg:py-28 text-white text-center relative overflow-hidden bg-radial from-crimson/40 via-maroon to-[#2B0203]">
         <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-                You too can make a difference
+                {{ $ctaSec?->headline ?: 'You too can make a difference' }}
             </h2>
             <p class="text-base sm:text-lg text-[var(--accent-cream)] max-w-2xl mx-auto leading-relaxed">
-                Whether by sponsoring a child's tuition, volunteering your skills, or partnering with our training labs, your support creates lasting change.
+                {{ $ctaSec?->body_text ?: "Whether by sponsoring a child's tuition, volunteering your skills, or partnering with our training labs, your support creates lasting change." }}
             </p>
             <div class="flex flex-wrap items-center justify-center gap-4 pt-4">
-                <a href="{{ url('/donate') }}" 
+                <a href="{{ $ctaSec?->button_url ?: url('/donate') }}" 
                    class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-bold bg-white text-maroon hover:bg-[var(--accent-cream)] transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer">
-                    Make a Donation
+                    {{ $ctaSec?->button_text ?: 'Make a Donation' }}
                 </a>
                 <a href="{{ url('/get-involved') }}" 
                    class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-semibold border-2 border-white/80 text-white hover:bg-white/10 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer">

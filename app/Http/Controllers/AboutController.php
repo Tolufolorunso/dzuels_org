@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PageSection;
 use App\Models\Partner;
 use App\Models\TeamMember;
 use Illuminate\Contracts\View\View;
@@ -13,6 +14,8 @@ class AboutController extends Controller
      */
     public function __invoke(): View
     {
+        $sections = PageSection::getPageSections('about');
+
         try {
             $trustees = TeamMember::active()->byGroup('trustee')->ordered()->get();
             $management = TeamMember::active()->byGroup('management')->ordered()->get();
@@ -26,6 +29,7 @@ class AboutController extends Controller
         }
 
         return view('about', [
+            'sections' => $sections,
             'trustees' => $trustees,
             'management' => $management,
             'advisors' => $advisors,

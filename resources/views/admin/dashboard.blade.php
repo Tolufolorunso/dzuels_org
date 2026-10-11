@@ -19,18 +19,20 @@
                 </div>
 
                 <div class="flex items-center gap-3 shrink-0">
-                    <a href="{{ route('admin.events.create') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-[var(--accent-cream)] text-maroon hover:bg-[#FBE9DC] transition-all shadow-xs cursor-pointer">
+                    <a href="{{ route('admin.pages.index') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-[var(--accent-cream)] text-maroon hover:bg-[#FBE9DC] transition-all shadow-xs cursor-pointer">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                         </svg>
-                        <span>New Event</span>
+                        <span>Pages CMS</span>
                     </a>
-                    <a href="{{ route('admin.settings') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-white/15 text-white hover:bg-white/25 border border-white/20 transition-all cursor-pointer">
+                    @if(auth()->user()->isSuperAdmin())
+                    <a href="{{ route('admin.users.index') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-white/15 text-white hover:bg-white/25 border border-white/20 transition-all cursor-pointer">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
-                        <span>Settings</span>
+                        <span>Staff Accounts</span>
                     </a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -294,6 +296,11 @@
                     <h3 class="text-sm font-bold text-stone-900 uppercase tracking-wider">Quick Actions</h3>
 
                     <div class="space-y-2">
+                        @if(auth()->user()->canManageContent())
+                        <a href="{{ route('admin.pages.index') }}" class="flex items-center justify-between p-3 rounded-2xl bg-stone-50 hover:bg-stone-100 border border-stone-200/60 transition-colors group">
+                            <span class="text-xs font-semibold text-stone-800 group-hover:text-maroon">Edit Page Content (CMS)</span>
+                            <span class="text-stone-400 group-hover:text-maroon text-sm font-bold">→</span>
+                        </a>
                         <a href="{{ route('admin.programmes.create') }}" class="flex items-center justify-between p-3 rounded-2xl bg-stone-50 hover:bg-stone-100 border border-stone-200/60 transition-colors group">
                             <span class="text-xs font-semibold text-stone-800 group-hover:text-maroon">Add New Programme</span>
                             <span class="text-stone-400 group-hover:text-maroon text-sm font-bold">→</span>
@@ -302,12 +309,19 @@
                             <span class="text-xs font-semibold text-stone-800 group-hover:text-maroon">Create New Event</span>
                             <span class="text-stone-400 group-hover:text-maroon text-sm font-bold">→</span>
                         </a>
-                        <a href="{{ route('admin.team.create') }}" class="flex items-center justify-between p-3 rounded-2xl bg-stone-50 hover:bg-stone-100 border border-stone-200/60 transition-colors group">
-                            <span class="text-xs font-semibold text-stone-800 group-hover:text-maroon">Add Team Member</span>
+                        @endif
+                        @if(auth()->user()->isSuperAdmin())
+                        <a href="{{ route('admin.users.index') }}" class="flex items-center justify-between p-3 rounded-2xl bg-stone-50 hover:bg-stone-100 border border-stone-200/60 transition-colors group">
+                            <span class="text-xs font-semibold text-stone-800 group-hover:text-maroon">Manage Staff Accounts</span>
                             <span class="text-stone-400 group-hover:text-maroon text-sm font-bold">→</span>
                         </a>
                         <a href="{{ route('admin.settings') }}" class="flex items-center justify-between p-3 rounded-2xl bg-stone-50 hover:bg-stone-100 border border-stone-200/60 transition-colors group">
                             <span class="text-xs font-semibold text-stone-800 group-hover:text-maroon">Update Impact Stats</span>
+                            <span class="text-stone-400 group-hover:text-maroon text-sm font-bold">→</span>
+                        </a>
+                        @endif
+                        <a href="{{ route('admin.profile.password') }}" class="flex items-center justify-between p-3 rounded-2xl bg-stone-50 hover:bg-stone-100 border border-stone-200/60 transition-colors group">
+                            <span class="text-xs font-semibold text-stone-800 group-hover:text-maroon">Change Account Password</span>
                             <span class="text-stone-400 group-hover:text-maroon text-sm font-bold">→</span>
                         </a>
                     </div>

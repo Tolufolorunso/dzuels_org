@@ -8,6 +8,9 @@
     <x-slot:description>Discover Dzuels Educational Foundation programmes: Digital Infrastructure in Ijero-Ekiti, Innovation & Tech Day, Reading Competitions, and Spelling Bee Contests.</x-slot:description>
 
     {{-- 1. Hero & Breadcrumb Banner --}}
+    @php
+        $heroSec = $sections['hero'] ?? null;
+    @endphp
     <section class="relative bg-maroon text-white py-16 sm:py-24 overflow-hidden">
         {{-- Background Pattern & Linear Gradient --}}
         <div class="absolute inset-0 z-0 opacity-20">
@@ -30,15 +33,15 @@
 
             <div class="max-w-3xl space-y-4">
                 <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--accent-cream)]/20 text-[var(--accent-cream)] border border-[var(--accent-cream)]/30 backdrop-blur-xs">
-                    Impact In Action
+                    {{ $heroSec?->subheadline ?: 'Impact In Action' }}
                 </span>
                 
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
-                    Our Impact <span class="script-accent text-[var(--accent-cream)] text-5xl sm:text-6xl lg:text-7xl font-normal block sm:inline">Programmes</span>
+                    {{ $heroSec?->headline ?: 'Our Impact Programmes' }}
                 </h1>
 
                 <p class="text-lg sm:text-xl text-white/90 leading-relaxed max-w-2xl pt-2">
-                    Empowering Nigerian children, teachers, and schools through grassroots literacy campaigns, digital labs, and STEM innovation showcases.
+                    {{ $heroSec?->body_text ?: 'Empowering Nigerian children, teachers, and schools through grassroots literacy campaigns, digital labs, and STEM innovation showcases.' }}
                 </p>
             </div>
         </div>

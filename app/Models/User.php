@@ -32,11 +32,59 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is an administrator.
+     * Check if user is an administrator (super_admin or legacy admin).
      */
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return in_array($this->role, ['super_admin', 'admin']);
+    }
+
+    /**
+     * Check if user is a super administrator.
+     */
+    public function isSuperAdmin(): bool
+    {
+        return in_array($this->role, ['super_admin', 'admin']);
+    }
+
+    /**
+     * Check if user is a content editor.
+     */
+    public function isEditor(): bool
+    {
+        return $this->role === 'editor';
+    }
+
+    /**
+     * Check if user is support staff.
+     */
+    public function isSupport(): bool
+    {
+        return $this->role === 'support';
+    }
+
+    /**
+     * Determine if the user can manage staff accounts.
+     */
+    public function canManageUsers(): bool
+    {
+        return $this->isSuperAdmin();
+    }
+
+    /**
+     * Determine if the user can manage site settings.
+     */
+    public function canManageSettings(): bool
+    {
+        return $this->isSuperAdmin();
+    }
+
+    /**
+     * Determine if the user can manage CMS pages, events, and programmes.
+     */
+    public function canManageContent(): bool
+    {
+        return $this->isSuperAdmin() || $this->isEditor();
     }
 
     /**
@@ -44,6 +92,6 @@ class User extends Authenticatable
      */
     public function canAccessAdmin(): bool
     {
-        return $this->is_active && in_array($this->role, ['admin', 'editor']);
+        return $this->is_active && in_array($this->role, ['super_admin', 'admin', 'editor', 'support']);
     }
 }

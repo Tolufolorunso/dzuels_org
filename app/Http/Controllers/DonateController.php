@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PageSection;
 use App\Models\Setting;
 use Illuminate\Contracts\View\View;
 
@@ -12,6 +13,7 @@ class DonateController extends Controller
      */
     public function __invoke(): View
     {
+        $sections = PageSection::getPageSections('donate');
         $settings = [
             'flutterwave_url' => Setting::get('flutterwave_url') ?: 'https://flutterwave.com/pay/j0byxgjs0nma',
             'bank_name' => Setting::get('bank_name') ?: 'Guaranty Trust Bank (GTBank) Plc.',
@@ -106,6 +108,6 @@ class DonateController extends Controller
             ],
         ];
 
-        return view('donate.index', compact('settings', 'diasporaAccounts', 'givingTiers', 'impactPillars', 'faqs'));
+        return view('donate.index', compact('sections', 'settings', 'diasporaAccounts', 'givingTiers', 'impactPillars', 'faqs'));
     }
 }

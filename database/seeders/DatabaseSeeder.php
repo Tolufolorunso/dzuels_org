@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             ProgrammeSeeder::class,
             EventSeeder::class,
             GallerySeeder::class,
+            PageSectionSeeder::class,
         ]);
     }
 }

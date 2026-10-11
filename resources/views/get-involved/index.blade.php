@@ -13,6 +13,9 @@
          class="min-h-screen bg-[var(--bg)] transition-colors">
 
         {{-- 1. Hero Section --}}
+        @php
+            $heroSec = $sections['hero'] ?? null;
+        @endphp
         <section class="relative py-16 lg:py-24 bg-[var(--surface)] border-b border-[var(--border)] overflow-hidden transition-colors">
             {{-- Decorative ambient background glows --}}
             <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-maroon/5 dark:bg-maroon/10 blur-3xl pointer-events-none"></div>
@@ -20,15 +23,15 @@
 
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
                 <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-mint border border-emerald-200 dark:border-emerald-800 mb-6">
-                    <span>🤝</span> Make a Difference With Us
+                    <span>🤝</span> {{ $heroSec?->subheadline ?: 'Make a Difference With Us' }}
                 </span>
 
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-[var(--heading)] tracking-tight max-w-4xl mx-auto leading-tight">
-                    Get Involved & Power <span class="font-serif italic font-normal text-crimson dark:text-[var(--accent-cream)]">Youth Potential</span>
+                    {{ $heroSec?->headline ?: 'Get Involved & Power Youth Potential' }}
                 </h1>
 
                 <p class="mt-6 text-lg sm:text-xl text-[var(--text-muted)] max-w-2xl mx-auto leading-relaxed">
-                    Whether giving your time as an inspirational mentor or collaborating as an institutional partner, your involvement directly accelerates youth digital literacy and educational equity.
+                    {{ $heroSec?->body_text ?: 'Whether giving your time as an inspirational mentor or collaborating as an institutional partner, your involvement directly accelerates youth digital literacy and educational equity.' }}
                 </p>
 
                 {{-- Badges Strip --}}
