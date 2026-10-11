@@ -222,7 +222,7 @@ CREATE TABLE `failed_jobs` (
   `queue` varchar(255) NOT NULL,
   `payload` longtext NOT NULL,
   `exception` longtext NOT NULL,
-  `failed_at` timestamp NOT NULL DEFAULT 'current_timestamp()',
+  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   KEY `failed_jobs_connection_queue_failed_at_index` (`connection`, `queue`, `failed_at`),
   UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`),
   PRIMARY KEY (`id`)

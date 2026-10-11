@@ -314,7 +314,8 @@ class DatabaseExportService
             }
         }
 
-        if (strtoupper($trimmed) === 'CURRENT_TIMESTAMP') {
+        $normalizedFunc = strtoupper(trim($trimmed, "()'\" "));
+        if (in_array($normalizedFunc, ['CURRENT_TIMESTAMP', 'NOW', 'LOCALTIME', 'LOCALTIMESTAMP'], true)) {
             return 'DEFAULT CURRENT_TIMESTAMP';
         }
 
