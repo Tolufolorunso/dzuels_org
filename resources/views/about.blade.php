@@ -40,7 +40,7 @@
     </section>
 
     {{-- 2. Our Story & 10-Year Journey --}}
-    <section class="py-20 bg-[var(--bg)] transition-colors">
+    <section class="py-20 bg-[var(--bg)] transition-colors overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
                 {{-- Story Text Column --}}
@@ -101,7 +101,7 @@
                         </div>
 
                         {{-- Floating 10-Year Impact Card --}}
-                        <div class="absolute -bottom-6 -left-4 sm:-left-6 bg-[var(--surface)] border border-[var(--border)] p-4 sm:p-5 rounded-2xl shadow-xl flex items-center gap-4 max-w-xs transition-colors">
+                        <div class="absolute -bottom-6 left-2 sm:-left-6 bg-[var(--surface)] border border-[var(--border)] p-4 sm:p-5 rounded-2xl shadow-xl flex items-center gap-4 max-w-[calc(100%-1rem)] sm:max-w-xs transition-colors">
                             <div class="w-12 h-12 rounded-xl bg-maroon text-cream flex items-center justify-center font-bold shrink-0 shadow-md">
                                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />

@@ -15,14 +15,15 @@
 - [x] 11. **Contact page** - contact form (first name, last name, email, phone, subject, message), address, phone numbers, email and a lazy-loaded Google map, with messages saved in an admin inbox and emailed to staff
 - [x] 12. **News** - staff write and publish posts with a cover image in the admin panel; visitors see a news index, article pages with share buttons (WhatsApp, X, Facebook, copy link) and related posts, and the homepage shows the latest three
 - [x] 13. **Newsletter signup** - footer form that stores subscribers, prevents duplicates, lets staff export the list as CSV and gives subscribers an unsubscribe link
-- [ ] 14. **SEO foundation** - every page has a unique title, meta description, canonical URL, Open Graph and Twitter tags, plus Organization, Breadcrumb and Article structured data, an auto-generated `sitemap.xml`, `robots.txt` and 301 redirects from old URLs (`/partner` to `/get-involved`)
-- [ ] 15. **Privacy policy and error pages** - readable privacy policy page linked from the footer and every form, and friendly 404 and 500 pages with links back to Home and Donate
-- [ ] 16. **Accessibility and performance pass** - WCAG 2.2 AA contrast checked in light and dark mode, visible focus and full keyboard use, reduced-motion support, responsive images and preloaded fonts, and Lighthouse 90 or higher on mobile for Home, About, Events and Gallery
-- [ ] 17. **Content migration and launch** - all current text, team photos, partner logos and gallery photos loaded from optimized assets, forms and redirects tested on the live server, HTTPS and mail working, backups and uptime monitoring on, domain pointed to the new site, sitemap submitted to Google Search Console
+- [x] 14. **Site refinement & ITD 2026 overhaul** - hide News and Newsletter across public views and admin tabs (dormant for now); full mobile/tablet responsiveness pass eliminating all horizontal scrolling across all screens (320px–1024px) using `max-w-full`, `%` units and fluid constraints; redesign `/admin` into a modern, professional, usable dashboard layout; update the live event to ITD 2026 (Oct 17, 2026 at AAoJ Memorial Learning Center: "Learning Today, Creating Tomorrow", 300 participants in 10 batches of 30, inside/garden rotation) with a reusable annual structure
+- [ ] 15. **SEO foundation** - every page has a unique title, meta description, canonical URL, Open Graph and Twitter tags, Organization and Breadcrumb structured data, auto-generated `sitemap.xml`, `robots.txt`, and silent 301 redirect from `/partner` to `/get-involved`
+- [ ] 16. **Privacy policy and error pages** - readable privacy policy page linked from the footer and forms, and friendly 404 and 500 pages with links back to Home and Donate
+- [ ] 17. **Accessibility and launch readiness** - WCAG 2.2 AA contrast verified in light and dark mode, visible focus and keyboard navigation, responsive images, Lighthouse performance checks, live server checks, domain pointing and Google Search Console submission
 
-## Post-MVP
+## Deferred Ideas (Not Scheduled as Features)
 
-- [ ] 18. **Annual reports and downloads** - staff upload PDFs (annual reports, project updates) that appear on a public Reports page
-- [ ] 19. **Impact stories and testimonials** - short beneficiary and partner quotes (with written permission) shown on Home and programme pages
-- [ ] 20. **Diaspora donations** - donation option for USD or GBP givers alongside the Naira options
-- [ ] 21. **Donor receipts and recurring giving** - automatic thank-you emails with receipts, and monthly donation plans
+*(Preserved for future reference, completely removed from the feature roadmap)*
+- **Annual reports and downloads**: staff upload PDFs (annual reports, project updates) that appear on a public Reports page
+- **Impact stories and testimonials**: short beneficiary and partner quotes (with written permission) shown on Home and programme pages
+- **Diaspora donations**: donation option for USD or GBP givers alongside the Naira options
+- **Donor receipts and recurring giving**: automatic thank-you emails with receipts, and monthly donation plans

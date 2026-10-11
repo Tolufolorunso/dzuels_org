@@ -24,6 +24,7 @@ class Event extends Model
         'event_date',
         'end_date',
         'venue',
+        'theme',
         'banner_image',
         'schedule',
         'is_registration_open',

@@ -37,9 +37,6 @@
                         <a href="{{ url('/gallery') }}" class="hover:text-[var(--accent-cream)] transition-colors">Photo Gallery</a>
                     </li>
                     <li>
-                        <a href="{{ url('/news') }}" class="hover:text-[var(--accent-cream)] transition-colors">News & Updates</a>
-                    </li>
-                    <li>
                         <a href="{{ url('/contact') }}" class="hover:text-[var(--accent-cream)] transition-colors">Contact Us</a>
                     </li>
                 </ul>
@@ -70,74 +67,27 @@
                 </ul>
             </div>
 
-            <!-- Column 4: Stay Connected -->
+            <!-- Column 4: Get In Touch -->
             <div>
-                <h3 class="text-sm font-bold uppercase tracking-wider text-white mb-5">Stay Connected</h3>
+                <h3 class="text-sm font-bold uppercase tracking-wider text-white mb-5">Get In Touch</h3>
                 <p class="text-sm text-[var(--footer-muted)] leading-relaxed mb-4">
-                    Subscribe for quarterly community impact stories, student achievements, and event invitations.
+                    Have questions, want to volunteer, or interested in partnering with our educational initiatives?
                 </p>
-                <div x-data="{
-                    email: '',
-                    hp: '',
-                    loading: false,
-                    msg: '',
-                    isError: false,
-                    async submitForm() {
-                        if (!this.email) return;
-                        this.loading = true;
-                        this.msg = '';
-                        this.isError = false;
-                        try {
-                            const res = await fetch('{{ route('newsletter.subscribe') }}', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'Accept': 'application/json',
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                },
-                                body: JSON.stringify({ email: this.email, _dzuels_hp: this.hp })
-                            });
-                            const data = await res.json();
-                            if (res.ok) {
-                                this.msg = data.message || '✓ Thank you for subscribing to Dzuels updates!';
-                                this.email = '';
-                            } else {
-                                this.isError = true;
-                                this.msg = data.message || (data.errors?.email ? data.errors.email[0] : 'Please enter a valid email address.');
-                            }
-                        } catch (err) {
-                            this.isError = true;
-                            this.msg = 'An error occurred. Please try again.';
-                        } finally {
-                            this.loading = false;
-                        }
-                    }
-                }">
-                    <form @submit.prevent="submitForm" method="POST" action="{{ route('newsletter.subscribe') }}" class="flex flex-col sm:flex-row gap-2">
-                        @csrf
-                        <input type="text" name="_dzuels_hp" x-model="hp" class="hidden" tabindex="-1" autocomplete="off">
-                        <input 
-                            type="email" 
-                            name="email"
-                            x-model="email"
-                            required 
-                            placeholder="Enter email address" 
-                            aria-label="Email for newsletter"
-                            class="w-full px-3.5 py-2.5 rounded-lg bg-white/10 text-white placeholder-white/50 text-sm border border-white/20 focus:outline-none focus:ring-2 focus:ring-[var(--accent-cream)] focus:border-transparent transition-all"
-                        >
-                        <button 
-                            type="submit" 
-                            :disabled="loading"
-                            class="px-5 py-2.5 rounded-lg bg-crimson hover:bg-crimson-hover text-white text-sm font-semibold transition-colors duration-200 cursor-pointer shrink-0 shadow-xs disabled:opacity-50"
-                        >
-                            <span x-show="!loading">Join</span>
-                            <span x-show="loading" x-cloak>...</span>
-                        </button>
-                    </form>
-                    <p x-show="msg" x-cloak :class="isError ? 'text-rose-400' : 'text-[var(--accent-mint)]'" class="text-xs mt-2 font-medium" x-text="msg"></p>
-                    @if(session('newsletter_success'))
-                        <p class="text-xs text-[var(--accent-mint)] mt-2 font-medium">✓ {{ session('newsletter_success') }}</p>
-                    @endif
+                <div class="space-y-3 text-xs text-[var(--footer-muted)]">
+                    <p class="flex items-center gap-2">
+                        <span class="text-[var(--accent-cream)] font-semibold">Email:</span>
+                        <a href="mailto:info@dzuelsfoundation.org" class="hover:text-white transition-colors">info@dzuelsfoundation.org</a>
+                    </p>
+                    <p class="flex items-center gap-2">
+                        <span class="text-[var(--accent-cream)] font-semibold">Phone:</span>
+                        <a href="tel:+2348033889576" class="hover:text-white transition-colors">+234 803 388 9576</a>
+                    </p>
+                    <div class="pt-2">
+                        <a href="{{ url('/get-involved') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold bg-crimson hover:bg-crimson-hover text-white transition-colors shadow-xs">
+                            <span>Volunteer or Partner</span>
+                            <span>&rarr;</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

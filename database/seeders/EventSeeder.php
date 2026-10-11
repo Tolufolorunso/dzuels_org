@@ -13,50 +13,56 @@ class EventSeeder extends Seeder
      */
     public function run(): void
     {
-        $flagshipDate = Carbon::create(2026, 11, 20, 9, 0, 0);
+        $flagshipDate = Carbon::create(2026, 10, 17, 8, 0, 0);
 
         Event::updateOrCreate(
-            ['slug' => 'ijero-tech-day-10th-anniversary'],
+            ['slug' => 'ijero-tech-day-2026'],
             [
-                'title' => 'Ijero Tech Day & 10th Anniversary Celebration',
-                'summary' => 'Celebrating 10 years of purpose, innovation, and impact in Ijero-Ekiti. Join students, educators, and leaders for hands-on tech demonstrations, awards, and digital milestones.',
-                'description' => "Join us as we celebrate 10 years of impact, innovation, and transformation at the Dzuels Foundation Tech-Day. This milestone event showcases our decade-long journey of digital transformation across rural secondary schools in Ekiti State.\n\nAttendees will experience live student coding showcases, robotics demonstrations, educational keynotes, and an inspiring panel on the future of tech careers for rural youth. Whether you are a student, teacher, community leader, or tech professional, Ijero Tech Day offers an unforgettable day of learning, inspiration, and purpose-driven networking.",
+                'title' => 'Ijero Tech-Day 2026 (ITD 2026)',
+                'summary' => 'Empowering 300 children with practical AI tools across 10 rotating batches of 30, inside interactive labs and garden booths, plus 22 cohort graduate certificates.',
+                'description' => "Ijero Tech-Day 2026 (ITD 2026) is the flagship community technology festival organized by Dzuels Educational Foundation under the theme \"Learning Today, Creating Tomorrow\". Held at the AAoJ Memorial Learning Center in Ijero-Ekiti, this high-impact gathering brings together 300 selected primary and secondary school students, dedicated educators, and community mentors for a transformative full-day digital literacy and AI immersion experience.\n\nStudents participate in synchronized 10-batch rotations of 30 participants each across two experiential learning zones:\n1. Inside Practical Lab: 20-minute intensive hands-on sessions introducing practical Artificial Intelligence tools, prompt thinking, and digital creativity on modern computing equipment.\n2. Garden Innovation Pavilion: Outdoor creative stations featuring an AI Image Creation Booth, interactive Tech Quizzes, student digital logic challenges, and prize giveaways.\n\nThe event also features the milestone Cohort 2026 Certificate Presentations, honoring 22 outstanding students who completed our rigorous digital literacy training, alongside community educational keynotes and educator recognition.",
                 'event_date' => $flagshipDate,
-                'end_date' => $flagshipDate->copy()->setTime(16, 0, 0),
-                'venue' => 'Dzuels Community Digital Hub, Ijero-Ekiti, Ekiti State, Nigeria',
+                'end_date' => $flagshipDate->copy()->setTime(17, 0, 0),
+                'venue' => 'AAoJ Memorial Learning Center, Ijero-Ekiti (inside + garden)',
+                'theme' => 'Learning Today, Creating Tomorrow',
                 'banner_image' => 'front/images/techday.webp',
                 'schedule' => [
                     [
-                        'time' => '09:00 AM - 10:00 AM',
-                        'title' => 'Registration, Accreditation & Welcome Breakfast',
-                        'speaker' => 'Dzuels Foundation Host Team',
+                        'time' => '08:00 AM - 09:00 AM',
+                        'title' => 'Accreditation, Batch Allocation & Welcome Assembly',
+                        'speaker' => 'Dzuels Foundation Coordination Team',
                     ],
                     [
-                        'time' => '10:00 AM - 11:30 AM',
-                        'title' => 'Keynote: A Decade of Transforming Rural Education Through Tech',
-                        'speaker' => 'Board of Trustees & Special Guests',
+                        'time' => '09:00 AM - 09:30 AM',
+                        'title' => 'Opening Ceremony: "Learning Today, Creating Tomorrow"',
+                        'speaker' => 'Board of Trustees & Community Leaders',
                     ],
                     [
-                        'time' => '11:45 AM - 01:15 PM',
-                        'title' => 'Hands-On Student Tech Demos & Coding Showcase',
-                        'speaker' => 'Dzuels ICT Students & SeedDev Mentors',
+                        'time' => '09:30 AM - 01:00 PM',
+                        'title' => 'Morning AI Lab & Garden Rotation Sessions (Batches 1 – 5)',
+                        'speaker' => 'Tech Instructors & Mentors',
                     ],
                     [
-                        'time' => '01:15 PM - 02:00 PM',
-                        'title' => 'Lunch Break & Interactive Tech Exhibition',
-                        'speaker' => 'Partner Exhibitors & Student Builders',
+                        'time' => '01:00 PM - 02:00 PM',
+                        'title' => 'Lunch Break, Networking & Image Creation Showcase',
+                        'speaker' => 'Students & Guest Exhibitors',
                     ],
                     [
-                        'time' => '02:00 PM - 03:30 PM',
-                        'title' => '10th Anniversary Toast, Awards & Community Networking',
-                        'speaker' => 'Leadership Team & Community Leaders',
+                        'time' => '02:00 PM - 04:30 PM',
+                        'title' => 'Afternoon AI Lab & Garden Rotation Sessions (Batches 6 – 10)',
+                        'speaker' => 'Tech Instructors & Mentors',
+                    ],
+                    [
+                        'time' => '04:30 PM - 05:00 PM',
+                        'title' => 'Cohort Graduation: Presentation of 22 Certificates & Grand Finale',
+                        'speaker' => 'Foundation Leadership & Dignitaries',
                     ],
                 ],
                 'is_registration_open' => true,
                 'is_active' => true,
                 'sort_order' => 1,
-                'seo_title' => 'Ijero Tech Day & 10th Anniversary Celebration | Dzuels Foundation',
-                'seo_description' => 'Celebrate 10 years of educational and digital impact at Ijero Tech Day. Register now to attend hands-on tech demos, student presentations, and community keynotes in Ijero-Ekiti.',
+                'seo_title' => 'Ijero Tech-Day 2026 (ITD 2026) | Dzuels Educational Foundation',
+                'seo_description' => 'Join 300 students and educators for Ijero Tech-Day 2026 on October 17, 2026. Theme: Learning Today, Creating Tomorrow. Register now for free community admission.',
             ]
         );
 

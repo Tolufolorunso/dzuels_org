@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth overflow-x-hidden max-w-full">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -33,7 +33,7 @@
 
     @stack('styles')
 </head>
-<body class="min-h-screen flex flex-col font-sans antialiased text-[var(--text)] bg-[var(--bg)] selection:bg-[var(--accent-cream)] selection:text-maroon">
+<body class="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col font-sans antialiased text-[var(--text)] bg-[var(--bg)] selection:bg-[var(--accent-cream)] selection:text-maroon">
     <!-- Top Utility Bar -->
     <x-utility-bar />
 
@@ -41,7 +41,7 @@
     <x-header />
 
     <!-- Main Content Area -->
-    <main class="flex-grow">
+    <main class="flex-grow w-full max-w-full overflow-x-hidden">
         {{ $slot }}
     </main>
 

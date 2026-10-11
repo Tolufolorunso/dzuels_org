@@ -3,6 +3,7 @@
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ContactMessageController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\GalleryAlbumController as AdminGalleryAlbumController;
 use App\Http\Controllers\Admin\InquiryController;
@@ -62,7 +63,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Protected Administration
     Route::middleware(['admin'])->group(function () {
-        Route::get('/', fn () => redirect()->route('admin.settings'))->name('dashboard');
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('/settings', [SettingController::class, 'index'])->name('settings');
         Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
         Route::post('/settings/sync', [SettingController::class, 'syncApi'])->name('settings.sync');

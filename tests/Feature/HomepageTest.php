@@ -65,8 +65,8 @@ class HomepageTest extends TestCase
         $response->assertSeeText('Volunteer for ITD');
 
         // Upcoming Event Callout
-        $response->assertSeeText('Upcoming Milestone Event');
-        $response->assertSeeText('Ijero Tech Day & 10th Anniversary');
+        $response->assertSeeText('Upcoming Flagship Event • Oct 17, 2026');
+        $response->assertSeeText('Ijero Tech-Day 2026 (ITD 2026)');
         $response->assertSeeText('Register to Attend');
 
         // Partners Strip

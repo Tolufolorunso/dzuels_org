@@ -57,7 +57,7 @@ class LayoutTest extends TestCase
         $response->assertOk();
         $response->assertSeeText('Quick Links');
         $response->assertSeeText('Programmes & Giving');
-        $response->assertSeeText('Stay Connected');
+        $response->assertSeeText('Get In Touch');
         $response->assertSeeText('Privacy Policy');
         $response->assertSeeText('12b Doherty Road, Ijero-Ekiti');
     }

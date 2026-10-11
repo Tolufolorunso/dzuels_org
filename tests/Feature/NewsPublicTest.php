@@ -157,7 +157,7 @@ class NewsPublicTest extends TestCase
         $response->assertSeeText('No Articles Published Yet');
     }
 
-    public function test_homepage_displays_latest_three_published_posts(): void
+    public function test_homepage_keeps_news_section_dormant(): void
     {
         for ($i = 1; $i <= 4; $i++) {
             Post::create([
@@ -170,24 +170,10 @@ class NewsPublicTest extends TestCase
             ]);
         }
 
-        Post::create([
-            'title' => 'Hidden Draft Not on Homepage',
-            'slug' => 'hidden-draft-not-on-homepage',
-            'excerpt' => 'Draft story.',
-            'body' => 'Draft story body.',
-            'status' => 'draft',
-            'published_at' => null,
-        ]);
-
         $response = $this->get('/');
 
         $response->assertOk();
-        $response->assertSeeText('News & Impact Stories');
-        $response->assertSeeText('News Story Number 4');
-        $response->assertSeeText('News Story Number 3');
-        $response->assertSeeText('News Story Number 2');
-        // Story 1 was the oldest, so only 4, 3, 2 should be in latest 3
-        $response->assertDontSeeText('News Story Number 1');
-        $response->assertDontSeeText('Hidden Draft Not on Homepage');
+        $response->assertDontSeeText('News & Impact Stories');
+        $response->assertDontSeeText('News Story Number 4');
     }
 }

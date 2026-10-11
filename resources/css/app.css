@@ -86,7 +86,16 @@ html.dark {
     --footer-muted: #A38C8A;
 }
 
+html {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 body {
+    max-width: 100%;
+    overflow-x: hidden;
+    position: relative;
+    width: 100%;
     background-color: var(--bg);
     color: var(--text);
     font-family: var(--font-sans);

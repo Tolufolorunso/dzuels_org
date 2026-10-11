@@ -67,7 +67,7 @@
                                id="slug" 
                                name="slug" 
                                value="{{ old('slug', $event->slug) }}" 
-                               placeholder="e.g. ijero-tech-day-10th-anniversary" 
+                               placeholder="e.g. ijero-tech-day-2026" 
                                class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm font-mono focus:border-maroon focus:ring-2 focus:ring-maroon/20 outline-none transition-all">
                         @error('slug')
                             <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
@@ -75,8 +75,8 @@
                     </div>
                 </div>
 
-                {{-- Date, End Date & Venue --}}
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                {{-- Date, End Date, Venue & Theme --}}
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div>
                         <label for="event_date" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
                             Start Date & Time
@@ -113,9 +113,24 @@
                                id="venue" 
                                name="venue" 
                                value="{{ old('venue', $event->venue) }}" 
-                               placeholder="e.g. Dzuels Digital Hub, Ijero-Ekiti" 
+                               placeholder="e.g. AAoJ Memorial Center, Ijero-Ekiti" 
                                class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:border-maroon focus:ring-2 focus:ring-maroon/20 outline-none transition-all">
                         @error('venue')
+                            <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="theme" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
+                            Theme / Slogan
+                        </label>
+                        <input type="text" 
+                               id="theme" 
+                               name="theme" 
+                               value="{{ old('theme', $event->theme) }}" 
+                               placeholder="e.g. Learning Today, Creating Tomorrow" 
+                               class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:border-maroon focus:ring-2 focus:ring-maroon/20 outline-none transition-all">
+                        @error('theme')
                             <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>

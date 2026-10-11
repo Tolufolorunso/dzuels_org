@@ -48,6 +48,15 @@
                 {{ $event->title }}
             </h1>
 
+            @if ($event->theme)
+                <div>
+                    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold bg-[var(--accent-cream)]/20 text-maroon dark:text-[var(--accent-cream)] border border-[var(--accent-cream)]/40">
+                        <span>✨ Theme:</span>
+                        <span class="italic font-bold">"{{ $event->theme }}"</span>
+                    </span>
+                </div>
+            @endif
+
             <div class="flex flex-wrap items-center gap-6 text-sm text-[var(--text-muted)] pt-2 border-t border-[var(--border)]">
                 <div class="flex items-center gap-2">
                     <span>📍</span>
@@ -294,10 +303,12 @@
                                     <select id="attendee_type" 
                                             name="attendee_type" 
                                             class="w-full px-4 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--bg)] text-sm text-[var(--text)] focus:border-maroon focus:ring-2 focus:ring-maroon/20 outline-none transition-all">
-                                        <option value="student" {{ old('attendee_type') == 'student' ? 'selected' : '' }}>Student / Youth</option>
-                                        <option value="educator" {{ old('attendee_type') == 'educator' ? 'selected' : '' }}>Teacher / School Administrator</option>
+                                        <option value="student" {{ old('attendee_type') == 'student' ? 'selected' : '' }}>Student / Youth (Batch Participant)</option>
+                                        <option value="teacher" {{ old('attendee_type') == 'teacher' ? 'selected' : '' }}>Teacher / School Representative</option>
+                                        <option value="cohort_graduate" {{ old('attendee_type') == 'cohort_graduate' ? 'selected' : '' }}>Cohort Graduate (Certificate Recipient)</option>
+                                        <option value="guest" {{ old('attendee_type') == 'guest' ? 'selected' : '' }}>Community Guest / Dignitary</option>
+                                        <option value="educator" {{ old('attendee_type') == 'educator' ? 'selected' : '' }}>Educator / School Administrator</option>
                                         <option value="tech_enthusiast" {{ old('attendee_type') == 'tech_enthusiast' ? 'selected' : '' }}>Tech Enthusiast / Developer</option>
-                                        <option value="community_leader" {{ old('attendee_type') == 'community_leader' ? 'selected' : '' }}>Community Leader / Elder</option>
                                         <option value="partner" {{ old('attendee_type') == 'partner' ? 'selected' : '' }}>Partner / Sponsor Representative</option>
                                         <option value="general" {{ old('attendee_type') == 'general' ? 'selected' : '' }}>General Guest</option>
                                     </select>
@@ -309,12 +320,12 @@
                                 {{-- Notes / Expectations --}}
                                 <div>
                                     <label for="notes" class="block text-xs font-bold uppercase tracking-wider text-[var(--text-strong)] mb-1.5">
-                                        Expectations or Notes (Optional)
+                                        School / Batch / Special Notes (Optional)
                                     </label>
                                     <textarea id="notes" 
                                               name="notes" 
                                               rows="2" 
-                                              placeholder="Any specific questions or areas of interest..." 
+                                              placeholder="School name, class, batch or special notes (e.g. Batch participant, teacher, or cohort graduate)..." 
                                               class="w-full px-4 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--bg)] text-sm text-[var(--text)] focus:border-maroon focus:ring-2 focus:ring-maroon/20 outline-none transition-all">{{ old('notes') }}</textarea>
                                 </div>
 
