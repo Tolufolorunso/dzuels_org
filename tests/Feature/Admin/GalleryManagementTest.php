@@ -407,4 +407,43 @@ class GalleryManagementTest extends TestCase
             @rmdir($dir);
         }
     }
+
+    public function test_admin_can_create_and_update_album_using_existing_gallery_photo(): void
+    {
+        $existingPath = 'front/images/gallery/optimized/itd-2025-01.webp';
+
+        $response = $this->actingAs($this->admin)->post('/admin/gallery', [
+            'title' => 'Album From Gallery Picker',
+            'slug' => 'album-from-gallery-picker',
+            'cover_image' => $existingPath,
+            'is_active' => '1',
+        ]);
+
+        $response->assertRedirect(route('admin.gallery.index'));
+        $this->assertDatabaseHas('gallery_albums', [
+            'title' => 'Album From Gallery Picker',
+            'cover_image' => $existingPath,
+        ]);
+
+        $album = GalleryAlbum::where('slug', 'album-from-gallery-picker')->first();
+
+        // Update with another existing gallery photo
+        $updatedPath = 'front/images/gallery/optimized/itd-2025-02.webp';
+        $response = $this->actingAs($this->admin)->put("/admin/gallery/{$album->id}", [
+            'title' => 'Album From Gallery Picker Updated',
+            'cover_image' => $updatedPath,
+        ]);
+
+        $response->assertRedirect(route('admin.gallery.index'));
+        $this->assertEquals($updatedPath, $album->fresh()->cover_image);
+
+        // Clear cover photo
+        $response = $this->actingAs($this->admin)->put("/admin/gallery/{$album->id}", [
+            'title' => 'Album From Gallery Picker Cleared',
+            'cover_image' => '',
+        ]);
+
+        $response->assertRedirect(route('admin.gallery.index'));
+        $this->assertNull($album->fresh()->cover_image);
+    }
 }

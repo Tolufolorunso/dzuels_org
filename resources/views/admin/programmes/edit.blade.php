@@ -109,26 +109,13 @@
                     @enderror
                 </div>
 
-                {{-- Cover Image Upload & Current Preview --}}
+                {{-- Cover Image --}}
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                        Current Cover Image
-                    </label>
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-24 h-16 rounded-xl bg-stone-100 border border-stone-200 overflow-hidden shrink-0">
-                            <img src="{{ $programme->cover_image_url }}" alt="{{ $programme->title }}" class="w-full h-full object-cover">
-                        </div>
-                        <p class="text-xs text-stone-500">Upload a new file below if you wish to replace this image.</p>
-                    </div>
-
-                    <label for="cover_image" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                        Replace Cover Image <span class="text-stone-400 font-normal">(Optional, JPEG, PNG, WebP up to 8MB)</span>
-                    </label>
-                    <input type="file" 
-                           name="cover_image" 
-                           id="cover_image" 
-                           accept="image/*"
-                           class="w-full text-xs text-stone-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-stone-100 file:text-stone-700 hover:file:bg-stone-200 cursor-pointer">
+                    <x-admin.media-picker 
+                        name="cover_image" 
+                        :value="old('cover_image', $programme->cover_image)" 
+                        label="Cover Photo" 
+                        help="Choose from existing gallery albums or upload and auto-optimize a new image (converted to lightweight WebP <= 180 KB)." />
                     @error('cover_image')
                         <p class="mt-1 text-xs text-rose-500">{{ $message }}</p>
                     @enderror

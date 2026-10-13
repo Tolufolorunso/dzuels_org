@@ -22,7 +22,9 @@ class StorePostRequest extends FormRequest
             'slug' => ['nullable', 'string', 'max:255', 'unique:posts,slug'],
             'excerpt' => ['nullable', 'string', 'max:1000'],
             'body' => ['required', 'string'],
-            'cover_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'],
+            'cover_image' => $this->hasFile('cover_image')
+                ? ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120']
+                : ['nullable', 'string', 'max:255'],
             'programme_id' => ['nullable', 'integer', 'exists:programmes,id'],
             'status' => ['required', 'string', 'in:draft,published'],
             'published_at' => ['nullable', 'date'],

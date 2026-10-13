@@ -85,14 +85,11 @@
 
                 {{-- Cover Image --}}
                 <div class="sm:col-span-2">
-                    <label for="cover_image" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                        Cover Image <span class="text-stone-400 font-normal lowercase">(optional, JPG, PNG, WEBP max 5MB)</span>
-                    </label>
-                    <input type="file" 
-                           id="cover_image" 
-                           name="cover_image" 
-                           accept="image/*" 
-                           class="w-full text-sm text-stone-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-stone-100 file:text-stone-700 hover:file:bg-stone-200 cursor-pointer">
+                    <x-admin.media-picker 
+                        name="cover_image" 
+                        :value="old('cover_image')" 
+                        label="Cover Image" 
+                        help="Choose from existing gallery albums or upload and auto-optimize a new image (converted to lightweight WebP <= 180 KB)." />
                     @error('cover_image')
                         <p class="text-xs text-rose-500 mt-1.5">{{ $message }}</p>
                     @enderror

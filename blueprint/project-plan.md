@@ -52,11 +52,22 @@ Finalizing the web platform for live release and addressing critical operational
   Anchored by the philosophy *"An Integrated Approach to the Total Well Being of the Child"*, editable in `/admin/pages/home`.
 - **Production Export & Launch Readiness**: Re-export `dzuels_database.sql` containing all updated seeders, settings, and causes for 1-click phpMyAdmin import on Namecheap cPanel (`server161.web-hosting.com`), update `cpanel_changed_files.txt`, and verify deployment integrity.
 
-### Milestone 6: Production Refinements, Image Optimizer Hardening (<= 180 KB WebP), Dynamic Library Photos & Get Involved UI Overhaul (Active Target)
+### Milestone 6: Production Refinements, Image Optimizer Hardening (<= 180 KB WebP), Dynamic Library Photos & Get Involved UI Overhaul (Completed & Shipped)
 - **High-Performance WebP Optimizer (<= 180 KB Ceiling)**: Hard limit of 180 KB for every uploaded photo across gallery and CMS, with iterative quality reduction and dimensional scaling to preserve sharpness without distortion. Original source files deleted immediately. Retroactive conversion of all legacy uploads.
 - **Full Unclipped Causes Graphic**: Display the 6 Impact Causes banner uncropped and unclipped on the homepage with natural aspect ratio and clean responsive layout.
 - **Dynamic 4-Photo Famoyinka Memorial Library CMS**: Section management in `/admin/pages/home` with media pickers for all 4 mosaic action photos and captions.
 - **Get Involved Layout & Responsive Overhaul**: Tab-synchronized sidebar with dedicated corporate partner metrics, CSR alignment, sticky placement, and Tailwind v4 gradient styling.
+
+### Milestone 7: Universal Gallery Media Picker & Centralized Cover Photo Optimizer (Active Target)
+Empowering foundation staff with full visual asset reuse and ensuring comprehensive image optimization across all content management modules:
+- **Universal "Select from Gallery" Media Picker**: Replace raw `<input type="file">` elements with the reusable `<x-admin.media-picker>` component across all remaining dashboard forms:
+  1. Gallery Collection / Album create & edit (`cover_image`)
+  2. Foundation Programme create & edit (`cover_image`)
+  3. News / Blog Article create & edit (`cover_image`)
+  4. Team Member create & edit (`photo`)
+  Staff can either browse and select any existing high-resolution photo from the gallery (with album filters, search, and thumbnail preview) or upload a new image.
+- **Centralized Cover Photo Optimization**: Guarantee that every cover photo uploaded anywhere in the admin dashboard passes through `ImageOptimizerService`, strictly converting to `.webp`, enforcing a hard $\le 180\text{ KB}$ ($184,320\text{ bytes}$) file size ceiling, and automatically purging original uncompressed files.
+- **Dual-Input Controllers & Form Requests**: Update controllers (`GalleryAlbumController`, `ProgrammeController`, `PostController`, `TeamMemberController`) and form request validators (`StoreGalleryAlbumRequest`, `UpdateGalleryAlbumRequest`, `StoreProgrammeRequest`, `UpdateProgrammeRequest`, `StorePostRequest`, `UpdatePostRequest`, `StoreTeamMemberRequest`, `UpdateTeamMemberRequest`) to gracefully accept both direct file uploads and existing selected gallery image paths.
 
 ## 2. Users - Who is this for?
 
@@ -113,7 +124,7 @@ Finalizing the web platform for live release and addressing critical operational
   - Synchronization of `cpanel_changed_files.txt` deployment manifest.
   - Comprehensive test suite, code style audit, and production configuration check.
 
-### Milestone 6: Production Refinements, Image Optimizer Hardening (<= 180 KB WebP), Dynamic Library Photos & Get Involved UI Overhaul (Feature 28, Active Target)
+### Milestone 6: Production Refinements, Image Optimizer Hardening (<= 180 KB WebP), Dynamic Library Photos & Get Involved UI Overhaul (Feature 28, Shipped)
 - 28. **High-performance WebP image optimizer (<= 180 KB ceiling), full unclipped causes display, dynamic Famoyinka Library photos in CMS & Get Involved UI overhaul**:
   - Harden `ImageOptimizerService` to strictly encode WebP files with a maximum size ceiling of 180 KB (184,320 bytes) using iterative quality reduction and dimensional scaling.
   - Automatically delete original uncompressed files after WebP creation.
@@ -122,6 +133,14 @@ Finalizing the web platform for live release and addressing critical operational
   - Display the homepage 6 Impact Causes graphic unclipped with natural aspect ratio and clean layout.
   - Enable dashboard management for the 4 Famoyinka Memorial Children's Library action photos and labels in `/admin/pages/home`.
   - Overhaul `/get-involved` with tab-synchronized sidebar content for volunteers vs corporate partners, Tailwind v4 linear gradients, and responsive sticky layout.
+
+### Milestone 7: Universal Gallery Media Picker & Centralized Cover Photo Optimizer (Feature 29, Active Target)
+- 29. **Universal gallery media picker and centralized cover photo optimization**:
+  - Integrate `<x-admin.media-picker>` across Gallery Album create/edit, Programme create/edit, News create/edit, and Team Member create/edit forms.
+  - Enable staff to choose existing photos from any gallery collection or upload and optimize new cover images.
+  - Update Form Requests to validate both string paths (from gallery) and valid image files.
+  - Enforce `ImageOptimizerService` on all cover photo uploads ($\le 180\text{ KB}$ WebP ceiling, original cleanup).
+  - Update deployment manifest and verify full regression suite.
 
 ## 4. Data - What are we storing?
 

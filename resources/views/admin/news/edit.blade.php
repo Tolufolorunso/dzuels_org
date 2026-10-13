@@ -131,28 +131,13 @@
                     @enderror
                 </div>
 
-                {{-- Cover Image Upload & Current Preview --}}
+                {{-- Cover Image --}}
                 <div>
-                    <label for="cover_image" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                        Cover Photo
-                    </label>
-
-                    @if ($post->cover_image)
-                        <div class="mb-3 flex items-center gap-4 p-3 bg-stone-50 rounded-xl border border-stone-200">
-                            <img src="{{ $post->cover_image_url }}" alt="{{ $post->title }}" class="w-16 h-12 object-cover rounded-lg border border-stone-200">
-                            <div class="text-xs text-stone-600">
-                                <span class="font-semibold text-stone-800 block">Current Cover Photo</span>
-                                <span class="text-stone-400 font-mono">{{ $post->cover_image }}</span>
-                            </div>
-                        </div>
-                    @endif
-
-                    <input type="file" 
-                           name="cover_image" 
-                           id="cover_image" 
-                           accept="image/jpeg,image/png,image/webp"
-                           class="w-full text-xs text-stone-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-stone-100 file:text-stone-700 hover:file:bg-stone-200 cursor-pointer">
-                    <p class="mt-1 text-xs text-stone-400">Leave empty to keep existing cover photo.</p>
+                    <x-admin.media-picker 
+                        name="cover_image" 
+                        :value="old('cover_image', $post->cover_image)" 
+                        label="Cover Photo" 
+                        help="Choose from existing gallery albums or upload and auto-optimize a new image (converted to lightweight WebP <= 180 KB)." />
                     @error('cover_image')
                         <p class="mt-1 text-xs text-rose-500">{{ $message }}</p>
                     @enderror

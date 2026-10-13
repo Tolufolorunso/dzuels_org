@@ -113,16 +113,13 @@
                     @enderror
                 </div>
 
-                {{-- Cover Image Upload --}}
+                {{-- Cover Image --}}
                 <div>
-                    <label for="cover_image" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                        Cover Photo <span class="text-stone-400 font-normal">(JPEG, PNG, WebP up to 8MB)</span>
-                    </label>
-                    <input type="file" 
-                           name="cover_image" 
-                           id="cover_image" 
-                           accept="image/*"
-                           class="w-full text-xs text-stone-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-stone-100 file:text-stone-700 hover:file:bg-stone-200 cursor-pointer">
+                    <x-admin.media-picker 
+                        name="cover_image" 
+                        :value="old('cover_image')" 
+                        label="Cover Photo" 
+                        help="Choose from existing gallery albums or upload and auto-optimize a new image (converted to lightweight WebP <= 180 KB)." />
                     @error('cover_image')
                         <p class="mt-1 text-xs text-rose-500">{{ $message }}</p>
                     @enderror

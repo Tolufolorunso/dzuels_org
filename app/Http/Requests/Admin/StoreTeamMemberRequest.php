@@ -23,7 +23,9 @@ class StoreTeamMemberRequest extends FormRequest
             'group' => ['required', 'string', 'in:trustee,management,advisor'],
             'field' => ['nullable', 'string', 'max:255'],
             'bio' => ['nullable', 'string'],
-            'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:4096'],
+            'photo' => $this->hasFile('photo')
+                ? ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:4096']
+                : ['nullable', 'string', 'max:255'],
             'linkedin_url' => ['nullable', 'url', 'max:255'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['nullable', 'boolean'],

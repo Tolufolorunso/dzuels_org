@@ -22,7 +22,9 @@ class StoreProgrammeRequest extends FormRequest
             'slug' => ['nullable', 'string', 'max:255', 'unique:programmes,slug'],
             'summary' => ['required', 'string', 'max:1000'],
             'body' => ['required', 'string'],
-            'cover_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp,svg', 'max:8192'],
+            'cover_image' => $this->hasFile('cover_image')
+                ? ['nullable', 'image', 'mimes:jpeg,png,jpg,webp,svg', 'max:8192']
+                : ['nullable', 'string', 'max:255'],
             'partner_name' => ['nullable', 'string', 'max:255'],
             'is_featured' => ['nullable', 'boolean'],
             'is_active' => ['nullable', 'boolean'],

@@ -175,4 +175,49 @@ class ProgrammeManagementTest extends TestCase
 
         $response->assertSessionHasErrors(['title', 'summary', 'body']);
     }
+
+    public function test_admin_can_create_and_update_programme_using_existing_gallery_photo(): void
+    {
+        $existingPath = 'front/images/gallery/optimized/general-01.webp';
+
+        $response = $this->actingAs($this->admin)->post('/admin/programmes', [
+            'title' => 'STEM Outreach Programme',
+            'slug' => 'stem-outreach-programme',
+            'summary' => 'Hands on STEM projects across rural schools.',
+            'body' => 'Full narrative on our science, technology, and math workshops.',
+            'cover_image' => $existingPath,
+            'is_active' => '1',
+        ]);
+
+        $response->assertRedirect(route('admin.programmes.index'));
+        $this->assertDatabaseHas('programmes', [
+            'title' => 'STEM Outreach Programme',
+            'cover_image' => $existingPath,
+        ]);
+
+        $programme = Programme::where('slug', 'stem-outreach-programme')->first();
+
+        // Update with another gallery photo
+        $updatedPath = 'front/images/gallery/optimized/general-02.webp';
+        $response = $this->actingAs($this->admin)->put(route('admin.programmes.update', $programme), [
+            'title' => 'STEM Outreach Programme Updated',
+            'summary' => 'Updated summary text',
+            'body' => 'Updated body text',
+            'cover_image' => $updatedPath,
+        ]);
+
+        $response->assertRedirect(route('admin.programmes.index'));
+        $this->assertEquals($updatedPath, $programme->fresh()->cover_image);
+
+        // Clear cover photo
+        $response = $this->actingAs($this->admin)->put(route('admin.programmes.update', $programme), [
+            'title' => 'STEM Outreach Programme Cleared',
+            'summary' => 'Cleared summary text',
+            'body' => 'Cleared body text',
+            'cover_image' => '',
+        ]);
+
+        $response->assertRedirect(route('admin.programmes.index'));
+        $this->assertNull($programme->fresh()->cover_image);
+    }
 }

@@ -29,7 +29,9 @@ class UpdateGalleryAlbumRequest extends FormRequest
             'slug' => ['nullable', 'string', 'max:255', 'unique:gallery_albums,slug,'.$albumId],
             'kicker' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:1000'],
-            'cover_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'],
+            'cover_image' => $this->hasFile('cover_image')
+                ? ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:8192']
+                : ['nullable', 'string', 'max:255'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['nullable', 'boolean'],
         ];

@@ -77,11 +77,15 @@
                 </div>
 
                 {{-- Photo Upload --}}
-                <div class="sm:col-span-2 space-y-1.5">
-                    <label for="photo" class="block text-xs font-bold uppercase tracking-wider text-stone-700">Profile Photo</label>
-                    <input type="file" id="photo" name="photo" accept="image/jpeg,image/png,image/webp" 
-                           class="w-full px-3.5 py-2 rounded-xl border border-stone-300 focus:border-maroon focus:ring-1 focus:ring-maroon text-sm outline-none file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-stone-100 file:text-stone-700 hover:file:bg-stone-200" />
-                    <p class="text-[11px] text-stone-500">Supports JPEG, PNG, or WebP (max 4MB). Square portrait recommended.</p>
+                <div class="sm:col-span-2">
+                    <x-admin.media-picker 
+                        name="photo" 
+                        :value="old('photo')" 
+                        label="Profile Photo" 
+                        help="Choose from existing gallery albums or upload and auto-optimize a new profile photo (WebP <= 180 KB)." />
+                    @error('photo')
+                        <p class="text-xs text-rose-500 mt-1.5">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 {{-- Bio --}}

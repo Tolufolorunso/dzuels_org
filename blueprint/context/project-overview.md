@@ -1,6 +1,6 @@
 # Dzuels Educational Foundation - Project Overview
 
-<!-- blueprint:source-hash e575a1b6cc31433a7dc2d44c5eabb769df444efc18a148d4d3537ebd2755c614 -->
+<!-- blueprint:source-hash e5163fb1fbb406c7fbd5218310eb47e5b3c02af4a0f4a59fa8c11a7e4b63058f -->
 
 > Rebuild of dzuelsfoundation.org as a modern, high-trust, mobile-first Laravel web application powering education support, digital literacy, and community welfare in Nigeria.
 
@@ -13,11 +13,11 @@ Dzuels Educational Foundation is a Nigerian charity (registered 2015) providing 
 - **Milestone 3 (Shipped):** Production MariaDB configuration, root `dzuels_database.sql` export, hotline update (`+234 904 249 3883`), hero imagery overlays, and Spelling Bee image fixes.
 - **Milestone 4 (Shipped):** Dynamic Media Hub, Gallery Overhaul, Famoyinka Memorial Children's Library Integration, multi-phone settings (up to 5 lines), dynamic contact CMS (custom schedule/timezone), and dynamic partners strip on Home and About.
 - **Milestone 5 (Shipped):** Production Launch Hardening, Resilient Media Pipeline, Givebutter Diaspora Donations & 6 Impact Causes CMS across Features 25–27.
-- **Milestone 6 (Active Target):** Production Refinements, Image Optimizer Hardening (<= 180 KB WebP), Dynamic Library Photos & Get Involved UI Overhaul:
-  1. High-performance WebP image optimizer hardening in `ImageOptimizerService` with a strict <= 180 KB (184,320 bytes) file size ceiling, iterative quality reduction and dimensional scaling, automatic source file deletion, and retroactive conversion of all existing uploads.
-  2. Full unclipped 6 Impact Causes graphic display on the homepage with natural aspect ratio and clean layout.
-  3. Dynamic 4-photo Famoyinka Memorial Children's Library section management in `/admin/pages/home` with media pickers and custom labels.
-  4. Overhauled `/get-involved` layout with tab-synchronized sidebar content for volunteers vs corporate partners, sticky positioning, and Tailwind v4 linear gradients.
+- **Milestone 6 (Shipped):** Production Refinements, Image Optimizer Hardening (<= 180 KB WebP), Dynamic Library Photos & Get Involved UI Overhaul across Feature 28.
+- **Milestone 7 (Active Target):** Universal Gallery Media Picker & Centralized Cover Photo Optimizer:
+  1. Universal integration of `<x-admin.media-picker>` across Gallery Collection create/edit (`cover_image`), Programme create/edit (`cover_image`), News create/edit (`cover_image`), and Team Member create/edit (`photo`) so every photo upload has the option to select existing photos from the gallery.
+  2. Centralized optimization enforcing $\le 180\text{ KB}$ WebP format and original file cleanup on all cover photo uploads.
+  3. Dual-input controller and Form Request handling for direct file uploads and selected gallery paths.
 
 ## Users
 
@@ -81,9 +81,13 @@ Dzuels Educational Foundation is a Nigerian charity (registered 2015) providing 
 26. **Dynamic site logo in settings, Givebutter U.S. diaspora donations & 6 Impact Causes CMS** - Customizable site logo in `/admin/settings` propagating site-wide; Givebutter U.S. diaspora donation button on `/donate` with "For U.S. Donors Only" badge; overhaul Home causes into the authentic 6 pillars (`cause.jpg`) editable via `/admin/pages/home`. *(Completed)*
 27. **Production release suite, updated MariaDB database export & launch verification** - Refresh root `dzuels_database.sql` via `php artisan db:export-sql`; synchronize `cpanel_changed_files.txt`; perform full test & lint audit; finalize production deployment readiness. *(Completed)*
 
-### Milestone 6 Features (Active Build Order)
+### Milestone 6 Features (Completed & Shipped)
 
-28. **High-performance WebP image optimizer (<= 180 KB ceiling), full unclipped causes display, dynamic Famoyinka Library photos in CMS & Get Involved UI overhaul** - Harden `ImageOptimizerService` to strictly produce WebP images with a hard maximum size limit of 180 KB via iterative quality and dimension scaling, delete uncompressed original files, retroactively optimize all existing uploads in `public/uploads/`, and unify all admin file uploaders (`GalleryAlbumController`, `MediaController`, `PageController`, `ProgrammeController`, `TeamMemberController`); remove image clipping on the homepage 6 Impact Causes section so the complete graphic is fully visible without cropped edges or obscuring badges; make the 4 Famoyinka Memorial Children's Library mosaic photos and labels editable via `/admin/pages/home` with graceful fallbacks; and overhaul `/get-involved` layout and styling with tab-synchronized sidebar content (dedicated partnership impact metrics and contact cards when "Partner With Us" is active), sticky alignment, and Tailwind v4 linear gradients.
+28. **High-performance WebP image optimizer (<= 180 KB ceiling), full unclipped causes display, dynamic Famoyinka Library photos in CMS & Get Involved UI overhaul** - Harden `ImageOptimizerService` to strictly produce WebP images with a hard maximum size limit of 180 KB via iterative quality and dimension scaling, delete uncompressed original files, retroactively optimize all existing uploads in `public/uploads/`, and unify all admin file uploaders (`GalleryAlbumController`, `MediaController`, `PageController`, `ProgrammeController`, `TeamMemberController`); remove image clipping on the homepage 6 Impact Causes section so the complete graphic is fully visible without cropped edges or obscuring badges; make the 4 Famoyinka Memorial Children's Library mosaic photos and labels editable via `/admin/pages/home` with graceful fallbacks; and overhaul `/get-involved` layout and styling with tab-synchronized sidebar content (dedicated partnership impact metrics and contact cards when "Partner With Us" is active), sticky alignment, and Tailwind v4 linear gradients. *(Completed)*
+
+### Milestone 7 Features (Active Build Order)
+
+29. **Universal gallery media picker and centralized cover photo optimization** - empower staff to select existing photos from any gallery album or upload and optimize new images across every photo upload form in the admin panel: replace raw file inputs with `<x-admin.media-picker>` in Gallery Album create/edit (`cover_image`), Programme create/edit (`cover_image`), News/Post create/edit (`cover_image`), and Team Member create/edit (`photo`); update controllers and form requests (`GalleryAlbumController`, `ProgrammeController`, `PostController`, `TeamMemberController`) to seamlessly accept either selected gallery image paths or direct file uploads; ensure all uploaded cover photos are processed through `ImageOptimizerService` strictly enforcing $\le 180\text{ KB}$ WebP format and original file deletion; and synchronize the deployment manifest and test suite.
 
 ### Deferred Ideas (Non-Roadmap)
 

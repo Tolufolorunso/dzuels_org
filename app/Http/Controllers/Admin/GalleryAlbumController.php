@@ -70,6 +70,10 @@ class GalleryAlbumController extends Controller
                 1200,
                 800
             );
+        } elseif ($request->filled('cover_image')) {
+            $validated['cover_image'] = $request->input('cover_image');
+        } else {
+            $validated['cover_image'] = null;
         }
 
         $validated['is_active'] = $request->boolean('is_active', true);
@@ -111,6 +115,19 @@ class GalleryAlbumController extends Controller
                 1200,
                 800
             );
+        } elseif ($request->filled('cover_image')) {
+            $newCover = $request->input('cover_image');
+            if ($album->cover_image && $album->cover_image !== $newCover && str_starts_with($album->cover_image, 'uploads/gallery/covers/') && file_exists(public_path($album->cover_image))) {
+                @unlink(public_path($album->cover_image));
+            }
+            $validated['cover_image'] = $newCover;
+        } elseif ($request->boolean('remove_cover_image') || ($request->has('cover_image') && $request->input('cover_image') === null)) {
+            if ($album->cover_image && str_starts_with($album->cover_image, 'uploads/') && file_exists(public_path($album->cover_image))) {
+                @unlink(public_path($album->cover_image));
+            }
+            $validated['cover_image'] = null;
+        } else {
+            unset($validated['cover_image']);
         }
 
         $validated['is_active'] = $request->boolean('is_active', true);

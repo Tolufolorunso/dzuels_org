@@ -61,6 +61,10 @@ class ProgrammeController extends Controller
                 1600,
                 1200
             );
+        } elseif ($request->filled('cover_image')) {
+            $validated['cover_image'] = $request->input('cover_image');
+        } else {
+            $validated['cover_image'] = null;
         }
 
         $validated['is_featured'] = $request->boolean('is_featured');
@@ -93,12 +97,29 @@ class ProgrammeController extends Controller
         }
 
         if ($request->hasFile('cover_image')) {
+            if ($programme->cover_image && str_starts_with($programme->cover_image, 'uploads/programmes/') && file_exists(public_path($programme->cover_image))) {
+                @unlink(public_path($programme->cover_image));
+            }
+
             $validated['cover_image'] = $this->optimizer->optimize(
                 $request->file('cover_image'),
                 'uploads/programmes',
                 1600,
                 1200
             );
+        } elseif ($request->filled('cover_image')) {
+            $newCover = $request->input('cover_image');
+            if ($programme->cover_image && $programme->cover_image !== $newCover && str_starts_with($programme->cover_image, 'uploads/programmes/') && file_exists(public_path($programme->cover_image))) {
+                @unlink(public_path($programme->cover_image));
+            }
+            $validated['cover_image'] = $newCover;
+        } elseif ($request->boolean('remove_cover_image') || ($request->has('cover_image') && $request->input('cover_image') === null)) {
+            if ($programme->cover_image && str_starts_with($programme->cover_image, 'uploads/programmes/') && file_exists(public_path($programme->cover_image))) {
+                @unlink(public_path($programme->cover_image));
+            }
+            $validated['cover_image'] = null;
+        } else {
+            unset($validated['cover_image']);
         }
 
         $validated['is_featured'] = $request->boolean('is_featured');
@@ -116,6 +137,10 @@ class ProgrammeController extends Controller
      */
     public function destroy(Programme $programme): RedirectResponse
     {
+        if ($programme->cover_image && str_starts_with($programme->cover_image, 'uploads/programmes/') && file_exists(public_path($programme->cover_image))) {
+            @unlink(public_path($programme->cover_image));
+        }
+
         $programme->delete();
 
         return redirect()->route('admin.programmes.index')

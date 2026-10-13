@@ -195,4 +195,49 @@ class NewsManagementTest extends TestCase
 
         $response->assertSessionHasErrors(['title', 'body', 'status']);
     }
+
+    public function test_admin_can_create_and_update_news_using_existing_gallery_photo(): void
+    {
+        $existingPath = 'front/images/gallery/optimized/itd-2025-03.webp';
+
+        $response = $this->actingAs($this->admin)->post('/admin/news', [
+            'title' => 'Gallery Selected News Article',
+            'slug' => 'gallery-selected-news-article',
+            'excerpt' => 'Article with photo from gallery.',
+            'body' => 'Article body text discussing the gallery photo selection feature.',
+            'status' => 'published',
+            'cover_image' => $existingPath,
+        ]);
+
+        $response->assertRedirect(route('admin.news.index'));
+        $this->assertDatabaseHas('posts', [
+            'title' => 'Gallery Selected News Article',
+            'cover_image' => $existingPath,
+        ]);
+
+        $post = Post::where('slug', 'gallery-selected-news-article')->first();
+
+        // Update with another gallery photo
+        $updatedPath = 'front/images/gallery/optimized/itd-2025-04.webp';
+        $response = $this->actingAs($this->admin)->put(route('admin.news.update', $post), [
+            'title' => 'Gallery Selected News Article Updated',
+            'body' => 'Updated article body text.',
+            'status' => 'published',
+            'cover_image' => $updatedPath,
+        ]);
+
+        $response->assertRedirect(route('admin.news.index'));
+        $this->assertEquals($updatedPath, $post->fresh()->cover_image);
+
+        // Clear cover photo
+        $response = $this->actingAs($this->admin)->put(route('admin.news.update', $post), [
+            'title' => 'Gallery Selected News Article Cleared',
+            'body' => 'Cleared article body text.',
+            'status' => 'published',
+            'cover_image' => '',
+        ]);
+
+        $response->assertRedirect(route('admin.news.index'));
+        $this->assertNull($post->fresh()->cover_image);
+    }
 }

@@ -60,6 +60,10 @@ class TeamMemberController extends Controller
                 800,
                 800
             );
+        } elseif ($request->filled('photo')) {
+            $validated['photo'] = $request->input('photo');
+        } else {
+            $validated['photo'] = null;
         }
 
         TeamMember::create($validated);
@@ -86,15 +90,29 @@ class TeamMemberController extends Controller
         $validated['is_active'] = $request->boolean('is_active');
         $validated['sort_order'] = (int) ($validated['sort_order'] ?? 0);
 
-        if ($request->boolean('remove_photo')) {
+        if ($request->boolean('remove_photo') || ($request->has('photo') && $request->input('photo') === null)) {
+            if ($team->photo && str_starts_with($team->photo, 'uploads/team/') && file_exists(public_path($team->photo))) {
+                @unlink(public_path($team->photo));
+            }
             $validated['photo'] = null;
         } elseif ($request->hasFile('photo')) {
+            if ($team->photo && str_starts_with($team->photo, 'uploads/team/') && file_exists(public_path($team->photo))) {
+                @unlink(public_path($team->photo));
+            }
             $validated['photo'] = $this->optimizer->optimize(
                 $request->file('photo'),
                 'uploads/team',
                 800,
                 800
             );
+        } elseif ($request->filled('photo')) {
+            $newPhoto = $request->input('photo');
+            if ($team->photo && $team->photo !== $newPhoto && str_starts_with($team->photo, 'uploads/team/') && file_exists(public_path($team->photo))) {
+                @unlink(public_path($team->photo));
+            }
+            $validated['photo'] = $newPhoto;
+        } else {
+            unset($validated['photo']);
         }
 
         $team->update($validated);
@@ -107,6 +125,10 @@ class TeamMemberController extends Controller
      */
     public function destroy(TeamMember $team): RedirectResponse
     {
+        if ($team->photo && str_starts_with($team->photo, 'uploads/team/') && file_exists(public_path($team->photo))) {
+            @unlink(public_path($team->photo));
+        }
+
         $team->delete();
 
         return redirect()->route('admin.team.index')->with('success', 'Team member deleted successfully.');

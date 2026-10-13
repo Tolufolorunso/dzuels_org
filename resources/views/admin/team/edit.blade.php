@@ -74,23 +74,15 @@
                 </div>
 
                 {{-- Photo Upload & Current Photo --}}
-                <div class="sm:col-span-2 space-y-2">
-                    <label for="photo" class="block text-xs font-bold uppercase tracking-wider text-stone-700">Profile Photo</label>
-                    @if ($member->photo_url)
-                        <div class="flex items-center gap-4 p-3 rounded-xl bg-stone-50 border border-stone-200">
-                            <img src="{{ $member->photo_url }}" alt="{{ $member->name }}" class="w-14 h-14 rounded-full object-cover border border-stone-200" />
-                            <div class="space-y-1">
-                                <span class="text-xs text-stone-700 font-medium block">Current photo attached</span>
-                                <label class="inline-flex items-center gap-2 cursor-pointer text-xs text-rose-600 hover:text-rose-700">
-                                    <input type="checkbox" name="remove_photo" value="1" class="w-3.5 h-3.5 text-rose-600 rounded border-stone-300 focus:ring-rose-500" />
-                                    <span>Remove current photo</span>
-                                </label>
-                            </div>
-                        </div>
-                    @endif
-                    <input type="file" id="photo" name="photo" accept="image/jpeg,image/png,image/webp" 
-                           class="w-full px-3.5 py-2 rounded-xl border border-stone-300 focus:border-maroon focus:ring-1 focus:ring-maroon text-sm outline-none file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-stone-100 file:text-stone-700 hover:file:bg-stone-200" />
-                    <p class="text-[11px] text-stone-500">Leave blank to keep existing photo. Supports JPEG, PNG, or WebP (max 4MB).</p>
+                <div class="sm:col-span-2">
+                    <x-admin.media-picker 
+                        name="photo" 
+                        :value="old('photo', $member->photo)" 
+                        label="Profile Photo" 
+                        help="Choose from existing gallery albums or upload and auto-optimize a new profile photo (WebP <= 180 KB)." />
+                    @error('photo')
+                        <p class="text-xs text-rose-500 mt-1.5">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 {{-- Bio --}}

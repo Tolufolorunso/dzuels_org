@@ -192,4 +192,52 @@ class TeamMemberManagementTest extends TestCase
             'id' => $member->id,
         ]);
     }
+
+    public function test_admin_can_create_and_update_team_member_using_existing_gallery_photo(): void
+    {
+        $existingPath = 'front/images/gallery/optimized/itd-2025-05.webp';
+
+        $response = $this->actingAs($this->admin)->post('/admin/team', [
+            'name' => 'Prof. Adeleke Johnson',
+            'role' => 'Education Advisor',
+            'group' => 'advisor',
+            'field' => 'Higher Education Policy',
+            'bio' => 'Advising on STEM and higher education curricula.',
+            'is_active' => '1',
+            'photo' => $existingPath,
+        ]);
+
+        $response->assertRedirect(route('admin.team.index'));
+        $this->assertDatabaseHas('team_members', [
+            'name' => 'Prof. Adeleke Johnson',
+            'photo' => $existingPath,
+        ]);
+
+        $member = TeamMember::where('name', 'Prof. Adeleke Johnson')->first();
+
+        // Update with another gallery photo
+        $updatedPath = 'front/images/gallery/optimized/itd-2025-06.webp';
+        $response = $this->actingAs($this->admin)->put("/admin/team/{$member->id}", [
+            'name' => 'Prof. Adeleke Johnson Updated',
+            'role' => 'Education Advisor',
+            'group' => 'advisor',
+            'is_active' => '1',
+            'photo' => $updatedPath,
+        ]);
+
+        $response->assertRedirect(route('admin.team.index'));
+        $this->assertEquals($updatedPath, $member->fresh()->photo);
+
+        // Clear photo
+        $response = $this->actingAs($this->admin)->put("/admin/team/{$member->id}", [
+            'name' => 'Prof. Adeleke Johnson Cleared',
+            'role' => 'Education Advisor',
+            'group' => 'advisor',
+            'is_active' => '1',
+            'photo' => '',
+        ]);
+
+        $response->assertRedirect(route('admin.team.index'));
+        $this->assertNull($member->fresh()->photo);
+    }
 }

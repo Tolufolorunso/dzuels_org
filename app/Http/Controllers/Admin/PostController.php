@@ -66,6 +66,10 @@ class PostController extends Controller
                 1600,
                 1200
             );
+        } elseif ($request->filled('cover_image')) {
+            $validated['cover_image'] = $request->input('cover_image');
+        } else {
+            $validated['cover_image'] = null;
         }
 
         if ($validated['status'] === 'published' && empty($validated['published_at'])) {
@@ -111,6 +115,19 @@ class PostController extends Controller
             if ($news->cover_image && str_starts_with($news->cover_image, 'uploads/news/') && file_exists(public_path($news->cover_image)) && $news->cover_image !== $validated['cover_image']) {
                 @unlink(public_path($news->cover_image));
             }
+        } elseif ($request->filled('cover_image')) {
+            $newCover = $request->input('cover_image');
+            if ($news->cover_image && $news->cover_image !== $newCover && str_starts_with($news->cover_image, 'uploads/news/') && file_exists(public_path($news->cover_image))) {
+                @unlink(public_path($news->cover_image));
+            }
+            $validated['cover_image'] = $newCover;
+        } elseif ($request->boolean('remove_cover_image') || ($request->has('cover_image') && $request->input('cover_image') === null)) {
+            if ($news->cover_image && str_starts_with($news->cover_image, 'uploads/news/') && file_exists(public_path($news->cover_image))) {
+                @unlink(public_path($news->cover_image));
+            }
+            $validated['cover_image'] = null;
+        } else {
+            unset($validated['cover_image']);
         }
 
         if ($validated['status'] === 'published' && empty($validated['published_at'])) {
