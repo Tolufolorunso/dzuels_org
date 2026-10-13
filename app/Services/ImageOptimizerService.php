@@ -11,6 +11,31 @@ use Throwable;
 class ImageOptimizerService
 {
     /**
+     * Strict maximum file size ceiling in bytes: 180 KB (180 * 1024 = 184,320 bytes).
+     */
+    public const MAX_BYTES = 184320;
+
+    /**
+     * Default maximum pixel width/height for web performance.
+     */
+    public const DEFAULT_MAX_DIMENSION = 1600;
+
+    /**
+     * Default initial WebP quality.
+     */
+    public const DEFAULT_INITIAL_QUALITY = 82;
+
+    /**
+     * Minimum WebP quality during iterative compression before downscaling dimensions.
+     */
+    public const MIN_QUALITY = 40;
+
+    /**
+     * Quality decrement step during iterative compression.
+     */
+    public const QUALITY_STEP = 5;
+
+    /**
      * Check if the GD extension and core functions are available.
      */
     public function isGdAvailable(): bool
@@ -22,23 +47,24 @@ class ImageOptimizerService
     }
 
     /**
-     * Optimize an uploaded image file, resize if needed, convert to WebP,
-     * and delete the original. If GD is unavailable or fails, gracefully
-     * falls back to storing the original file directly without throwing.
+     * Optimize an uploaded image file, strictly enforce WebP output with a maximum
+     * file size ceiling of 180 KB, and delete the original uncompressed source file.
      *
      * @param  UploadedFile|string  $file  Uploaded file instance or absolute file path
-     * @param  string  $destinationRelativeDir  Destination directory relative to public_path() (e.g. 'uploads/gallery/photos')
-     * @param  int  $maxWidth  Maximum width in pixels (aspect ratio maintained)
-     * @param  int  $maxHeight  Maximum height in pixels (aspect ratio maintained)
-     * @param  int  $quality  WebP compression quality (0-100)
-     * @return string Relative path from public_path() to the stored file
+     * @param  string  $destinationRelativeDir  Destination directory relative to public_path()
+     * @param  int  $maxWidth  Maximum pixel width (aspect ratio maintained)
+     * @param  int  $maxHeight  Maximum pixel height (aspect ratio maintained)
+     * @param  int  $quality  Starting WebP compression quality (0-100)
+     * @param  int  $maxBytes  Maximum file size ceiling in bytes (default 180 KB)
+     * @return string Relative path from public_path() to the optimized WebP file
      */
     public function optimize(
         UploadedFile|string $file,
         string $destinationRelativeDir = 'uploads/general',
-        int $maxWidth = 1920,
-        int $maxHeight = 1920,
-        int $quality = 82
+        int $maxWidth = self::DEFAULT_MAX_DIMENSION,
+        int $maxHeight = self::DEFAULT_MAX_DIMENSION,
+        int $quality = self::DEFAULT_INITIAL_QUALITY,
+        int $maxBytes = self::MAX_BYTES
     ): string {
         $sourcePath = $file instanceof UploadedFile ? $file->getRealPath() : $file;
 
@@ -59,7 +85,7 @@ class ImageOptimizerService
             $origExt = strtolower(pathinfo($file, PATHINFO_EXTENSION) ?: 'jpg');
         }
 
-        // If GD is not loaded or missing core functions, immediately use direct fallback
+        // If GD is missing or unusable, use direct fallback
         if (! $this->isGdAvailable()) {
             Log::info('GD extension unavailable. Storing image directly without WebP conversion.');
 
@@ -72,13 +98,12 @@ class ImageOptimizerService
         try {
             $imageInfo = @\getimagesize($sourcePath);
             if ($imageInfo === false) {
-                // Not recognizable by GD getimagesize, fall back to direct storage
                 return $this->storeDirectFallback($file, $destinationDir, $destinationRelativeDir, $origExt);
             }
 
             [$origWidth, $origHeight, $imageType] = $imageInfo;
 
-            // Load image using globally qualified GD function
+            // Load source image
             $srcImage = match ($imageType) {
                 IMAGETYPE_JPEG => \function_exists('imagecreatefromjpeg') ? @\imagecreatefromjpeg($sourcePath) : null,
                 IMAGETYPE_PNG => \function_exists('imagecreatefrompng') ? @\imagecreatefrompng($sourcePath) : null,
@@ -88,11 +113,10 @@ class ImageOptimizerService
             };
 
             if (! $srcImage) {
-                // Decoding failed, fall back safely
                 return $this->storeDirectFallback($file, $destinationDir, $destinationRelativeDir, $origExt);
             }
 
-            // Calculate dimensions preserving aspect ratio
+            // Calculate target dimensions maintaining aspect ratio
             $targetWidth = $origWidth;
             $targetHeight = $origHeight;
 
@@ -115,7 +139,7 @@ class ImageOptimizerService
             \imagefilledrectangle($dstImage, 0, 0, $targetWidth, $targetHeight, $transparent);
             \imagealphablending($dstImage, true);
 
-            // Resample with high quality interpolation
+            // Resample with high-quality interpolation
             \imagecopyresampled(
                 $dstImage,
                 $srcImage,
@@ -133,33 +157,87 @@ class ImageOptimizerService
             $filename = time().'_'.Str::random(12).'.webp';
             $fullDestinationPath = $destinationDir.DIRECTORY_SEPARATOR.$filename;
 
-            // Save as WebP
-            $saved = \imagewebp($dstImage, $fullDestinationPath, $quality);
+            // Iterative optimization pass: start at requested quality, decrement while filesize > maxBytes
+            $currentQuality = max(10, min(100, $quality));
+            $saved = \imagewebp($dstImage, $fullDestinationPath, $currentQuality);
 
             if (! $saved || ! file_exists($fullDestinationPath)) {
                 return $this->storeDirectFallback($file, $destinationDir, $destinationRelativeDir, $origExt);
             }
 
-            // If source is a temporary uploaded file or raw uncompressed file inside public uploads, delete original
-            if ($file instanceof UploadedFile) {
-                if (file_exists($sourcePath)) {
-                    @unlink($sourcePath);
-                }
-            } elseif (is_string($file) && file_exists($file) && $file !== $fullDestinationPath) {
-                @unlink($file);
+            $currentSize = (int) filesize($fullDestinationPath);
+
+            // Iteration phase 1: Reduce quality down to MIN_QUALITY
+            while ($currentSize > $maxBytes && $currentQuality > self::MIN_QUALITY) {
+                $currentQuality -= self::QUALITY_STEP;
+                \imagewebp($dstImage, $fullDestinationPath, $currentQuality);
+                \clearstatcache(true, $fullDestinationPath);
+                $currentSize = (int) filesize($fullDestinationPath);
             }
 
-            return trim($destinationRelativeDir, '/\\').'/'.$filename;
+            // Iteration phase 2: If still exceeding maxBytes, iteratively downscale canvas dimensions
+            while ($currentSize > $maxBytes && $targetWidth > 320 && $targetHeight > 240) {
+                $targetWidth = max(240, (int) round($targetWidth * 0.9));
+                $targetHeight = max(180, (int) round($targetHeight * 0.9));
+
+                $scaledCanvas = \imagecreatetruecolor($targetWidth, $targetHeight);
+                \imagealphablending($scaledCanvas, false);
+                \imagesavealpha($scaledCanvas, true);
+                \imagecopyresampled(
+                    $scaledCanvas,
+                    $dstImage,
+                    0,
+                    0,
+                    0,
+                    0,
+                    $targetWidth,
+                    $targetHeight,
+                    \imagesx($dstImage),
+                    \imagesy($dstImage)
+                );
+
+                \imagedestroy($dstImage);
+                $dstImage = $scaledCanvas;
+
+                \imagewebp($dstImage, $fullDestinationPath, $currentQuality);
+                \clearstatcache(true, $fullDestinationPath);
+                $currentSize = (int) filesize($fullDestinationPath);
+            }
+
+            // Delete original uncompressed source file
+            $this->cleanupSourceFile($file, $sourcePath, $fullDestinationPath);
+
+            return trim(str_replace('\\', '/', $destinationRelativeDir), '/').'/'.$filename;
         } catch (Throwable $e) {
             Log::warning('Image optimization encountered an error, falling back to direct storage: '.$e->getMessage());
 
             return $this->storeDirectFallback($file, $destinationDir, $destinationRelativeDir, $origExt);
         } finally {
-            if ($srcImage && \is_resource($srcImage) || (is_object($srcImage) && $srcImage instanceof \GdImage)) {
+            if ($srcImage && (\is_resource($srcImage) || (is_object($srcImage) && $srcImage instanceof \GdImage))) {
                 @\imagedestroy($srcImage);
             }
-            if ($dstImage && \is_resource($dstImage) || (is_object($dstImage) && $dstImage instanceof \GdImage)) {
+            if ($dstImage && (\is_resource($dstImage) || (is_object($dstImage) && $dstImage instanceof \GdImage))) {
                 @\imagedestroy($dstImage);
+            }
+        }
+    }
+
+    /**
+     * Safely delete the original source file after saving the optimized WebP.
+     */
+    protected function cleanupSourceFile(UploadedFile|string $file, string $sourcePath, string $destinationPath): void
+    {
+        if ($file instanceof UploadedFile) {
+            $realPath = $file->getRealPath();
+            if ($realPath && file_exists($realPath)) {
+                @unlink($realPath);
+            }
+        } elseif (is_string($file)) {
+            $realSource = realpath($sourcePath) ?: $sourcePath;
+            $realDest = realpath($destinationPath) ?: $destinationPath;
+
+            if ($realSource && $realDest && $realSource !== $realDest && file_exists($realSource)) {
+                @unlink($realSource);
             }
         }
     }
@@ -181,8 +259,11 @@ class ImageOptimizerService
             $file->move($destinationDir, $filename);
         } elseif (is_string($file)) {
             @copy($file, $fullDestinationPath);
+            if (file_exists($file) && realpath($file) !== realpath($fullDestinationPath)) {
+                @unlink($file);
+            }
         }
 
-        return trim($destinationRelativeDir, '/\\').'/'.$filename;
+        return trim(str_replace('\\', '/', $destinationRelativeDir), '/').'/'.$filename;
     }
 }

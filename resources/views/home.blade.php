@@ -316,23 +316,12 @@
                 {{-- Left Side: Visual Foundation Graphic / Imagery Frame --}}
                 <div class="lg:col-span-5 relative group">
                     <div class="absolute -top-3 -left-3 sm:-top-4 sm:-left-4 w-full h-full border-3 border-[var(--accent-cream)] dark:border-maroon/40 rounded-3xl z-0 pointer-events-none group-hover:translate-x-1 group-hover:translate-y-1 transition-transform duration-300"></div>
-                    <div class="relative z-10 overflow-hidden rounded-3xl shadow-xl border border-[var(--border)] bg-[var(--surface)]">
+                    <div class="relative z-10 overflow-hidden rounded-3xl shadow-xl border border-[var(--border)] bg-[var(--surface)] p-2 sm:p-3 flex items-center justify-center">
                         <img src="{{ $causeSec?->getImageUrl() ?: asset('front/images/cause.webp') }}" 
                              alt="Dzuels Educational Foundation - An Integrated Approach to the Total Well Being of the Child" 
                              loading="lazy"
                              decoding="async"
-                             class="w-full h-[420px] sm:h-[480px] lg:h-[520px] object-cover transition-transform duration-500 group-hover:scale-102" />
-                        
-                        {{-- Overlay Pill Badge --}}
-                        <div class="absolute bottom-4 left-4 right-4 p-4 rounded-2xl bg-[var(--surface)]/95 backdrop-blur-md border border-[var(--border)] shadow-lg flex items-center gap-3">
-                            <span class="w-10 h-10 rounded-xl bg-maroon/10 text-maroon dark:text-[var(--accent-cream)] flex items-center justify-center text-lg shrink-0">
-                                🤝
-                            </span>
-                            <div>
-                                <span class="text-xs font-bold text-[var(--heading)] block leading-tight">Authentic Ministry Pillars</span>
-                                <span class="text-[11px] text-[var(--text-muted)]">Targeted community transformation in Nigeria</span>
-                            </div>
-                        </div>
+                             class="w-full h-auto max-h-[580px] object-contain rounded-2xl transition-transform duration-500 group-hover:scale-101" />
                     </div>
                 </div>
 
@@ -383,6 +372,20 @@
     </section>
 
     {{-- 7. Famoyinka Memorial Children's Library Showcase --}}
+    @php
+        $librarySec = $sections['famoyinka_library'] ?? null;
+        $defaultLibPhotos = [
+            ['image' => 'front/images/gallery/optimized/famoyinka-01.webp', 'label' => 'Free Book Loans', 'alt' => "Student selecting books at Famoyinka Memorial Children's Library"],
+            ['image' => 'front/images/gallery/optimized/famoyinka-03.webp', 'label' => 'Creative Arts', 'alt' => 'Creative watercolor art workshop'],
+            ['image' => 'front/images/gallery/optimized/famoyinka-02.webp', 'label' => 'Leadership Games', 'alt' => 'Leadership teamwork games and sports'],
+            ['image' => 'front/images/gallery/optimized/famoyinka-04.webp', 'label' => 'Ikogosi Excursion', 'alt' => 'Ikogosi Warm Springs educational excursion'],
+        ];
+        $libPhotos = $librarySec?->meta_data['photos'] ?? $defaultLibPhotos;
+        $p1 = $libPhotos[0] ?? $defaultLibPhotos[0];
+        $p2 = $libPhotos[1] ?? $defaultLibPhotos[1];
+        $p3 = $libPhotos[2] ?? $defaultLibPhotos[2];
+        $p4 = $libPhotos[3] ?? $defaultLibPhotos[3];
+    @endphp
     <section class="py-20 lg:py-28 bg-[var(--surface-alt)] transition-colors relative overflow-hidden border-y border-[var(--border)]">
         {{-- Subtle background pattern --}}
         <div class="absolute inset-0 z-0 opacity-15 pointer-events-none">
@@ -395,13 +398,13 @@
                 <div class="lg:col-span-7 space-y-8">
                     <div>
                         <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-maroon/10 text-maroon dark:bg-mint/15 dark:text-mint border border-maroon/20 dark:border-mint/30">
-                            <span>📚 Permanent Literacy Sanctuary</span>
+                            <span>📚 {{ $librarySec?->subheadline ?: 'Permanent Literacy Sanctuary' }}</span>
                         </div>
                         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[var(--heading)] tracking-tight leading-tight mt-3">
-                            Famoyinka Memorial Children's Library
+                            {{ $librarySec?->headline ?: "Famoyinka Memorial Children's Library" }}
                         </h2>
                         <p class="text-base sm:text-lg text-[var(--text)] leading-relaxed mt-4">
-                            A vibrant community sanctuary in Ijero-Ekiti founded to nurture inquisitive minds, ignite a lifelong love for reading, and inspire creative expression in every child.
+                            {{ $librarySec?->body_text ?: 'A vibrant community sanctuary in Ijero-Ekiti founded to nurture inquisitive minds, ignite a lifelong love for reading, and inspire creative expression in every child.' }}
                         </p>
                     </div>
 
@@ -456,7 +459,7 @@
                     <div class="flex flex-wrap items-center gap-4 pt-2">
                         <a href="{{ url('/programmes/famoyinka-memorial-library') }}" 
                            class="inline-flex items-center justify-center px-7 py-3.5 rounded-full text-sm font-bold bg-maroon text-white hover:bg-crimson transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5">
-                            Explore Library Programme &rarr;
+                            {{ $librarySec?->button_text ?: 'Explore Library Programme' }} &rarr;
                         </a>
                         <a href="{{ url('/gallery?album=famoyinka-library') }}" 
                            class="inline-flex items-center justify-center px-6 py-3.5 rounded-full text-sm font-semibold border border-[var(--border)] bg-[var(--surface)] text-[var(--heading)] hover:border-maroon hover:text-maroon dark:hover:border-mint dark:hover:text-mint transition-all duration-200">
@@ -470,42 +473,42 @@
                     <div class="grid grid-cols-2 gap-3 sm:gap-4">
                         <div class="space-y-3 sm:space-y-4">
                             <div class="rounded-2xl sm:rounded-3xl overflow-hidden border border-[var(--border)] shadow-md aspect-4/5 group relative">
-                                <img src="{{ asset('front/images/gallery/optimized/famoyinka-01.webp') }}" 
-                                     alt="Student selecting books at Famoyinka Memorial Children's Library" 
+                                <img src="{{ str_starts_with($p1['image'] ?? '', 'http') ? $p1['image'] : asset($p1['image'] ?? 'front/images/gallery/optimized/famoyinka-01.webp') }}" 
+                                     alt="{{ $p1['alt'] ?? 'Student selecting books at Famoyinka Memorial Children\'s Library' }}" 
                                      loading="lazy" decoding="async" 
                                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                 <div class="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent flex items-end p-3.5">
-                                    <span class="text-xs font-semibold text-white drop-shadow-xs">Free Book Loans</span>
+                                    <span class="text-xs font-semibold text-white drop-shadow-xs">{{ $p1['label'] ?? 'Free Book Loans' }}</span>
                                 </div>
                             </div>
                             <div class="rounded-2xl sm:rounded-3xl overflow-hidden border border-[var(--border)] shadow-md aspect-square group relative">
-                                <img src="{{ asset('front/images/gallery/optimized/famoyinka-03.webp') }}" 
-                                     alt="Creative watercolor art workshop" 
+                                <img src="{{ str_starts_with($p2['image'] ?? '', 'http') ? $p2['image'] : asset($p2['image'] ?? 'front/images/gallery/optimized/famoyinka-03.webp') }}" 
+                                     alt="{{ $p2['alt'] ?? 'Creative watercolor art workshop' }}" 
                                      loading="lazy" decoding="async" 
                                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                 <div class="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent flex items-end p-3.5">
-                                    <span class="text-xs font-semibold text-white drop-shadow-xs">Creative Arts</span>
+                                    <span class="text-xs font-semibold text-white drop-shadow-xs">{{ $p2['label'] ?? 'Creative Arts' }}</span>
                                 </div>
                             </div>
                         </div>
 
                         <div class="space-y-3 sm:space-y-4 pt-6 sm:pt-8">
                             <div class="rounded-2xl sm:rounded-3xl overflow-hidden border border-[var(--border)] shadow-md aspect-square group relative">
-                                <img src="{{ asset('front/images/gallery/optimized/famoyinka-02.webp') }}" 
-                                     alt="Leadership teamwork games and sports" 
+                                <img src="{{ str_starts_with($p3['image'] ?? '', 'http') ? $p3['image'] : asset($p3['image'] ?? 'front/images/gallery/optimized/famoyinka-02.webp') }}" 
+                                     alt="{{ $p3['alt'] ?? 'Leadership teamwork games and sports' }}" 
                                      loading="lazy" decoding="async" 
                                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                 <div class="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent flex items-end p-3.5">
-                                    <span class="text-xs font-semibold text-white drop-shadow-xs">Leadership Games</span>
+                                    <span class="text-xs font-semibold text-white drop-shadow-xs">{{ $p3['label'] ?? 'Leadership Games' }}</span>
                                 </div>
                             </div>
                             <div class="rounded-2xl sm:rounded-3xl overflow-hidden border border-[var(--border)] shadow-md aspect-4/5 group relative">
-                                <img src="{{ asset('front/images/gallery/optimized/famoyinka-04.webp') }}" 
-                                     alt="Ikogosi Warm Springs educational excursion" 
+                                <img src="{{ str_starts_with($p4['image'] ?? '', 'http') ? $p4['image'] : asset($p4['image'] ?? 'front/images/gallery/optimized/famoyinka-04.webp') }}" 
+                                     alt="{{ $p4['alt'] ?? 'Ikogosi Warm Springs educational excursion' }}" 
                                      loading="lazy" decoding="async" 
                                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                 <div class="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent flex items-end p-3.5">
-                                    <span class="text-xs font-semibold text-white drop-shadow-xs">Ikogosi Excursion</span>
+                                    <span class="text-xs font-semibold text-white drop-shadow-xs">{{ $p4['label'] ?? 'Ikogosi Excursion' }}</span>
                                 </div>
                             </div>
                         </div>

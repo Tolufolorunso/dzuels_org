@@ -6,12 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreTeamMemberRequest;
 use App\Http\Requests\Admin\UpdateTeamMemberRequest;
 use App\Models\TeamMember;
+use App\Services\ImageOptimizerService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class TeamMemberController extends Controller
 {
+    public function __construct(
+        protected ImageOptimizerService $optimizer
+    ) {}
+
     /**
      * Display a listing of team members.
      */
@@ -23,7 +28,6 @@ class TeamMemberController extends Controller
         if ($group && in_array($group, ['trustee', 'management', 'advisor'], true)) {
             $query->byGroup($group);
         }
-
         $members = $query->get();
 
         return view('admin.team.index', [
@@ -50,10 +54,12 @@ class TeamMemberController extends Controller
         $validated['sort_order'] = (int) ($validated['sort_order'] ?? 0);
 
         if ($request->hasFile('photo')) {
-            $file = $request->file('photo');
-            $filename = time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
-            $file->move(public_path('uploads/team'), $filename);
-            $validated['photo'] = 'uploads/team/'.$filename;
+            $validated['photo'] = $this->optimizer->optimize(
+                $request->file('photo'),
+                'uploads/team',
+                800,
+                800
+            );
         }
 
         TeamMember::create($validated);
@@ -83,10 +89,12 @@ class TeamMemberController extends Controller
         if ($request->boolean('remove_photo')) {
             $validated['photo'] = null;
         } elseif ($request->hasFile('photo')) {
-            $file = $request->file('photo');
-            $filename = time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
-            $file->move(public_path('uploads/team'), $filename);
-            $validated['photo'] = 'uploads/team/'.$filename;
+            $validated['photo'] = $this->optimizer->optimize(
+                $request->file('photo'),
+                'uploads/team',
+                800,
+                800
+            );
         }
 
         $team->update($validated);

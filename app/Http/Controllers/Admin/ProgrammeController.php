@@ -6,12 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreProgrammeRequest;
 use App\Http\Requests\Admin\UpdateProgrammeRequest;
 use App\Models\Programme;
+use App\Services\ImageOptimizerService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
 
 class ProgrammeController extends Controller
 {
+    public function __construct(
+        protected ImageOptimizerService $optimizer
+    ) {}
+
     /**
      * Display a listing of foundation programmes.
      */
@@ -50,16 +55,12 @@ class ProgrammeController extends Controller
         $validated['slug'] = $slug;
 
         if ($request->hasFile('cover_image')) {
-            $file = $request->file('cover_image');
-            $filename = time().'_'.Str::random(8).'.'.$file->getClientOriginalExtension();
-            $destination = public_path('uploads/programmes');
-
-            if (! file_exists($destination)) {
-                mkdir($destination, 0755, true);
-            }
-
-            $file->move($destination, $filename);
-            $validated['cover_image'] = 'uploads/programmes/'.$filename;
+            $validated['cover_image'] = $this->optimizer->optimize(
+                $request->file('cover_image'),
+                'uploads/programmes',
+                1600,
+                1200
+            );
         }
 
         $validated['is_featured'] = $request->boolean('is_featured');
@@ -92,16 +93,12 @@ class ProgrammeController extends Controller
         }
 
         if ($request->hasFile('cover_image')) {
-            $file = $request->file('cover_image');
-            $filename = time().'_'.Str::random(8).'.'.$file->getClientOriginalExtension();
-            $destination = public_path('uploads/programmes');
-
-            if (! file_exists($destination)) {
-                mkdir($destination, 0755, true);
-            }
-
-            $file->move($destination, $filename);
-            $validated['cover_image'] = 'uploads/programmes/'.$filename;
+            $validated['cover_image'] = $this->optimizer->optimize(
+                $request->file('cover_image'),
+                'uploads/programmes',
+                1600,
+                1200
+            );
         }
 
         $validated['is_featured'] = $request->boolean('is_featured');

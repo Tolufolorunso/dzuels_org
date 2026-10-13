@@ -436,70 +436,169 @@
                         </div>
                     </div>
 
-                    {{-- Right Column: Information & Impact Sidebar --}}
-                    <div class="lg:col-span-4 space-y-8">
+                    {{-- Right Column: Information & Impact Sidebar (Tab-Synchronized) --}}
+                    <div class="lg:col-span-4 space-y-6 lg:sticky lg:top-28 lg:self-start">
                         
-                        {{-- Volunteer Impact Card --}}
-                        <div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-6 sm:p-8 shadow-sm transition-colors">
-                            <div class="w-12 h-12 rounded-2xl bg-maroon/10 text-maroon dark:text-[var(--accent-cream)] flex items-center justify-center text-2xl mb-4">
-                                🌟
+                        {{-- SIDEBAR TAB 1: VOLUNTEER INFO --}}
+                        <div x-show="activeTab === 'volunteer'" 
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 translate-y-2"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             class="space-y-6">
+                            
+                            {{-- Volunteer Impact Card --}}
+                            <div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-6 sm:p-8 shadow-sm transition-colors">
+                                <div class="w-12 h-12 rounded-2xl bg-maroon/10 text-maroon dark:text-[var(--accent-cream)] flex items-center justify-center text-2xl mb-4">
+                                    🌟
+                                </div>
+                                <h3 class="text-xl font-bold text-[var(--heading)] mb-3">
+                                    Why Volunteer With Us?
+                                </h3>
+                                <ul class="space-y-3 text-sm text-[var(--text-muted)]">
+                                    <li class="flex items-start gap-2.5">
+                                        <span class="text-emerald-500 font-bold shrink-0">✓</span>
+                                        <span><strong>Inspire Students Directly:</strong> Deliver hands-on digital training and literacy mentorship in public secondary schools in Ekiti State.</span>
+                                    </li>
+                                    <li class="flex items-start gap-2.5">
+                                        <span class="text-emerald-500 font-bold shrink-0">✓</span>
+                                        <span><strong>Flexible Roles:</strong> On-site weekend workshops or remote curriculum coaching.</span>
+                                    </li>
+                                    <li class="flex items-start gap-2.5">
+                                        <span class="text-emerald-500 font-bold shrink-0">✓</span>
+                                        <span><strong>Recognized Service:</strong> Certificate of community contribution and active volunteer network.</span>
+                                    </li>
+                                </ul>
                             </div>
-                            <h3 class="text-xl font-bold text-[var(--heading)] mb-3">
-                                Why Volunteer With Us?
-                            </h3>
-                            <ul class="space-y-3 text-sm text-[var(--text-muted)]">
-                                <li class="flex items-start gap-2.5">
-                                    <span class="text-emerald-500 font-bold shrink-0">✓</span>
-                                    <span><strong>Inspire Students Directly:</strong> Deliver hands-on digital training in public secondary schools in Ekiti State.</span>
-                                </li>
-                                <li class="flex items-start gap-2.5">
-                                    <span class="text-emerald-500 font-bold shrink-0">✓</span>
-                                    <span><strong>Flexible Roles:</strong> On-site weekend mentoring or remote digital project coaching.</span>
-                                </li>
-                                <li class="flex items-start gap-2.5">
-                                    <span class="text-emerald-500 font-bold shrink-0">✓</span>
-                                    <span><strong>Recognized Service:</strong> Certificate of community contribution and active volunteer network.</span>
-                                </li>
-                            </ul>
+
+                            {{-- Volunteer Community Card --}}
+                            <div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-6 sm:p-8 shadow-sm transition-colors">
+                                <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center text-2xl mb-4">
+                                    🤝
+                                </div>
+                                <h3 class="text-xl font-bold text-[var(--heading)] mb-3">
+                                    Volunteer Community
+                                </h3>
+                                <p class="text-sm text-[var(--text-muted)] leading-relaxed mb-4">
+                                    Join passionate educators, university graduates, and tech mentors dedicating their skills to bridge education gaps in Southwest Nigeria.
+                                </p>
+                                <div class="p-4 rounded-2xl bg-[var(--bg)] border border-[var(--border)] space-y-2 text-xs text-[var(--text-strong)] font-semibold">
+                                    <div class="flex items-center gap-2">
+                                        <span>📚</span>
+                                        <span>Reading & Spelling Bee coaching</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span>💻</span>
+                                        <span>ICT Lab instructors & tech trainers</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span>🎯</span>
+                                        <span>Leadership mentoring & youth events</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Financial Giving Promotion --}}
+                            <div class="rounded-3xl p-6 sm:p-8 bg-linear-to-br from-maroon to-crimson text-white shadow-md">
+                                <h3 class="text-xl font-bold text-white mb-2">Prefer to donate funds?</h3>
+                                <p class="text-sm text-[var(--accent-cream)]/90 mb-5 leading-relaxed">
+                                    You can support our lab equipment drives and student sponsorships instantly with debit card or direct bank transfer.
+                                </p>
+                                <a href="{{ route('donate') }}" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-maroon hover:bg-[var(--accent-cream)] transition-all shadow-xs">
+                                    <span>Support via Donate</span>
+                                    <span>&rarr;</span>
+                                </a>
+                            </div>
                         </div>
 
-                        {{-- Corporate / Institutional Partners Card --}}
-                        <div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-6 sm:p-8 shadow-sm transition-colors">
-                            <div class="w-12 h-12 rounded-2xl bg-[var(--accent-cream-light)] text-maroon dark:text-[var(--accent-cream)] flex items-center justify-center text-2xl mb-4">
-                                🏛️
+                        {{-- SIDEBAR TAB 2: PARTNER INFO --}}
+                        <div x-show="activeTab === 'partner'" 
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 translate-y-2"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             class="space-y-6">
+                            
+                            {{-- Corporate / Institutional Partners Card --}}
+                            <div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-6 sm:p-8 shadow-sm transition-colors">
+                                <div class="w-12 h-12 rounded-2xl bg-[var(--accent-cream-light)] text-maroon dark:text-[var(--accent-cream)] flex items-center justify-center text-2xl mb-4">
+                                    🏛️
+                                </div>
+                                <h3 class="text-xl font-bold text-[var(--heading)] mb-3">
+                                    Institutional Collaboration & Pathways
+                                </h3>
+                                <p class="text-sm text-[var(--text-muted)] leading-relaxed mb-4">
+                                    We partner with corporations, alumni associations, and philanthropic foundations to scale educational infrastructure with rigorous governance.
+                                </p>
+                                <div class="p-4 rounded-2xl bg-[var(--bg)] border border-[var(--border)] space-y-2.5 text-xs text-[var(--text-strong)] font-semibold">
+                                    <div class="flex items-start gap-2">
+                                        <span class="text-base shrink-0">📊</span>
+                                        <span><strong>Measurable Outcomes:</strong> Detailed field reports, metrics tracking, and photographic evidence.</span>
+                                    </div>
+                                    <div class="flex items-start gap-2">
+                                        <span class="text-base shrink-0">🎯</span>
+                                        <span><strong>Co-Branded Impact:</strong> Digital lab naming, sponsored classrooms, and CSR visibility.</span>
+                                    </div>
+                                    <div class="flex items-start gap-2">
+                                        <span class="text-base shrink-0">🛡️</span>
+                                        <span><strong>Full Compliance:</strong> Registered under CAC (CAC/IT/NO 79495) with transparent banking.</span>
+                                    </div>
+                                </div>
                             </div>
-                            <h3 class="text-xl font-bold text-[var(--heading)] mb-3">
-                                Institutional Collaboration
-                            </h3>
-                            <p class="text-sm text-[var(--text-muted)] leading-relaxed mb-4">
-                                We partner with leading corporations, foundations, alumni associations, and tech organizations to scale educational infrastructure.
-                            </p>
-                            <div class="p-4 rounded-2xl bg-[var(--bg)] border border-[var(--border)] space-y-2 text-xs text-[var(--text-strong)] font-semibold">
-                                <div class="flex items-center gap-2">
-                                    <span>📊</span>
-                                    <span>Detailed impact reports and metrics</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span>🎯</span>
-                                    <span>Co-branded lab naming & initiatives</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span>🛡️</span>
-                                    <span>Full regulatory compliance & transparency</span>
-                                </div>
-                            </div>
-                        </div>
 
-                        {{-- Financial Giving Promotion --}}
-                        <div class="rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-maroon to-crimson text-white shadow-md">
-                            <h3 class="text-xl font-bold text-white mb-2">Prefer to donate funds?</h3>
-                            <p class="text-sm text-[var(--accent-cream)]/90 mb-5 leading-relaxed">
-                                You can support our lab equipment drives and student sponsorships instantly with debit card or direct bank transfer.
-                            </p>
-                            <a href="{{ route('donate') }}" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-maroon hover:bg-[var(--accent-cream)] transition-all shadow-xs">
-                                <span>Support via Donate</span>
-                                <span>&rarr;</span>
-                            </a>
+                            {{-- Proven Track Record Card --}}
+                            <div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-6 sm:p-8 shadow-sm transition-colors">
+                                <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-2xl mb-4">
+                                    📈
+                                </div>
+                                <h3 class="text-xl font-bold text-[var(--heading)] mb-3">
+                                    Verified Impact Track Record
+                                </h3>
+                                <div class="grid grid-cols-2 gap-3 mb-4">
+                                    <div class="p-3 rounded-xl bg-[var(--bg)] border border-[var(--border)] text-center">
+                                        <span class="text-2xl font-black text-maroon dark:text-[var(--accent-cream)] block">165+</span>
+                                        <span class="text-[11px] text-[var(--text-muted)] font-medium">ICT Students Trained</span>
+                                    </div>
+                                    <div class="p-3 rounded-xl bg-[var(--bg)] border border-[var(--border)] text-center">
+                                        <span class="text-2xl font-black text-maroon dark:text-[var(--accent-cream)] block">591+</span>
+                                        <span class="text-[11px] text-[var(--text-muted)] font-medium">Literacy Learners</span>
+                                    </div>
+                                    <div class="p-3 rounded-xl bg-[var(--bg)] border border-[var(--border)] text-center">
+                                        <span class="text-2xl font-black text-maroon dark:text-[var(--accent-cream)] block">15</span>
+                                        <span class="text-[11px] text-[var(--text-muted)] font-medium">Supported Schools</span>
+                                    </div>
+                                    <div class="p-3 rounded-xl bg-[var(--bg)] border border-[var(--border)] text-center">
+                                        <span class="text-2xl font-black text-maroon dark:text-[var(--accent-cream)] block">10+</span>
+                                        <span class="text-[11px] text-[var(--text-muted)] font-medium">Years Serving Youth</span>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-[var(--text-muted)] leading-relaxed">
+                                    All partner sponsorships deploy directly into public school digital labs and grassroots literacy centers in Ekiti State.
+                                </p>
+                            </div>
+
+                            {{-- Direct Corporate Secretariat Hotline Card --}}
+                            <div class="rounded-3xl p-6 sm:p-8 bg-linear-to-br from-maroon to-crimson text-white shadow-md">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="text-lg">📞</span>
+                                    <h3 class="text-lg font-bold text-white">Direct Secretariat Inquiry</h3>
+                                </div>
+                                <p class="text-xs sm:text-sm text-[var(--accent-cream)]/90 mb-4 leading-relaxed">
+                                    Need immediate partnership briefings, formal proposal letters, or bilateral MOU discussions? Contact our leadership team:
+                                </p>
+                                <div class="space-y-2 text-xs font-semibold text-white/95 pb-4 border-b border-white/20">
+                                    <div class="flex items-center gap-2">
+                                        <span>📧</span>
+                                        <a href="mailto:info@dzuelsfoundation.org" class="underline hover:text-[var(--accent-cream)]">info@dzuelsfoundation.org</a>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span>📱</span>
+                                        <a href="tel:+2349042493883" class="hover:text-[var(--accent-cream)]">+234 904 249 3883</a>
+                                    </div>
+                                </div>
+                                <div class="pt-3 flex items-center justify-between text-[11px] text-[var(--accent-cream)]/80">
+                                    <span>Response timeframe:</span>
+                                    <span class="font-bold text-white">Within 24–48 Hours</span>
+                                </div>
+                            </div>
                         </div>
 
                     </div>

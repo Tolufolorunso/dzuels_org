@@ -1,6 +1,6 @@
 # Dzuels Educational Foundation - Project Overview
 
-<!-- blueprint:source-hash cacafbdf33d9e0a4c10017e89f3bc680bb9cbf63559d0e6816af6ca002a7a80d -->
+<!-- blueprint:source-hash e575a1b6cc31433a7dc2d44c5eabb769df444efc18a148d4d3537ebd2755c614 -->
 
 > Rebuild of dzuelsfoundation.org as a modern, high-trust, mobile-first Laravel web application powering education support, digital literacy, and community welfare in Nigeria.
 
@@ -12,13 +12,12 @@ Dzuels Educational Foundation is a Nigerian charity (registered 2015) providing 
 - **Milestone 2 (Shipped):** Completed brand assets (full favicon suite), ITD 2026 overhaul (October 3, 2026 date, AI empowerment objective, dynamic sponsor tiering), server-rendered gallery lightbox, WordPress-style Page Content CMS, multi-tier RBAC (`super_admin`, `editor`, `support`), password recovery, and MySQL export tooling.
 - **Milestone 3 (Shipped):** Production MariaDB configuration, root `dzuels_database.sql` export, hotline update (`+234 904 249 3883`), hero imagery overlays, and Spelling Bee image fixes.
 - **Milestone 4 (Shipped):** Dynamic Media Hub, Gallery Overhaul, Famoyinka Memorial Children's Library Integration, multi-phone settings (up to 5 lines), dynamic contact CMS (custom schedule/timezone), and dynamic partners strip on Home and About.
-- **Milestone 5 (Active Target):** Production Launch Hardening, Resilient Media Pipeline, Givebutter Diaspora Donations & 6 Impact Causes CMS:
-  1. Resilient image optimization pipeline with global namespace GD scoping and automatic zero-crash fallback to direct storage when GD is unavailable or fails.
-  2. Multi-image bulk uploading in `/admin/gallery` with per-photo metadata editor (caption, alt text, year label, sort order).
-  3. Dynamic site logo upload and selection in `/admin/settings` propagating to navbar, footer, and admin dashboard.
-  4. U.S. diaspora giving integration on `/donate` with Givebutter (`https://givebutter.com/dzuels-foundation`), "For U.S. Donors Only" badge, and admin setting.
-  5. Overhaul Home causes to the authentic 6 pillars from `cause.jpg` (Paul's academy, Peter's net, Deborah congress, Naomi's kitchen, Priscilla's upper room, Luke's Tent) anchored by "An Integrated Approach to the Total Well Being of the Child", editable in `/admin/pages/home`.
-  6. Final production release readiness, refreshed `dzuels_database.sql`, and `cpanel_changed_files.txt` synchronization.
+- **Milestone 5 (Shipped):** Production Launch Hardening, Resilient Media Pipeline, Givebutter Diaspora Donations & 6 Impact Causes CMS across Features 25–27.
+- **Milestone 6 (Active Target):** Production Refinements, Image Optimizer Hardening (<= 180 KB WebP), Dynamic Library Photos & Get Involved UI Overhaul:
+  1. High-performance WebP image optimizer hardening in `ImageOptimizerService` with a strict <= 180 KB (184,320 bytes) file size ceiling, iterative quality reduction and dimensional scaling, automatic source file deletion, and retroactive conversion of all existing uploads.
+  2. Full unclipped 6 Impact Causes graphic display on the homepage with natural aspect ratio and clean layout.
+  3. Dynamic 4-photo Famoyinka Memorial Children's Library section management in `/admin/pages/home` with media pickers and custom labels.
+  4. Overhauled `/get-involved` layout with tab-synchronized sidebar content for volunteers vs corporate partners, sticky positioning, and Tailwind v4 linear gradients.
 
 ## Users
 
@@ -28,7 +27,7 @@ Dzuels Educational Foundation is a Nigerian charity (registered 2015) providing 
 - **Beneficiaries, Parents & Students:** Community members accessing literacy resources, activities, and the Famoyinka Memorial Children's Library.
 - **Foundation Staff (Role-Based Admin Users):**
   - **Super Admin:** Full platform control, managing staff accounts, role permissions, global settings (logo, multi-phone lines, Givebutter link, hours/timezone), and database exports.
-  - **Editor / Content Manager:** Updating page text/images via visual CMS (including the 6 impact causes in `/admin/pages/home`), managing programmes, events, sponsors, partner logos, and managing gallery photos with bulk upload.
+  - **Editor / Content Manager:** Updating page text/images via visual CMS (including the 6 impact causes and library photos in `/admin/pages/home`), managing programmes, events, sponsors, partner logos, and managing gallery photos with bulk upload.
   - **Support / Viewer:** Reading incoming contact enquiries, volunteer submissions, and event records.
 
 ## Usage model
@@ -76,11 +75,15 @@ Dzuels Educational Foundation is a Nigerian charity (registered 2015) providing 
 23. **Famoyinka Memorial Children's Library programme integration and curated visual outreach** - Dedicated public programme page at `/programmes/famoyinka-memorial-library` and dedicated gallery album; curated authentic action photos of children; pruned repetitive shots; cross-linked on Home and About. *(Completed)*
 24. **Site-wide multi-phone settings, dynamic contact CMS and dynamic partners strip** - Up to 5 contact phone lines in `/admin/settings` unified site-wide; 100% dynamic `/contact` page (custom working hours, timezone `GMT +1`, schedule note); dynamic partners strip on Home and About driven by `/admin/partners`. *(Completed)*
 
-### Milestone 5 Features (Active Build Order)
+### Milestone 5 Features (Completed & Shipped)
 
-25. **Resilient image optimization pipeline, upload fallback & gallery bulk uploader** - Resolve GD global namespace scoping and extension checks in `ImageOptimizerService` with automatic zero-crash fallback to direct storage; add multi-image bulk uploading in `/admin/gallery`; provide per-photo metadata editor (caption, alt text, year label, sort order).
-26. **Dynamic site logo in settings, Givebutter U.S. diaspora donations & 6 Impact Causes CMS** - Customizable site logo in `/admin/settings` propagating site-wide; Givebutter U.S. diaspora donation button on `/donate` with "For U.S. Donors Only" badge; overhaul Home causes into the authentic 6 pillars (`cause.jpg`) editable via `/admin/pages/home`.
-27. **Production release suite, updated MariaDB database export & launch verification** - Refresh root `dzuels_database.sql` via `php artisan db:export-sql`; synchronize `cpanel_changed_files.txt`; perform full test & lint audit; finalize production deployment readiness.
+25. **Resilient image optimization pipeline, upload fallback & gallery bulk uploader** - Resolve GD global namespace scoping and extension checks in `ImageOptimizerService` with automatic zero-crash fallback to direct storage; add multi-image bulk uploading in `/admin/gallery`; provide per-photo metadata editor (caption, alt text, year label, sort order). *(Completed)*
+26. **Dynamic site logo in settings, Givebutter U.S. diaspora donations & 6 Impact Causes CMS** - Customizable site logo in `/admin/settings` propagating site-wide; Givebutter U.S. diaspora donation button on `/donate` with "For U.S. Donors Only" badge; overhaul Home causes into the authentic 6 pillars (`cause.jpg`) editable via `/admin/pages/home`. *(Completed)*
+27. **Production release suite, updated MariaDB database export & launch verification** - Refresh root `dzuels_database.sql` via `php artisan db:export-sql`; synchronize `cpanel_changed_files.txt`; perform full test & lint audit; finalize production deployment readiness. *(Completed)*
+
+### Milestone 6 Features (Active Build Order)
+
+28. **High-performance WebP image optimizer (<= 180 KB ceiling), full unclipped causes display, dynamic Famoyinka Library photos in CMS & Get Involved UI overhaul** - Harden `ImageOptimizerService` to strictly produce WebP images with a hard maximum size limit of 180 KB via iterative quality and dimension scaling, delete uncompressed original files, retroactively optimize all existing uploads in `public/uploads/`, and unify all admin file uploaders (`GalleryAlbumController`, `MediaController`, `PageController`, `ProgrammeController`, `TeamMemberController`); remove image clipping on the homepage 6 Impact Causes section so the complete graphic is fully visible without cropped edges or obscuring badges; make the 4 Famoyinka Memorial Children's Library mosaic photos and labels editable via `/admin/pages/home` with graceful fallbacks; and overhaul `/get-involved` layout and styling with tab-synchronized sidebar content (dedicated partnership impact metrics and contact cards when "Partner With Us" is active), sticky alignment, and Tailwind v4 linear gradients.
 
 ### Deferred Ideas (Non-Roadmap)
 
@@ -107,14 +110,14 @@ Dzuels Educational Foundation is a Nigerian charity (registered 2015) providing 
 ### Page & PageSection (Dynamic CMS)
 - `id` (bigint, PK)
 - `page_key` (string, index) - e.g. `home`, `about`, `programmes`, `contact`, `donate`, `get_involved`
-- `section_key` (string, index) - e.g. `hero`, `causes`, `vision_mission`, `values`, `story`, `bank_details`
+- `section_key` (string, index) - e.g. `hero`, `causes`, `famoyinka_library`, `vision_mission`, `values`, `story`, `bank_details`
 - `headline` (string, nullable)
 - `subheadline` (string, nullable)
 - `body_text` (text, nullable)
 - `image_path` (string, nullable)
 - `button_text` (string, nullable)
 - `button_url` (string, nullable)
-- `meta_data` (json, nullable) - structured data for 6 impact pillars (titles, ministry tags, descriptions, icons)
+- `meta_data` (json, nullable) - structured data for 6 impact pillars and Famoyinka library 4 mosaic photos & labels
 - `sort_order` (integer, default 0)
 - `timestamps`
 
@@ -156,7 +159,7 @@ Dzuels Educational Foundation is a Nigerian charity (registered 2015) providing 
 ## Tech stack
 
 - **Backend:** Laravel 13 on PHP 8.3 / 8.4, MariaDB 10.3+ / MySQL 8.0+ in development and production (`server161.web-hosting.com`), Eloquent ORM.
-- **Image Optimization & Upload Pipeline:** Native PHP GD (`imagewebp`, `imagecopyresampled`) with zero external package dependencies, backed by automatic direct-storage fallback for maximum reliability.
+- **Image Optimization & Upload Pipeline:** Native PHP GD (`imagewebp`, `imagecopyresampled`) with zero external package dependencies. Strict iterative optimization loop enforcing <= 180 KB WebP output and automated uncompressed original deletion.
 - **Admin Panel:** Tailored SaaS administrative dashboard at `/admin` with role-based authorization (Super Admin, Editor, Support).
 - **Frontend Templates:** Blade server-side templates with modular components.
 - **Styling:** Tailwind CSS v4 (`@tailwindcss/vite`) using CSS tokens. Strict zero-horizontal-overflow rules with `max-w-full`.
@@ -185,13 +188,13 @@ Non-profit charity donations. The platform does not sell products or show advert
   - Dark Mode Surface: `#241012`
   - Footer Background: `#2B0203`
 - **Core Public Routes:**
-  - `/` - Homepage (dynamic partners strip, library feature, and 6 impact causes)
+  - `/` - Homepage (dynamic partners strip, library feature with 4 dynamic photos, and 6 unclipped impact causes)
   - `/about` - About Us (dynamic partners strip & leadership)
   - `/programmes` & `/programmes/{slug}` - Programmes catalog (including `/programmes/famoyinka-memorial-library`)
   - `/events` & `/events/{slug}` - Events Showcase & ITD 2026
   - `/gallery` & `/gallery/{album}` - Photo Gallery with dynamic collections, year labels, and lightbox
   - `/donate` - Giving page (Flutterwave NGN, GTBank NGN, and Givebutter U.S. Only)
-  - `/get-involved` - Volunteer and partner application
+  - `/get-involved` - Volunteer and partner application with tab-synchronized sidebar
   - `/contact` - Contact details (up to 5 phone lines, custom hours/timezone) & enquiry form
   - `/privacy-policy` - Privacy terms
   - `/admin` - Professional administrative dashboard with global media picker, settings logo, and bulk gallery uploader
@@ -208,4 +211,4 @@ Non-profit charity donations. The platform does not sell products or show advert
 
 ## Open questions
 
-*(None. All requirements, upload resilient fallback, Givebutter link, 6 impact causes in `/admin/pages/home`, and Milestone 5 scope confirmed.)*
+*(None. All requirements for Milestone 6 / Feature 28 confirmed and ready for implementation.)*

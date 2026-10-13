@@ -119,14 +119,81 @@
                             </div>
                         </div>
 
-                        <!-- Image Upload & Gallery Picker -->
-                        <div class="pt-2 border-t border-stone-100">
-                            <x-admin.media-picker 
-                                name="image_path" 
-                                :value="$section->image_path" 
-                                label="Section Imagery & Graphic Banner" 
-                                help="Select an existing photo from the gallery archive or upload a new image (auto-converted to WebP via GD)." />
-                        </div>
+                        @if ($section->section_key !== 'famoyinka_library')
+                            <!-- Image Upload & Gallery Picker -->
+                            <div class="pt-2 border-t border-stone-100">
+                                <x-admin.media-picker 
+                                    name="image_path" 
+                                    :value="$section->image_path" 
+                                    label="Section Imagery & Graphic Banner" 
+                                    help="Select an existing photo from the gallery archive or upload a new image (auto-converted to WebP <= 180 KB)." />
+                            </div>
+                        @endif
+
+                        @if ($page === 'home' && $section->section_key === 'famoyinka_library')
+                            @php
+                                $defaultPhotos = [
+                                    ['image' => 'front/images/gallery/optimized/famoyinka-01.webp', 'label' => 'Free Book Loans', 'alt' => "Student selecting books at Famoyinka Memorial Children's Library"],
+                                    ['image' => 'front/images/gallery/optimized/famoyinka-03.webp', 'label' => 'Creative Arts', 'alt' => 'Creative watercolor art workshop'],
+                                    ['image' => 'front/images/gallery/optimized/famoyinka-02.webp', 'label' => 'Leadership Games', 'alt' => 'Leadership teamwork games and sports'],
+                                    ['image' => 'front/images/gallery/optimized/famoyinka-04.webp', 'label' => 'Ikogosi Excursion', 'alt' => 'Ikogosi Warm Springs educational excursion'],
+                                ];
+                                $libraryPhotos = old('meta_data.photos', $section->meta_data['photos'] ?? $defaultPhotos);
+                            @endphp
+
+                            <div class="pt-6 border-t border-stone-200/80 space-y-6">
+                                <div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-5">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <span class="text-xl">📚</span>
+                                        <h4 class="text-sm font-bold text-stone-900">Famoyinka Memorial Library – Action Photography Mosaic</h4>
+                                    </div>
+                                    <p class="text-xs text-stone-600">Select or upload the 4 action photos featured on the homepage sanctuary showcase. You can customize the image, action pill label (e.g. "Free Book Loans"), and accessible alt text for each photo.</p>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    @for ($idx = 0; $idx < 4; $idx++)
+                                        @php
+                                            $photo = $libraryPhotos[$idx] ?? ($defaultPhotos[$idx] ?? []);
+                                        @endphp
+                                        <div class="p-5 rounded-2xl bg-stone-50 border border-stone-200/80 space-y-4">
+                                            <div class="flex items-center justify-between pb-2 border-b border-stone-200/60">
+                                                <span class="text-xs font-bold text-stone-800">Mosaic Photo {{ $idx + 1 }}</span>
+                                                <span class="text-[10px] text-stone-500 font-medium">Slot {{ $idx + 1 }} of 4</span>
+                                            </div>
+
+                                            <x-admin.media-picker 
+                                                name="meta_data[photos][{{ $idx }}][image]" 
+                                                :value="$photo['image'] ?? ''" 
+                                                label="Photo {{ $idx + 1 }}" 
+                                                help="Select from gallery or upload new (WebP <= 180 KB)." />
+
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                                                <div>
+                                                    <label class="block text-[10px] font-bold text-stone-600 uppercase tracking-wider mb-1">
+                                                        Action Label
+                                                    </label>
+                                                    <input type="text" 
+                                                           name="meta_data[photos][{{ $idx }}][label]" 
+                                                           value="{{ $photo['label'] ?? '' }}" 
+                                                           class="w-full px-3 py-1.5 rounded-lg border border-stone-300 text-xs font-semibold text-stone-900 focus:border-maroon focus:outline-none" 
+                                                           placeholder="e.g. Free Book Loans">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-[10px] font-bold text-stone-600 uppercase tracking-wider mb-1">
+                                                        Alt Text (Accessibility)
+                                                    </label>
+                                                    <input type="text" 
+                                                           name="meta_data[photos][{{ $idx }}][alt]" 
+                                                           value="{{ $photo['alt'] ?? '' }}" 
+                                                           class="w-full px-3 py-1.5 rounded-lg border border-stone-300 text-xs text-stone-700 focus:border-maroon focus:outline-none" 
+                                                           placeholder="Descriptive caption">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endfor
+                                </div>
+                            </div>
+                        @endif
 
                         @if ($page === 'home' && $section->section_key === 'causes')
                             @php

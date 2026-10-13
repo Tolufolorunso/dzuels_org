@@ -112,6 +112,41 @@ class PageSectionSeeder extends Seeder
             ],
             [
                 'page_key' => 'home',
+                'section_key' => 'famoyinka_library',
+                'headline' => "Famoyinka Memorial Children's Library",
+                'subheadline' => 'Permanent Literacy Sanctuary',
+                'body_text' => 'An active, community-anchored hub dedicated to childhood literacy, creative self-expression, and transformational leadership in Southwest Nigeria.',
+                'image_path' => null,
+                'button_text' => 'Explore Library Programme',
+                'button_url' => '/programmes/famoyinka-memorial-library',
+                'meta_data' => [
+                    'photos' => [
+                        [
+                            'image' => 'front/images/gallery/optimized/famoyinka-01.webp',
+                            'label' => 'Free Book Loans',
+                            'alt' => "Student selecting books at Famoyinka Memorial Children's Library",
+                        ],
+                        [
+                            'image' => 'front/images/gallery/optimized/famoyinka-03.webp',
+                            'label' => 'Creative Arts',
+                            'alt' => 'Creative watercolor art workshop',
+                        ],
+                        [
+                            'image' => 'front/images/gallery/optimized/famoyinka-02.webp',
+                            'label' => 'Leadership Games',
+                            'alt' => 'Leadership teamwork games and sports',
+                        ],
+                        [
+                            'image' => 'front/images/gallery/optimized/famoyinka-04.webp',
+                            'label' => 'Ikogosi Excursion',
+                            'alt' => 'Ikogosi Warm Springs educational excursion',
+                        ],
+                    ],
+                ],
+                'sort_order' => 6,
+            ],
+            [
+                'page_key' => 'home',
                 'section_key' => 'featured_project',
                 'headline' => 'Ijero-Ekiti Digital Infrastructure and Literacy Initiative',
                 'subheadline' => 'Flagship Project',
@@ -119,7 +154,7 @@ class PageSectionSeeder extends Seeder
                 'image_path' => 'front/images/dzuelsCollage.webp',
                 'button_text' => 'Explore Our Programmes',
                 'button_url' => '/programmes',
-                'sort_order' => 6,
+                'sort_order' => 7,
             ],
             [
                 'page_key' => 'home',
@@ -130,7 +165,7 @@ class PageSectionSeeder extends Seeder
                 'image_path' => null,
                 'button_text' => 'Get Involved Today',
                 'button_url' => '/get-involved',
-                'sort_order' => 7,
+                'sort_order' => 8,
             ],
 
             // 2. About Page

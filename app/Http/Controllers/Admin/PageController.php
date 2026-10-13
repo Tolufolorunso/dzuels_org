@@ -116,6 +116,10 @@ class PageController extends Controller
             'meta_data.pillars.*.ministry' => ['nullable', 'string', 'max:150'],
             'meta_data.pillars.*.description' => ['nullable', 'string', 'max:500'],
             'meta_data.pillars.*.icon' => ['nullable', 'string', 'max:50'],
+            'meta_data.photos' => ['nullable', 'array'],
+            'meta_data.photos.*.image' => ['nullable', 'string', 'max:255'],
+            'meta_data.photos.*.label' => ['nullable', 'string', 'max:100'],
+            'meta_data.photos.*.alt' => ['nullable', 'string', 'max:255'],
         ]);
 
         $pageSection = PageSection::firstOrNew([

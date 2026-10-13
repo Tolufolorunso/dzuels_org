@@ -7,12 +7,17 @@ use App\Http\Requests\Admin\StorePostRequest;
 use App\Http\Requests\Admin\UpdatePostRequest;
 use App\Models\Post;
 use App\Models\Programme;
+use App\Services\ImageOptimizerService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
+    public function __construct(
+        protected ImageOptimizerService $optimizer
+    ) {}
+
     /**
      * Display a listing of news articles in admin panel.
      */
@@ -55,16 +60,12 @@ class PostController extends Controller
         $validated['slug'] = $slug;
 
         if ($request->hasFile('cover_image')) {
-            $file = $request->file('cover_image');
-            $filename = time().'_'.Str::random(8).'.'.$file->getClientOriginalExtension();
-            $destination = public_path('uploads/news');
-
-            if (! file_exists($destination)) {
-                mkdir($destination, 0755, true);
-            }
-
-            $file->move($destination, $filename);
-            $validated['cover_image'] = 'uploads/news/'.$filename;
+            $validated['cover_image'] = $this->optimizer->optimize(
+                $request->file('cover_image'),
+                'uploads/news',
+                1600,
+                1200
+            );
         }
 
         if ($validated['status'] === 'published' && empty($validated['published_at'])) {
@@ -100,21 +101,16 @@ class PostController extends Controller
         }
 
         if ($request->hasFile('cover_image')) {
-            $file = $request->file('cover_image');
-            $filename = time().'_'.Str::random(8).'.'.$file->getClientOriginalExtension();
-            $destination = public_path('uploads/news');
+            $validated['cover_image'] = $this->optimizer->optimize(
+                $request->file('cover_image'),
+                'uploads/news',
+                1600,
+                1200
+            );
 
-            if (! file_exists($destination)) {
-                mkdir($destination, 0755, true);
-            }
-
-            $file->move($destination, $filename);
-
-            if ($news->cover_image && str_starts_with($news->cover_image, 'uploads/news/') && file_exists(public_path($news->cover_image))) {
+            if ($news->cover_image && str_starts_with($news->cover_image, 'uploads/news/') && file_exists(public_path($news->cover_image)) && $news->cover_image !== $validated['cover_image']) {
                 @unlink(public_path($news->cover_image));
             }
-
-            $validated['cover_image'] = 'uploads/news/'.$filename;
         }
 
         if ($validated['status'] === 'published' && empty($validated['published_at'])) {

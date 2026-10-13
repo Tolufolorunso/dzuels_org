@@ -107,6 +107,62 @@ class PageContentManagementTest extends TestCase
         }
     }
 
+    public function test_admin_can_update_famoyinka_library_photos_and_view_on_homepage(): void
+    {
+        $payload = [
+            'headline' => 'Famoyinka Memorial Sanctuary Test',
+            'subheadline' => 'Literacy Haven',
+            'body_text' => 'Updated library sanctuary description.',
+            'button_text' => 'Read More',
+            'button_url' => '/programmes/famoyinka-memorial-library',
+            'meta_data' => [
+                'photos' => [
+                    [
+                        'image' => 'uploads/test/custom-photo-01.webp',
+                        'label' => 'Custom Book Club',
+                        'alt' => 'Students at book club',
+                    ],
+                    [
+                        'image' => 'uploads/test/custom-photo-02.webp',
+                        'label' => 'Art Showcase',
+                        'alt' => 'Students drawing',
+                    ],
+                    [
+                        'image' => 'uploads/test/custom-photo-03.webp',
+                        'label' => 'Debate Circle',
+                        'alt' => 'Debate competition',
+                    ],
+                    [
+                        'image' => 'uploads/test/custom-photo-04.webp',
+                        'label' => 'Nature Tour',
+                        'alt' => 'Trip excursion',
+                    ],
+                ],
+            ],
+        ];
+
+        $response = $this->actingAs($this->admin)->put('/admin/pages/home/sections/famoyinka_library', $payload);
+
+        $response->assertRedirect();
+        $response->assertSessionHas('success');
+
+        $this->assertDatabaseHas('page_sections', [
+            'page_key' => 'home',
+            'section_key' => 'famoyinka_library',
+            'headline' => 'Famoyinka Memorial Sanctuary Test',
+            'subheadline' => 'Literacy Haven',
+        ]);
+
+        $homeResponse = $this->get('/');
+        $homeResponse->assertStatus(200);
+        $homeResponse->assertSee('Famoyinka Memorial Sanctuary Test');
+        $homeResponse->assertSee('Custom Book Club');
+        $homeResponse->assertSee('Art Showcase');
+        $homeResponse->assertSee('Debate Circle');
+        $homeResponse->assertSee('Nature Tour');
+        $homeResponse->assertSee('uploads/test/custom-photo-01.webp');
+    }
+
     public function test_invalid_page_key_returns_404(): void
     {
         $response = $this->actingAs($this->admin)->get('/admin/pages/non_existent_page');

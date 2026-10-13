@@ -36,7 +36,7 @@ Empowering foundation staff with full media flexibility and addressing visual st
 - **Multi-Phone Site Settings (Up to 5 Lines)**: Expand site settings to store up to 5 contact hotlines (`contact_phone_1` through `contact_phone_5`), unifying all site-wide phone displays (header utility bar, mobile nav, footer, contact cards, error pages) to read strictly from site settings with empty numbers gracefully omitted.
 - **Fully Dynamic Contact Page & Dynamic Partners Strip**: Remove all hardcoded copy on `/contact` (office hours and timezone configurable from dashboard, e.g. "Mon – Fri: 8:00 AM – 5:00 PM (GMT +1)"); and render the "Our Valued Partners - Collaborating for greater impact" logo strip dynamically on both Home (`/`) and About (`/about`) with full management in `/admin/partners`.
 
-### Milestone 5: Production Launch Hardening, Resilient Media Pipeline, Givebutter Diaspora Donations & 6 Impact Causes CMS (Active Target)
+### Milestone 5: Production Launch Hardening, Resilient Media Pipeline, Givebutter Diaspora Donations & 6 Impact Causes CMS (Completed & Shipped)
 Finalizing the web platform for live release and addressing critical operational feedback:
 - **Resilient Upload Engine & GD Fallback**: Eliminate `imagecreatefromjpeg` crashes by correctly scoping GD functions in the global namespace (`\imagecreatefrom...`), checking extension availability, and implementing a graceful fallback to direct storage so photo uploads always succeed without crashing regardless of server GD configuration.
 - **Gallery Multi-Photo Bulk Upload**: Streamline gallery management by allowing staff to select and upload multiple images simultaneously into an album, with subsequent per-photo metadata editing (caption, year label, alt text, sort order).
@@ -51,6 +51,12 @@ Finalizing the web platform for live release and addressing critical operational
   6. Health awareness and support (Luke's Tent)
   Anchored by the philosophy *"An Integrated Approach to the Total Well Being of the Child"*, editable in `/admin/pages/home`.
 - **Production Export & Launch Readiness**: Re-export `dzuels_database.sql` containing all updated seeders, settings, and causes for 1-click phpMyAdmin import on Namecheap cPanel (`server161.web-hosting.com`), update `cpanel_changed_files.txt`, and verify deployment integrity.
+
+### Milestone 6: Production Refinements, Image Optimizer Hardening (<= 180 KB WebP), Dynamic Library Photos & Get Involved UI Overhaul (Active Target)
+- **High-Performance WebP Optimizer (<= 180 KB Ceiling)**: Hard limit of 180 KB for every uploaded photo across gallery and CMS, with iterative quality reduction and dimensional scaling to preserve sharpness without distortion. Original source files deleted immediately. Retroactive conversion of all legacy uploads.
+- **Full Unclipped Causes Graphic**: Display the 6 Impact Causes banner uncropped and unclipped on the homepage with natural aspect ratio and clean responsive layout.
+- **Dynamic 4-Photo Famoyinka Memorial Library CMS**: Section management in `/admin/pages/home` with media pickers for all 4 mosaic action photos and captions.
+- **Get Involved Layout & Responsive Overhaul**: Tab-synchronized sidebar with dedicated corporate partner metrics, CSR alignment, sticky placement, and Tailwind v4 gradient styling.
 
 ## 2. Users - Who is this for?
 
@@ -93,7 +99,7 @@ Finalizing the web platform for live release and addressing critical operational
   - Make `/contact` 100% dynamic (custom office hours and timezone like "GMT +1", address, card descriptions).
   - Dynamic "Our Valued Partners" strip on Home and About pages driven by `/admin/partners`.
 
-### Milestone 5: Production Launch Hardening, Resilient Media Pipeline, Givebutter Diaspora Donations & 6 Impact Causes CMS (Features 25–27)
+### Milestone 5: Production Launch Hardening, Resilient Media Pipeline, Givebutter Diaspora Donations & 6 Impact Causes CMS (Features 25–27, Shipped)
 - 25. **Resilient image optimization pipeline, upload fallback & gallery bulk uploader**:
   - Resolve GD global namespace scoping and extension availability checks in `ImageOptimizerService`.
   - Graceful direct-save fallback ensuring zero-crash uploads even without GD.
@@ -106,6 +112,16 @@ Finalizing the web platform for live release and addressing critical operational
   - Root `dzuels_database.sql` update via `php artisan db:export-sql`.
   - Synchronization of `cpanel_changed_files.txt` deployment manifest.
   - Comprehensive test suite, code style audit, and production configuration check.
+
+### Milestone 6: Production Refinements, Image Optimizer Hardening (<= 180 KB WebP), Dynamic Library Photos & Get Involved UI Overhaul (Feature 28, Active Target)
+- 28. **High-performance WebP image optimizer (<= 180 KB ceiling), full unclipped causes display, dynamic Famoyinka Library photos in CMS & Get Involved UI overhaul**:
+  - Harden `ImageOptimizerService` to strictly encode WebP files with a maximum size ceiling of 180 KB (184,320 bytes) using iterative quality reduction and dimensional scaling.
+  - Automatically delete original uncompressed files after WebP creation.
+  - Retroactively optimize legacy photos in `public/uploads/` so all photos are <= 180 KB WebP.
+  - Unify all dashboard photo upload routes through the optimizer.
+  - Display the homepage 6 Impact Causes graphic unclipped with natural aspect ratio and clean layout.
+  - Enable dashboard management for the 4 Famoyinka Memorial Children's Library action photos and labels in `/admin/pages/home`.
+  - Overhaul `/get-involved` with tab-synchronized sidebar content for volunteers vs corporate partners, Tailwind v4 linear gradients, and responsive sticky layout.
 
 ## 4. Data - What are we storing?
 
