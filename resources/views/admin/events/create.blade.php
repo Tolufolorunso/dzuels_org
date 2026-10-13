@@ -157,17 +157,14 @@
                     @enderror
                 </div>
 
-                {{-- Banner Image Upload --}}
+                {{-- Banner Image Picker --}}
                 <div>
-                    <label for="banner_image" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                        Event Banner Image (Optional)
-                    </label>
-                    <input type="file" 
-                           id="banner_image" 
-                           name="banner_image" 
-                           accept="image/jpeg,image/png,image/webp" 
-                           class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-stone-100 file:text-stone-700 hover:file:bg-stone-200">
-                    <p class="text-xs text-stone-500 mt-1">If blank, defaults to the high-resolution Tech Day banner.</p>
+                    <x-admin.media-picker 
+                        name="banner_image" 
+                        :value="old('banner_image')" 
+                        label="Event Banner Image" 
+                        help="Choose from the existing photo gallery or upload a new image (automatically optimized to WebP). If blank, defaults to the high-resolution Tech Day banner." 
+                    />
                     @error('banner_image')
                         <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
                     @enderror

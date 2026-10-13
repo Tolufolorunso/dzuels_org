@@ -20,6 +20,7 @@ class GalleryPhoto extends Model
         'image_path',
         'caption',
         'alt_text',
+        'year',
         'sort_order',
     ];
 
@@ -57,5 +58,18 @@ class GalleryPhoto extends Model
         }
 
         return asset('uploads/gallery/'.$this->image_path);
+    }
+
+    /**
+     * Get the formatted display label including year.
+     */
+    public function getDisplayLabelAttribute(): string
+    {
+        $label = $this->caption ?: ($this->album?->title ?? 'Gallery Photo');
+        if ($this->year && ! str_contains($label, (string) $this->year)) {
+            return $label.' '.$this->year;
+        }
+
+        return $label;
     }
 }

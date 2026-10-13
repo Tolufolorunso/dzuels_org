@@ -95,7 +95,8 @@ class PageContentManagementTest extends TestCase
         $section = PageSection::where('page_key', 'home')->where('section_key', 'hero')->first();
         $this->assertNotNull($section);
         $this->assertNotNull($section->image_path);
-        $this->assertStringStartsWith('front/images/cms/', $section->image_path);
+        $this->assertStringStartsWith('uploads/cms/', $section->image_path);
+        $this->assertStringEndsWith('.webp', $section->image_path);
 
         $fullPath = public_path($section->image_path);
         $this->assertTrue(File::exists($fullPath));

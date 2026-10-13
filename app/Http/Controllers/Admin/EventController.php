@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\StoreEventRequest;
 use App\Http\Requests\Admin\UpdateEventRequest;
 use App\Models\Event;
 use App\Models\EventRegistration;
+use App\Services\ImageOptimizerService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,6 +15,10 @@ use Illuminate\Support\Str;
 
 class EventController extends Controller
 {
+    public function __construct(
+        protected ImageOptimizerService $optimizer
+    ) {}
+
     /**
      * Display a listing of foundation events.
      */
@@ -56,16 +61,17 @@ class EventController extends Controller
         $validated['slug'] = $slug;
 
         if ($request->hasFile('banner_image')) {
-            $file = $request->file('banner_image');
-            $filename = time().'_'.Str::random(8).'.'.$file->getClientOriginalExtension();
-            $destination = public_path('uploads/events');
-
-            if (! file_exists($destination)) {
-                mkdir($destination, 0755, true);
-            }
-
-            $file->move($destination, $filename);
-            $validated['banner_image'] = 'uploads/events/'.$filename;
+            $validated['banner_image'] = $this->optimizer->optimize(
+                $request->file('banner_image'),
+                'uploads/events',
+                1920,
+                1080,
+                82
+            );
+        } elseif ($request->filled('banner_image')) {
+            $validated['banner_image'] = $request->input('banner_image');
+        } elseif ($request->filled('banner_image_path')) {
+            $validated['banner_image'] = $request->input('banner_image_path');
         }
 
         $validated['schedule'] = $this->normalizeSchedule($request);
@@ -99,16 +105,17 @@ class EventController extends Controller
         }
 
         if ($request->hasFile('banner_image')) {
-            $file = $request->file('banner_image');
-            $filename = time().'_'.Str::random(8).'.'.$file->getClientOriginalExtension();
-            $destination = public_path('uploads/events');
-
-            if (! file_exists($destination)) {
-                mkdir($destination, 0755, true);
-            }
-
-            $file->move($destination, $filename);
-            $validated['banner_image'] = 'uploads/events/'.$filename;
+            $validated['banner_image'] = $this->optimizer->optimize(
+                $request->file('banner_image'),
+                'uploads/events',
+                1920,
+                1080,
+                82
+            );
+        } elseif ($request->has('banner_image')) {
+            $validated['banner_image'] = $request->input('banner_image') ?: null;
+        } elseif ($request->has('banner_image_path')) {
+            $validated['banner_image'] = $request->input('banner_image_path') ?: null;
         }
 
         $validated['schedule'] = $this->normalizeSchedule($request);

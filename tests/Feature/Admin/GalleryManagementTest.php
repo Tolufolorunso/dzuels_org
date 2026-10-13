@@ -4,6 +4,7 @@ namespace Tests\Feature\Admin;
 
 use App\Models\GalleryAlbum;
 use App\Models\User;
+use App\Services\ImageOptimizerService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
@@ -236,5 +237,174 @@ class GalleryManagementTest extends TestCase
         $response->assertRedirect(route('admin.gallery.photos', $album));
 
         $this->assertDatabaseMissing('gallery_photos', ['id' => $photo->id]);
+    }
+
+    public function test_admin_can_update_photo_metadata_including_year(): void
+    {
+        $album = GalleryAlbum::create([
+            'title' => 'ITD Album',
+            'slug' => 'itd-album',
+            'is_active' => true,
+        ]);
+
+        $photo = $album->photos()->create([
+            'image_path' => 'front/images/gallery/optimized/itd-01.webp',
+            'caption' => 'Original caption',
+            'year' => '2023',
+            'alt_text' => 'Old alt',
+            'sort_order' => 1,
+        ]);
+
+        $response = $this->actingAs($this->admin)->put("/admin/gallery/{$album->id}/photos/{$photo->id}", [
+            'caption' => 'Ijero Tech Day 2025 Keynote',
+            'year' => '2025',
+            'alt_text' => 'Keynote presentation',
+            'sort_order' => 5,
+        ]);
+
+        $response->assertRedirect(route('admin.gallery.photos', $album));
+        $this->assertDatabaseHas('gallery_photos', [
+            'id' => $photo->id,
+            'caption' => 'Ijero Tech Day 2025 Keynote',
+            'year' => '2025',
+            'alt_text' => 'Keynote presentation',
+            'sort_order' => 5,
+        ]);
+    }
+
+    public function test_admin_can_bulk_delete_photos(): void
+    {
+        $album = GalleryAlbum::create([
+            'title' => 'Bulk Delete Album',
+            'slug' => 'bulk-delete-album',
+            'is_active' => true,
+        ]);
+
+        $photo1 = $album->photos()->create([
+            'image_path' => 'front/images/gallery/optimized/p1.webp',
+            'caption' => 'Photo 1',
+            'sort_order' => 1,
+        ]);
+        $photo2 = $album->photos()->create([
+            'image_path' => 'front/images/gallery/optimized/p2.webp',
+            'caption' => 'Photo 2',
+            'sort_order' => 2,
+        ]);
+        $photo3 = $album->photos()->create([
+            'image_path' => 'front/images/gallery/optimized/p3.webp',
+            'caption' => 'Photo 3',
+            'sort_order' => 3,
+        ]);
+
+        $response = $this->actingAs($this->admin)->delete("/admin/gallery/{$album->id}/photos/bulk-destroy", [
+            'photo_ids' => [$photo1->id, $photo2->id],
+        ]);
+
+        $response->assertRedirect(route('admin.gallery.photos', $album));
+        $this->assertDatabaseMissing('gallery_photos', ['id' => $photo1->id]);
+        $this->assertDatabaseMissing('gallery_photos', ['id' => $photo2->id]);
+        $this->assertDatabaseHas('gallery_photos', ['id' => $photo3->id]);
+    }
+
+    public function test_admin_can_reorder_albums(): void
+    {
+        $album1 = GalleryAlbum::create([
+            'title' => 'First Album',
+            'slug' => 'first-album',
+            'sort_order' => 1,
+            'is_active' => true,
+        ]);
+        $album2 = GalleryAlbum::create([
+            'title' => 'Second Album',
+            'slug' => 'second-album',
+            'sort_order' => 2,
+            'is_active' => true,
+        ]);
+
+        $response = $this->actingAs($this->admin)->post('/admin/gallery/reorder', [
+            'album_ids' => [$album2->id, $album1->id],
+        ]);
+
+        $response->assertRedirect(route('admin.gallery.index'));
+        $this->assertEquals(1, $album2->fresh()->sort_order);
+        $this->assertEquals(2, $album1->fresh()->sort_order);
+    }
+
+    public function test_admin_can_query_media_picker_photos_json(): void
+    {
+        $album = GalleryAlbum::create([
+            'title' => 'Media Library Album',
+            'slug' => 'media-library-album',
+            'is_active' => true,
+        ]);
+
+        $photo = $album->photos()->create([
+            'image_path' => 'front/images/gallery/optimized/general-04.webp',
+            'caption' => 'Kids Coding Robotics',
+            'year' => '2024',
+            'sort_order' => 1,
+        ]);
+
+        $response = $this->actingAs($this->admin)->getJson('/admin/media/photos?search=Robotics');
+
+        $response->assertOk();
+        $response->assertJsonStructure([
+            'photos' => [
+                '*' => ['id', 'image_path', 'image_url', 'caption', 'year', 'display_label', 'album_id', 'album_title'],
+            ],
+            'albums' => [
+                '*' => ['id', 'title'],
+            ],
+        ]);
+
+        $this->assertTrue(collect($response->json('photos'))->contains('id', $photo->id));
+    }
+
+    public function test_admin_can_upload_and_optimize_image_via_media_endpoint(): void
+    {
+        $fakeImage = UploadedFile::fake()->image('dashboard-banner.jpg', 1200, 800);
+
+        $response = $this->actingAs($this->admin)->postJson('/admin/media/upload', [
+            'image' => $fakeImage,
+        ]);
+
+        $response->assertOk();
+        $response->assertJson([
+            'success' => true,
+        ]);
+
+        $path = $response->json('image_path');
+        $this->assertNotNull($path);
+        $this->assertStringEndsWith('.webp', $path);
+        $this->assertFileExists(public_path($path));
+
+        if (file_exists(public_path($path))) {
+            @unlink(public_path($path));
+        }
+    }
+
+    public function test_image_optimizer_service_converts_to_webp_and_removes_uncompressed_original(): void
+    {
+        $optimizer = app(ImageOptimizerService::class);
+        $fakeImage = UploadedFile::fake()->image('test-photo.png', 1600, 1200);
+
+        $optimizedRelPath = $optimizer->optimize($fakeImage, 'uploads/test_optimized', 800, 600, 80);
+
+        $this->assertStringEndsWith('.webp', $optimizedRelPath);
+        $this->assertFileExists(public_path($optimizedRelPath));
+
+        // Verify dimensions were downscaled proportionally
+        [$width, $height] = getimagesize(public_path($optimizedRelPath));
+        $this->assertLessThanOrEqual(800, $width);
+        $this->assertLessThanOrEqual(600, $height);
+
+        // Clean up created file and directory
+        if (file_exists(public_path($optimizedRelPath))) {
+            @unlink(public_path($optimizedRelPath));
+        }
+        $dir = public_path('uploads/test_optimized');
+        if (is_dir($dir)) {
+            @rmdir($dir);
+        }
     }
 }

@@ -1,5 +1,37 @@
 <x-admin-layout title="Gallery Albums">
-    <div class="space-y-6">
+    <div x-data="{
+        albums: {{ json_encode($albums->map(fn($a) => ['id' => $a->id, 'title' => $a->title, 'sort_order' => $a->sort_order])) }},
+        move(index, direction) {
+            const targetIndex = index + direction;
+            if (targetIndex < 0 || targetIndex >= this.albums.length) return;
+            const temp = this.albums[index];
+            this.albums[index] = this.albums[targetIndex];
+            this.albums[targetIndex] = temp;
+            
+            // Build and submit form
+            const form = document.getElementById('reorder-form');
+            form.innerHTML = '';
+            
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = '_token';
+            csrfInput.value = '{{ csrf_token() }}';
+            form.appendChild(csrfInput);
+
+            this.albums.forEach(a => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'album_ids[]';
+                input.value = a.id;
+                form.appendChild(input);
+            });
+
+            form.submit();
+        }
+    }" class="space-y-6">
+
+        <form id="reorder-form" method="POST" action="{{ route('admin.gallery.reorder') }}" class="hidden"></form>
+
         {{-- Header Bar --}}
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
@@ -12,7 +44,7 @@
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
-                    New Album
+                    New Collection
                 </a>
             </div>
         </div>
@@ -26,7 +58,7 @@
                     </div>
                     <p class="text-stone-600 font-medium text-sm">No gallery albums found.</p>
                     <a href="{{ route('admin.gallery.create') }}" class="text-xs text-maroon hover:underline font-semibold inline-block">
-                        Create the first album
+                        Create the first collection
                     </a>
                 </div>
             @else
@@ -38,7 +70,7 @@
                                 <th scope="col" class="px-6 py-3.5">Kicker & Description</th>
                                 <th scope="col" class="px-6 py-3.5 text-center">Photos</th>
                                 <th scope="col" class="px-6 py-3.5 text-center">Visibility</th>
-                                <th scope="col" class="px-6 py-3.5 text-center">Order</th>
+                                <th scope="col" class="px-6 py-3.5 text-center">Display Order</th>
                                 <th scope="col" class="px-6 py-3.5 text-right">Actions</th>
                             </tr>
                         </thead>
@@ -94,9 +126,29 @@
                                         </form>
                                     </td>
 
-                                    {{-- Order --}}
-                                    <td class="px-6 py-4 text-xs font-mono text-center text-stone-600">
-                                        {{ $album->sort_order }}
+                                    {{-- Order Controls --}}
+                                    <td class="px-6 py-4 text-center">
+                                        <div class="inline-flex items-center justify-center gap-1 bg-stone-50 border border-stone-200 rounded-lg p-1">
+                                            <button type="button" 
+                                                    @click="move({{ $loop->index }}, -1)" 
+                                                    class="p-1 rounded text-stone-500 hover:text-stone-900 hover:bg-stone-200 transition-colors {{ $loop->first ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer' }}" 
+                                                    {{ $loop->first ? 'disabled' : '' }} 
+                                                    title="Move collection up">
+                                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                                                </svg>
+                                            </button>
+                                            <span class="font-mono text-xs font-bold text-stone-700 w-5 text-center">{{ $album->sort_order }}</span>
+                                            <button type="button" 
+                                                    @click="move({{ $loop->index }}, 1)" 
+                                                    class="p-1 rounded text-stone-500 hover:text-stone-900 hover:bg-stone-200 transition-colors {{ $loop->last ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer' }}" 
+                                                    {{ $loop->last ? 'disabled' : '' }} 
+                                                    title="Move collection down">
+                                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </td>
 
                                     {{-- Actions --}}
@@ -132,7 +184,7 @@
 
                                             {{-- Delete --}}
                                             <form method="POST" action="{{ route('admin.gallery.destroy', $album) }}" 
-                                                  onsubmit="return confirm('Are you sure you want to delete album \'{{ addslashes($album->title) }}\'? This will also delete all {{ $album->photos_count }} photos in this collection.');" 
+                                                  onsubmit="return confirm('Are you sure you want to delete collection \'{{ addslashes($album->title) }}\'? This will also delete all {{ $album->photos_count }} photos in this collection.');" 
                                                   class="inline">
                                                 @csrf
                                                 @method('DELETE')

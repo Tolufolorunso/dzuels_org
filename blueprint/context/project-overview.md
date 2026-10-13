@@ -1,6 +1,6 @@
 # Dzuels Educational Foundation - Project Overview
 
-<!-- blueprint:source-hash bbde7e9d4760b56ae81a06c722660d0bb28f66a0e79f8b3b37275e9639cb4056 -->
+<!-- blueprint:source-hash 82f337a6d246116dd811d6a185dce8822f812c156d1e312cd22e2253283f024f -->
 
 > Rebuild of dzuelsfoundation.org as a modern, high-trust, mobile-first Laravel web application powering education support, digital literacy, and community welfare in Nigeria.
 
@@ -10,24 +10,25 @@ Dzuels Educational Foundation is a Nigerian charity (registered 2015) providing 
 
 - **Milestone 1 (Shipped):** Overhauled the web application across 17 features: verified WCAG 2.2 AA accessibility, responsive design (zero horizontal overflow), SEO foundation, dynamic settings, event showcase, pre-optimized WebP photo gallery, donation channels, contact/volunteer inboxes, and launch readiness diagnostic commands.
 - **Milestone 2 (Shipped):** Completed brand assets (full favicon suite), ITD 2026 overhaul (October 3, 2026 date, AI empowerment objective, dynamic sponsor tiering), server-rendered gallery lightbox, WordPress-style Page Content CMS, multi-tier RBAC (`super_admin`, `editor`, `support`), password recovery, and MySQL export tooling.
-- **Milestone 3 (Active Focus):** Complete live production server configuration on Namecheap cPanel (`server161.web-hosting.com` running MariaDB) and final launch polish:
-  1. Transition `.env` and `.env.example` to default to MariaDB/MySQL.
-  2. Provide ready-to-import `dzuels_database.sql` directly in the project root for 1-click phpMyAdmin import.
-  3. Ensure all layout, hotline, and contact data is strictly driven from database records (zero hardcoded values).
-  4. Replace telephone number with `+234 904 249 3883` site-wide.
-  5. Hide Diaspora & International Wire transfers channel on `/donate` for now.
-  6. Add contextual background imagery with maroon gradient overlays to About, Programmes, and Contact hero sections.
-  7. Fix Spelling Bee cover photo to authentic contest photo (`front/images/gallery/optimized/spelling-01.webp`).
+- **Milestone 3 (Shipped):** Production MariaDB configuration, root `dzuels_database.sql` export, hotline update (`+234 904 249 3883`), hero imagery overlays, and Spelling Bee image fixes.
+- **Milestone 4 (Active Focus):** Dynamic Media Hub, Gallery Overhaul, Famoyinka Memorial Children's Library Integration & Global Admin Controls:
+  1. Auto-optimize all dashboard image uploads via native PHP GD (WebP conversion + deleting originals, 100% PHP 8.3 & 8.4 compatible).
+  2. Implement reusable Media Library picker modal across dashboard forms to upload or choose existing gallery images.
+  3. Dynamic gallery collections CRUD/reordering, single and bulk photo deletion, and standardized event/year photo labeling.
+  4. Integrate Famoyinka Memorial Children's Library as a dedicated public programme and gallery collection; seed authentic action photography of children; prune repetitive photos; and cross-link on Home and About.
+  5. Expand site settings to support up to 5 contact phone lines site-wide.
+  6. Make `/contact` 100% dynamic (custom office hours and timezone like "GMT +1").
+  7. Render dynamic partners strip on Home and About pages driven by `/admin/partners`.
 
 ## Users
 
 - **Donors (Nigeria & Diaspora/USA):** Seek transparency, verified impact numbers, quick Flutterwave online giving, and GTBank transfer details.
 - **Volunteers & Partners:** Apply for mentorship or submit corporate partnership inquiries.
-- **Event Participants & Schools:** Students and educators attending ITD 2026 to learn AI tools and celebrate cohort graduations.
-- **Beneficiaries & Parents:** Community members accessing literacy resources and visual photo archives.
+- **Event Participants & Schools:** Students and educators attending ITD 2026 to learn AI tools, spelling bees, and reading competitions.
+- **Beneficiaries, Parents & Students:** Community members accessing literacy resources, activities, and the Famoyinka Memorial Children's Library.
 - **Foundation Staff (Role-Based Admin Users):**
-  - **Super Admin:** Full platform control, managing staff accounts, role permissions, global settings, and database exports.
-  - **Editor / Content Manager:** Updating page text/images via the visual CMS, managing programmes, events, sponsors, and gallery albums.
+  - **Super Admin:** Full platform control, managing staff accounts, role permissions, global settings (multi-phone lines, hours/timezones), and database exports.
+  - **Editor / Content Manager:** Updating page text/images via visual CMS, managing programmes (including the library), events, sponsors, partner logos, and gallery collections/photos.
   - **Support / Viewer:** Reading incoming contact enquiries, volunteer submissions, and event records.
 
 ## Usage model
@@ -65,9 +66,15 @@ Dzuels Educational Foundation is a Nigerian charity (registered 2015) providing 
 19. **Site-wide page content management, user access control and password recovery** - WordPress-style page content editor in `/admin/pages` allowing staff to update text and section images across all public pages; role-based user management where admins create and manage staff accounts with granular access levels; and password reset workflow. *(Completed)*
 20. **MySQL database export and cPanel phpMyAdmin migration suite** - Automated Artisan database export command (`php artisan db:export-sql`) generating a clean, MySQL/MariaDB-compliant `.sql` dump file with proper schemas and all seeded foundation data for 1-click import into cPanel phpMyAdmin, accompanied by a step-by-step cPanel deployment and `.env` credentials guide. *(Completed)*
 
-### Milestone 3 Features (Active Build Order)
+### Milestone 3 Features (Completed & Shipped)
 
-21. **Production MariaDB configuration, root SQL dump, phone hotline update and hero imagery refinements** - Configure `.env` and `.env.example` for local and production MariaDB/MySQL (`server161.web-hosting.com`); provide root `dzuels_database.sql` for 1-click phpMyAdmin import; ensure all layout and contact data is strictly driven from database settings; replace phone number with `+234 904 249 3883` site-wide; hide Diaspora & International Wire on `/donate`; add contextual background imagery to About, Programmes, and Contact hero sections; and fix Spelling Bee cover photo to an authentic contest image (`spelling-01.webp`).
+21. **Production MariaDB configuration, root SQL dump, phone hotline update and hero imagery refinements** - Configure `.env` and `.env.example` for local and production MariaDB/MySQL (`server161.web-hosting.com`); provide root `dzuels_database.sql` for 1-click phpMyAdmin import; ensure all layout and contact data is strictly driven from database settings; replace phone number with `+234 904 249 3883` site-wide; hide Diaspora & International Wire on `/donate`; add contextual background imagery to About, Programmes, and Contact hero sections; and fix Spelling Bee cover photo to an authentic contest image (`spelling-01.webp`). *(Completed)*
+
+### Milestone 4 Features (Active Build Order)
+
+22. **Automated image optimization, global media picker and gallery collection/photo management** - Auto-convert all dashboard uploads to WebP and delete original uncompressed files using PHP 8.3/8.4 native GD; reusable Media Library picker modal in admin forms to upload or choose existing gallery images; full CRUD and reordering for gallery collections/categories; single and bulk photo deletion in `/admin/gallery`; and photo metadata editing with standardized year labels across all collections (e.g., "Spelling Bee 2024").
+23. **Famoyinka Memorial Children's Library programme integration and curated visual outreach** - Dedicated public programme at `/programmes/famoyinka-memorial-library` and dedicated gallery collection; prune repetitive gallery photos (such as duplicate Reading Competition shots); seed authentic action photography of children (crafts, transformational leadership games, Ikogosi excursion, library activities and book borrowing); and prominent cross-linking of the library on Home and About pages.
+24. **Site-wide multi-phone settings, dynamic contact CMS and dynamic partners strip** - Support up to 5 contact phone numbers in `/admin/settings` (`contact_phone_1` to `contact_phone_5`); unify all site-wide phone displays (header utility bar, mobile menu, footer, contact cards, error pages) to pull from site settings; make `/contact` 100% dynamic (custom office hours and timezone like "GMT +1", address, card descriptions); and dynamic "Our Valued Partners" strip on Home and About pages driven by `/admin/partners`.
 
 ### Deferred Ideas (Non-Roadmap)
 
@@ -112,11 +119,11 @@ Dzuels Educational Foundation is a Nigerian charity (registered 2015) providing 
 - `slug` (string, unique)
 - `summary` (text)
 - `description` (longText)
-- `objective` (text, nullable) - "Empowering children with AI tools to learn smarter, think creatively, and build the future."
-- `event_date` (dateTime, nullable) - Oct 3, 2026
-- `venue` (string, nullable) - AAoJ Memorial Learning Center, Ijero-Ekiti (inside + garden)
-- `banner_image` (string, nullable) - Extracted backdrop banner
-- `schedule` (json, nullable) - 10 batches of 30, inside/garden rotation
+- `objective` (text, nullable)
+- `event_date` (dateTime, nullable)
+- `venue` (string, nullable)
+- `banner_image` (string, nullable)
+- `schedule` (json, nullable)
 - `is_registration_open` (boolean, default false)
 - `sort_order` (integer, default 0)
 - `timestamps`
@@ -133,26 +140,26 @@ Dzuels Educational Foundation is a Nigerian charity (registered 2015) providing 
 
 ### Setting
 - `id` (bigint, PK)
-- `key` (string, unique)
-- `value` (text, nullable) - includes `contact_phone_1` (`+234 904 249 3883`)
+- `key` (string, unique) - `contact_phone_1` through `contact_phone_5`, `office_hours`, `office_timezone`, impact numbers, banking, registration
+- `value` (text, nullable)
 - `type` (string: text, integer, json, boolean)
 - `timestamps`
 
 ### Programme
 - `id` (bigint, PK)
-- `title` (string)
-- `slug` (string, unique)
+- `title` (string) - includes "Famoyinka Memorial Children's Library"
+- `slug` (string, unique) - `famoyinka-memorial-library`
 - `summary` (text)
 - `body` (longText)
-- `cover_image` (string, nullable) - Spelling Bee uses `front/images/gallery/optimized/spelling-01.webp`
+- `cover_image` (string, nullable)
 - `partner_name` (string, nullable)
 - `sort_order` (integer, default 0)
 - `is_featured` (boolean, default false)
 - `timestamps`
 
 ### GalleryAlbum & GalleryPhoto
-- `gallery_albums`: `id`, `title`, `slug`, `kicker`, `description`, `cover_image`, `sort_order`, `timestamps`
-- `gallery_photos`: `id`, `gallery_album_id` (FK), `image_path`, `caption`, `alt_text`, `sort_order`, `timestamps`
+- `gallery_albums`: `id`, `title`, `slug`, `kicker`, `description`, `cover_image`, `sort_order`, `is_active`, `timestamps`
+- `gallery_photos`: `id`, `gallery_album_id` (FK), `image_path`, `caption`, `alt_text`, `year` (string/int, nullable), `sort_order`, `timestamps`
 
 ### TeamMember & Partner
 - `team_members`: `id`, `name`, `role`, `group` (trustee, management, advisor), `field`, `bio`, `photo`, `linkedin_url`, `sort_order`, `is_active`, `timestamps`
@@ -164,14 +171,13 @@ Dzuels Educational Foundation is a Nigerian charity (registered 2015) providing 
 
 ## Tech stack
 
-- **Backend:** Laravel 13 on PHP 8.3+, MariaDB 10.3+ / MySQL 8.0+ in development and production (`server161.web-hosting.com`), Eloquent ORM.
+- **Backend:** Laravel 13 on PHP 8.3 / 8.4, MariaDB 10.3+ / MySQL 8.0+ in development and production (`server161.web-hosting.com`), Eloquent ORM.
+- **Image Optimization:** Native PHP GD (`imagewebp`, `imagecopyresampled`) with zero external package dependencies.
 - **Admin Panel:** Tailored SaaS administrative dashboard at `/admin` with role-based authorization (Super Admin, Editor, Support).
 - **Frontend Templates:** Blade server-side templates with modular components.
 - **Styling:** Tailwind CSS v4 (`@tailwindcss/vite`) using CSS tokens. Strict zero-horizontal-overflow rules with `max-w-full`.
-- **JavaScript:** Lightweight Alpine.js (robust inline/modular initialization) for interactive widgets.
-- **Typography:** Self-hosted Poppins (body & headings) and Great Vibes (accent script).
-- **Brand Assets:** Multi-resolution favicons (`favicon.ico`, apple-touch-icon, webmanifest) derived from foundation logo.
-- **Payments:** Hosted Flutterwave checkout link + GTBank manual transfer details.
+- **JavaScript:** Lightweight Alpine.js for interactive widgets, lightbox, and the reusable media picker modal.
+- **Deployment Manifest:** Project root `cpanel_changed_files.txt` tracking created and modified files for selective cPanel synchronization.
 - **Testing & Quality:** PHPUnit 12 (`php artisan test`) and Laravel Pint code style formatting.
 
 ## Monetization
@@ -194,21 +200,22 @@ Non-profit charity donations. The platform does not sell products or show advert
   - Dark Mode Surface: `#241012`
   - Footer Background: `#2B0203`
 - **Core Public Routes:**
-  - `/` - Homepage
-  - `/about` - About Us (hero with contextual background image)
-  - `/programmes` & `/programmes/{slug}` - Programmes (hero with contextual background image)
+  - `/` - Homepage (dynamic partners strip & library feature)
+  - `/about` - About Us (dynamic partners strip & leadership)
+  - `/programmes` & `/programmes/{slug}` - Programmes catalog (including `/programmes/famoyinka-memorial-library`)
   - `/events` & `/events/{slug}` - Events Showcase & ITD 2026
-  - `/gallery` & `/gallery/{album}` - Photo Gallery
+  - `/gallery` & `/gallery/{album}` - Photo Gallery with dynamic collections, year labels, and lightbox
   - `/donate` - Giving page (Flutterwave & GTBank NGN)
   - `/get-involved` - Volunteer and partner application
-  - `/contact` - Contact details (+234 904 249 3883) & enquiry form
+  - `/contact` - Contact details (up to 5 phone lines, custom hours/timezone) & enquiry form
   - `/privacy-policy` - Privacy terms
-  - `/admin` - Professional administrative dashboard
+  - `/admin` - Professional administrative dashboard with global media picker
 
 ## Deployment
 
-- **Target Hosting:** Namecheap cPanel (`server161.web-hosting.com`) with PHP 8.3+ and MariaDB 10.3+.
+- **Target Hosting:** Namecheap cPanel (`server161.web-hosting.com`) with PHP 8.3/8.4 and MariaDB 10.3+.
 - **Database Migration:** Managed via root `dzuels_database.sql` and `php artisan db:export-sql` for 1-click import into cPanel phpMyAdmin.
+- **File Upload Tracking:** Active `cpanel_changed_files.txt` at project root.
 - **Web Root:** `public/` directory (mapped to `public_html` or domain document root).
 - **Domain:** `dzuelsfoundation.org` with AutoSSL / Let's Encrypt certificates.
 - **Build Sequence:** `composer install --no-dev --optimize-autoloader`, `npm run build`, `php artisan optimize`.
@@ -216,4 +223,4 @@ Non-profit charity donations. The platform does not sell products or show advert
 
 ## Open questions
 
-*(None. All requirements, server host specifications, phone hotlines, and visual assets are confirmed.)*
+*(None. All requirements, GD compatibility with PHP 8.4, multi-phone rules, and 3-feature boundary for Milestone 4 confirmed.)*

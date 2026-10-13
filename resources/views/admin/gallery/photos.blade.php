@@ -1,5 +1,22 @@
 <x-admin-layout title="Manage Photos - {{ $album->title }}">
-    <div class="space-y-8">
+    <div x-data="{
+        selectedPhotos: [],
+        selectAll: false,
+        editingPhoto: null,
+        toggleAll() {
+            if (this.selectAll) {
+                this.selectedPhotos = {{ json_encode($photos->pluck('id')->values()) }};
+            } else {
+                this.selectedPhotos = [];
+            }
+        },
+        openEdit(photo) {
+            this.editingPhoto = { ...photo };
+        },
+        closeEdit() {
+            this.editingPhoto = null;
+        }
+    }" class="space-y-8">
         {{-- Header Bar --}}
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
@@ -16,7 +33,7 @@
                     </span>
                 </div>
                 <p class="text-sm text-stone-500 mt-1">
-                    {{ $album->kicker ? $album->kicker . ' • ' : '' }}Manage, upload, and organize photos in this collection.
+                    {{ $album->kicker ? $album->kicker . ' • ' : '' }}Manage, upload, edit labels, and organize photos in this collection.
                 </p>
             </div>
             <div class="flex items-center gap-3">
@@ -37,13 +54,13 @@
 
         {{-- Upload New Photos Card --}}
         <div class="bg-white rounded-2xl border border-stone-200 shadow-xs p-6">
-            <h2 class="text-base font-bold text-stone-900 mb-1">Upload Photos</h2>
-            <p class="text-xs text-stone-500 mb-4">Select one or multiple images (JPG, PNG, WEBP, up to 10MB each) to add to this album.</p>
+            <h2 class="text-base font-bold text-stone-900 mb-1">Upload & Optimize Photos</h2>
+            <p class="text-xs text-stone-500 mb-4">Select image(s). Uploaded files are automatically optimized to modern WebP via GD and resized to eliminate raw uncompressed overhead.</p>
 
             <form method="POST" action="{{ route('admin.gallery.photos.upload', $album) }}" enctype="multipart/form-data" class="space-y-4">
                 @csrf
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     {{-- Files Input --}}
                     <div>
                         <label for="photos" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
@@ -72,11 +89,24 @@
                         <input type="text" 
                                id="caption" 
                                name="caption" 
-                               placeholder="e.g. Students demonstrating robotics project" 
+                               placeholder="e.g. Students in coding session" 
                                class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon/20 focus:border-maroon transition-colors">
                     </div>
 
-                    {{-- Default Alt Text --}}
+                    {{-- Year --}}
+                    <div>
+                        <label for="year" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
+                            Event / Activity Year <span class="text-rose-500">*</span>
+                        </label>
+                        <input type="text" 
+                               id="year" 
+                               name="year" 
+                               placeholder="e.g. 2024, 2025" 
+                               value="{{ date('Y') }}"
+                               class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon/20 focus:border-maroon transition-colors">
+                    </div>
+
+                    {{-- Default Alt Text & Submit --}}
                     <div>
                         <label for="alt_text" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
                             Alt Text <span class="text-stone-400 font-normal lowercase">(optional)</span>
@@ -97,11 +127,41 @@
             </form>
         </div>
 
-        {{-- Photos Grid --}}
+        {{-- Photos Grid and Bulk Actions --}}
         <div class="space-y-4">
-            <div class="flex items-center justify-between">
-                <h2 class="text-lg font-bold text-stone-900">Photos in this Collection</h2>
-                <span class="text-xs text-stone-500">Showing all {{ $photos->count() }} images</span>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-stone-200">
+                <div class="flex items-center gap-3">
+                    <label class="flex items-center gap-2 cursor-pointer text-xs font-semibold text-stone-700">
+                        <input type="checkbox" 
+                               x-model="selectAll" 
+                               @change="toggleAll()" 
+                               class="rounded text-maroon focus:ring-maroon/20 border-stone-300 w-4 h-4">
+                        <span>Select All (<span x-text="{{ $photos->count() }}"></span>)</span>
+                    </label>
+                    <span class="text-xs text-stone-400">•</span>
+                    <span class="text-xs text-stone-500">
+                        <span x-text="selectedPhotos.length" class="font-bold text-stone-900">0</span> selected
+                    </span>
+                </div>
+
+                {{-- Bulk Delete Form --}}
+                <div x-show="selectedPhotos.length > 0" x-cloak class="flex items-center gap-2">
+                    <form method="POST" action="{{ route('admin.gallery.photos.bulk-destroy', $album) }}" 
+                          @submit.prevent="if(confirm('Are you sure you want to delete ' + selectedPhotos.length + ' selected photo(s)? This cannot be undone.')) $el.submit()">
+                        @csrf
+                        @method('DELETE')
+                        <template x-for="id in selectedPhotos" :key="id">
+                            <input type="hidden" name="photo_ids[]" :value="id">
+                        </template>
+                        <button type="submit" 
+                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-rose-600 text-white hover:bg-rose-700 transition-colors shadow-xs cursor-pointer">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            Delete Selected (<span x-text="selectedPhotos.length"></span>)
+                        </button>
+                    </form>
+                </div>
             </div>
 
             @if ($photos->isEmpty())
@@ -115,40 +175,148 @@
             @else
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                     @foreach ($photos as $photo)
-                        <div class="bg-white rounded-xl border border-stone-200 overflow-hidden shadow-xs hover:shadow transition-shadow group flex flex-col justify-between">
+                        <div class="bg-white rounded-xl border border-stone-200 overflow-hidden shadow-xs hover:shadow transition-shadow group flex flex-col justify-between relative"
+                             :class="{ 'ring-2 ring-maroon border-maroon': selectedPhotos.includes({{ $photo->id }}) }">
+                            
+                            {{-- Checkbox overlay --}}
+                            <div class="absolute top-2 left-2 z-10 bg-white/90 backdrop-blur-xs rounded-md p-1 shadow-xs">
+                                <input type="checkbox" 
+                                       value="{{ $photo->id }}" 
+                                       x-model="selectedPhotos" 
+                                       class="rounded text-maroon focus:ring-maroon/20 border-stone-300 w-4 h-4 cursor-pointer">
+                            </div>
+
                             <div class="relative aspect-4/3 bg-stone-100 overflow-hidden">
                                 <img src="{{ $photo->image_url }}" 
                                      alt="{{ $photo->alt_text ?? $album->title }}" 
                                      loading="lazy" 
                                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                <div class="absolute top-2 left-2 bg-black/60 backdrop-blur-xs text-white text-[10px] font-mono px-1.5 py-0.5 rounded">
+                                
+                                {{-- Year badge --}}
+                                @if ($photo->year)
+                                    <div class="absolute top-2 right-2 bg-maroon/90 backdrop-blur-xs text-white text-[10px] font-bold px-1.5 py-0.5 rounded shadow-xs">
+                                        {{ $photo->year }}
+                                    </div>
+                                @endif
+                                
+                                <div class="absolute bottom-1 left-2 text-white/90 text-[10px] font-mono drop-shadow">
                                     #{{ $loop->iteration }}
                                 </div>
                             </div>
-                            <div class="p-3 flex items-center justify-between gap-2 border-t border-stone-100 bg-stone-50/50">
+
+                            <div class="p-3 flex flex-col justify-between gap-2 border-t border-stone-100 bg-stone-50/50">
                                 <div class="min-w-0">
-                                    <p class="text-[11px] font-medium text-stone-700 truncate" title="{{ $photo->caption ?? basename($photo->image_path) }}">
-                                        {{ $photo->caption ?: basename($photo->image_path) }}
+                                    <p class="text-[11px] font-medium text-stone-800 truncate" title="{{ $photo->display_label }}">
+                                        {{ $photo->display_label }}
+                                    </p>
+                                    <p class="text-[10px] text-stone-400 truncate">
+                                        {{ basename($photo->image_path) }}
                                     </p>
                                 </div>
-                                <form method="POST" action="{{ route('admin.gallery.photos.destroy', [$album, $photo]) }}" 
-                                      onsubmit="return confirm('Delete this photo from the album?');" 
-                                      class="shrink-0">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" 
-                                            class="p-1 text-stone-400 hover:text-rose-600 rounded hover:bg-rose-50 transition-colors cursor-pointer" 
-                                            title="Delete photo">
-                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                <div class="flex items-center justify-between pt-1 border-t border-stone-200/60">
+                                    {{-- Edit Button --}}
+                                    <button type="button" 
+                                            @click="openEdit({{ json_encode([
+                                                'id' => $photo->id,
+                                                'caption' => $photo->caption,
+                                                'alt_text' => $photo->alt_text,
+                                                'year' => $photo->year,
+                                                'sort_order' => $photo->sort_order,
+                                                'image_url' => $photo->image_url,
+                                                'update_url' => route('admin.gallery.photos.update', [$album, $photo]),
+                                            ]) }})"
+                                            class="text-[11px] font-semibold text-stone-600 hover:text-maroon transition-colors cursor-pointer flex items-center gap-1">
+                                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
+                                        Edit
                                     </button>
-                                </form>
+
+                                    {{-- Single Delete Form --}}
+                                    <form method="POST" action="{{ route('admin.gallery.photos.destroy', [$album, $photo]) }}" 
+                                          onsubmit="return confirm('Delete this photo from the album?');" 
+                                          class="shrink-0">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" 
+                                                class="p-1 text-stone-400 hover:text-rose-600 rounded hover:bg-rose-50 transition-colors cursor-pointer" 
+                                                title="Delete photo">
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     @endforeach
                 </div>
             @endif
+        </div>
+
+        {{-- Edit Photo Modal --}}
+        <div x-show="editingPhoto !== null" 
+             x-cloak 
+             @keydown.escape.window="closeEdit()" 
+             class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+            
+            <div @click.away="closeEdit()" 
+                 class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-stone-200 space-y-4">
+                
+                <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+                    <h3 class="text-base font-bold text-stone-900">Edit Photo Details</h3>
+                    <button type="button" @click="closeEdit()" class="text-stone-400 hover:text-stone-600 cursor-pointer">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <template x-if="editingPhoto">
+                    <form :action="editingPhoto.update_url" method="POST" class="space-y-4">
+                        @csrf
+                        @method('PUT')
+
+                        <div class="flex items-center gap-4 p-3 bg-stone-50 rounded-xl">
+                            <img :src="editingPhoto.image_url" alt="" class="w-16 h-16 object-cover rounded-lg">
+                            <div class="text-xs text-stone-500">
+                                <p class="font-bold text-stone-800">Photo #<span x-text="editingPhoto.id"></span></p>
+                                <p class="text-[11px] text-stone-400">Update label, event year, and sort order.</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">Caption</label>
+                            <input type="text" name="caption" x-model="editingPhoto.caption" class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-sm focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">Event Year</label>
+                                <input type="text" name="year" x-model="editingPhoto.year" placeholder="e.g. 2024" class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-sm focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">Sort Order</label>
+                                <input type="number" name="sort_order" x-model="editingPhoto.sort_order" class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-sm focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">Alt Text</label>
+                            <input type="text" name="alt_text" x-model="editingPhoto.alt_text" class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-sm focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
+                        </div>
+
+                        <div class="flex items-center justify-end gap-3 pt-3 border-t border-stone-100">
+                            <button type="button" @click="closeEdit()" class="px-4 py-2 text-xs font-semibold text-stone-600 hover:text-stone-900 cursor-pointer">
+                                Cancel
+                            </button>
+                            <button type="submit" class="px-5 py-2 text-xs font-bold uppercase tracking-wider bg-maroon text-white hover:bg-crimson rounded-xl shadow-xs cursor-pointer">
+                                Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </template>
+            </div>
         </div>
     </div>
 </x-admin-layout>

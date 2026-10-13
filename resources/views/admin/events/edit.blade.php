@@ -166,23 +166,14 @@
                     @enderror
                 </div>
 
-                {{-- Banner Image Upload & Current Preview --}}
+                {{-- Banner Image Picker --}}
                 <div>
-                    <label for="banner_image" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                        Replace Banner Image (Optional)
-                    </label>
-                    @if ($event->banner_image)
-                        <div class="mb-3 flex items-center gap-3 p-3 bg-stone-50 rounded-xl border border-stone-200">
-                            <img src="{{ $event->banner_image_url }}" alt="Current Banner" class="w-20 h-14 object-cover rounded-lg border border-stone-200">
-                            <span class="text-xs text-stone-600">Current banner: <span class="font-mono text-stone-800">{{ $event->banner_image }}</span></span>
-                        </div>
-                    @endif
-                    <input type="file" 
-                           id="banner_image" 
-                           name="banner_image" 
-                           accept="image/jpeg,image/png,image/webp" 
-                           class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-stone-100 file:text-stone-700 hover:file:bg-stone-200">
-                    <p class="text-xs text-stone-500 mt-1">Leave empty to keep current banner.</p>
+                    <x-admin.media-picker 
+                        name="banner_image" 
+                        :value="old('banner_image', $event->banner_image)" 
+                        label="Event Banner Image" 
+                        help="Choose from the existing photo gallery or upload a new image (automatically optimized to WebP). Leave blank to keep default banner." 
+                    />
                     @error('banner_image')
                         <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
                     @enderror

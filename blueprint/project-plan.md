@@ -4,7 +4,7 @@ Dzuels Educational Foundation website rebuild (https://dzuelsfoundation.org), bu
 
 ## 1. Problem - What problem are we solving?
 
-Dzuels Educational Foundation is a Nigerian charity, founded on 22 June 2015 and registered the same year. It provides education support and skills acquisition for indigent Nigerian children and youth, creates awareness of social vices and mitigating measures, and feeds poor families, among other social responsibilities. Its current work includes free literacy support and digital skills training for teachers and students in Ijero-Ekiti (Ekiti State, Southwest Nigeria), plus yearly flagship events such as Innovation and Tech Day (ITD), a Reading Competition, and a Spelling Bee.
+Dzuels Educational Foundation is a Nigerian charity, founded on 22 June 2015 and registered the same year. It provides education support and skills acquisition for indigent Nigerian children and youth, creates awareness of social vices and mitigating measures, and feeds poor families, among other social responsibilities. Its current work includes free literacy support and digital skills training for teachers and students in Ijero-Ekiti (Ekiti State, Southwest Nigeria), plus yearly flagship events such as Innovation and Tech Day (ITD), a Reading Competition, and a Spelling Bee, alongside the Famoyinka Memorial Children's Library.
 
 ### Milestone 1: Core Web Platform (Completed & Shipped)
 The foundation's web presence was rebuilt into a modern, fast, accessible, SEO-optimized Laravel application with verified WCAG 2.2 AA compliance, brand color tokens, dynamic settings, team/partner/programme showcases, payment details, contact forms, and security safeguards across 17 completed features.
@@ -18,70 +18,84 @@ To make the platform independent and self-manageable by non-technical staff:
 - **Role-Based Access Control & Password Recovery**: Super Admin, Editor, and Support roles with password reset workflows.
 - **MySQL Database Export Suite**: Automated `php artisan db:export-sql` generating clean SQL dumps for phpMyAdmin on cPanel.
 
-### Milestone 3: Production Server Readiness & Launch Refinements (Active Target)
-Finalizing production readiness for live deployment on Namecheap cPanel (`server161.web-hosting.com` running MariaDB):
-- **MariaDB / MySQL Architecture**: Transition `.env` and `.env.example` to default to MariaDB/MySQL. Provide `dzuels_database.sql` directly in the project root folder for 1-click import into phpMyAdmin on `server161.web-hosting.com`.
-- **Dynamic Database-Driven Content**: Ensure all layout elements, contact numbers, impact statistics, and addresses pull dynamically from the database (`settings` and `page_sections` tables) with zero hardcoded values.
-- **Hotline & Contact Update**: Completely replace old telephone `+234 803 388 9576` with `+234 904 249 3883` across all seeders, database records, views, and error pages.
-- **Giving Channels Refinement**: Hide the Diaspora & International Wire transfers channel on `/donate` for now, keeping focus on Flutterwave online donations and direct GTBank Naira transfers.
+### Milestone 3: Production Server Readiness & Launch Refinements (Completed & Shipped)
+Finalized production readiness for live deployment on Namecheap cPanel (`server161.web-hosting.com` running MariaDB):
+- **MariaDB / MySQL Architecture**: Transition `.env` and `.env.example` to default to MariaDB/MySQL. Provide root `dzuels_database.sql` for 1-click phpMyAdmin import.
+- **Dynamic Database-Driven Content**: Ensure layout elements, impact statistics, and contacts pull dynamically from the database.
+- **Hotline & Contact Update**: Completely replace old telephone numbers with `+234 904 249 3883` site-wide.
+- **Giving Channels Refinement**: Hide the Diaspora & International Wire transfers channel on `/donate` for now.
 - **Contextual Hero Section Imagery**: Enrich About Us, Programmes, and Contact page heroes with rich, contextual background imagery and maroon gradient overlays.
-- **Spelling Bee Programme Image Fix**: Replace the incorrect `home_1.webp` with an authentic Spelling Bee championship photo (`front/images/gallery/optimized/spelling-01.webp`).
+- **Spelling Bee Programme Image Fix**: Replace placeholder with authentic Spelling Bee championship photo (`spelling-01.webp`).
+
+### Milestone 4: Dynamic Media Hub, Gallery Overhaul, Famoyinka Memorial Library & Global Admin Controls (Active Target)
+Empowering foundation staff with full media flexibility and addressing visual storytelling feedback:
+- **Automated Upload Image Optimization**: Native PHP GD processing on every dashboard image upload: automatically resize, convert to WebP, save to public uploads, and delete the unoptimized original. Compatible with PHP 8.3 & 8.4.
+- **Global Media Library Picker**: A reusable media modal component across all dashboard edit forms (events, programmes, page sections, partners) allowing staff to either upload a new image or pick an existing photo from the gallery.
+- **Gallery & Collection Overhaul**: Full CRUD and sort reordering for collections/categories (moving beyond fixed albums); single and bulk photo deletion; photo metadata editing; and standardized event and year labeling across all photos (e.g. "Spelling Bee 2024", "Reading Competition 2024", "Famoyinka Library 2025").
+- **Famoyinka Memorial Children's Library Integration**: Dedicated official programme at `/programmes/famoyinka-memorial-library` and dedicated gallery collection; visual curation introducing authentic action photography of children (crafts, transformational leadership games, Ikogosi trip, library reading and book borrowing); pruning repetitive photos; and cross-linking the library across Home and About.
+- **Multi-Phone Site Settings (Up to 5 Lines)**: Expand site settings to store up to 5 contact hotlines (`contact_phone_1` through `contact_phone_5`), unifying all site-wide phone displays (header utility bar, mobile nav, footer, contact cards, error pages) to read strictly from site settings with empty numbers gracefully omitted.
+- **Fully Dynamic Contact Page & Dynamic Partners Strip**: Remove all hardcoded copy on `/contact` (office hours and timezone configurable from dashboard, e.g. "Mon – Fri: 8:00 AM – 5:00 PM (GMT +1)"); and render the "Our Valued Partners - Collaborating for greater impact" logo strip dynamically on both Home (`/`) and About (`/about`) with full management in `/admin/partners`.
 
 ## 2. Users - Who is this for?
 
-- **Prospective donors**: In Nigeria and the diaspora, seeking transparency and quick donation methods.
-- **Volunteers & Partners**: Submitting applications and corporate partnership inquiries.
-- **Event participants & schools**: Attending ITD 2026 and browsing schedules, objectives, and sponsors.
-- **Beneficiaries & parents**: Accessing educational resources, reading competitions, and visual archives.
+- **Prospective donors**: Seeking transparency, impact evidence, and seamless donation channels.
+- **Volunteers & Partners**: Submitting applications and exploring organizational partnerships.
+- **Event participants & schools**: Attending ITD 2026, reading competitions, and spelling bees.
+- **Beneficiaries, parents & students**: Accessing educational literacy, community activities, and the Famoyinka Memorial Children's Library.
 - **Foundation Staff (Admin Users)**:
-  - **Super Admin**: Full platform control, managing staff users, access permissions, site settings, and database exports.
-  - **Editor / Content Manager**: Updating page content (WordPress-style), programmes, events, sponsors, and gallery albums.
-  - **Support / Viewer**: Viewing incoming contact messages, volunteer applications, and event attendee records.
+  - **Super Admin**: Managing staff accounts, role permissions, global site settings (up to 5 phone lines, office hours/timezone), and database exports.
+  - **Editor / Content Manager**: Updating page content, programmes (including the library), events, sponsors, partner logos, and managing the gallery collections and photos.
+  - **Support / Viewer**: Viewing incoming contact messages, volunteer applications, and event registrations.
 
 ## 3. Features & Milestones
 
 ### Milestone 1: Core Web Platform (Shipped, Features 1–17)
-- Public layout, brand theme, and dark mode engine.
-- Admin dashboard, dynamic site settings, and impact counters.
-- Home, About, Programmes, Events, Gallery, Donate, Get Involved, Contact, News, and Newsletter signup.
-- Site responsiveness overhaul and modern admin UI.
-- Comprehensive SEO foundation, privacy policy, and branded error pages.
-- WCAG 2.2 AA accessibility compliance, automated `app:launch-check`, and production runbook.
+- 1–17. Public layout, brand theme, admin dashboard, dynamic settings, home, about, programmes, events, gallery, donate, volunteer, contact, news, newsletter, responsiveness overhaul, SEO foundation, accessibility compliance.
 
 ### Milestone 2: Polish, Dynamic CMS, Access Control & cPanel Deployment (Shipped, Features 18–20)
 - 18. Brand assets, ITD 2026 event overhaul, and gallery optimization.
 - 19. Site-wide page content management, user access control, and password recovery.
 - 20. MySQL database export and cPanel phpMyAdmin migration suite.
 
-### Milestone 3: Production Server Readiness & Launch Refinements (Features 21+)
-- 21. **Production MariaDB configuration, root SQL dump, phone hotline update and hero imagery refinements**:
-  - Configure `.env` and `.env.example` for local and production MariaDB/MySQL (`server161.web-hosting.com`).
-  - Provide root `dzuels_database.sql` for 1-click phpMyAdmin import.
-  - Ensure all layout and contact data is strictly driven from database settings.
-  - Replace phone number with `+234 904 249 3883` site-wide.
-  - Hide Diaspora & International Wire on `/donate`.
-  - Add contextual background imagery to About, Programmes, and Contact hero sections.
-  - Fix Spelling Bee cover photo to authentic contest image (`front/images/gallery/optimized/spelling-01.webp`).
+### Milestone 3: Production Server Readiness & Launch Refinements (Shipped, Feature 21)
+- 21. Production MariaDB configuration, root SQL dump, phone hotline update and hero imagery refinements.
+
+### Milestone 4: Dynamic Media Hub, Gallery Overhaul, Famoyinka Memorial Library & Global Admin Controls (Features 22–24)
+- 22. **Automated image optimization, global media picker and gallery collection/photo management**:
+  - Auto-convert all dashboard uploads to WebP and delete original uncompressed files using PHP 8.3/8.4 native GD.
+  - Reusable Media Library picker modal in admin forms to upload or choose existing gallery images.
+  - CRUD and reordering for gallery collections/categories.
+  - Single and bulk photo deletion in `/admin/gallery`.
+  - Photo metadata editing with standardized year labels across all collections (e.g., "Spelling Bee 2024").
+- 23. **Famoyinka Memorial Children's Library programme integration and curated visual outreach**:
+  - Dedicated public programme at `/programmes/famoyinka-memorial-library` and dedicated gallery collection.
+  - Prune repetitive gallery photos and seed diverse action photos of children (crafts, transformational leadership games, Ikogosi trip, library reading and book borrowing).
+  - Prominent cross-linking of the library on Home and About pages.
+- 24. **Site-wide multi-phone settings, dynamic contact CMS and dynamic partners strip**:
+  - Support up to 5 contact phone numbers in `/admin/settings` (`contact_phone_1` to `contact_phone_5`).
+  - Unify all site-wide phone displays (header utility bar, mobile menu, footer, contact cards, error pages) to pull from site settings.
+  - Make `/contact` 100% dynamic (custom office hours and timezone like "GMT +1", address, card descriptions).
+  - Dynamic "Our Valued Partners" strip on Home and About pages driven by `/admin/partners`.
 
 ## 4. Data - What are we storing?
 
-- **users**: id, name, email, password, role (`super_admin`, `editor`, `support`), is_active, timestamps.
-- **password_reset_tokens**: email, token, created_at.
-- **page_sections**: page key, section key, headline, subheadline, body_text, image_path, button_text, button_url, meta_data (JSON), sort_order.
-- **event_sponsors**: id, event_id, name, logo_path, tier, website_url, sort_order.
-- **settings**: key/value pairs for impact numbers, contacts (`contact_phone_1` = `+234 904 249 3883`), banking, registration, Flutterwave links.
-- **programmes**, **events**, **gallery_albums**, **gallery_photos**, **team_members**, **partners**, **contact_messages**, **volunteer_applications**.
+- **settings**: extended key/values for `contact_phone_1` through `contact_phone_5`, `office_hours` (e.g. "Mon – Fri: 8:00 AM – 5:00 PM"), `office_timezone` (e.g. "GMT +1"), impact numbers, banking, and registration.
+- **gallery_albums**: id, title, slug, kicker, description, cover_image, sort_order, is_active, timestamps.
+- **gallery_photos**: id, gallery_album_id, image_path, caption, alt_text, year, sort_order, timestamps.
+- **programmes**: id, title, slug, excerpt, description, image_path, is_active, sort_order, timestamps (including `famoyinka-memorial-library`).
+- **partners**: id, name, logo, website_url, sort_order, is_active, timestamps.
+- **users**, **page_sections**, **event_sponsors**, **events**, **team_members**, **contact_messages**, **volunteer_applications**.
 
 ## 5. Tech - What stack are we using?
 
-- **Backend:** Laravel 13 on PHP 8.3+, MariaDB 10.3+ / MySQL 8.0+ in development and production (`server161.web-hosting.com`).
-- **Frontend:** Blade templates, Tailwind CSS v4, Alpine.js (robust inline/modular initialization).
-- **Authentication & RBAC:** Session guard with role-based policies and password reset brokers.
-- **Export Tooling:** Custom SQL dump generator supporting MariaDB/MySQL syntax (`CREATE TABLE`, batch `INSERT INTO` with `utf8mb4_unicode_ci`).
+- **Backend:** Laravel 13 on PHP 8.3 / 8.4, MariaDB 10.3+ / MySQL 8.0+.
+- **Image Processing:** Native PHP GD (`imagewebp`, `imagecopyresampled`) with zero external package dependencies.
+- **Frontend:** Blade templates, Tailwind CSS v4, Alpine.js (modals, gallery masonry, media picker).
+- **Deployment Tracking:** Root `cpanel_changed_files.txt` manifest tracking all modified files for cPanel uploads.
 
 ## 6. Deployment - cPanel & Production
 
-- Hosted on Namecheap cPanel (`server161.web-hosting.com`) running MariaDB with PHP 8.3+.
+- Hosted on Namecheap cPanel (`server161.web-hosting.com`) running MariaDB with PHP 8.3/8.4.
 - Domain: `dzuelsfoundation.org`.
-- Database imported via cPanel phpMyAdmin using root `dzuels_database.sql`.
-- HTTPS secured via AutoSSL / Let's Encrypt.
+- Database exportable via `php artisan db:export-sql` and root `dzuels_database.sql`.
+- File synchronization facilitated by `cpanel_changed_files.txt`.

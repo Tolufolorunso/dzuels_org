@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\ForgotPasswordController as AdminForgotPasswordController;
 use App\Http\Controllers\Admin\GalleryAlbumController as AdminGalleryAlbumController;
 use App\Http\Controllers\Admin\InquiryController;
+use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\NewsletterSubscriberController as AdminNewsletterSubscriberController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PartnerController;
@@ -86,6 +87,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['admin'])->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
+        // Media Library Picker API
+        Route::get('/media/photos', [MediaController::class, 'photos'])->name('media.photos');
+        Route::post('/media/upload', [MediaController::class, 'upload'])->name('media.upload');
+
         // Staff Profile & Password Security
         Route::get('/profile', [AdminProfileController::class, 'edit'])->name('profile.password');
         Route::put('/profile/password', [AdminProfileController::class, 'updatePassword'])->name('profile.password.update');
@@ -126,9 +131,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('events', AdminEventController::class)->except(['show']);
 
         // Gallery Management
+        Route::post('/gallery/reorder', [AdminGalleryAlbumController::class, 'reorderAlbums'])->name('gallery.reorder');
         Route::patch('/gallery/{album}/toggle', [AdminGalleryAlbumController::class, 'toggleActive'])->name('gallery.toggle');
         Route::get('/gallery/{album}/photos', [AdminGalleryAlbumController::class, 'photos'])->name('gallery.photos');
         Route::post('/gallery/{album}/photos', [AdminGalleryAlbumController::class, 'uploadPhotos'])->name('gallery.photos.upload');
+        Route::put('/gallery/{album}/photos/{photo}', [AdminGalleryAlbumController::class, 'updatePhoto'])->name('gallery.photos.update');
+        Route::delete('/gallery/{album}/photos/bulk-destroy', [AdminGalleryAlbumController::class, 'bulkDestroyPhotos'])->name('gallery.photos.bulk-destroy');
         Route::delete('/gallery/{album}/photos/{photo}', [AdminGalleryAlbumController::class, 'destroyPhoto'])->name('gallery.photos.destroy');
         Route::resource('gallery', AdminGalleryAlbumController::class)->parameters(['gallery' => 'album'])->except(['show']);
 

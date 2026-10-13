@@ -6,14 +6,22 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreGalleryAlbumRequest;
 use App\Http\Requests\Admin\StoreGalleryPhotoRequest;
 use App\Http\Requests\Admin\UpdateGalleryAlbumRequest;
+use App\Http\Requests\Admin\UpdateGalleryPhotoRequest;
 use App\Models\GalleryAlbum;
 use App\Models\GalleryPhoto;
+use App\Services\ImageOptimizerService;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class GalleryAlbumController extends Controller
 {
+    public function __construct(
+        protected ImageOptimizerService $optimizer
+    ) {}
+
     /**
      * Display a listing of gallery albums.
      */
@@ -55,16 +63,12 @@ class GalleryAlbumController extends Controller
         $validated['slug'] = $slug;
 
         if ($request->hasFile('cover_image')) {
-            $file = $request->file('cover_image');
-            $filename = time().'_'.Str::random(8).'.'.$file->getClientOriginalExtension();
-            $destination = public_path('uploads/gallery/covers');
-
-            if (! file_exists($destination)) {
-                mkdir($destination, 0755, true);
-            }
-
-            $file->move($destination, $filename);
-            $validated['cover_image'] = 'uploads/gallery/covers/'.$filename;
+            $validated['cover_image'] = $this->optimizer->optimize(
+                $request->file('cover_image'),
+                'uploads/gallery/covers',
+                1200,
+                800
+            );
         }
 
         $validated['is_active'] = $request->boolean('is_active', true);
@@ -96,21 +100,16 @@ class GalleryAlbumController extends Controller
         }
 
         if ($request->hasFile('cover_image')) {
-            $file = $request->file('cover_image');
-            $filename = time().'_'.Str::random(8).'.'.$file->getClientOriginalExtension();
-            $destination = public_path('uploads/gallery/covers');
-
-            if (! file_exists($destination)) {
-                mkdir($destination, 0755, true);
-            }
-
-            $file->move($destination, $filename);
-
             if ($album->cover_image && str_starts_with($album->cover_image, 'uploads/') && file_exists(public_path($album->cover_image))) {
                 @unlink(public_path($album->cover_image));
             }
 
-            $validated['cover_image'] = 'uploads/gallery/covers/'.$filename;
+            $validated['cover_image'] = $this->optimizer->optimize(
+                $request->file('cover_image'),
+                'uploads/gallery/covers',
+                1200,
+                800
+            );
         }
 
         $validated['is_active'] = $request->boolean('is_active', true);
@@ -159,6 +158,28 @@ class GalleryAlbumController extends Controller
     }
 
     /**
+     * Reorder albums sort_order.
+     */
+    public function reorderAlbums(Request $request): JsonResponse|RedirectResponse
+    {
+        $validated = $request->validate([
+            'album_ids' => ['required', 'array', 'min:1'],
+            'album_ids.*' => ['integer', 'exists:gallery_albums,id'],
+        ]);
+
+        foreach ($validated['album_ids'] as $index => $albumId) {
+            GalleryAlbum::where('id', $albumId)->update(['sort_order' => $index + 1]);
+        }
+
+        if ($request->wantsJson()) {
+            return response()->json(['message' => 'Albums reordered successfully.']);
+        }
+
+        return redirect()->route('admin.gallery.index')
+            ->with('success', 'Albums reordered successfully.');
+    }
+
+    /**
      * View photos in a gallery album.
      */
     public function photos(GalleryAlbum $album): View
@@ -176,11 +197,6 @@ class GalleryAlbumController extends Controller
      */
     public function uploadPhotos(StoreGalleryPhotoRequest $request, GalleryAlbum $album): RedirectResponse
     {
-        $destination = public_path('uploads/gallery/photos');
-        if (! file_exists($destination)) {
-            mkdir($destination, 0755, true);
-        }
-
         $uploadedCount = 0;
         $maxSortOrder = (int) $album->photos()->max('sort_order');
 
@@ -193,17 +209,24 @@ class GalleryAlbumController extends Controller
 
         $caption = $request->input('caption');
         $altText = $request->input('alt_text') ?: $album->title;
+        $year = $request->input('year');
 
         foreach ($files as $file) {
             if ($file && $file->isValid()) {
-                $filename = time().'_'.Str::random(10).'.'.$file->getClientOriginalExtension();
-                $file->move($destination, $filename);
+                $optimizedPath = $this->optimizer->optimize(
+                    $file,
+                    'uploads/gallery/photos',
+                    1920,
+                    1920,
+                    82
+                );
 
                 $maxSortOrder++;
                 $album->photos()->create([
-                    'image_path' => 'uploads/gallery/photos/'.$filename,
+                    'image_path' => $optimizedPath,
                     'caption' => $caption,
                     'alt_text' => $altText,
+                    'year' => $year,
                     'sort_order' => $maxSortOrder,
                 ]);
 
@@ -212,7 +235,27 @@ class GalleryAlbumController extends Controller
         }
 
         return redirect()->route('admin.gallery.photos', $album)
-            ->with('success', "{$uploadedCount} photo(s) added successfully.");
+            ->with('success', "{$uploadedCount} photo(s) added and optimized successfully.");
+    }
+
+    /**
+     * Update an individual photo metadata in a gallery album.
+     */
+    public function updatePhoto(UpdateGalleryPhotoRequest $request, GalleryAlbum $album, GalleryPhoto $photo): RedirectResponse
+    {
+        if ($photo->gallery_album_id !== $album->id) {
+            abort(404);
+        }
+
+        $validated = $request->validated();
+        if (isset($validated['sort_order'])) {
+            $validated['sort_order'] = (int) $validated['sort_order'];
+        }
+
+        $photo->update($validated);
+
+        return redirect()->route('admin.gallery.photos', $album)
+            ->with('success', 'Photo metadata updated successfully.');
     }
 
     /**
@@ -232,5 +275,30 @@ class GalleryAlbumController extends Controller
 
         return redirect()->route('admin.gallery.photos', $album)
             ->with('success', 'Photo removed successfully.');
+    }
+
+    /**
+     * Delete multiple photos in bulk from a gallery album.
+     */
+    public function bulkDestroyPhotos(Request $request, GalleryAlbum $album): RedirectResponse
+    {
+        $validated = $request->validate([
+            'photo_ids' => ['required', 'array', 'min:1'],
+            'photo_ids.*' => ['integer'],
+        ]);
+
+        $photos = $album->photos()->whereIn('id', $validated['photo_ids'])->get();
+        $deletedCount = 0;
+
+        foreach ($photos as $photo) {
+            if ($photo->image_path && str_starts_with($photo->image_path, 'uploads/') && file_exists(public_path($photo->image_path))) {
+                @unlink(public_path($photo->image_path));
+            }
+            $photo->delete();
+            $deletedCount++;
+        }
+
+        return redirect()->route('admin.gallery.photos', $album)
+            ->with('success', "{$deletedCount} photo(s) removed successfully.");
     }
 }

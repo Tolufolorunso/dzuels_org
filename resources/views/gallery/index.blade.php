@@ -33,6 +33,7 @@
         foreach ($albums as $album) {
             foreach ($album->photos as $photo) {
                 $totalPhotos++;
+                $label = $photo->display_label;
                 $allPhotos[] = [
                     'id' => $photo->id,
                     'album_id' => $album->id,
@@ -41,7 +42,9 @@
                     'album_kicker' => $album->kicker ?? 'Dzuels Outreach',
                     'url' => $photo->image_url,
                     'caption' => $photo->caption,
-                    'alt' => $photo->alt_text ?: ($photo->caption ?: $album->title),
+                    'year' => $photo->year,
+                    'display_label' => $label,
+                    'alt' => $photo->alt_text ?: $label,
                 ];
             }
         }
@@ -255,11 +258,18 @@
                                 
                                 {{-- Dark Hover Gradient Overlay with Captions --}}
                                 <div class="absolute inset-0 bg-linear-to-t from-black/85 via-black/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 text-white">
-                                    <span class="text-[10px] uppercase font-bold tracking-wider text-[var(--accent-cream)] block">
-                                        {{ $photo['album_title'] }}
-                                    </span>
+                                    <div class="flex items-center justify-between gap-2 mb-1">
+                                        <span class="text-[10px] uppercase font-bold tracking-wider text-[var(--accent-cream)] block">
+                                            {{ $photo['album_title'] }}
+                                        </span>
+                                        @if ($photo['year'])
+                                            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-maroon/90 text-white shadow-xs">
+                                                {{ $photo['year'] }}
+                                            </span>
+                                        @endif
+                                    </div>
                                     <p class="text-xs font-semibold line-clamp-2 mt-0.5">
-                                        {{ $photo['caption'] ?: $photo['alt'] }}
+                                        {{ $photo['display_label'] }}
                                     </p>
                                     <div class="mt-2 flex items-center justify-between text-[10px] text-stone-300">
                                         <span class="flex items-center gap-1">
@@ -297,11 +307,16 @@
 
             {{-- Top Controls Bar --}}
             <div class="flex items-center justify-between text-white z-10">
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2">
                     <span class="px-3 py-1 rounded-full text-xs font-bold bg-white/10 backdrop-blur-xs text-[var(--accent-cream)] border border-white/10"
                           x-text="currentPhoto ? currentPhoto.album_title : ''">
                     </span>
-                    <span class="text-xs text-stone-400">
+                    <template x-if="currentPhoto && currentPhoto.year">
+                        <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-maroon text-white"
+                              x-text="currentPhoto.year">
+                        </span>
+                    </template>
+                    <span class="text-xs text-stone-400 ml-2">
                         Photo <strong class="text-white" x-text="activePhotoIndex + 1"></strong> of <strong class="text-white" x-text="filteredPhotos.length"></strong>
                     </span>
                 </div>
@@ -352,9 +367,13 @@
 
             {{-- Bottom Caption Bar --}}
             <div class="text-center text-white z-10 max-w-3xl mx-auto px-4">
-                <p class="text-sm font-medium text-stone-200" x-text="currentPhoto ? (currentPhoto.caption || currentPhoto.alt) : ''"></p>
+                <p class="text-sm font-semibold text-stone-100" x-text="currentPhoto ? (currentPhoto.display_label || currentPhoto.caption || currentPhoto.alt) : ''"></p>
                 <p class="text-xs text-stone-400 mt-1">
-                    <span x-text="currentPhoto ? currentPhoto.album_kicker : ''"></span> • Use ← and → keys to navigate, Esc to close
+                    <span x-text="currentPhoto ? currentPhoto.album_kicker : ''"></span>
+                    <template x-if="currentPhoto && currentPhoto.year">
+                        <span> • <span x-text="currentPhoto.year"></span></span>
+                    </template>
+                    <span> • Use ← and → keys to navigate, Esc to close</span>
                 </p>
             </div>
         </div>

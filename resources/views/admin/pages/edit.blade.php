@@ -119,33 +119,13 @@
                             </div>
                         </div>
 
-                        <!-- Image Upload & Preview -->
+                        <!-- Image Upload & Gallery Picker -->
                         <div class="pt-2 border-t border-stone-100">
-                            <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-3">
-                                Section Imagery & Graphic Banner
-                            </label>
-
-                            <div class="flex flex-col sm:flex-row sm:items-center gap-6">
-                                @if ($section->image_path)
-                                    <div class="shrink-0">
-                                        <span class="block text-[11px] text-stone-400 mb-1">Current Image:</span>
-                                        <div class="w-32 h-20 rounded-2xl overflow-hidden border border-stone-200 bg-stone-50 shadow-xs">
-                                            <img src="{{ $section->getImageUrl() }}" 
-                                                 alt="{{ $section->headline }}" 
-                                                 class="w-full h-full object-cover">
-                                        </div>
-                                    </div>
-                                @endif
-
-                                <div class="flex-1">
-                                    <span class="block text-[11px] text-stone-400 mb-1">Upload New Image (Replaces current):</span>
-                                    <input type="file" 
-                                           name="image" 
-                                           accept="image/png,image/jpeg,image/webp" 
-                                           class="block w-full text-xs text-stone-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-stone-100 file:text-stone-700 hover:file:bg-stone-200 cursor-pointer">
-                                    <p class="text-[11px] text-stone-400 mt-1">Recommended format: WebP, PNG, or JPG (max 5MB).</p>
-                                </div>
-                            </div>
+                            <x-admin.media-picker 
+                                name="image_path" 
+                                :value="$section->image_path" 
+                                label="Section Imagery & Graphic Banner" 
+                                help="Select an existing photo from the gallery archive or upload a new image (auto-converted to WebP via GD)." />
                         </div>
 
                         <!-- Submit Button -->

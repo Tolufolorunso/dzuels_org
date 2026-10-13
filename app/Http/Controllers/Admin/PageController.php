@@ -4,13 +4,17 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\PageSection;
+use App\Services\ImageOptimizerService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class PageController extends Controller
 {
+    public function __construct(
+        protected ImageOptimizerService $optimizer
+    ) {}
+
     /**
      * Managed public pages metadata.
      *
@@ -103,7 +107,8 @@ class PageController extends Controller
             'body_text' => ['nullable', 'string'],
             'button_text' => ['nullable', 'string', 'max:100'],
             'button_url' => ['nullable', 'string', 'max:255'],
-            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'],
+            'image_path' => ['nullable', 'string', 'max:255'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:10240'],
         ]);
 
         $pageSection = PageSection::firstOrNew([
@@ -118,18 +123,15 @@ class PageController extends Controller
         $pageSection->button_url = $validated['button_url'] ?? null;
 
         if ($request->hasFile('image')) {
-            $imageFile = $request->file('image');
-            $uploadDir = public_path('front/images/cms');
-
-            if (! is_dir($uploadDir)) {
-                mkdir($uploadDir, 0755, true);
-            }
-
-            $extension = $imageFile->getClientOriginalExtension() ?: 'webp';
-            $filename = $page.'_'.$section.'_'.Str::random(10).'.'.$extension;
-            $imageFile->move($uploadDir, $filename);
-
-            $pageSection->image_path = 'front/images/cms/'.$filename;
+            $pageSection->image_path = $this->optimizer->optimize(
+                $request->file('image'),
+                'uploads/cms',
+                1920,
+                1920,
+                82
+            );
+        } elseif ($request->has('image_path')) {
+            $pageSection->image_path = $validated['image_path'] ?: null;
         }
 
         $pageSection->save();

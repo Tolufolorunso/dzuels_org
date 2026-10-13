@@ -65,10 +65,16 @@ class GallerySeeder extends Seeder
                 'caption_label' => 'Community Impact Moment',
             ],
         ];
-
         foreach ($albumsData as $data) {
             $prefix = $data['prefix'];
             $captionLabel = $data['caption_label'];
+            $defaultYear = match ($data['slug']) {
+                'itd-2025' => '2025',
+                'itd-2024' => '2024',
+                'reading-competition' => '2024',
+                'spelling-bee' => '2024',
+                default => '2024',
+            };
             unset($data['prefix'], $data['caption_label']);
 
             $album = GalleryAlbum::updateOrCreate(
@@ -90,6 +96,7 @@ class GallerySeeder extends Seeder
                     [
                         'caption' => "{$captionLabel} #{$i}",
                         'alt_text' => "{$data['title']} - {$captionLabel} #{$i} in Ijero-Ekiti",
+                        'year' => $defaultYear,
                         'sort_order' => $i,
                     ]
                 );
