@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\GalleryAlbum;
+use Database\Seeders\GallerySeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -99,5 +100,43 @@ class GalleryPublicTest extends TestCase
 
         $response->assertOk();
         $response->assertSeeText('No photos found in this collection');
+    }
+
+    public function test_famoyinka_memorial_library_album_can_be_viewed_on_public_gallery(): void
+    {
+        $album = GalleryAlbum::create([
+            'title' => 'Famoyinka Memorial Library',
+            'slug' => 'famoyinka-library',
+            'kicker' => "Children's Literacy & Creative Hub",
+            'description' => "Action moments from our community children's library in Ijero-Ekiti.",
+            'sort_order' => 1,
+            'is_active' => true,
+        ]);
+
+        $album->photos()->create([
+            'image_path' => 'front/images/gallery/optimized/famoyinka-01.webp',
+            'caption' => "Children's Book Lending & Fiction Shelf",
+            'year' => '2024',
+            'sort_order' => 1,
+        ]);
+
+        $response = $this->get('/gallery/famoyinka-library');
+
+        $response->assertOk();
+        $response->assertSeeText('Famoyinka Memorial Library');
+        $response->assertSee('famoyinka-01.webp');
+    }
+
+    public function test_gallery_seeder_populates_famoyinka_library_and_prunes_reading_competition(): void
+    {
+        $this->seed(GallerySeeder::class);
+
+        $famoyinka = GalleryAlbum::where('slug', 'famoyinka-library')->first();
+        $this->assertNotNull($famoyinka);
+        $this->assertEquals(8, $famoyinka->photos()->count());
+
+        $reading = GalleryAlbum::where('slug', 'reading-competition')->first();
+        $this->assertNotNull($reading);
+        $this->assertEquals(8, $reading->photos()->count());
     }
 }

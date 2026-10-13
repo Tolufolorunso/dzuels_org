@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\GalleryAlbum;
 use App\Models\PageSection;
 use App\Models\Programme;
 use Illuminate\Contracts\View\View;
@@ -45,9 +46,23 @@ class ProgrammeController extends Controller
             ->take(3)
             ->get();
 
+        $galleryAlbum = GalleryAlbum::active()
+            ->where(function ($query) use ($programme) {
+                if ($programme->slug === 'famoyinka-memorial-library') {
+                    $query->where('slug', 'famoyinka-library');
+                } else {
+                    $query->where('slug', $programme->slug);
+                }
+            })
+            ->with(['photos' => function ($q) {
+                $q->orderBy('sort_order', 'asc')->take(4);
+            }])
+            ->first();
+
         return view('programmes.show', [
             'programme' => $programme,
             'relatedProgrammes' => $relatedProgrammes,
+            'galleryAlbum' => $galleryAlbum,
         ]);
     }
 }

@@ -20,7 +20,7 @@ class GalleryController extends Controller
             }])
             ->get();
 
-        $activeSlug = $request->query('collection');
+        $activeSlug = $request->query('collection') ?: $request->query('album');
 
         return view('gallery.index', compact('albums', 'activeSlug'));
     }

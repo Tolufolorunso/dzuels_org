@@ -85,6 +85,10 @@
                         </p>
 
                         <p class="text-base sm:text-lg text-[var(--text)] leading-relaxed">
+                            A cornerstone of this commitment is the <a href="{{ url('/programmes/famoyinka-memorial-library') }}" class="font-semibold text-maroon dark:text-mint underline decoration-crimson/40 hover:text-crimson">Famoyinka Memorial Children's Library</a> in Ijero-Ekiti—a permanent reading sanctuary providing free book loans, weekend study circles, creative arts, and transformational leadership activities for local youth.
+                        </p>
+
+                        <p class="text-base sm:text-lg text-[var(--text)] leading-relaxed">
                             Recognizing that learning does not happen in isolation, our work also reaches vulnerable households: providing nutritional assistance to indigent families through widows, creating deep awareness of social vices, and fostering transformational leadership in every classroom we touch.
                         </p>
                     @endif
@@ -230,6 +234,71 @@
                     <p class="text-sm text-[var(--text)] leading-relaxed">
                         Conducting health screenings, promoting hygiene, and raising awareness regarding social vices, substance abuse, and cyber-safety to protect youth development.
                     </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- 3b. Permanent Community Sanctuary Showcase: Famoyinka Memorial Children's Library --}}
+    <section class="py-16 sm:py-20 bg-[var(--surface)] transition-colors border-b border-[var(--border)] overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-[var(--surface-alt)] border border-[var(--border)] rounded-3xl p-8 sm:p-12 lg:p-14 shadow-lg grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-maroon/10 text-maroon dark:bg-mint/15 dark:text-mint border border-maroon/20 dark:border-mint/30">
+                        <span>🏛️ Permanent Community Hub</span>
+                    </div>
+                    
+                    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[var(--heading)] tracking-tight">
+                        Famoyinka Memorial Children's Library
+                    </h2>
+
+                    <p class="text-base sm:text-lg text-[var(--text)] leading-relaxed">
+                        Established as a permanent physical sanctuary in Ijero-Ekiti, the Famoyinka Memorial Children's Library brings our 10-year holistic child development vision to life every day. It provides children and families with open access to rich literature, quiet study workstations, and weekend mentorship circles.
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <div class="flex items-start gap-3">
+                            <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">✓</span>
+                            <span class="text-sm font-medium text-[var(--text)]">Free fiction, science & culture book loans</span>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">✓</span>
+                            <span class="text-sm font-medium text-[var(--text)]">Weekend study circles & digital lab access</span>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">✓</span>
+                            <span class="text-sm font-medium text-[var(--text)]">Creative arts, crafts & watercolor workshops</span>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">✓</span>
+                            <span class="text-sm font-medium text-[var(--text)]">Leadership games & Ikogosi nature trips</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-4 pt-4">
+                        <a href="{{ url('/programmes/famoyinka-memorial-library') }}" 
+                           class="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold bg-maroon text-white hover:bg-crimson transition-all shadow-md">
+                            <span>Explore Library Programme</span>
+                            <span>&rarr;</span>
+                        </a>
+                        <a href="{{ url('/gallery?album=famoyinka-library') }}" 
+                           class="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold border border-[var(--border)] bg-[var(--surface)] text-[var(--heading)] hover:border-maroon transition-all">
+                            <span>View Photo Gallery</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5">
+                    <div class="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-[var(--border)] shadow-xl aspect-4/3 sm:aspect-16/10 lg:aspect-4/3 group">
+                        <img src="{{ asset('front/images/gallery/optimized/famoyinka-01.webp') }}" 
+                             alt="Children reading at Famoyinka Memorial Children's Library" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                             loading="lazy">
+                        <div class="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6">
+                            <span class="text-xs font-bold uppercase tracking-wider text-[var(--accent-cream)]">Ijero-Ekiti, Nigeria</span>
+                            <p class="text-white font-bold text-lg mt-0.5">A Living Sanctuary for Young Readers</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

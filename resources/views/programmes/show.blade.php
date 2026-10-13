@@ -89,6 +89,62 @@
                         @endforeach
                     </div>
 
+                    {{-- Dedicated Gallery Showcase & Action Archive --}}
+                    @if ($programme->slug === 'famoyinka-memorial-library' || ($galleryAlbum && $galleryAlbum->photos->isNotEmpty()))
+                        @php
+                            $targetAlbumSlug = $galleryAlbum ? $galleryAlbum->slug : 'famoyinka-library';
+                            $galleryUrl = url('/gallery?album=' . $targetAlbumSlug);
+                        @endphp
+                        <div class="p-8 sm:p-10 rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-xs space-y-6">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--border)]">
+                                <div>
+                                    <span class="text-xs font-bold uppercase tracking-wider text-crimson dark:text-mint block">Visual Archive & Outreach</span>
+                                    <h3 class="text-xl sm:text-2xl font-bold text-[var(--heading)] mt-1">
+                                        Explore Photo Gallery
+                                    </h3>
+                                </div>
+                                <a href="{{ $galleryUrl }}" 
+                                   class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-maroon text-white hover:bg-crimson transition-all shadow-sm w-fit">
+                                    <span>Explore Photo Gallery</span>
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                    </svg>
+                                </a>
+                            </div>
+
+                            <p class="text-sm sm:text-base text-[var(--text)] leading-relaxed">
+                                Experience authentic moments from the Famoyinka Memorial Children's Library: free book lending, interactive weekend study circles, creative arts and crafts workshops, transformational leadership games, and educational excursions.
+                            </p>
+
+                            {{-- Photo Previews --}}
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 pt-2">
+                                @if ($galleryAlbum && $galleryAlbum->photos->isNotEmpty())
+                                    @foreach ($galleryAlbum->photos->take(4) as $previewPhoto)
+                                        <a href="{{ $galleryUrl }}" class="group relative aspect-4/3 rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--surface-alt)] shadow-xs block">
+                                            <img src="{{ $previewPhoto->image_url }}" alt="{{ $previewPhoto->alt_text ?: $previewPhoto->caption }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                            <div class="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-2.5">
+                                                <span class="text-[11px] font-semibold text-white truncate">{{ $previewPhoto->caption }}</span>
+                                            </div>
+                                        </a>
+                                    @endforeach
+                                @else
+                                    <a href="{{ $galleryUrl }}" class="group relative aspect-4/3 rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--surface-alt)] shadow-xs block">
+                                        <img src="{{ asset('front/images/gallery/optimized/famoyinka-01.webp') }}" alt="Student selecting books" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                    </a>
+                                    <a href="{{ $galleryUrl }}" class="group relative aspect-4/3 rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--surface-alt)] shadow-xs block">
+                                        <img src="{{ asset('front/images/gallery/optimized/famoyinka-02.webp') }}" alt="Outdoor leadership games" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                    </a>
+                                    <a href="{{ $galleryUrl }}" class="group relative aspect-4/3 rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--surface-alt)] shadow-xs block">
+                                        <img src="{{ asset('front/images/gallery/optimized/famoyinka-03.webp') }}" alt="Creative arts workshop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                    </a>
+                                    <a href="{{ $galleryUrl }}" class="group relative aspect-4/3 rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--surface-alt)] shadow-xs block">
+                                        <img src="{{ asset('front/images/gallery/optimized/famoyinka-04.webp') }}" alt="Ikogosi excursion" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
+
                     {{-- Community Callout Band --}}
                     <div class="p-8 rounded-3xl bg-linear-to-r from-maroon/10 to-mint/10 border border-maroon/20 dark:border-mint/20 space-y-4">
                         <h3 class="text-xl font-bold text-[var(--heading)]">
@@ -102,6 +158,34 @@
 
                 {{-- Right Column: Project Sidebar --}}
                 <div class="lg:col-span-4 space-y-8 lg:sticky lg:top-28">
+                    
+                    {{-- Visual Gallery Card in Sidebar --}}
+                    @if ($programme->slug === 'famoyinka-memorial-library' || $galleryAlbum)
+                        @php
+                            $targetAlbumSlug = $galleryAlbum ? $galleryAlbum->slug : 'famoyinka-library';
+                            $galleryUrl = url('/gallery?album=' . $targetAlbumSlug);
+                        @endphp
+                        <div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-6 shadow-xs space-y-4">
+                            <div class="flex items-center gap-2">
+                                <span class="p-2 rounded-xl bg-maroon/10 text-maroon dark:bg-mint/10 dark:text-mint">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </span>
+                                <h3 class="text-base font-bold text-[var(--heading)]">
+                                    Visual Outreach
+                                </h3>
+                            </div>
+                            <p class="text-xs text-[var(--text-muted)] leading-relaxed">
+                                See our children in action across library sessions, creative crafts, outdoor team-building, and field excursions.
+                            </p>
+                            <a href="{{ $galleryUrl }}" 
+                               class="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-xs font-bold bg-[var(--surface-alt)] hover:bg-maroon hover:text-white border border-[var(--border)] text-[var(--heading)] transition-all group">
+                                <span>Explore Photo Gallery</span>
+                                <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                            </a>
+                        </div>
+                    @endif
                     
                     {{-- Quick Facts Card --}}
                     <div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">

@@ -322,7 +322,140 @@
         </div>
     </section>
 
-    {{-- 7. Featured Project Card --}}
+    {{-- 7. Famoyinka Memorial Children's Library Showcase --}}
+    <section class="py-20 lg:py-28 bg-[var(--surface-alt)] transition-colors relative overflow-hidden border-y border-[var(--border)]">
+        {{-- Subtle background pattern --}}
+        <div class="absolute inset-0 z-0 opacity-15 pointer-events-none">
+            <div class="absolute inset-0 bg-[radial-gradient(#800000_1px,transparent_1px)] [background-size:28px_28px]"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+                {{-- Left Side: Text and 4 Pillars --}}
+                <div class="lg:col-span-7 space-y-8">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-maroon/10 text-maroon dark:bg-mint/15 dark:text-mint border border-maroon/20 dark:border-mint/30">
+                            <span>📚 Permanent Literacy Sanctuary</span>
+                        </div>
+                        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[var(--heading)] tracking-tight leading-tight mt-3">
+                            Famoyinka Memorial Children's Library
+                        </h2>
+                        <p class="text-base sm:text-lg text-[var(--text)] leading-relaxed mt-4">
+                            A vibrant community sanctuary in Ijero-Ekiti founded to nurture inquisitive minds, ignite a lifelong love for reading, and inspire creative expression in every child.
+                        </p>
+                    </div>
+
+                    {{-- 4 Core Pillars Grid --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {{-- Pillar 1 --}}
+                        <div class="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5 shadow-xs hover:border-maroon/40 dark:hover:border-mint/40 transition-colors">
+                            <div class="w-10 h-10 rounded-xl bg-maroon/10 text-maroon dark:bg-mint/10 dark:text-mint flex items-center justify-center text-lg mb-3">
+                                📖
+                            </div>
+                            <h3 class="text-base font-bold text-[var(--heading)]">Free Book Loans</h3>
+                            <p class="text-xs sm:text-sm text-[var(--text-muted)] mt-1 leading-relaxed">
+                                Curated fiction, non-fiction, science, and cultural literature accessible to every child and family without subscription fees.
+                            </p>
+                        </div>
+
+                        {{-- Pillar 2 --}}
+                        <div class="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5 shadow-xs hover:border-maroon/40 dark:hover:border-mint/40 transition-colors">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 dark:bg-amber-400/10 dark:text-amber-400 flex items-center justify-center text-lg mb-3">
+                                🎨
+                            </div>
+                            <h3 class="text-base font-bold text-[var(--heading)]">Creative Arts & Crafts</h3>
+                            <p class="text-xs sm:text-sm text-[var(--text-muted)] mt-1 leading-relaxed">
+                                Guided watercolor painting, model crafts, and expressive creative sessions building cognitive agility and artistic confidence.
+                            </p>
+                        </div>
+
+                        {{-- Pillar 3 --}}
+                        <div class="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5 shadow-xs hover:border-maroon/40 dark:hover:border-mint/40 transition-colors">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:bg-emerald-400/10 dark:text-emerald-400 flex items-center justify-center text-lg mb-3">
+                                🏆
+                            </div>
+                            <h3 class="text-base font-bold text-[var(--heading)]">Leadership & Teamwork</h3>
+                            <p class="text-xs sm:text-sm text-[var(--text-muted)] mt-1 leading-relaxed">
+                                Transformational leadership activities, sportsmanship challenges, and problem-solving circles anchored on our DRNICER values.
+                            </p>
+                        </div>
+
+                        {{-- Pillar 4 --}}
+                        <div class="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5 shadow-xs hover:border-maroon/40 dark:hover:border-mint/40 transition-colors">
+                            <div class="w-10 h-10 rounded-xl bg-sky-500/10 text-sky-600 dark:bg-sky-400/10 dark:text-sky-400 flex items-center justify-center text-lg mb-3">
+                                🌿
+                            </div>
+                            <h3 class="text-base font-bold text-[var(--heading)]">Educational Excursions</h3>
+                            <p class="text-xs sm:text-sm text-[var(--text-muted)] mt-1 leading-relaxed">
+                                Horizon-broadening expeditions including trips to the Ikogosi Warm Springs, expanding children's environmental perspective.
+                            </p>
+                        </div>
+                    </div>
+
+                    {{-- Actions --}}
+                    <div class="flex flex-wrap items-center gap-4 pt-2">
+                        <a href="{{ url('/programmes/famoyinka-memorial-library') }}" 
+                           class="inline-flex items-center justify-center px-7 py-3.5 rounded-full text-sm font-bold bg-maroon text-white hover:bg-crimson transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5">
+                            Explore Library Programme &rarr;
+                        </a>
+                        <a href="{{ url('/gallery?album=famoyinka-library') }}" 
+                           class="inline-flex items-center justify-center px-6 py-3.5 rounded-full text-sm font-semibold border border-[var(--border)] bg-[var(--surface)] text-[var(--heading)] hover:border-maroon hover:text-maroon dark:hover:border-mint dark:hover:text-mint transition-all duration-200">
+                            Browse Photo Gallery
+                        </a>
+                    </div>
+                </div>
+
+                {{-- Right Side: Action Photography Mosaic --}}
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="grid grid-cols-2 gap-3 sm:gap-4">
+                        <div class="space-y-3 sm:space-y-4">
+                            <div class="rounded-2xl sm:rounded-3xl overflow-hidden border border-[var(--border)] shadow-md aspect-4/5 group relative">
+                                <img src="{{ asset('front/images/gallery/optimized/famoyinka-01.webp') }}" 
+                                     alt="Student selecting books at Famoyinka Memorial Children's Library" 
+                                     loading="lazy" decoding="async" 
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent flex items-end p-3.5">
+                                    <span class="text-xs font-semibold text-white drop-shadow-xs">Free Book Loans</span>
+                                </div>
+                            </div>
+                            <div class="rounded-2xl sm:rounded-3xl overflow-hidden border border-[var(--border)] shadow-md aspect-square group relative">
+                                <img src="{{ asset('front/images/gallery/optimized/famoyinka-03.webp') }}" 
+                                     alt="Creative watercolor art workshop" 
+                                     loading="lazy" decoding="async" 
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent flex items-end p-3.5">
+                                    <span class="text-xs font-semibold text-white drop-shadow-xs">Creative Arts</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3 sm:space-y-4 pt-6 sm:pt-8">
+                            <div class="rounded-2xl sm:rounded-3xl overflow-hidden border border-[var(--border)] shadow-md aspect-square group relative">
+                                <img src="{{ asset('front/images/gallery/optimized/famoyinka-02.webp') }}" 
+                                     alt="Leadership teamwork games and sports" 
+                                     loading="lazy" decoding="async" 
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent flex items-end p-3.5">
+                                    <span class="text-xs font-semibold text-white drop-shadow-xs">Leadership Games</span>
+                                </div>
+                            </div>
+                            <div class="rounded-2xl sm:rounded-3xl overflow-hidden border border-[var(--border)] shadow-md aspect-4/5 group relative">
+                                <img src="{{ asset('front/images/gallery/optimized/famoyinka-04.webp') }}" 
+                                     alt="Ikogosi Warm Springs educational excursion" 
+                                     loading="lazy" decoding="async" 
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent flex items-end p-3.5">
+                                    <span class="text-xs font-semibold text-white drop-shadow-xs">Ikogosi Excursion</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- 8. Featured Project Card --}}
     @php
         $featSec = $sections['featured_project'] ?? null;
     @endphp

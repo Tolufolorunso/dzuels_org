@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Programme;
+use Database\Seeders\GallerySeeder;
 use Database\Seeders\ProgrammeSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -116,5 +117,36 @@ class ProgrammePublicTest extends TestCase
         $detailResponse = $this->get('/programmes/spelling-bee-contests');
         $detailResponse->assertOk();
         $detailResponse->assertSee('front/images/gallery/optimized/spelling-01.webp');
+    }
+
+    public function test_famoyinka_memorial_library_programme_renders_with_rich_narrative_and_gallery_cross_link(): void
+    {
+        $this->seed(ProgrammeSeeder::class);
+        $this->seed(GallerySeeder::class);
+
+        $response = $this->get('/programmes/famoyinka-memorial-library');
+
+        $response->assertOk();
+        $response->assertSeeText("Famoyinka Memorial Children's Library");
+        $response->assertSeeText('Explore Photo Gallery');
+        $response->assertSee(url('/gallery?album=famoyinka-library'));
+        $response->assertSee('front/images/gallery/optimized/famoyinka-01.webp');
+    }
+
+    public function test_home_and_about_pages_feature_famoyinka_memorial_library(): void
+    {
+        $homeResponse = $this->get('/');
+        $homeResponse->assertOk();
+        $homeResponse->assertSeeText("Famoyinka Memorial Children's Library");
+        $homeResponse->assertSeeText('Free Book Loans');
+        $homeResponse->assertSeeText('Creative Arts & Crafts');
+        $homeResponse->assertSeeText('Leadership & Teamwork');
+        $homeResponse->assertSeeText('Educational Excursions');
+        $homeResponse->assertSee(url('/programmes/famoyinka-memorial-library'));
+
+        $aboutResponse = $this->get('/about');
+        $aboutResponse->assertOk();
+        $aboutResponse->assertSeeText("Famoyinka Memorial Children's Library");
+        $aboutResponse->assertSee(url('/programmes/famoyinka-memorial-library'));
     }
 }
