@@ -7,6 +7,7 @@ use App\Models\EventSponsor;
 use App\Models\Setting;
 use App\Models\User;
 use App\Services\DatabaseExportService;
+use Database\Seeders\PageSectionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
 use Tests\TestCase;
@@ -203,5 +204,22 @@ class DatabaseExportCommandTest extends TestCase
         $this->assertArrayHasKey('users', $result['tables']);
         $this->assertArrayHasKey('migrations', $result['tables']);
         $this->assertArrayHasKey('page_sections', $result['tables']);
+    }
+
+    public function test_it_exports_page_sections_with_meta_data(): void
+    {
+        $this->seed(PageSectionSeeder::class);
+
+        $customRelative = 'database/dumps/test_export.sql';
+        $customAbsolute = base_path($customRelative);
+
+        $this->artisan('db:export-sql', ['--output' => $customRelative])
+            ->assertSuccessful();
+
+        $content = File::get($customAbsolute);
+
+        $this->assertStringContainsString('INSERT INTO `page_sections`', $content);
+        $this->assertStringContainsString('AN INTEGRATED APPROACH TO THE TOTAL WELL BEING OF THE CHILD', $content);
+        $this->assertStringContainsString('Paul\\\'s academy', $content);
     }
 }

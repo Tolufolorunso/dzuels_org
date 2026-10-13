@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Event;
 use App\Models\GalleryAlbum;
+use App\Models\PageSection;
 use App\Models\Partner;
 use App\Models\Programme;
 use App\Models\Setting;
@@ -88,6 +89,7 @@ class LaunchCheckCommand extends Command
             'Partners' => Partner::count(),
             'Gallery Albums' => GalleryAlbum::count(),
             'Settings' => Setting::count(),
+            'Page Sections' => PageSection::count(),
         ];
 
         foreach ($requiredModels as $name => $count) {
@@ -107,6 +109,29 @@ class LaunchCheckCommand extends Command
             $warnings++;
         }
 
+        if (Setting::getLogoUrl()) {
+            $this->line('  <fg=green>✔</> Site logo helper configured ('.Setting::getLogoUrl().').');
+        } else {
+            $this->line('  <fg=yellow>⚠</> Site logo is not configured.');
+            $warnings++;
+        }
+
+        $givebutterUrl = Setting::get('givebutter_url');
+        if ($givebutterUrl) {
+            $this->line('  <fg=green>✔</> Givebutter U.S. donation channel configured ('.$givebutterUrl.').');
+        } else {
+            $this->line('  <fg=yellow>⚠</> Givebutter URL is not set in settings.');
+            $warnings++;
+        }
+
+        $causesSection = PageSection::where('page_key', 'home')->where('section_key', 'causes')->first();
+        if ($causesSection && ! empty($causesSection->meta_data['pillars']) && count($causesSection->meta_data['pillars']) === 6) {
+            $this->line('  <fg=green>✔</> 6 Impact Causes and foundational tagline verified in Page CMS.');
+        } else {
+            $this->line('  <fg=yellow>⚠</> 6 Impact Causes or tagline missing in home page sections.');
+            $warnings++;
+        }
+
         $sqlDumpPath = database_path('dumps/dzuels_database.sql');
         $rootDumpPath = base_path('dzuels_database.sql');
         if ((File::exists($sqlDumpPath) && filesize($sqlDumpPath) > 0) || (File::exists($rootDumpPath) && filesize($rootDumpPath) > 0)) {
@@ -115,6 +140,14 @@ class LaunchCheckCommand extends Command
             $this->line("  <fg=green>✔</> Production MariaDB/MySQL database dump exists ({$dumpSize} KB).");
         } else {
             $this->line('  <fg=yellow>⚠</> Production database dump missing. Generate with `php artisan db:export-sql`.');
+            $warnings++;
+        }
+
+        $cpanelManifestPath = base_path('cpanel_changed_files.txt');
+        if (File::exists($cpanelManifestPath) && filesize($cpanelManifestPath) > 0) {
+            $this->line('  <fg=green>✔</> cPanel deployment manifest exists (cpanel_changed_files.txt).');
+        } else {
+            $this->line('  <fg=yellow>⚠</> cPanel deployment manifest missing.');
             $warnings++;
         }
 

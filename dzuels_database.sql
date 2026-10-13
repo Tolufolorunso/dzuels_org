@@ -1,7 +1,7 @@
 -- =====================================================================
 -- Dzuels Educational Foundation - Production Database Export
 -- Target: cPanel phpMyAdmin / MySQL 5.7+ / MariaDB 10.3+
--- Generated: 2026-10-11 17:12:47 UTC
+-- Generated: 2026-10-13 17:16:30 UTC
 -- Laravel: 13.35.0 | PHP: 8.4.7
 -- =====================================================================
 
@@ -28,7 +28,7 @@ CREATE TABLE `migrations` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `migrations` (21 rows)
+-- Dumping data for table `migrations` (22 rows)
 --
 
 LOCK TABLES `migrations` WRITE;
@@ -54,7 +54,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (18, '2026_10_11_070000_add_theme_to_events_table', 1),
 (19, '2026_10_11_160000_add_objective_to_events_table', 1),
 (20, '2026_10_11_160001_create_event_sponsors_table', 1),
-(21, '2026_10_11_170000_create_page_sections_table', 1);
+(21, '2026_10_11_170000_create_page_sections_table', 1),
+(22, '2026_10_13_061932_add_year_to_gallery_photos_table', 2);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -127,7 +128,7 @@ CREATE TABLE `sessions` (
 LOCK TABLES `sessions` WRITE;
 /*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('b0cfw2JDhdw9cdH2BC0qGtwOjDdN54px3dEY6Vtb', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJIaTVuWDROQnJObWVkVnNXc3ZCMFk1WENndm1FeWRvbUplZWVteElHIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL2xvY2FsaG9zdDo4MDAwXC9wcm9ncmFtbWVzIiwicm91dGUiOiJwcm9ncmFtbWVzLmluZGV4In0sIl9mbGFzaCI6eyJvbGQiOltdLCJuZXciOltdfX0=', 1791738767);
+('Wck1qOvNXI4r2yB2tI378zoGnn3grIIn6bTmjZPK', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiI4aThrdE1HcGxBZEhVWDZOQVIzV3NHZ0VhZHlCWHFuZWlpZHc2aXdFIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL2xvY2FsaG9zdDo4MDAwXC9ldmVudHMiLCJyb3V0ZSI6ImV2ZW50cy5pbmRleCJ9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX0sImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjoxLCJwYXNzd29yZF9oYXNoX3dlYiI6ImRlMWQyNzA0OWZkYmM4N2Y4YTkzNDJjNWQ2Yzg3YjJiYTdhOTU1Yjg1YzcxMTMyZWI1ZjhjYTliZDVkMDU3ODEifQ==', 1791911790);
 /*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -151,7 +152,7 @@ CREATE TABLE `cache` (
 LOCK TABLES `cache` WRITE;
 /*!40000 ALTER TABLE `cache` DISABLE KEYS */;
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('dzuels-cache-dzuels_site_settings', 'a:18:{s:17:"stat_ict_students";i:165;s:22:"stat_literacy_students";i:591;s:22:"stat_schools_supported";i:15;s:14:"stat_feed_mode";s:6:"manual";s:17:"stat_api_endpoint";s:0:"";s:15:"contact_phone_1";s:17:"+234 904 249 3883";s:15:"contact_phone_2";s:17:"+234 810 000 0000";s:13:"contact_email";s:25:"info@dzuelsfoundation.org";s:15:"contact_address";s:51:"12b Doherty Road, Ijero-Ekiti, Ekiti State, Nigeria";s:15:"flutterwave_url";s:40:"https://flutterwave.com/pay/j0byxgjs0nma";s:9:"bank_name";s:33:"Guaranty Trust Bank (GTBank) Plc.";s:17:"bank_account_name";s:29:"Dzuels Educational Foundation";s:19:"bank_account_number";s:10:"0450072850";s:19:"registration_number";s:16:"CAC/IT/NO 123456";s:15:"social_linkedin";s:20:"https://linkedin.com";s:15:"social_facebook";s:20:"https://facebook.com";s:14:"social_twitter";s:19:"https://twitter.com";s:16:"social_instagram";s:21:"https://instagram.com";}', 2107097007);
+('dzuels-cache-dzuels_site_settings', 'a:26:{s:17:"stat_ict_students";i:165;s:22:"stat_literacy_students";i:591;s:22:"stat_schools_supported";i:15;s:14:"stat_feed_mode";s:6:"manual";s:17:"stat_api_endpoint";s:0:"";s:15:"contact_phone_1";s:17:"+234 904 249 3883";s:15:"contact_phone_2";s:17:"+234 810 000 0000";s:13:"contact_email";s:25:"info@dzuelsfoundation.org";s:15:"contact_address";s:51:"12b Doherty Road, Ijero-Ekiti, Ekiti State, Nigeria";s:15:"flutterwave_url";s:40:"https://flutterwave.com/pay/j0byxgjs0nma";s:9:"bank_name";s:33:"Guaranty Trust Bank (GTBank) Plc.";s:17:"bank_account_name";s:29:"Dzuels Educational Foundation";s:19:"bank_account_number";s:10:"0450072850";s:19:"registration_number";s:16:"CAC/IT/NO 123456";s:15:"social_linkedin";s:20:"https://linkedin.com";s:15:"social_facebook";s:20:"https://facebook.com";s:14:"social_twitter";s:19:"https://twitter.com";s:16:"social_instagram";s:21:"https://instagram.com";s:15:"contact_phone_3";s:0:"";s:15:"contact_phone_4";s:0:"";s:15:"contact_phone_5";s:0:"";s:21:"contact_working_hours";s:32:"Mon – Fri: 8:00 AM – 5:00 PM";s:16:"contact_timezone";s:6:"GMT +1";s:25:"contact_working_days_note";s:25:"Closed on public holidays";s:9:"site_logo";s:21:"front/images/logo.png";s:14:"givebutter_url";s:40:"https://givebutter.com/dzuels-foundation";}', 2107270282);
 /*!40000 ALTER TABLE `cache` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -249,7 +250,7 @@ CREATE TABLE `settings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `settings` (18 rows)
+-- Dumping data for table `settings` (26 rows)
 --
 
 LOCK TABLES `settings` WRITE;
@@ -260,8 +261,8 @@ INSERT INTO `settings` (`id`, `key`, `value`, `type`, `group`, `created_at`, `up
 (3, 'stat_schools_supported', '15', 'integer', 'impact', '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
 (4, 'stat_feed_mode', 'manual', 'string', 'impact', '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
 (5, 'stat_api_endpoint', '', 'string', 'impact', '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(6, 'contact_phone_1', '+234 904 249 3883', 'string', 'contact', '2026-10-11 16:36:13', '2026-10-11 16:43:21'),
-(7, 'contact_phone_2', '+234 810 000 0000', 'string', 'contact', '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
+(6, 'contact_phone_1', '+234 904 249 3883', 'string', 'contact', '2026-10-11 16:36:13', '2026-10-13 16:51:02'),
+(7, 'contact_phone_2', '+234 810 000 0000', 'string', 'contact', '2026-10-11 16:36:13', '2026-10-13 16:51:02'),
 (8, 'contact_email', 'info@dzuelsfoundation.org', 'string', 'contact', '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
 (9, 'contact_address', '12b Doherty Road, Ijero-Ekiti, Ekiti State, Nigeria', 'string', 'contact', '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
 (10, 'flutterwave_url', 'https://flutterwave.com/pay/j0byxgjs0nma', 'string', 'banking', '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
@@ -272,7 +273,15 @@ INSERT INTO `settings` (`id`, `key`, `value`, `type`, `group`, `created_at`, `up
 (15, 'social_linkedin', 'https://linkedin.com', 'string', 'social', '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
 (16, 'social_facebook', 'https://facebook.com', 'string', 'social', '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
 (17, 'social_twitter', 'https://twitter.com', 'string', 'social', '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(18, 'social_instagram', 'https://instagram.com', 'string', 'social', '2026-10-11 16:36:13', '2026-10-11 16:36:13');
+(18, 'social_instagram', 'https://instagram.com', 'string', 'social', '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
+(19, 'contact_phone_3', '', 'string', 'contact', '2026-10-13 14:30:55', '2026-10-13 16:51:02'),
+(20, 'contact_phone_4', '', 'string', 'contact', '2026-10-13 14:30:55', '2026-10-13 14:30:55'),
+(21, 'contact_phone_5', '', 'string', 'contact', '2026-10-13 14:30:55', '2026-10-13 14:30:55'),
+(22, 'contact_working_hours', 'Mon – Fri: 8:00 AM – 5:00 PM', 'string', 'contact', '2026-10-13 14:30:55', '2026-10-13 16:51:02'),
+(23, 'contact_timezone', 'GMT +1', 'string', 'contact', '2026-10-13 14:30:55', '2026-10-13 14:30:55'),
+(24, 'contact_working_days_note', 'Closed on public holidays', 'string', 'contact', '2026-10-13 14:30:55', '2026-10-13 14:30:55'),
+(25, 'site_logo', 'front/images/logo.png', 'string', 'general', '2026-10-13 16:51:02', '2026-10-13 16:51:02'),
+(26, 'givebutter_url', 'https://givebutter.com/dzuels-foundation', 'string', 'banking', '2026-10-13 16:51:02', '2026-10-13 16:51:02');
 /*!40000 ALTER TABLE `settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -346,10 +355,10 @@ CREATE TABLE `partners` (
 LOCK TABLES `partners` WRITE;
 /*!40000 ALTER TABLE `partners` DISABLE KEYS */;
 INSERT INTO `partners` (`id`, `name`, `logo`, `website_url`, `sort_order`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 'ASCEND Education Foundation', 'front/images/ascend.jpg', 'https://ascendedufoundation.org/', 1, 1, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(2, 'Solape Adesuyi Associates', 'front/images/SAA.jpg', NULL, 2, 1, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(3, 'Help Meet A Need', 'front/images/helpmeetaneed.png', NULL, 3, 1, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(4, 'Int International', 'front/images/intinternational.png', NULL, 4, 1, '2026-10-11 16:36:13', '2026-10-11 16:36:13');
+(1, 'ASCEND Education Foundation', 'front/images/ascend.webp', 'https://ascendedufoundation.org/', 1, 1, '2026-10-11 16:36:13', '2026-10-13 14:47:21'),
+(2, 'Solape Adesuyi Associates', 'front/images/SAA.webp', NULL, 2, 1, '2026-10-11 16:36:13', '2026-10-13 14:47:21'),
+(3, 'Help Meet A Need', 'front/images/helpmeetaneed.webp', NULL, 3, 1, '2026-10-11 16:36:13', '2026-10-13 14:47:21'),
+(4, 'Int International', 'front/images/intinternational.webp', NULL, 4, 1, '2026-10-11 16:36:13', '2026-10-13 14:47:21');
 /*!40000 ALTER TABLE `partners` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -379,16 +388,17 @@ CREATE TABLE `programmes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `programmes` (4 rows)
+-- Dumping data for table `programmes` (5 rows)
 --
 
 LOCK TABLES `programmes` WRITE;
 /*!40000 ALTER TABLE `programmes` DISABLE KEYS */;
 INSERT INTO `programmes` (`id`, `title`, `slug`, `summary`, `body`, `cover_image`, `partner_name`, `gallery_album_id`, `is_featured`, `is_active`, `sort_order`, `seo_title`, `seo_description`, `created_at`, `updated_at`) VALUES
-(1, 'Digital Infrastructure & Literacy in Ijero-Ekiti', 'ijero-digital-literacy', 'Free literacy interventions, digital skills training for teachers and students, and computer lab provisioning across Ijero-Ekiti in Southwest Nigeria.', 'The Digital Infrastructure and Literacy project in Ijero-Ekiti is Dzuels Educational Foundation\'s flagship community technology intervention. Operated in close technical collaboration with the Information Technology Seed Development Initiative (SeedDev), this project addresses the stark digital divide experienced by secondary schools and educators in rural Ekiti State.\n\nThrough this multi-year initiative, we equip local non-profit and public community secondary schools with fully functional computer workstations, reliable power inverters, and offline educational repositories. Our trainers deliver structured weekend and holiday bootcamps covering foundational computer operations, typing skills, digital research, visual productivity suites, and basic coding paradigms for both pupils and teachers.\n\nBy empowering educators with digital lesson planning competencies and introducing young learners to modern technology early, this programme directly unlocks future career pathways in software engineering, digital entrepreneurship, and academic excellence.', 'front/images/dzuelsCollage.webp', 'Information Technology Seed Development Initiative (SeedDev)', NULL, 1, 1, 1, 'Digital Infrastructure & Literacy in Ijero-Ekiti | Dzuels Foundation', 'Equipping public schools with modern digital infrastructure, teacher upskilling, and computer literacy bootcamps for indigent students in Ijero-Ekiti.', '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(2, 'Innovation and Tech Day (ITD)', 'innovation-and-tech-day', 'Our annual flagship technology festival celebrating youth innovation, hands-on digital exhibitions, robotics demos, and keynote mentorship from tech industry leaders.', 'Innovation and Tech Day (ITD) is our marquee annual showcase where young beneficiaries from across Ekiti State demonstrate their technological inventions, creative software projects, and digital literacy milestones before parents, community leaders, and visiting industry executives.\n\nEach edition features high-energy student hackathons, coding exhibitions, digital art showcases, and inspirational keynote panels hosted by software engineers, healthcare leaders, and academic consultants from Nigeria and the diaspora. Outstanding teams and student innovators receive educational scholarships, laptops, and direct mentorship placement to foster their continued growth.\n\nITD serves as both a celebration of community resilience and a launchpad for the next generation of African technology creators.', 'front/images/gallery/optimized/itd-2025-05.webp', 'SeedDev & Corporate Tech Allies', NULL, 1, 1, 2, 'Innovation and Tech Day (ITD) | Dzuels Educational Foundation', 'Annual flagship technology exposition celebrating youth innovation, coding exhibitions, and creative problem-solving among Ekiti youth.', '2026-10-11 16:36:13', '2026-10-11 17:10:37'),
-(3, 'Reading Competition', 'reading-competition', 'A grassroots literacy campaign designed to rekindle a passionate reading culture, vocabulary mastery, and textual comprehension among primary and junior secondary students.', 'Reading is the foundational cornerstone of all intellectual development. The Dzuels Reading Competition is an annual literacy advocacy programme that challenges primary and junior secondary pupils across underserved schools to dive deep into literature, African folklore, and contemporary educational texts.\n\nParticipating students receive curated book packs and participate in inter-school reading challenges that assess comprehension, phonetic pronunciation, textual summary, and expressive articulation. In tandem with the competition, our volunteer educators facilitate mobile reading clinics and donate class libraries to partnering schools to sustain reading habits throughout the academic calendar.\n\nBy transforming reading into an exciting, rewarded sport, we build lifelong learners who lead with intellect and curiosity.', 'front/images/about_1.webp', 'ASCEND Education Foundation', NULL, 0, 1, 3, 'Annual Reading Competition | Dzuels Educational Foundation', 'State-wide literacy intervention revitalizing reading culture and comprehension excellence among primary school pupils in Ekiti State.', '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(4, 'Spelling Bee Contests', 'spelling-bee-contests', 'A high-impact inter-school spelling championship enhancing linguistic confidence, memory retention, public poise, and academic camaraderie for young pupils.', 'The Dzuels Spelling Bee Contest brings together hundreds of eager pupils from diverse public and community schools to test their mastery of the English lexicon in a supportive, spirited tournament.\n\nBeyond teaching orthography and etymology, the Spelling Bee builds crucial non-cognitive skills: composure under pressure, mental agility, sportsmanship, and fearless public speaking. Finalists compete on stage before cheering peers, families, and education inspectors, competing for coveted school fee grants, complete textbook suites, and gold medals.\n\nThis initiative proves that with structured practice and compassionate encouragement, every child can achieve extraordinary linguistic and academic heights.', 'front/images/gallery/optimized/spelling-01.webp', NULL, NULL, 0, 1, 4, 'Spelling Bee Contests | Dzuels Educational Foundation', 'Inter-school competition promoting vocabulary acquisition, public speaking poise, and cognitive development for young learners.', '2026-10-11 16:36:13', '2026-10-11 16:45:03');
+(1, 'Digital Infrastructure & Literacy in Ijero-Ekiti', 'ijero-digital-literacy', 'Free literacy interventions, digital skills training for teachers and students, and computer lab provisioning across Ijero-Ekiti in Southwest Nigeria.', 'The Digital Infrastructure and Literacy project in Ijero-Ekiti is Dzuels Educational Foundation\'s flagship community technology intervention. Operated in close technical collaboration with the Information Technology Seed Development Initiative (SeedDev), this project addresses the stark digital divide experienced by secondary schools and educators in rural Ekiti State.\n\nThrough this multi-year initiative, we equip local non-profit and public community secondary schools with fully functional computer workstations, reliable power inverters, and offline educational repositories. Our trainers deliver structured weekend and holiday bootcamps covering foundational computer operations, typing skills, digital research, visual productivity suites, and basic coding paradigms for both pupils and teachers.\n\nBy empowering educators with digital lesson planning competencies and introducing young learners to modern technology early, this programme directly unlocks future career pathways in software engineering, digital entrepreneurship, and academic excellence.', 'front/images/dzuelsCollage.webp', 'Information Technology Seed Development Initiative (SeedDev)', NULL, 1, 1, 2, 'Digital Infrastructure & Literacy in Ijero-Ekiti | Dzuels Foundation', 'Equipping public schools with modern digital infrastructure, teacher upskilling, and computer literacy bootcamps for indigent students in Ijero-Ekiti.', '2026-10-11 16:36:13', '2026-10-13 14:07:52'),
+(2, 'Innovation and Tech Day (ITD)', 'innovation-and-tech-day', 'Our annual flagship technology festival celebrating youth innovation, hands-on digital exhibitions, robotics demos, and keynote mentorship from tech industry leaders.', 'Innovation and Tech Day (ITD) is our marquee annual showcase where young beneficiaries from across Ekiti State demonstrate their technological inventions, creative software projects, and digital literacy milestones before parents, community leaders, and visiting industry executives.\n\nEach edition features high-energy student hackathons, coding exhibitions, digital art showcases, and inspirational keynote panels hosted by software engineers, healthcare leaders, and academic consultants from Nigeria and the diaspora. Outstanding teams and student innovators receive educational scholarships, laptops, and direct mentorship placement to foster their continued growth.\n\nITD serves as both a celebration of community resilience and a launchpad for the next generation of African technology creators.', 'front/images/gallery/optimized/itd-2025-05.webp', 'SeedDev & Corporate Tech Allies', NULL, 1, 1, 3, 'Innovation and Tech Day (ITD) | Dzuels Educational Foundation', 'Annual flagship technology exposition celebrating youth innovation, coding exhibitions, and creative problem-solving among Ekiti youth.', '2026-10-11 16:36:13', '2026-10-13 14:07:52'),
+(3, 'Reading Competition', 'reading-competition', 'A grassroots literacy campaign designed to rekindle a passionate reading culture, vocabulary mastery, and textual comprehension among primary and junior secondary students.', 'Reading is the foundational cornerstone of all intellectual development. The Dzuels Reading Competition is an annual literacy advocacy programme that challenges primary and junior secondary pupils across underserved schools to dive deep into literature, African folklore, and contemporary educational texts.\n\nParticipating students receive curated book packs and participate in inter-school reading challenges that assess comprehension, phonetic pronunciation, textual summary, and expressive articulation. In tandem with the competition, our volunteer educators facilitate mobile reading clinics and donate class libraries to partnering schools to sustain reading habits throughout the academic calendar.\n\nBy transforming reading into an exciting, rewarded sport, we build lifelong learners who lead with intellect and curiosity.', 'front/images/about_1.webp', 'ASCEND Education Foundation', NULL, 0, 1, 4, 'Annual Reading Competition | Dzuels Educational Foundation', 'State-wide literacy intervention revitalizing reading culture and comprehension excellence among primary school pupils in Ekiti State.', '2026-10-11 16:36:13', '2026-10-13 14:07:52'),
+(4, 'Spelling Bee Contests', 'spelling-bee-contests', 'A high-impact inter-school spelling championship enhancing linguistic confidence, memory retention, public poise, and academic camaraderie for young pupils.', 'The Dzuels Spelling Bee Contest brings together hundreds of eager pupils from diverse public and community schools to test their mastery of the English lexicon in a supportive, spirited tournament.\n\nBeyond teaching orthography and etymology, the Spelling Bee builds crucial non-cognitive skills: composure under pressure, mental agility, sportsmanship, and fearless public speaking. Finalists compete on stage before cheering peers, families, and education inspectors, competing for coveted school fee grants, complete textbook suites, and gold medals.\n\nThis initiative proves that with structured practice and compassionate encouragement, every child can achieve extraordinary linguistic and academic heights.', 'front/images/gallery/optimized/spelling-01.webp', NULL, NULL, 0, 1, 5, 'Spelling Bee Contests | Dzuels Educational Foundation', 'Inter-school competition promoting vocabulary acquisition, public speaking poise, and cognitive development for young learners.', '2026-10-11 16:36:13', '2026-10-13 14:07:52'),
+(5, 'Famoyinka Memorial Children\'s Library', 'famoyinka-memorial-library', 'A community-centered children\'s reading sanctuary and creative learning hub in Ijero-Ekiti providing free book lending, weekend study circles, creative arts and crafts, transformational leadership games, and educational excursions.', 'The Famoyinka Memorial Children\'s Library is Dzuels Educational Foundation\'s dedicated literacy and youth enrichment sanctuary in Ijero-Ekiti. Established in loving memory of a lifelong community champion for child welfare and learning, the library provides a safe, welcoming, and vibrant environment where young learners from indigent backgrounds can discover the joy of books, cultivate imaginative thinking, and build foundational leadership qualities.\n\nOur extensive collection spans African literature, classic folklore, beginner phonics, science and mathematics workbooks, reference encyclopedias, and engaging fiction. Beyond daily book loans, the library hosts structured weekend reading circles, interactive storytelling sessions, creative arts and crafts workshops, and transformational leadership board challenges that instill discipline, teamwork, and fearless curiosity.\n\nIn addition, our library beneficiaries participate in fully sponsored educational excursions — such as nature and environmental science discovery field trips to Ikogosi Warm Springs — expanding their horizons beyond classroom walls. Every service, book loan, and mentorship activity is offered completely free of charge to all children in Ijero-Ekiti and surrounding communities.', 'front/images/gallery/optimized/famoyinka-01.webp', 'Famoyinka Family & Community Literacy Patrons', NULL, 1, 1, 1, 'Famoyinka Memorial Children\'s Library | Dzuels Educational Foundation', 'Community children\'s library providing free book borrowing, creative crafts, leadership games, and literacy circles in Ijero-Ekiti.', '2026-10-13 14:07:52', '2026-10-13 14:07:52');
 /*!40000 ALTER TABLE `programmes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -513,17 +523,18 @@ CREATE TABLE `gallery_albums` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `gallery_albums` (5 rows)
+-- Dumping data for table `gallery_albums` (6 rows)
 --
 
 LOCK TABLES `gallery_albums` WRITE;
 /*!40000 ALTER TABLE `gallery_albums` DISABLE KEYS */;
 INSERT INTO `gallery_albums` (`id`, `title`, `slug`, `kicker`, `description`, `cover_image`, `sort_order`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 'ITD 2025', 'itd-2025', 'Innovation and Tech Day', 'Highlights from ITD 2025: keynote talks, hands-on coding demonstrations, award moments, and student builders.', 'front/images/gallery/optimized/itd-2025-05.webp', 1, 1, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(2, 'ITD 2024', 'itd-2024', 'Inaugural Tech Day', 'Highlights from the maiden ITD 2024 edition: bringing technology education and digital skills to Ijero-Ekiti.', 'front/images/gallery/optimized/itd-2024-01.webp', 2, 1, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(3, 'Reading Competition', 'reading-competition', 'Literacy Outreach', 'Encouraging early literacy, book reading culture, comprehension, and vocabulary among young students.', 'front/images/gallery/optimized/reading-01.webp', 3, 1, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(4, 'Spelling Bee', 'spelling-bee', 'Academic Excellence', 'Spelling Bee tournaments across secondary schools in Ekiti State promoting language mastery and confidence.', 'front/images/gallery/optimized/spelling-01.webp', 4, 1, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(5, 'General', 'general', 'Everyday Impact', 'Mentorship sessions, classroom interventions, community outreach, and equipment distribution moments.', 'front/images/gallery/optimized/general-01.webp', 5, 1, '2026-10-11 16:36:13', '2026-10-11 16:36:13');
+(1, 'ITD 2025', 'itd-2025', 'Innovation and Tech Day', 'Highlights from ITD 2025: keynote talks, hands-on coding demonstrations, award moments, and student builders.', 'front/images/gallery/optimized/itd-2025-05.webp', 2, 1, '2026-10-11 16:36:13', '2026-10-13 14:10:21'),
+(2, 'ITD 2024', 'itd-2024', 'Inaugural Tech Day', 'Highlights from the maiden ITD 2024 edition: bringing technology education and digital skills to Ijero-Ekiti.', 'front/images/gallery/optimized/itd-2024-01.webp', 3, 1, '2026-10-11 16:36:13', '2026-10-13 14:10:21'),
+(3, 'Reading Competition', 'reading-competition', 'Literacy Outreach', 'Encouraging early literacy, book reading culture, comprehension, and vocabulary among young students.', 'front/images/gallery/optimized/reading-01.webp', 4, 1, '2026-10-11 16:36:13', '2026-10-13 14:10:21'),
+(4, 'Spelling Bee', 'spelling-bee', 'Academic Excellence', 'Spelling Bee tournaments across secondary schools in Ekiti State promoting language mastery and confidence.', 'front/images/gallery/optimized/spelling-01.webp', 5, 1, '2026-10-11 16:36:13', '2026-10-13 14:10:21'),
+(5, 'General', 'general', 'Everyday Impact', 'Mentorship sessions, classroom interventions, community outreach, and equipment distribution moments.', 'front/images/gallery/optimized/general-01.webp', 6, 1, '2026-10-11 16:36:13', '2026-10-13 14:10:21'),
+(6, 'Famoyinka Memorial Library', 'famoyinka-library', 'Children\'s Literacy & Creative Hub', 'Action moments from our community children\'s library in Ijero-Ekiti: story circles, book loans, creative crafts, transformational leadership games, and educational excursions.', 'front/images/gallery/optimized/famoyinka-01.webp', 1, 1, '2026-10-13 14:10:21', '2026-10-13 14:10:21');
 /*!40000 ALTER TABLE `gallery_albums` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -538,6 +549,7 @@ CREATE TABLE `gallery_photos` (
   `image_path` varchar(255) NOT NULL,
   `caption` varchar(255) NULL DEFAULT NULL,
   `alt_text` varchar(255) NULL DEFAULT NULL,
+  `year` varchar(10) NULL DEFAULT NULL,
   `sort_order` int NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -547,139 +559,74 @@ CREATE TABLE `gallery_photos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `gallery_photos` (125 rows)
+-- Dumping data for table `gallery_photos` (61 rows)
 --
 
 LOCK TABLES `gallery_photos` WRITE;
 /*!40000 ALTER TABLE `gallery_photos` DISABLE KEYS */;
-INSERT INTO `gallery_photos` (`id`, `gallery_album_id`, `image_path`, `caption`, `alt_text`, `sort_order`, `created_at`, `updated_at`) VALUES
-(1, 1, 'front/images/gallery/optimized/itd-2025-01.webp', 'ITD 2025 Highlight #1', 'ITD 2025 - ITD 2025 Highlight #1 in Ijero-Ekiti', 1, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(2, 1, 'front/images/gallery/optimized/itd-2025-02.webp', 'ITD 2025 Highlight #2', 'ITD 2025 - ITD 2025 Highlight #2 in Ijero-Ekiti', 2, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(3, 1, 'front/images/gallery/optimized/itd-2025-03.webp', 'ITD 2025 Highlight #3', 'ITD 2025 - ITD 2025 Highlight #3 in Ijero-Ekiti', 3, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(4, 1, 'front/images/gallery/optimized/itd-2025-04.webp', 'ITD 2025 Highlight #4', 'ITD 2025 - ITD 2025 Highlight #4 in Ijero-Ekiti', 4, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(5, 1, 'front/images/gallery/optimized/itd-2025-05.webp', 'ITD 2025 Highlight #5', 'ITD 2025 - ITD 2025 Highlight #5 in Ijero-Ekiti', 5, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(6, 1, 'front/images/gallery/optimized/itd-2025-06.webp', 'ITD 2025 Highlight #6', 'ITD 2025 - ITD 2025 Highlight #6 in Ijero-Ekiti', 6, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(7, 1, 'front/images/gallery/optimized/itd-2025-07.webp', 'ITD 2025 Highlight #7', 'ITD 2025 - ITD 2025 Highlight #7 in Ijero-Ekiti', 7, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(8, 1, 'front/images/gallery/optimized/itd-2025-08.webp', 'ITD 2025 Highlight #8', 'ITD 2025 - ITD 2025 Highlight #8 in Ijero-Ekiti', 8, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(9, 1, 'front/images/gallery/optimized/itd-2025-09.webp', 'ITD 2025 Highlight #9', 'ITD 2025 - ITD 2025 Highlight #9 in Ijero-Ekiti', 9, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(10, 1, 'front/images/gallery/optimized/itd-2025-10.webp', 'ITD 2025 Highlight #10', 'ITD 2025 - ITD 2025 Highlight #10 in Ijero-Ekiti', 10, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(11, 1, 'front/images/gallery/optimized/itd-2025-11.webp', 'ITD 2025 Highlight #11', 'ITD 2025 - ITD 2025 Highlight #11 in Ijero-Ekiti', 11, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(12, 1, 'front/images/gallery/optimized/itd-2025-12.webp', 'ITD 2025 Highlight #12', 'ITD 2025 - ITD 2025 Highlight #12 in Ijero-Ekiti', 12, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(13, 1, 'front/images/gallery/optimized/itd-2025-13.webp', 'ITD 2025 Highlight #13', 'ITD 2025 - ITD 2025 Highlight #13 in Ijero-Ekiti', 13, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(14, 1, 'front/images/gallery/optimized/itd-2025-14.webp', 'ITD 2025 Highlight #14', 'ITD 2025 - ITD 2025 Highlight #14 in Ijero-Ekiti', 14, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(15, 1, 'front/images/gallery/optimized/itd-2025-15.webp', 'ITD 2025 Highlight #15', 'ITD 2025 - ITD 2025 Highlight #15 in Ijero-Ekiti', 15, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(16, 1, 'front/images/gallery/optimized/itd-2025-16.webp', 'ITD 2025 Highlight #16', 'ITD 2025 - ITD 2025 Highlight #16 in Ijero-Ekiti', 16, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(17, 1, 'front/images/gallery/optimized/itd-2025-17.webp', 'ITD 2025 Highlight #17', 'ITD 2025 - ITD 2025 Highlight #17 in Ijero-Ekiti', 17, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(18, 1, 'front/images/gallery/optimized/itd-2025-18.webp', 'ITD 2025 Highlight #18', 'ITD 2025 - ITD 2025 Highlight #18 in Ijero-Ekiti', 18, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(19, 1, 'front/images/gallery/optimized/itd-2025-19.webp', 'ITD 2025 Highlight #19', 'ITD 2025 - ITD 2025 Highlight #19 in Ijero-Ekiti', 19, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(20, 1, 'front/images/gallery/optimized/itd-2025-20.webp', 'ITD 2025 Highlight #20', 'ITD 2025 - ITD 2025 Highlight #20 in Ijero-Ekiti', 20, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(21, 1, 'front/images/gallery/optimized/itd-2025-21.webp', 'ITD 2025 Highlight #21', 'ITD 2025 - ITD 2025 Highlight #21 in Ijero-Ekiti', 21, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(22, 1, 'front/images/gallery/optimized/itd-2025-22.webp', 'ITD 2025 Highlight #22', 'ITD 2025 - ITD 2025 Highlight #22 in Ijero-Ekiti', 22, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(23, 1, 'front/images/gallery/optimized/itd-2025-23.webp', 'ITD 2025 Highlight #23', 'ITD 2025 - ITD 2025 Highlight #23 in Ijero-Ekiti', 23, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(24, 1, 'front/images/gallery/optimized/itd-2025-24.webp', 'ITD 2025 Highlight #24', 'ITD 2025 - ITD 2025 Highlight #24 in Ijero-Ekiti', 24, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(25, 1, 'front/images/gallery/optimized/itd-2025-25.webp', 'ITD 2025 Highlight #25', 'ITD 2025 - ITD 2025 Highlight #25 in Ijero-Ekiti', 25, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(26, 2, 'front/images/gallery/optimized/itd-2024-01.webp', 'ITD 2024 Highlight #1', 'ITD 2024 - ITD 2024 Highlight #1 in Ijero-Ekiti', 1, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(27, 2, 'front/images/gallery/optimized/itd-2024-02.webp', 'ITD 2024 Highlight #2', 'ITD 2024 - ITD 2024 Highlight #2 in Ijero-Ekiti', 2, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(28, 2, 'front/images/gallery/optimized/itd-2024-03.webp', 'ITD 2024 Highlight #3', 'ITD 2024 - ITD 2024 Highlight #3 in Ijero-Ekiti', 3, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(29, 2, 'front/images/gallery/optimized/itd-2024-04.webp', 'ITD 2024 Highlight #4', 'ITD 2024 - ITD 2024 Highlight #4 in Ijero-Ekiti', 4, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(30, 2, 'front/images/gallery/optimized/itd-2024-05.webp', 'ITD 2024 Highlight #5', 'ITD 2024 - ITD 2024 Highlight #5 in Ijero-Ekiti', 5, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(31, 2, 'front/images/gallery/optimized/itd-2024-06.webp', 'ITD 2024 Highlight #6', 'ITD 2024 - ITD 2024 Highlight #6 in Ijero-Ekiti', 6, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(32, 2, 'front/images/gallery/optimized/itd-2024-07.webp', 'ITD 2024 Highlight #7', 'ITD 2024 - ITD 2024 Highlight #7 in Ijero-Ekiti', 7, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(33, 2, 'front/images/gallery/optimized/itd-2024-08.webp', 'ITD 2024 Highlight #8', 'ITD 2024 - ITD 2024 Highlight #8 in Ijero-Ekiti', 8, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(34, 2, 'front/images/gallery/optimized/itd-2024-09.webp', 'ITD 2024 Highlight #9', 'ITD 2024 - ITD 2024 Highlight #9 in Ijero-Ekiti', 9, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(35, 2, 'front/images/gallery/optimized/itd-2024-10.webp', 'ITD 2024 Highlight #10', 'ITD 2024 - ITD 2024 Highlight #10 in Ijero-Ekiti', 10, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(36, 2, 'front/images/gallery/optimized/itd-2024-11.webp', 'ITD 2024 Highlight #11', 'ITD 2024 - ITD 2024 Highlight #11 in Ijero-Ekiti', 11, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(37, 2, 'front/images/gallery/optimized/itd-2024-12.webp', 'ITD 2024 Highlight #12', 'ITD 2024 - ITD 2024 Highlight #12 in Ijero-Ekiti', 12, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(38, 2, 'front/images/gallery/optimized/itd-2024-13.webp', 'ITD 2024 Highlight #13', 'ITD 2024 - ITD 2024 Highlight #13 in Ijero-Ekiti', 13, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(39, 2, 'front/images/gallery/optimized/itd-2024-14.webp', 'ITD 2024 Highlight #14', 'ITD 2024 - ITD 2024 Highlight #14 in Ijero-Ekiti', 14, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(40, 2, 'front/images/gallery/optimized/itd-2024-15.webp', 'ITD 2024 Highlight #15', 'ITD 2024 - ITD 2024 Highlight #15 in Ijero-Ekiti', 15, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(41, 2, 'front/images/gallery/optimized/itd-2024-16.webp', 'ITD 2024 Highlight #16', 'ITD 2024 - ITD 2024 Highlight #16 in Ijero-Ekiti', 16, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(42, 2, 'front/images/gallery/optimized/itd-2024-17.webp', 'ITD 2024 Highlight #17', 'ITD 2024 - ITD 2024 Highlight #17 in Ijero-Ekiti', 17, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(43, 2, 'front/images/gallery/optimized/itd-2024-18.webp', 'ITD 2024 Highlight #18', 'ITD 2024 - ITD 2024 Highlight #18 in Ijero-Ekiti', 18, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(44, 2, 'front/images/gallery/optimized/itd-2024-19.webp', 'ITD 2024 Highlight #19', 'ITD 2024 - ITD 2024 Highlight #19 in Ijero-Ekiti', 19, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(45, 2, 'front/images/gallery/optimized/itd-2024-20.webp', 'ITD 2024 Highlight #20', 'ITD 2024 - ITD 2024 Highlight #20 in Ijero-Ekiti', 20, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(46, 2, 'front/images/gallery/optimized/itd-2024-21.webp', 'ITD 2024 Highlight #21', 'ITD 2024 - ITD 2024 Highlight #21 in Ijero-Ekiti', 21, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(47, 2, 'front/images/gallery/optimized/itd-2024-22.webp', 'ITD 2024 Highlight #22', 'ITD 2024 - ITD 2024 Highlight #22 in Ijero-Ekiti', 22, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(48, 2, 'front/images/gallery/optimized/itd-2024-23.webp', 'ITD 2024 Highlight #23', 'ITD 2024 - ITD 2024 Highlight #23 in Ijero-Ekiti', 23, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(49, 2, 'front/images/gallery/optimized/itd-2024-24.webp', 'ITD 2024 Highlight #24', 'ITD 2024 - ITD 2024 Highlight #24 in Ijero-Ekiti', 24, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(50, 2, 'front/images/gallery/optimized/itd-2024-25.webp', 'ITD 2024 Highlight #25', 'ITD 2024 - ITD 2024 Highlight #25 in Ijero-Ekiti', 25, '2026-10-11 16:36:13', '2026-10-11 16:36:13');
-INSERT INTO `gallery_photos` (`id`, `gallery_album_id`, `image_path`, `caption`, `alt_text`, `sort_order`, `created_at`, `updated_at`) VALUES
-(51, 3, 'front/images/gallery/optimized/reading-01.webp', 'Reading Competition Moment #1', 'Reading Competition - Reading Competition Moment #1 in Ijero-Ekiti', 1, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(52, 3, 'front/images/gallery/optimized/reading-02.webp', 'Reading Competition Moment #2', 'Reading Competition - Reading Competition Moment #2 in Ijero-Ekiti', 2, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(53, 3, 'front/images/gallery/optimized/reading-03.webp', 'Reading Competition Moment #3', 'Reading Competition - Reading Competition Moment #3 in Ijero-Ekiti', 3, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(54, 3, 'front/images/gallery/optimized/reading-04.webp', 'Reading Competition Moment #4', 'Reading Competition - Reading Competition Moment #4 in Ijero-Ekiti', 4, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(55, 3, 'front/images/gallery/optimized/reading-05.webp', 'Reading Competition Moment #5', 'Reading Competition - Reading Competition Moment #5 in Ijero-Ekiti', 5, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(56, 3, 'front/images/gallery/optimized/reading-06.webp', 'Reading Competition Moment #6', 'Reading Competition - Reading Competition Moment #6 in Ijero-Ekiti', 6, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(57, 3, 'front/images/gallery/optimized/reading-07.webp', 'Reading Competition Moment #7', 'Reading Competition - Reading Competition Moment #7 in Ijero-Ekiti', 7, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(58, 3, 'front/images/gallery/optimized/reading-08.webp', 'Reading Competition Moment #8', 'Reading Competition - Reading Competition Moment #8 in Ijero-Ekiti', 8, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(59, 3, 'front/images/gallery/optimized/reading-09.webp', 'Reading Competition Moment #9', 'Reading Competition - Reading Competition Moment #9 in Ijero-Ekiti', 9, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(60, 3, 'front/images/gallery/optimized/reading-10.webp', 'Reading Competition Moment #10', 'Reading Competition - Reading Competition Moment #10 in Ijero-Ekiti', 10, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(61, 3, 'front/images/gallery/optimized/reading-11.webp', 'Reading Competition Moment #11', 'Reading Competition - Reading Competition Moment #11 in Ijero-Ekiti', 11, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(62, 3, 'front/images/gallery/optimized/reading-12.webp', 'Reading Competition Moment #12', 'Reading Competition - Reading Competition Moment #12 in Ijero-Ekiti', 12, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(63, 3, 'front/images/gallery/optimized/reading-13.webp', 'Reading Competition Moment #13', 'Reading Competition - Reading Competition Moment #13 in Ijero-Ekiti', 13, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(64, 3, 'front/images/gallery/optimized/reading-14.webp', 'Reading Competition Moment #14', 'Reading Competition - Reading Competition Moment #14 in Ijero-Ekiti', 14, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(65, 3, 'front/images/gallery/optimized/reading-15.webp', 'Reading Competition Moment #15', 'Reading Competition - Reading Competition Moment #15 in Ijero-Ekiti', 15, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(66, 3, 'front/images/gallery/optimized/reading-16.webp', 'Reading Competition Moment #16', 'Reading Competition - Reading Competition Moment #16 in Ijero-Ekiti', 16, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(67, 3, 'front/images/gallery/optimized/reading-17.webp', 'Reading Competition Moment #17', 'Reading Competition - Reading Competition Moment #17 in Ijero-Ekiti', 17, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(68, 3, 'front/images/gallery/optimized/reading-18.webp', 'Reading Competition Moment #18', 'Reading Competition - Reading Competition Moment #18 in Ijero-Ekiti', 18, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(69, 3, 'front/images/gallery/optimized/reading-19.webp', 'Reading Competition Moment #19', 'Reading Competition - Reading Competition Moment #19 in Ijero-Ekiti', 19, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(70, 3, 'front/images/gallery/optimized/reading-20.webp', 'Reading Competition Moment #20', 'Reading Competition - Reading Competition Moment #20 in Ijero-Ekiti', 20, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(71, 3, 'front/images/gallery/optimized/reading-21.webp', 'Reading Competition Moment #21', 'Reading Competition - Reading Competition Moment #21 in Ijero-Ekiti', 21, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(72, 3, 'front/images/gallery/optimized/reading-22.webp', 'Reading Competition Moment #22', 'Reading Competition - Reading Competition Moment #22 in Ijero-Ekiti', 22, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(73, 3, 'front/images/gallery/optimized/reading-23.webp', 'Reading Competition Moment #23', 'Reading Competition - Reading Competition Moment #23 in Ijero-Ekiti', 23, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(74, 3, 'front/images/gallery/optimized/reading-24.webp', 'Reading Competition Moment #24', 'Reading Competition - Reading Competition Moment #24 in Ijero-Ekiti', 24, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(75, 3, 'front/images/gallery/optimized/reading-25.webp', 'Reading Competition Moment #25', 'Reading Competition - Reading Competition Moment #25 in Ijero-Ekiti', 25, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(76, 4, 'front/images/gallery/optimized/spelling-01.webp', 'Spelling Bee Contestant #1', 'Spelling Bee - Spelling Bee Contestant #1 in Ijero-Ekiti', 1, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(77, 4, 'front/images/gallery/optimized/spelling-02.webp', 'Spelling Bee Contestant #2', 'Spelling Bee - Spelling Bee Contestant #2 in Ijero-Ekiti', 2, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(78, 4, 'front/images/gallery/optimized/spelling-03.webp', 'Spelling Bee Contestant #3', 'Spelling Bee - Spelling Bee Contestant #3 in Ijero-Ekiti', 3, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(79, 4, 'front/images/gallery/optimized/spelling-04.webp', 'Spelling Bee Contestant #4', 'Spelling Bee - Spelling Bee Contestant #4 in Ijero-Ekiti', 4, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(80, 4, 'front/images/gallery/optimized/spelling-05.webp', 'Spelling Bee Contestant #5', 'Spelling Bee - Spelling Bee Contestant #5 in Ijero-Ekiti', 5, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(81, 4, 'front/images/gallery/optimized/spelling-06.webp', 'Spelling Bee Contestant #6', 'Spelling Bee - Spelling Bee Contestant #6 in Ijero-Ekiti', 6, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(82, 4, 'front/images/gallery/optimized/spelling-07.webp', 'Spelling Bee Contestant #7', 'Spelling Bee - Spelling Bee Contestant #7 in Ijero-Ekiti', 7, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(83, 4, 'front/images/gallery/optimized/spelling-08.webp', 'Spelling Bee Contestant #8', 'Spelling Bee - Spelling Bee Contestant #8 in Ijero-Ekiti', 8, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(84, 4, 'front/images/gallery/optimized/spelling-09.webp', 'Spelling Bee Contestant #9', 'Spelling Bee - Spelling Bee Contestant #9 in Ijero-Ekiti', 9, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(85, 4, 'front/images/gallery/optimized/spelling-10.webp', 'Spelling Bee Contestant #10', 'Spelling Bee - Spelling Bee Contestant #10 in Ijero-Ekiti', 10, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(86, 4, 'front/images/gallery/optimized/spelling-11.webp', 'Spelling Bee Contestant #11', 'Spelling Bee - Spelling Bee Contestant #11 in Ijero-Ekiti', 11, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(87, 4, 'front/images/gallery/optimized/spelling-12.webp', 'Spelling Bee Contestant #12', 'Spelling Bee - Spelling Bee Contestant #12 in Ijero-Ekiti', 12, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(88, 4, 'front/images/gallery/optimized/spelling-13.webp', 'Spelling Bee Contestant #13', 'Spelling Bee - Spelling Bee Contestant #13 in Ijero-Ekiti', 13, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(89, 4, 'front/images/gallery/optimized/spelling-14.webp', 'Spelling Bee Contestant #14', 'Spelling Bee - Spelling Bee Contestant #14 in Ijero-Ekiti', 14, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(90, 4, 'front/images/gallery/optimized/spelling-15.webp', 'Spelling Bee Contestant #15', 'Spelling Bee - Spelling Bee Contestant #15 in Ijero-Ekiti', 15, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(91, 4, 'front/images/gallery/optimized/spelling-16.webp', 'Spelling Bee Contestant #16', 'Spelling Bee - Spelling Bee Contestant #16 in Ijero-Ekiti', 16, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(92, 4, 'front/images/gallery/optimized/spelling-17.webp', 'Spelling Bee Contestant #17', 'Spelling Bee - Spelling Bee Contestant #17 in Ijero-Ekiti', 17, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(93, 4, 'front/images/gallery/optimized/spelling-18.webp', 'Spelling Bee Contestant #18', 'Spelling Bee - Spelling Bee Contestant #18 in Ijero-Ekiti', 18, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(94, 4, 'front/images/gallery/optimized/spelling-19.webp', 'Spelling Bee Contestant #19', 'Spelling Bee - Spelling Bee Contestant #19 in Ijero-Ekiti', 19, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(95, 4, 'front/images/gallery/optimized/spelling-20.webp', 'Spelling Bee Contestant #20', 'Spelling Bee - Spelling Bee Contestant #20 in Ijero-Ekiti', 20, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(96, 4, 'front/images/gallery/optimized/spelling-21.webp', 'Spelling Bee Contestant #21', 'Spelling Bee - Spelling Bee Contestant #21 in Ijero-Ekiti', 21, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(97, 4, 'front/images/gallery/optimized/spelling-22.webp', 'Spelling Bee Contestant #22', 'Spelling Bee - Spelling Bee Contestant #22 in Ijero-Ekiti', 22, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(98, 4, 'front/images/gallery/optimized/spelling-23.webp', 'Spelling Bee Contestant #23', 'Spelling Bee - Spelling Bee Contestant #23 in Ijero-Ekiti', 23, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(99, 4, 'front/images/gallery/optimized/spelling-24.webp', 'Spelling Bee Contestant #24', 'Spelling Bee - Spelling Bee Contestant #24 in Ijero-Ekiti', 24, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(100, 4, 'front/images/gallery/optimized/spelling-25.webp', 'Spelling Bee Contestant #25', 'Spelling Bee - Spelling Bee Contestant #25 in Ijero-Ekiti', 25, '2026-10-11 16:36:13', '2026-10-11 16:36:13');
-INSERT INTO `gallery_photos` (`id`, `gallery_album_id`, `image_path`, `caption`, `alt_text`, `sort_order`, `created_at`, `updated_at`) VALUES
-(101, 5, 'front/images/gallery/optimized/general-01.webp', 'Community Impact Moment #1', 'General - Community Impact Moment #1 in Ijero-Ekiti', 1, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(102, 5, 'front/images/gallery/optimized/general-02.webp', 'Community Impact Moment #2', 'General - Community Impact Moment #2 in Ijero-Ekiti', 2, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(103, 5, 'front/images/gallery/optimized/general-03.webp', 'Community Impact Moment #3', 'General - Community Impact Moment #3 in Ijero-Ekiti', 3, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(104, 5, 'front/images/gallery/optimized/general-04.webp', 'Community Impact Moment #4', 'General - Community Impact Moment #4 in Ijero-Ekiti', 4, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(105, 5, 'front/images/gallery/optimized/general-05.webp', 'Community Impact Moment #5', 'General - Community Impact Moment #5 in Ijero-Ekiti', 5, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(106, 5, 'front/images/gallery/optimized/general-06.webp', 'Community Impact Moment #6', 'General - Community Impact Moment #6 in Ijero-Ekiti', 6, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(107, 5, 'front/images/gallery/optimized/general-07.webp', 'Community Impact Moment #7', 'General - Community Impact Moment #7 in Ijero-Ekiti', 7, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(108, 5, 'front/images/gallery/optimized/general-08.webp', 'Community Impact Moment #8', 'General - Community Impact Moment #8 in Ijero-Ekiti', 8, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(109, 5, 'front/images/gallery/optimized/general-09.webp', 'Community Impact Moment #9', 'General - Community Impact Moment #9 in Ijero-Ekiti', 9, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(110, 5, 'front/images/gallery/optimized/general-10.webp', 'Community Impact Moment #10', 'General - Community Impact Moment #10 in Ijero-Ekiti', 10, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(111, 5, 'front/images/gallery/optimized/general-11.webp', 'Community Impact Moment #11', 'General - Community Impact Moment #11 in Ijero-Ekiti', 11, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(112, 5, 'front/images/gallery/optimized/general-12.webp', 'Community Impact Moment #12', 'General - Community Impact Moment #12 in Ijero-Ekiti', 12, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(113, 5, 'front/images/gallery/optimized/general-13.webp', 'Community Impact Moment #13', 'General - Community Impact Moment #13 in Ijero-Ekiti', 13, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(114, 5, 'front/images/gallery/optimized/general-14.webp', 'Community Impact Moment #14', 'General - Community Impact Moment #14 in Ijero-Ekiti', 14, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(115, 5, 'front/images/gallery/optimized/general-15.webp', 'Community Impact Moment #15', 'General - Community Impact Moment #15 in Ijero-Ekiti', 15, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(116, 5, 'front/images/gallery/optimized/general-16.webp', 'Community Impact Moment #16', 'General - Community Impact Moment #16 in Ijero-Ekiti', 16, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(117, 5, 'front/images/gallery/optimized/general-17.webp', 'Community Impact Moment #17', 'General - Community Impact Moment #17 in Ijero-Ekiti', 17, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(118, 5, 'front/images/gallery/optimized/general-18.webp', 'Community Impact Moment #18', 'General - Community Impact Moment #18 in Ijero-Ekiti', 18, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(119, 5, 'front/images/gallery/optimized/general-19.webp', 'Community Impact Moment #19', 'General - Community Impact Moment #19 in Ijero-Ekiti', 19, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(120, 5, 'front/images/gallery/optimized/general-20.webp', 'Community Impact Moment #20', 'General - Community Impact Moment #20 in Ijero-Ekiti', 20, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(121, 5, 'front/images/gallery/optimized/general-21.webp', 'Community Impact Moment #21', 'General - Community Impact Moment #21 in Ijero-Ekiti', 21, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(122, 5, 'front/images/gallery/optimized/general-22.webp', 'Community Impact Moment #22', 'General - Community Impact Moment #22 in Ijero-Ekiti', 22, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(123, 5, 'front/images/gallery/optimized/general-23.webp', 'Community Impact Moment #23', 'General - Community Impact Moment #23 in Ijero-Ekiti', 23, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(124, 5, 'front/images/gallery/optimized/general-24.webp', 'Community Impact Moment #24', 'General - Community Impact Moment #24 in Ijero-Ekiti', 24, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(125, 5, 'front/images/gallery/optimized/general-25.webp', 'Community Impact Moment #25', 'General - Community Impact Moment #25 in Ijero-Ekiti', 25, '2026-10-11 16:36:13', '2026-10-11 16:36:13');
+INSERT INTO `gallery_photos` (`id`, `gallery_album_id`, `image_path`, `caption`, `alt_text`, `year`, `sort_order`, `created_at`, `updated_at`) VALUES
+(1, 1, 'front/images/gallery/optimized/itd-2025-01.webp', 'ITD 2025 Highlight #1', 'ITD 2025 - ITD 2025 Highlight #1 in Ijero-Ekiti', '2025', 1, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(2, 1, 'front/images/gallery/optimized/itd-2025-02.webp', 'ITD 2025 Highlight #2', 'ITD 2025 - ITD 2025 Highlight #2 in Ijero-Ekiti', '2025', 2, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(3, 1, 'front/images/gallery/optimized/itd-2025-03.webp', 'ITD 2025 Highlight #3', 'ITD 2025 - ITD 2025 Highlight #3 in Ijero-Ekiti', '2025', 3, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(4, 1, 'front/images/gallery/optimized/itd-2025-04.webp', 'ITD 2025 Highlight #4', 'ITD 2025 - ITD 2025 Highlight #4 in Ijero-Ekiti', '2025', 4, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(5, 1, 'front/images/gallery/optimized/itd-2025-05.webp', 'ITD 2025 Highlight #5', 'ITD 2025 - ITD 2025 Highlight #5 in Ijero-Ekiti', '2025', 5, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(6, 1, 'front/images/gallery/optimized/itd-2025-06.webp', 'ITD 2025 Highlight #6', 'ITD 2025 - ITD 2025 Highlight #6 in Ijero-Ekiti', '2025', 6, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(7, 1, 'front/images/gallery/optimized/itd-2025-07.webp', 'ITD 2025 Highlight #7', 'ITD 2025 - ITD 2025 Highlight #7 in Ijero-Ekiti', '2025', 7, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(8, 1, 'front/images/gallery/optimized/itd-2025-08.webp', 'ITD 2025 Highlight #8', 'ITD 2025 - ITD 2025 Highlight #8 in Ijero-Ekiti', '2025', 8, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(9, 1, 'front/images/gallery/optimized/itd-2025-09.webp', 'ITD 2025 Highlight #9', 'ITD 2025 - ITD 2025 Highlight #9 in Ijero-Ekiti', '2025', 9, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(10, 1, 'front/images/gallery/optimized/itd-2025-10.webp', 'ITD 2025 Highlight #10', 'ITD 2025 - ITD 2025 Highlight #10 in Ijero-Ekiti', '2025', 10, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(11, 1, 'front/images/gallery/optimized/itd-2025-11.webp', 'ITD 2025 Highlight #11', 'ITD 2025 - ITD 2025 Highlight #11 in Ijero-Ekiti', '2025', 11, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(12, 1, 'front/images/gallery/optimized/itd-2025-12.webp', 'ITD 2025 Highlight #12', 'ITD 2025 - ITD 2025 Highlight #12 in Ijero-Ekiti', '2025', 12, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(13, 1, 'front/images/gallery/optimized/itd-2025-13.webp', 'ITD 2025 Highlight #13', 'ITD 2025 - ITD 2025 Highlight #13 in Ijero-Ekiti', '2025', 13, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(14, 1, 'front/images/gallery/optimized/itd-2025-14.webp', 'ITD 2025 Highlight #14', 'ITD 2025 - ITD 2025 Highlight #14 in Ijero-Ekiti', '2025', 14, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(15, 1, 'front/images/gallery/optimized/itd-2025-15.webp', 'ITD 2025 Highlight #15', 'ITD 2025 - ITD 2025 Highlight #15 in Ijero-Ekiti', '2025', 15, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(26, 2, 'front/images/gallery/optimized/itd-2024-01.webp', 'ITD 2024 Highlight #1', 'ITD 2024 - ITD 2024 Highlight #1 in Ijero-Ekiti', '2024', 1, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(27, 2, 'front/images/gallery/optimized/itd-2024-02.webp', 'ITD 2024 Highlight #2', 'ITD 2024 - ITD 2024 Highlight #2 in Ijero-Ekiti', '2024', 2, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(28, 2, 'front/images/gallery/optimized/itd-2024-03.webp', 'ITD 2024 Highlight #3', 'ITD 2024 - ITD 2024 Highlight #3 in Ijero-Ekiti', '2024', 3, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(29, 2, 'front/images/gallery/optimized/itd-2024-04.webp', 'ITD 2024 Highlight #4', 'ITD 2024 - ITD 2024 Highlight #4 in Ijero-Ekiti', '2024', 4, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(30, 2, 'front/images/gallery/optimized/itd-2024-05.webp', 'ITD 2024 Highlight #5', 'ITD 2024 - ITD 2024 Highlight #5 in Ijero-Ekiti', '2024', 5, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(31, 2, 'front/images/gallery/optimized/itd-2024-06.webp', 'ITD 2024 Highlight #6', 'ITD 2024 - ITD 2024 Highlight #6 in Ijero-Ekiti', '2024', 6, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(32, 2, 'front/images/gallery/optimized/itd-2024-07.webp', 'ITD 2024 Highlight #7', 'ITD 2024 - ITD 2024 Highlight #7 in Ijero-Ekiti', '2024', 7, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(33, 2, 'front/images/gallery/optimized/itd-2024-08.webp', 'ITD 2024 Highlight #8', 'ITD 2024 - ITD 2024 Highlight #8 in Ijero-Ekiti', '2024', 8, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(34, 2, 'front/images/gallery/optimized/itd-2024-09.webp', 'ITD 2024 Highlight #9', 'ITD 2024 - ITD 2024 Highlight #9 in Ijero-Ekiti', '2024', 9, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(35, 2, 'front/images/gallery/optimized/itd-2024-10.webp', 'ITD 2024 Highlight #10', 'ITD 2024 - ITD 2024 Highlight #10 in Ijero-Ekiti', '2024', 10, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(36, 2, 'front/images/gallery/optimized/itd-2024-11.webp', 'ITD 2024 Highlight #11', 'ITD 2024 - ITD 2024 Highlight #11 in Ijero-Ekiti', '2024', 11, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(37, 2, 'front/images/gallery/optimized/itd-2024-12.webp', 'ITD 2024 Highlight #12', 'ITD 2024 - ITD 2024 Highlight #12 in Ijero-Ekiti', '2024', 12, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(51, 3, 'front/images/gallery/optimized/reading-01.webp', 'Reading Competition Moment #1', 'Reading Competition - Reading Competition Moment #1 in Ijero-Ekiti', '2024', 1, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(52, 3, 'front/images/gallery/optimized/reading-02.webp', 'Reading Competition Moment #2', 'Reading Competition - Reading Competition Moment #2 in Ijero-Ekiti', '2024', 2, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(53, 3, 'front/images/gallery/optimized/reading-03.webp', 'Reading Competition Moment #3', 'Reading Competition - Reading Competition Moment #3 in Ijero-Ekiti', '2024', 3, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(54, 3, 'front/images/gallery/optimized/reading-04.webp', 'Reading Competition Moment #4', 'Reading Competition - Reading Competition Moment #4 in Ijero-Ekiti', '2024', 4, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(55, 3, 'front/images/gallery/optimized/reading-05.webp', 'Reading Competition Moment #5', 'Reading Competition - Reading Competition Moment #5 in Ijero-Ekiti', '2024', 5, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(56, 3, 'front/images/gallery/optimized/reading-06.webp', 'Reading Competition Moment #6', 'Reading Competition - Reading Competition Moment #6 in Ijero-Ekiti', '2024', 6, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(57, 3, 'front/images/gallery/optimized/reading-07.webp', 'Reading Competition Moment #7', 'Reading Competition - Reading Competition Moment #7 in Ijero-Ekiti', '2024', 7, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(58, 3, 'front/images/gallery/optimized/reading-08.webp', 'Reading Competition Moment #8', 'Reading Competition - Reading Competition Moment #8 in Ijero-Ekiti', '2024', 8, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(76, 4, 'front/images/gallery/optimized/spelling-01.webp', 'Spelling Bee Contestant #1', 'Spelling Bee - Spelling Bee Contestant #1 in Ijero-Ekiti', '2024', 1, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(77, 4, 'front/images/gallery/optimized/spelling-02.webp', 'Spelling Bee Contestant #2', 'Spelling Bee - Spelling Bee Contestant #2 in Ijero-Ekiti', '2024', 2, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(78, 4, 'front/images/gallery/optimized/spelling-03.webp', 'Spelling Bee Contestant #3', 'Spelling Bee - Spelling Bee Contestant #3 in Ijero-Ekiti', '2024', 3, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(79, 4, 'front/images/gallery/optimized/spelling-04.webp', 'Spelling Bee Contestant #4', 'Spelling Bee - Spelling Bee Contestant #4 in Ijero-Ekiti', '2024', 4, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(80, 4, 'front/images/gallery/optimized/spelling-05.webp', 'Spelling Bee Contestant #5', 'Spelling Bee - Spelling Bee Contestant #5 in Ijero-Ekiti', '2024', 5, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(81, 4, 'front/images/gallery/optimized/spelling-06.webp', 'Spelling Bee Contestant #6', 'Spelling Bee - Spelling Bee Contestant #6 in Ijero-Ekiti', '2024', 6, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(82, 4, 'front/images/gallery/optimized/spelling-07.webp', 'Spelling Bee Contestant #7', 'Spelling Bee - Spelling Bee Contestant #7 in Ijero-Ekiti', '2024', 7, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(83, 4, 'front/images/gallery/optimized/spelling-08.webp', 'Spelling Bee Contestant #8', 'Spelling Bee - Spelling Bee Contestant #8 in Ijero-Ekiti', '2024', 8, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(84, 4, 'front/images/gallery/optimized/spelling-09.webp', 'Spelling Bee Contestant #9', 'Spelling Bee - Spelling Bee Contestant #9 in Ijero-Ekiti', '2024', 9, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(85, 4, 'front/images/gallery/optimized/spelling-10.webp', 'Spelling Bee Contestant #10', 'Spelling Bee - Spelling Bee Contestant #10 in Ijero-Ekiti', '2024', 10, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(101, 5, 'front/images/gallery/optimized/general-01.webp', 'Community Impact Moment #1', 'General - Community Impact Moment #1 in Ijero-Ekiti', '2024', 1, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(102, 5, 'front/images/gallery/optimized/general-02.webp', 'Community Impact Moment #2', 'General - Community Impact Moment #2 in Ijero-Ekiti', '2024', 2, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(103, 5, 'front/images/gallery/optimized/general-03.webp', 'Community Impact Moment #3', 'General - Community Impact Moment #3 in Ijero-Ekiti', '2024', 3, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(104, 5, 'front/images/gallery/optimized/general-04.webp', 'Community Impact Moment #4', 'General - Community Impact Moment #4 in Ijero-Ekiti', '2024', 4, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(105, 5, 'front/images/gallery/optimized/general-05.webp', 'Community Impact Moment #5', 'General - Community Impact Moment #5 in Ijero-Ekiti', '2024', 5, '2026-10-11 16:36:13', '2026-10-13 06:21:31');
+INSERT INTO `gallery_photos` (`id`, `gallery_album_id`, `image_path`, `caption`, `alt_text`, `year`, `sort_order`, `created_at`, `updated_at`) VALUES
+(106, 5, 'front/images/gallery/optimized/general-06.webp', 'Community Impact Moment #6', 'General - Community Impact Moment #6 in Ijero-Ekiti', '2024', 6, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(107, 5, 'front/images/gallery/optimized/general-07.webp', 'Community Impact Moment #7', 'General - Community Impact Moment #7 in Ijero-Ekiti', '2024', 7, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(108, 5, 'front/images/gallery/optimized/general-08.webp', 'Community Impact Moment #8', 'General - Community Impact Moment #8 in Ijero-Ekiti', '2024', 8, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(109, 5, 'front/images/gallery/optimized/general-09.webp', 'Community Impact Moment #9', 'General - Community Impact Moment #9 in Ijero-Ekiti', '2024', 9, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(110, 5, 'front/images/gallery/optimized/general-10.webp', 'Community Impact Moment #10', 'General - Community Impact Moment #10 in Ijero-Ekiti', '2024', 10, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(111, 5, 'front/images/gallery/optimized/general-11.webp', 'Community Impact Moment #11', 'General - Community Impact Moment #11 in Ijero-Ekiti', '2024', 11, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(112, 5, 'front/images/gallery/optimized/general-12.webp', 'Community Impact Moment #12', 'General - Community Impact Moment #12 in Ijero-Ekiti', '2024', 12, '2026-10-11 16:36:13', '2026-10-13 06:21:31'),
+(126, 6, 'front/images/gallery/optimized/famoyinka-01.webp', 'Children\'s Book Lending & Fiction Shelf', 'Student selecting books at Famoyinka Memorial Children\'s Library', '2024', 1, '2026-10-13 14:10:21', '2026-10-13 14:10:21'),
+(133, 6, 'front/images/gallery/optimized/famoyinka-08.webp', 'Holistic Education Support, Arts & Values Pillars', 'Foundation education support and values curriculum', '2024', 8, '2026-10-13 14:10:21', '2026-10-13 14:10:21'),
+(134, 6, 'uploads/gallery/photos/1791909302_Mf5Fltbdtc4d.jpg', NULL, 'Famoyinka Memorial Library', '2026', 9, '2026-10-13 16:35:02', '2026-10-13 16:35:02'),
+(135, 6, 'uploads/gallery/photos/1791909388_AHfYsmJuMoCw.jpg', 'ITD 2025 Highlight #17', 'ITD 2025 - ITD 2025 Highlight #17 in Ijero-Ekiti', '2026', 10, '2026-10-13 16:36:28', '2026-10-13 16:36:28');
 /*!40000 ALTER TABLE `gallery_photos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -819,7 +766,7 @@ CREATE TABLE `page_sections` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `page_sections` (19 rows)
+-- Dumping data for table `page_sections` (21 rows)
 --
 
 LOCK TABLES `page_sections` WRITE;
@@ -829,7 +776,7 @@ INSERT INTO `page_sections` (`id`, `page_key`, `section_key`, `headline`, `subhe
 (2, 'home', 'who_we_are', 'Dedicated to Transforming Lives and Communities Through Education', 'Who We Are', 'Dzuels Educational Foundation is a non-profit organisation dedicated to addressing poverty by providing quality education and skills acquisition for indigent children and youth across Nigeria. Founded in 2015, we bridge educational inequality by equipping underserved communities with modern digital skills, literacy support, and vital infrastructure.\n\nOur initiatives ensure that children from low-income backgrounds have the tools, guidance, and environments required to thrive in a rapidly changing world.', 'front/images/about_1.webp', 'Learn More About Us', '/about', NULL, 2, '2026-10-11 16:36:13', '2026-10-11 17:10:32'),
 (3, 'home', 'vision_mission', 'Our Core Purpose & Guiding Principles', 'Vision & Mission', 'Vision: An equitable society where every child, irrespective of socio-economic background, has access to quality education, modern digital literacy, and the opportunity to achieve their highest human potential.\n\nMission: To dismantle educational barriers for indigent youth in Nigeria by deploying digital classrooms, scholarship support, literacy outreach, and mentorship that spark lifelong empowerment.', NULL, NULL, NULL, NULL, 3, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
 (4, 'home', 'values', 'Our DRNICER Core Values', 'Guiding Principles', 'Dynamism, Resilience, Novelty, Integrity, Compassion, Excellence, Responsibility — these principles define every classroom we build and partnership we form.', NULL, NULL, NULL, NULL, 4, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(5, 'home', 'causes', 'Programs That Bridge the Opportunity Divide', 'Our Impact Causes', 'From digital hubs in Ijero-Ekiti to annual literacy contests, our causes are designed to uplift communities from the ground up.', 'front/images/cause.webp', NULL, NULL, NULL, 5, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
+(5, 'home', 'causes', 'Holistic support for youth & community development', 'Our 6 Impact Causes', 'We combine direct education sponsorship with skills acquisition, advocacy, family stability, transformative leadership, and community health.', 'front/images/cause.webp', NULL, NULL, '{"tagline":"AN INTEGRATED APPROACH TO THE TOTAL WELL BEING OF THE CHILD","pillars":[{"title":"Education Support","ministry":"Paul\'s academy","description":"Paying school fees, supplying curriculum textbooks, notebooks, uniforms, and educational kits to keep children in classrooms.","icon":"\\ud83c\\udf93"},{"title":"Skills Acquisition","ministry":"Peter\'s net","description":"Hands-on digital literacy, computer coding, and practical vocational training equipping youth with 21st-century self-reliance.","icon":"\\ud83d\\udcbb"},{"title":"Advocacy","ministry":"Deborah congress","description":"Championing child protection, education policy awareness, equal opportunity for indigent girls, and youth rights.","icon":"\\ud83d\\udce2"},{"title":"Feeding families","ministry":"Naomi\'s kitchen","description":"Targeted nutritional relief, food assistance, and hunger alleviation ensuring indigent pupils have the energy to learn.","icon":"\\ud83c\\udf72"},{"title":"Transformative leadership Training","ministry":"Priscilla\'s upper room","description":"Values-driven mentorship, ethical leadership training, and mindset transformation for emerging community leaders.","icon":"\\ud83c\\udf1f"},{"title":"Health awareness and support","ministry":"Luke\'s Tent","description":"Health education, medical screenings, personal hygiene kits, and basic medical support for vulnerable children and families.","icon":"\\ud83e\\ude7a"}]}', 5, '2026-10-11 16:36:13', '2026-10-13 16:50:56'),
 (6, 'home', 'featured_project', 'Ijero-Ekiti Digital Infrastructure and Literacy Initiative', 'Flagship Project', 'Establishing modern computer laboratories and solar-powered learning facilities in public schools across Ijero-Ekiti, equipping over 165 students with practical coding and computer skills.', 'front/images/dzuelsCollage.webp', 'Explore Our Programmes', '/programmes', NULL, 6, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
 (7, 'home', 'cta', 'Join Us in Shaping the Future of Nigeria\'s Youth', 'Take Action Today', 'Whether through corporate sponsorship, volunteer mentoring, or financial donations, your partnership empowers the next generation.', NULL, 'Get Involved Today', '/get-involved', NULL, 7, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
 (8, 'about', 'hero', 'A Decade of Impact, Education & Hope', 'About Dzuels Educational Foundation', 'Founded in 2015, Dzuels Educational Foundation has grown from a local literacy initiative in Ekiti State into an impactful non-profit organisation driving digital empowerment and community welfare across Nigeria.', 'front/images/gallery/optimized/general-01.webp', 'Support Our Mission', '/donate', NULL, 1, '2026-10-11 16:36:13', '2026-10-11 17:10:32'),
@@ -838,12 +785,14 @@ INSERT INTO `page_sections` (`id`, `page_key`, `section_key`, `headline`, `subhe
 (11, 'about', 'leadership', 'Board of Trustees, Management & Advisory Board', 'Foundation Governance', 'Guided by dedicated educators, technologists, and community leaders committed to absolute transparency, integrity, and social stewardship.', NULL, NULL, NULL, NULL, 4, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
 (12, 'programmes', 'hero', 'Sustainable Interventions Empowering Students and Schools', 'Our Programmes', 'Explore our targeted initiatives focused on digital literacy, STEM training, academic competitions, and teacher development across Ekiti State.', 'front/images/gallery/optimized/itd-2025-05.webp', 'Partner on a Programme', '/get-involved', NULL, 1, '2026-10-11 16:36:13', '2026-10-11 17:10:32'),
 (13, 'programmes', 'overview', 'Targeted Initiatives for Lasting Community Impact', 'Empowering Next-Gen Leaders', 'Every programme is designed with measurable outcomes: improving student academic performance, fostering digital confidence, and preparing youth for future careers.', NULL, NULL, NULL, NULL, 2, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(14, 'contact', 'hero', 'We Would Love to Hear From You', 'Get in Touch', 'Have questions about our initiatives, want to partner, or need more information? Reach out to our dedicated team.', 'front/images/gallery/optimized/general-05.webp', NULL, NULL, NULL, 1, '2026-10-11 16:36:13', '2026-10-11 17:10:32'),
-(15, 'contact', 'office', 'Our Head Office & Learning Centers', 'Visit Our Center', 'AAoJ Memorial Learning Center, Ijero-Ekiti, Ekiti State, Nigeria. Open Monday through Friday, 8:00 AM to 5:00 PM.', NULL, NULL, NULL, NULL, 2, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
+(14, 'contact', 'hero', 'We Are Always Available to Connect With You', 'Get in Touch', 'Have a question regarding our youth literacy initiatives, school computer labs, or community partnerships? Send us a message or visit our headquarters in Ijero-Ekiti.', 'front/images/gallery/optimized/general-05.webp', NULL, NULL, NULL, 1, '2026-10-11 16:36:13', '2026-10-13 16:50:56'),
+(15, 'contact', 'office', 'Our Head Office & Learning Centers', 'Visit Our Office', 'Our doors are open to students, teachers, volunteers, and partners working towards educational equity.', NULL, NULL, NULL, NULL, 2, '2026-10-11 16:36:13', '2026-10-13 16:50:56'),
 (16, 'donate', 'hero', 'Every Contribution Changes a Child\'s Future', 'Invest in Education', '100% of your generous gifts directly fund classroom infrastructure, student learning kits, and free digital training for indigent youth.', 'front/images/gallery/optimized/reading-01.webp', 'Give Online via Flutterwave', 'https://flutterwave.com/pay/j0byxgjs0nma', NULL, 1, '2026-10-11 16:36:13', '2026-10-11 17:10:32'),
 (17, 'donate', 'where_your_gift_goes', 'Transparent Allocation of Every Naira', 'Where Your Gift Goes', 'We ensure absolute financial accountability. Donations support digital lab computers, solar power backups, school supplies, scholarship grants, and teacher enablement.', NULL, NULL, NULL, NULL, 2, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
 (18, 'get_involved', 'hero', 'Lend Your Skills, Time, or Resources to Transform Education', 'Get Involved', 'Join our network of passionate volunteers and visionary corporate partners making an indelible mark on Nigerian education.', 'front/images/gallery/optimized/general-02.webp', 'Apply to Volunteer', '#volunteer-form', NULL, 1, '2026-10-11 16:36:13', '2026-10-11 17:10:32'),
-(19, 'get_involved', 'intro', 'Volunteer or Partner With Dzuels', 'Create Lasting Change', 'Whether you want to mentor young coders during Ijero Tech Day or sponsor a digital laboratory in a public school, there is a place for you in our mission.', NULL, NULL, NULL, NULL, 2, '2026-10-11 16:36:13', '2026-10-11 16:36:13');
+(19, 'get_involved', 'intro', 'Volunteer or Partner With Dzuels', 'Create Lasting Change', 'Whether you want to mentor young coders during Ijero Tech Day or sponsor a digital laboratory in a public school, there is a place for you in our mission.', NULL, NULL, NULL, NULL, 2, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
+(20, 'contact', 'form', 'Send Us a Message', 'Online Inquiry', 'Fill out the form below and a representative from Dzuels Educational Foundation will get in touch with you promptly.', NULL, NULL, NULL, NULL, 3, '2026-10-13 14:39:14', '2026-10-13 14:39:14'),
+(21, 'contact', 'map', 'Headquarters Location', 'Physical visits by appointment are warmly welcomed. Please call in advance so our field coordinators can assist with your schedule.', 'Our central educational center and community operations are based in Ijero-Ekiti, Ekiti State, Nigeria.', NULL, NULL, NULL, NULL, 4, '2026-10-13 14:39:14', '2026-10-13 14:39:14');
 /*!40000 ALTER TABLE `page_sections` ENABLE KEYS */;
 UNLOCK TABLES;
 

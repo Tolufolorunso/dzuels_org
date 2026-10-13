@@ -144,6 +144,11 @@ class AccessibilityAndLaunchReadinessTest extends TestCase
     {
         $this->artisan('app:launch-check')
             ->expectsOutputToContain('Dzuels Educational Foundation - Launch Check Suite')
+            ->expectsOutputToContain('Page Sections populated')
+            ->expectsOutputToContain('Site logo helper configured')
+            ->expectsOutputToContain('Givebutter U.S. donation channel configured')
+            ->expectsOutputToContain('6 Impact Causes and foundational tagline verified in Page CMS')
+            ->expectsOutputToContain('cPanel deployment manifest exists')
             ->expectsOutputToContain('READY FOR LAUNCH')
             ->assertExitCode(0);
     }

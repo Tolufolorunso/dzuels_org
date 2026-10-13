@@ -16,7 +16,9 @@ This validates:
 - Encryption key (`APP_KEY`)
 - Storage directory write permissions
 - Production Vite assets manifest (`public/build/manifest.json`)
-- Database connection and essential seed records (settings, ITD 2026 event, programmes, team members, albums, partners)
+- Database connection and essential seed records (settings including dynamic logo and Givebutter URL, 6 impact causes in page sections, ITD 2026 event, programmes, team members, albums, partners)
+- Existence of refreshed MariaDB database dump (`dzuels_database.sql`)
+- Presence of deployment manifest (`cpanel_changed_files.txt`)
 - All 11 critical named route endpoints
 
 ---

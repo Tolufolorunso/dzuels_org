@@ -607,14 +607,14 @@
                                  alt="{{ $partner->name }}" 
                                  loading="lazy"
                                  decoding="async"
-                                 class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 transition-all duration-300 opacity-80 hover:opacity-100" />
+                                 class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm hover:grayscale-0 transition-all duration-300 opacity-80 hover:opacity-100" />
                         </a>
                     @else
                         <img src="{{ $partner->logo_url }}" 
                              alt="{{ $partner->name }}" 
                              loading="lazy"
                              decoding="async"
-                             class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
+                             class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm  hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
                     @endif
                 @endforeach
             </div>

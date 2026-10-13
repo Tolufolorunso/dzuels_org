@@ -18,7 +18,7 @@ Before beginning the migration, ensure your cPanel hosting account meets the fol
 
 ## 2. Step 1: Export Database with the Migration Suite
 
-The application includes an automated Artisan command that extracts all 24 database tables and seeded foundation records (programmes, ITD 2026 event and sponsors, 125 optimized gallery photos, leadership team, site settings, dynamic CMS page sections, and admin accounts) into clean, standalone MySQL/MariaDB SQL syntax:
+The application includes an automated Artisan command that extracts all 24 database tables and seeded foundation records (programmes including the Famoyinka Memorial Library, ITD 2026 event and sponsors, optimized gallery photos, leadership team, site settings including dynamic logo and Givebutter U.S. giving URL, dynamic CMS page sections including the 6 authentic impact causes, and admin accounts) into clean, standalone MySQL/MariaDB SQL syntax:
 
 Run the following command on your local machine:
 
@@ -27,7 +27,7 @@ php artisan db:export-sql
 ```
 
 This generates:
-- **Output File:** `database/dumps/dzuels_database.sql`
+- **Output Files:** `database/dumps/dzuels_database.sql` and root `dzuels_database.sql` (mirrored for 1-click convenience)
 - **Dialect:** MySQL 5.7+ / 8.0+ and MariaDB 10.3+ compatible.
 - **Encoding:** `utf8mb4` with `utf8mb4_unicode_ci` collation.
 - **Safety Features:** Automatically wraps table statements in `SET FOREIGN_KEY_CHECKS=0;` and `START TRANSACTION;` to eliminate foreign key order errors during phpMyAdmin import.
@@ -244,11 +244,11 @@ Visit `https://dzuelsfoundation.org/admin` in your browser:
 - **Super Admin Email:** `admin@dzuelsfoundation.org`
 - Enter your password to sign in.
 - Navigate through:
-  - **Site Settings** (Impact stats, hotline, addresses, bank details)
-  - **Page Content CMS** (Live home, about, and programme page text/images)
+  - **Site Settings** (Dynamic site logo, up to 5 hotline numbers, Givebutter link, impact stats, addresses, banking details)
+  - **Page Content CMS** (Live home with 6 impact causes and tagline banner, about, and programme page text/images)
   - **Events** (ITD 2026 details and sponsors)
-  - **Gallery** (5 albums and 125 photos)
-  - **Staff Accounts** (Create role-based Editor or Support accounts)
+  - **Gallery** (Collections including Famoyinka Memorial Children's Library and multi-image bulk uploader)
+  - **Staff Accounts** (Role-based Super Admin, Editor, or Support accounts)
 
 ---
 
