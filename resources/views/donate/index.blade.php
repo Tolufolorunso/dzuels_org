@@ -184,81 +184,68 @@
                         </div>
                     </div>
 
-                    {{-- Channel 3: International & Diaspora Wire Transfers (Hidden for now per launch requirements) --}}
-                    @if(false)
-                    <div class="rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-xs p-6 sm:p-8 flex flex-col justify-between">
+                    {{-- Channel 3: U.S. Diaspora Giving via Givebutter --}}
+                    <div class="rounded-3xl bg-[var(--surface)] border-2 border-blue-500/30 dark:border-blue-500/50 shadow-md p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden group">
+                        <div class="absolute top-4 right-4">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-600 text-white shadow-xs">
+                                🇺🇸 U.S. Donors
+                            </span>
+                        </div>
+
                         <div>
                             <div class="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 flex items-center justify-center text-2xl mb-4">
-                                🌍
+                                🗽
                             </div>
-                            <h3 class="text-2xl font-bold text-[var(--heading)] mb-2">Diaspora & International Wire</h3>
+                            <h3 class="text-2xl font-bold text-[var(--heading)] mb-2">U.S. Diaspora Giving</h3>
                             <p class="text-sm text-[var(--text-muted)] mb-6">
-                                Direct international wire transfer details for friends and diaspora donors in the United States, United Kingdom, Canada, and Europe.
+                                Support our programs directly in USD from anywhere in the United States. Fast, secure, and transparent multi-currency giving tailored for our U.S. community.
                             </p>
 
-                            <div class="p-6 rounded-2xl bg-[var(--bg)] border border-[var(--border)] space-y-4 mb-6">
-                                <div class="flex items-center justify-between pb-3 border-b border-[var(--border)]">
-                                    <div>
-                                        <span class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] block">Bank & Swift Code</span>
-                                        <span class="text-sm font-bold text-[var(--heading)]">GTBank Plc. • Swift: {{ $diasporaAccounts['swift_code'] }}</span>
+                            {{-- Payment Methods Accepted Strip --}}
+                            <div class="p-5 rounded-2xl bg-[var(--bg)] border border-[var(--border)] space-y-3 mb-8">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-strong)] block">
+                                    Supported U.S. Payment Methods:
+                                </span>
+                                <div class="grid grid-cols-2 gap-2 text-xs font-semibold text-[var(--text)]">
+                                    <div class="flex items-center gap-2 p-2 rounded-lg bg-[var(--surface)] border border-[var(--border)]">
+                                        <span>💳</span>
+                                        <span>Credit / Debit Card</span>
                                     </div>
-                                    <button type="button" 
-                                            @click="copyText('{{ $diasporaAccounts['swift_code'] }}', 'swift')" 
-                                            class="px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer"
-                                            :class="copiedField === 'swift' ? 'bg-emerald-600 text-white' : 'bg-stone-200 dark:bg-stone-800 text-[var(--text)]'">
-                                        <span x-text="copiedField === 'swift' ? 'Copied' : 'Copy Swift'"></span>
-                                    </button>
-                                </div>
-
-                                {{-- USD --}}
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <span class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] block">USD Domiciliary Account</span>
-                                        <span class="text-base font-mono font-bold text-[var(--heading)]">{{ $diasporaAccounts['usd'] }}</span>
+                                    <div class="flex items-center gap-2 p-2 rounded-lg bg-[var(--surface)] border border-[var(--border)]">
+                                        <span>📱</span>
+                                        <span>Venmo & PayPal</span>
                                     </div>
-                                    <button type="button" 
-                                            @click="copyText('{{ $diasporaAccounts['usd'] }}', 'usd')" 
-                                            class="px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer"
-                                            :class="copiedField === 'usd' ? 'bg-emerald-600 text-white' : 'bg-stone-200 dark:bg-stone-800 text-[var(--text)]'">
-                                        <span x-text="copiedField === 'usd' ? 'Copied' : 'Copy'"></span>
-                                    </button>
-                                </div>
-
-                                {{-- GBP --}}
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <span class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] block">GBP Domiciliary Account</span>
-                                        <span class="text-base font-mono font-bold text-[var(--heading)]">{{ $diasporaAccounts['gbp'] }}</span>
+                                    <div class="flex items-center gap-2 p-2 rounded-lg bg-[var(--surface)] border border-[var(--border)]">
+                                        <span>🍏</span>
+                                        <span>Apple & Google Pay</span>
                                     </div>
-                                    <button type="button" 
-                                            @click="copyText('{{ $diasporaAccounts['gbp'] }}', 'gbp')" 
-                                            class="px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer"
-                                            :class="copiedField === 'gbp' ? 'bg-emerald-600 text-white' : 'bg-stone-200 dark:bg-stone-800 text-[var(--text)]'">
-                                        <span x-text="copiedField === 'gbp' ? 'Copied' : 'Copy'"></span>
-                                    </button>
-                                </div>
-
-                                {{-- EUR --}}
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <span class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] block">EUR Domiciliary Account</span>
-                                        <span class="text-base font-mono font-bold text-[var(--heading)]">{{ $diasporaAccounts['eur'] }}</span>
+                                    <div class="flex items-center gap-2 p-2 rounded-lg bg-[var(--surface)] border border-[var(--border)]">
+                                        <span>🏦</span>
+                                        <span>ACH Bank Transfer</span>
                                     </div>
-                                    <button type="button" 
-                                            @click="copyText('{{ $diasporaAccounts['eur'] }}', 'eur')" 
-                                            class="px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer"
-                                            :class="copiedField === 'eur' ? 'bg-emerald-600 text-white' : 'bg-stone-200 dark:bg-stone-800 text-[var(--text)]'">
-                                        <span x-text="copiedField === 'eur' ? 'Copied' : 'Copy'"></span>
-                                    </button>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="text-xs text-[var(--text-muted)]">
-                            <span>Beneficiary Name: <strong>{{ $settings['bank_account_name'] }}</strong></span>
+                        <div>
+                            <a href="{{ $settings['givebutter_url'] ?? 'https://givebutter.com/dzuels-foundation' }}" 
+                               target="_blank" 
+                               rel="noopener noreferrer"
+                               class="w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl text-sm font-bold bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-md hover:shadow-xl hover:-translate-y-0.5 cursor-pointer">
+                                <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                                <span>For U.S. Donors Only.</span>
+                            </a>
+                            <div class="mt-3 flex items-center justify-center gap-3 text-[11px] text-[var(--text-muted)]">
+                                <span>🔒 256-Bit SSL Encrypted</span>
+                                <span>•</span>
+                                <span>Powered by Givebutter</span>
+                                <span>•</span>
+                                <span>Instant Receipt</span>
+                            </div>
                         </div>
                     </div>
-                    @endif
 
                     {{-- Channel 4: In-Kind & Educational Equipment Support --}}
                     <div class="rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-xs p-6 sm:p-8 flex flex-col justify-between">

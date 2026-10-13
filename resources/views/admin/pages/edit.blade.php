@@ -128,6 +128,98 @@
                                 help="Select an existing photo from the gallery archive or upload a new image (auto-converted to WebP via GD)." />
                         </div>
 
+                        @if ($page === 'home' && $section->section_key === 'causes')
+                            @php
+                                $defaultPillars = [
+                                    ['title' => 'Education Support', 'ministry' => "Paul's academy", 'description' => 'Paying school fees, supplying curriculum textbooks, notebooks, uniforms, and educational kits to keep children in classrooms.', 'icon' => '🎓'],
+                                    ['title' => 'Skills Acquisition', 'ministry' => "Peter's net", 'description' => 'Hands-on digital literacy, computer coding, and practical vocational training equipping youth with 21st-century self-reliance.', 'icon' => '💻'],
+                                    ['title' => 'Advocacy', 'ministry' => 'Deborah congress', 'description' => 'Championing child protection, education policy awareness, equal opportunity for indigent girls, and youth rights.', 'icon' => '📢'],
+                                    ['title' => 'Feeding families', 'ministry' => "Naomi's kitchen", 'description' => 'Targeted nutritional relief, food assistance, and hunger alleviation ensuring indigent pupils have the energy to learn.', 'icon' => '🍲'],
+                                    ['title' => 'Transformative leadership Training', 'ministry' => "Priscilla's upper room", 'description' => 'Values-driven mentorship, ethical leadership training, and mindset transformation for emerging community leaders.', 'icon' => '🌟'],
+                                    ['title' => 'Health awareness and support', 'ministry' => "Luke's Tent", 'description' => 'Health education, medical screenings, personal hygiene kits, and basic medical support for vulnerable children and families.', 'icon' => '🩺'],
+                                ];
+                                $pillars = old('meta_data.pillars', $section->meta_data['pillars'] ?? $defaultPillars);
+                                $tagline = old('meta_data.tagline', $section->meta_data['tagline'] ?? 'AN INTEGRATED APPROACH TO THE TOTAL WELL BEING OF THE CHILD');
+                            @endphp
+
+                            <div class="pt-6 border-t border-stone-200/80 space-y-6">
+                                <div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-5">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <span class="text-xl">🌟</span>
+                                        <h4 class="text-sm font-bold text-stone-900">Foundational Tagline Banner</h4>
+                                    </div>
+                                    <p class="text-xs text-stone-600 mb-3">Displayed as a prominent theme banner above the 6 pillars matching the official foundation design from cause.jpg.</p>
+                                    <input type="text" 
+                                           name="meta_data[tagline]" 
+                                           value="{{ $tagline }}" 
+                                           class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-stone-900 font-bold uppercase tracking-wider text-xs sm:text-sm focus:border-maroon focus:ring-1 focus:ring-maroon focus:outline-none" 
+                                           placeholder="AN INTEGRATED APPROACH TO THE TOTAL WELL BEING OF THE CHILD">
+                                </div>
+
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <h4 class="text-sm font-bold text-stone-900">The 6 Authentic Impact Pillars</h4>
+                                            <p class="text-xs text-stone-500">Edit titles, ministry tags, icons, and descriptions for each of the 6 pillars</p>
+                                        </div>
+                                        <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-maroon/10 text-maroon">
+                                            6 Key Pillars
+                                        </span>
+                                    </div>
+
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        @foreach ($pillars as $idx => $pillar)
+                                            <div class="p-4 rounded-2xl bg-stone-50 border border-stone-200/80 space-y-3">
+                                                <div class="flex items-center justify-between pb-2 border-b border-stone-200/60">
+                                                    <span class="text-xs font-bold text-stone-700">Pillar {{ $idx + 1 }}</span>
+                                                    <input type="text" 
+                                                           name="meta_data[pillars][{{ $idx }}][icon]" 
+                                                           value="{{ $pillar['icon'] ?? '🌟' }}" 
+                                                           class="w-12 px-2 py-1 text-center rounded-lg border border-stone-300 text-sm focus:border-maroon focus:outline-none" 
+                                                           title="Icon / Emoji"
+                                                           placeholder="Icon">
+                                                </div>
+
+                                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                                    <div>
+                                                        <label class="block text-[10px] font-bold text-stone-600 uppercase tracking-wider mb-1">
+                                                            Pillar Title
+                                                        </label>
+                                                        <input type="text" 
+                                                               name="meta_data[pillars][{{ $idx }}][title]" 
+                                                               value="{{ $pillar['title'] ?? '' }}" 
+                                                               required
+                                                               class="w-full px-3 py-1.5 rounded-lg border border-stone-300 text-xs font-semibold text-stone-900 focus:border-maroon focus:outline-none" 
+                                                               placeholder="e.g. Education Support">
+                                                    </div>
+                                                    <div>
+                                                        <label class="block text-[10px] font-bold text-stone-600 uppercase tracking-wider mb-1">
+                                                            Ministry / Branch
+                                                        </label>
+                                                        <input type="text" 
+                                                               name="meta_data[pillars][{{ $idx }}][ministry]" 
+                                                               value="{{ $pillar['ministry'] ?? '' }}" 
+                                                               class="w-full px-3 py-1.5 rounded-lg border border-stone-300 text-xs text-stone-700 focus:border-maroon focus:outline-none" 
+                                                               placeholder="e.g. Paul's academy">
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <label class="block text-[10px] font-bold text-stone-600 uppercase tracking-wider mb-1">
+                                                        Description
+                                                    </label>
+                                                    <textarea name="meta_data[pillars][{{ $idx }}][description]" 
+                                                              rows="2" 
+                                                              class="w-full px-3 py-1.5 rounded-lg border border-stone-300 text-xs text-stone-800 leading-relaxed focus:border-maroon focus:outline-none" 
+                                                              placeholder="Descriptive summary...">{{ $pillar['description'] ?? '' }}</textarea>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
                         <!-- Submit Button -->
                         <div class="pt-4 border-t border-stone-100 flex justify-end">
                             <button type="submit" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold bg-maroon text-white hover:bg-stone-900 transition-colors shadow-xs cursor-pointer">

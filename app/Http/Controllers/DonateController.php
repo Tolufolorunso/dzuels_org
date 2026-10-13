@@ -16,6 +16,7 @@ class DonateController extends Controller
         $sections = PageSection::getPageSections('donate');
         $settings = [
             'flutterwave_url' => Setting::get('flutterwave_url') ?: 'https://flutterwave.com/pay/j0byxgjs0nma',
+            'givebutter_url' => Setting::get('givebutter_url') ?: 'https://givebutter.com/dzuels-foundation',
             'bank_name' => Setting::get('bank_name') ?: 'Guaranty Trust Bank (GTBank) Plc.',
             'bank_account_name' => Setting::get('bank_account_name') ?: 'Dzuels Educational Foundation',
             'bank_account_number' => Setting::get('bank_account_number') ?: '0450072850',
@@ -92,11 +93,11 @@ class DonateController extends Controller
             ],
             [
                 'question' => 'Are online donations secure?',
-                'answer' => 'All online payments are securely processed by Flutterwave using industry-leading 256-bit encryption and PCI-DSS Level 1 compliance. We do not store your credit card or bank credentials.',
+                'answer' => 'All online payments are securely processed by Flutterwave and Givebutter using industry-leading 256-bit encryption and PCI-DSS Level 1 compliance. We do not store your credit card or bank credentials.',
             ],
             [
                 'question' => 'Can I donate from outside Nigeria (USA, UK, Canada, Europe)?',
-                'answer' => 'Yes! You can donate online using any international Mastercard, Visa, or American Express card on our Flutterwave link. Alternatively, you can initiate a direct wire transfer to our GTBank domiciliary accounts (USD, GBP, EUR) using Swift Code GTBINGLA.',
+                'answer' => 'Yes! Donors in the United States can give directly via Givebutter (Credit/Debit, Venmo, PayPal, Apple Pay, ACH). International donors worldwide can also give using any card on Flutterwave or initiate direct transfers.',
             ],
             [
                 'question' => 'How can I get an official receipt for my bank transfer?',

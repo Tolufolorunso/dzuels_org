@@ -36,11 +36,40 @@
             @csrf
             @method('PUT')
 
-            <!-- SECTION 1: Verified Community Impact Metrics -->
+            <!-- SECTION 1: Brand Identity & Site Logo -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200/80 shadow-xs space-y-6">
+                <div class="flex items-center gap-3 pb-4 border-b border-stone-100">
+                    <span class="w-8 h-8 rounded-xl bg-amber-100 text-maroon flex items-center justify-center font-bold text-sm">1</span>
+                    <div>
+                        <h2 class="text-base font-bold text-stone-900">Brand Identity & Official Site Logo</h2>
+                        <p class="text-xs text-stone-500">Logo displayed on public navigation bars, footers, auth screens, and admin dashboard</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+                    <div class="lg:col-span-2">
+                        <x-admin.media-picker 
+                            name="site_logo" 
+                            :value="old('site_logo', $settings['site_logo'] ?? 'front/images/logo.png')" 
+                            label="Official Site Logo" 
+                            help="Select an existing logo from the media library or upload a new logo (automatically optimized). Transparent PNG, SVG, or WebP recommended. If unset, automatically defaults to front/images/logo.png."
+                        />
+                    </div>
+                    <div class="p-5 rounded-2xl bg-stone-50 border border-stone-200/60 flex flex-col items-center justify-center text-center space-y-3">
+                        <span class="text-xs font-bold text-stone-500 uppercase tracking-wider">Active Logo Preview</span>
+                        <div class="p-3 bg-white rounded-xl shadow-2xs border border-stone-200 inline-flex items-center justify-center min-h-[70px] min-w-[140px]">
+                            <img src="{{ \App\Models\Setting::getLogoUrl() }}" alt="Site Logo Preview" class="h-10 w-auto object-contain max-w-full">
+                        </div>
+                        <p class="text-[11px] text-stone-400">Current live brand logo rendered across the application.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: Verified Community Impact Metrics -->
             <div class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200/80 shadow-xs space-y-6">
                 <div class="flex items-center justify-between flex-wrap gap-2 pb-4 border-b border-stone-100">
                     <div class="flex items-center gap-3">
-                        <span class="w-8 h-8 rounded-xl bg-amber-100 text-maroon flex items-center justify-center font-bold text-sm">1</span>
+                        <span class="w-8 h-8 rounded-xl bg-amber-100 text-maroon flex items-center justify-center font-bold text-sm">2</span>
                         <div>
                             <h2 class="text-base font-bold text-stone-900">Verified Community Impact Metrics</h2>
                             <p class="text-xs text-stone-500">Key performance numbers displayed on the homepage impact band</p>
@@ -137,10 +166,10 @@
                 </div>
             </div>
 
-            <!-- SECTION 2: Organization Contacts -->
+            <!-- SECTION 3: Organization Contacts -->
             <div class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200/80 shadow-xs space-y-6">
                 <div class="flex items-center gap-3 pb-4 border-b border-stone-100">
-                    <span class="w-8 h-8 rounded-xl bg-amber-100 text-maroon flex items-center justify-center font-bold text-sm">2</span>
+                    <span class="w-8 h-8 rounded-xl bg-amber-100 text-maroon flex items-center justify-center font-bold text-sm">3</span>
                     <div>
                         <h2 class="text-base font-bold text-stone-900">Contact & Organization Information</h2>
                         <p class="text-xs text-stone-500">Official channels displayed on the header, utility bar, and contact page</p>
@@ -307,10 +336,10 @@
                 </div>
             </div>
 
-            <!-- SECTION 3: Giving & Banking Details -->
+            <!-- SECTION 4: Giving & Banking Details -->
             <div class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200/80 shadow-xs space-y-6">
                 <div class="flex items-center gap-3 pb-4 border-b border-stone-100">
-                    <span class="w-8 h-8 rounded-xl bg-amber-100 text-maroon flex items-center justify-center font-bold text-sm">3</span>
+                    <span class="w-8 h-8 rounded-xl bg-amber-100 text-maroon flex items-center justify-center font-bold text-sm">4</span>
                     <div>
                         <h2 class="text-base font-bold text-stone-900">Giving & Banking Channels</h2>
                         <p class="text-xs text-stone-500">Destination channels for donors giving online or via direct wire</p>
@@ -318,9 +347,9 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="md:col-span-2">
+                    <div>
                         <label for="flutterwave_url" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
-                            Flutterwave Hosted Giving URL
+                            Flutterwave Hosted Giving URL (Card & Local Payments)
                         </label>
                         <input 
                             id="flutterwave_url" 
@@ -329,6 +358,20 @@
                             value="{{ old('flutterwave_url', $settings['flutterwave_url'] ?? 'https://flutterwave.com/pay/j0byxgjs0nma') }}" 
                             required 
                             class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon focus:border-transparent transition-all"
+                        >
+                    </div>
+
+                    <div>
+                        <label for="givebutter_url" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
+                            Givebutter Hosted Giving URL (U.S. Donors Only)
+                        </label>
+                        <input 
+                            id="givebutter_url" 
+                            type="url" 
+                            name="givebutter_url" 
+                            value="{{ old('givebutter_url', $settings['givebutter_url'] ?? 'https://givebutter.com/dzuels-foundation') }}" 
+                            class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon focus:border-transparent transition-all"
+                            placeholder="https://givebutter.com/dzuels-foundation"
                         >
                     </div>
 
@@ -389,10 +432,10 @@
                 </div>
             </div>
 
-            <!-- SECTION 4: Social Media Links -->
+            <!-- SECTION 5: Social Media Links -->
             <div class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200/80 shadow-xs space-y-6">
                 <div class="flex items-center gap-3 pb-4 border-b border-stone-100">
-                    <span class="w-8 h-8 rounded-xl bg-amber-100 text-maroon flex items-center justify-center font-bold text-sm">4</span>
+                    <span class="w-8 h-8 rounded-xl bg-amber-100 text-maroon flex items-center justify-center font-bold text-sm">5</span>
                     <div>
                         <h2 class="text-base font-bold text-stone-900">Social Media & Public Profiles</h2>
                         <p class="text-xs text-stone-500">Official organization handles linked from the header and footer</p>

@@ -12,7 +12,7 @@
         'name' => 'Dzuels Educational Foundation',
         'alternateName' => 'Dzuels Foundation',
         'url' => url('/'),
-        'logo' => asset('front/images/logo.png'),
+        'logo' => \App\Models\Setting::getLogoUrl(),
         'description' => 'Dzuels Educational Foundation is a Nigerian non-profit organisation addressing poverty through quality education, youth literacy interventions, and digital skills acquisition in Ekiti State and beyond.',
         'email' => \App\Models\Setting::get('contact_email', 'info@dzuelsfoundation.org'),
         'telephone' => \App\Models\Setting::getPrimaryPhone(),

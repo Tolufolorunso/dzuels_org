@@ -13,6 +13,14 @@ class SettingSeeder extends Seeder
     public function run(): void
     {
         $defaults = [
+            // Brand & General Identity
+            [
+                'key' => 'site_logo',
+                'value' => 'front/images/logo.png',
+                'type' => 'string',
+                'group' => 'general',
+            ],
+
             // Verified Impact Statistics
             [
                 'key' => 'stat_ict_students',
@@ -111,6 +119,12 @@ class SettingSeeder extends Seeder
             [
                 'key' => 'flutterwave_url',
                 'value' => 'https://flutterwave.com/pay/j0byxgjs0nma',
+                'type' => 'string',
+                'group' => 'banking',
+            ],
+            [
+                'key' => 'givebutter_url',
+                'value' => 'https://givebutter.com/dzuels-foundation',
                 'type' => 'string',
                 'group' => 'banking',
             ],

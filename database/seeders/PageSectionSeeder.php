@@ -61,12 +61,53 @@ class PageSectionSeeder extends Seeder
             [
                 'page_key' => 'home',
                 'section_key' => 'causes',
-                'headline' => 'Programs That Bridge the Opportunity Divide',
-                'subheadline' => 'Our Impact Causes',
-                'body_text' => 'From digital hubs in Ijero-Ekiti to annual literacy contests, our causes are designed to uplift communities from the ground up.',
+                'headline' => 'Holistic support for youth & community development',
+                'subheadline' => 'Our 6 Impact Causes',
+                'body_text' => 'We combine direct education sponsorship with skills acquisition, advocacy, family stability, transformative leadership, and community health.',
                 'image_path' => 'front/images/cause.webp',
                 'button_text' => null,
                 'button_url' => null,
+                'meta_data' => [
+                    'tagline' => 'AN INTEGRATED APPROACH TO THE TOTAL WELL BEING OF THE CHILD',
+                    'pillars' => [
+                        [
+                            'title' => 'Education Support',
+                            'ministry' => "Paul's academy",
+                            'description' => 'Paying school fees, supplying curriculum textbooks, notebooks, uniforms, and educational kits to keep children in classrooms.',
+                            'icon' => '🎓',
+                        ],
+                        [
+                            'title' => 'Skills Acquisition',
+                            'ministry' => "Peter's net",
+                            'description' => 'Hands-on digital literacy, computer coding, and practical vocational training equipping youth with 21st-century self-reliance.',
+                            'icon' => '💻',
+                        ],
+                        [
+                            'title' => 'Advocacy',
+                            'ministry' => 'Deborah congress',
+                            'description' => 'Championing child protection, education policy awareness, equal opportunity for indigent girls, and youth rights.',
+                            'icon' => '📢',
+                        ],
+                        [
+                            'title' => 'Feeding families',
+                            'ministry' => "Naomi's kitchen",
+                            'description' => 'Targeted nutritional relief, food assistance, and hunger alleviation ensuring indigent pupils have the energy to learn.',
+                            'icon' => '🍲',
+                        ],
+                        [
+                            'title' => 'Transformative leadership Training',
+                            'ministry' => "Priscilla's upper room",
+                            'description' => 'Values-driven mentorship, ethical leadership training, and mindset transformation for emerging community leaders.',
+                            'icon' => '🌟',
+                        ],
+                        [
+                            'title' => 'Health awareness and support',
+                            'ministry' => "Luke's Tent",
+                            'description' => 'Health education, medical screenings, personal hygiene kits, and basic medical support for vulnerable children and families.',
+                            'icon' => '🩺',
+                        ],
+                    ],
+                ],
                 'sort_order' => 5,
             ],
             [

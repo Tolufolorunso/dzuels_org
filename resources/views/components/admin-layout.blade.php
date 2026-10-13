@@ -48,7 +48,7 @@
             <div class="h-16 flex items-center justify-between px-6 border-b border-white/10 bg-[#140102]">
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
                     <span class="bg-white p-1 rounded-lg shrink-0">
-                        <img src="{{ asset('front/images/logo.png') }}" alt="Dzuels Logo" class="h-7 w-auto object-contain">
+                        <img src="{{ \App\Models\Setting::getLogoUrl() }}" alt="Dzuels Logo" class="h-7 w-auto object-contain">
                     </span>
                     <div>
                         <span class="font-bold text-sm tracking-tight text-white block">Dzuels Admin</span>
@@ -208,7 +208,7 @@
             <div class="h-18 flex items-center px-6 border-b border-white/10 bg-[#140102]">
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 group">
                     <span class="bg-white p-1 rounded-xl shadow-xs group-hover:scale-105 transition-transform shrink-0">
-                        <img src="{{ asset('front/images/logo.png') }}" alt="Dzuels Logo" class="h-8 w-auto object-contain">
+                        <img src="{{ \App\Models\Setting::getLogoUrl() }}" alt="Dzuels Logo" class="h-8 w-auto object-contain">
                     </span>
                     <div>
                         <span class="font-bold text-sm tracking-tight text-white block">Dzuels Admin</span>

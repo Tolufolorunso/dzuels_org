@@ -109,6 +109,13 @@ class PageController extends Controller
             'button_url' => ['nullable', 'string', 'max:255'],
             'image_path' => ['nullable', 'string', 'max:255'],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:10240'],
+            'meta_data' => ['nullable', 'array'],
+            'meta_data.tagline' => ['nullable', 'string', 'max:255'],
+            'meta_data.pillars' => ['nullable', 'array'],
+            'meta_data.pillars.*.title' => ['nullable', 'string', 'max:150'],
+            'meta_data.pillars.*.ministry' => ['nullable', 'string', 'max:150'],
+            'meta_data.pillars.*.description' => ['nullable', 'string', 'max:500'],
+            'meta_data.pillars.*.icon' => ['nullable', 'string', 'max:50'],
         ]);
 
         $pageSection = PageSection::firstOrNew([
@@ -121,6 +128,10 @@ class PageController extends Controller
         $pageSection->body_text = $validated['body_text'] ?? null;
         $pageSection->button_text = $validated['button_text'] ?? null;
         $pageSection->button_url = $validated['button_url'] ?? null;
+
+        if ($request->has('meta_data')) {
+            $pageSection->meta_data = $validated['meta_data'] ?? null;
+        }
 
         if ($request->hasFile('image')) {
             $pageSection->image_path = $this->optimizer->optimize(

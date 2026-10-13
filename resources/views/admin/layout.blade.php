@@ -16,7 +16,7 @@
                 <div class="flex items-center gap-4">
                     <a href="{{ route('admin.settings') }}" class="flex items-center gap-3">
                         <span class="bg-white p-1 rounded-lg">
-                            <img src="{{ asset('front/images/logo.png') }}" alt="Dzuels Logo" class="h-7 w-auto object-contain">
+                            <img src="{{ \App\Models\Setting::getLogoUrl() }}" alt="Dzuels Logo" class="h-7 w-auto object-contain">
                         </span>
                         <div class="hidden sm:block">
                             <span class="font-bold text-sm tracking-tight text-white">Dzuels Administration</span>

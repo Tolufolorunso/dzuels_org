@@ -12,7 +12,7 @@
         <div class="bg-white rounded-3xl shadow-xl border border-stone-200/80 p-8 sm:p-10">
             <div class="text-center mb-8">
                 <a href="{{ url('/') }}" class="inline-block p-2 rounded-2xl bg-stone-50 border border-stone-100 mb-4 hover:scale-105 transition-transform duration-200">
-                    <img src="{{ asset('front/images/logo.png') }}" alt="Dzuels Educational Foundation" class="h-12 w-auto object-contain mx-auto">
+                    <img src="{{ \App\Models\Setting::getLogoUrl() }}" alt="Dzuels Educational Foundation" class="h-12 w-auto object-contain mx-auto">
                 </a>
                 <h1 class="text-2xl font-bold text-maroon tracking-tight">Staff Administration</h1>
                 <p class="text-xs text-stone-500 mt-1">Dzuels Educational Foundation Portal</p>

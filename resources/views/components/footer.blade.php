@@ -5,7 +5,7 @@
             <div>
                 <a href="{{ url('/') }}" class="inline-block mb-5">
                     <span class="inline-block bg-white p-2.5 rounded-xl shadow-xs">
-                        <img src="{{ asset('front/images/logo.png') }}" alt="Dzuels Educational Foundation" class="h-10 w-auto object-contain">
+                        <img src="{{ \App\Models\Setting::getLogoUrl() }}" alt="Dzuels Educational Foundation" class="h-10 w-auto object-contain">
                     </span>
                 </a>
                 <p class="text-[var(--footer-muted)] text-sm leading-relaxed mb-5">

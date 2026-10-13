@@ -57,14 +57,22 @@ class HomepageTest extends TestCase
         $response->assertSeeText('Excellence');
         $response->assertSeeText('Respect');
 
-        // Our Causes Section
-        $response->assertSeeText('Our Causes');
-        $response->assertSeeText('Integrated Intervention');
-        $response->assertSeeText('We empower indigent children across 8 key pillars');
-        $response->assertSeeText('Paying school fees');
-        $response->assertSeeText('Supplying books & kits');
-        $response->assertSeeText('Equipping non-profit labs');
-        $response->assertSeeText('Social vices awareness');
+        // Our 6 Authentic Causes Section
+        $response->assertSeeText('Our 6 Impact Causes');
+        $response->assertSeeText('AN INTEGRATED APPROACH TO THE TOTAL WELL BEING OF THE CHILD');
+        $response->assertSeeText('6 Foundational Pillars');
+        $response->assertSeeText('Education Support');
+        $response->assertSeeText("Paul's academy");
+        $response->assertSeeText('Skills Acquisition');
+        $response->assertSeeText("Peter's net");
+        $response->assertSeeText('Advocacy');
+        $response->assertSeeText('Deborah congress');
+        $response->assertSeeText('Feeding families');
+        $response->assertSeeText("Naomi's kitchen");
+        $response->assertSeeText('Transformative leadership Training');
+        $response->assertSeeText("Priscilla's upper room");
+        $response->assertSeeText('Health awareness and support');
+        $response->assertSeeText("Luke's Tent");
 
         // Featured Project Card
         $response->assertSeeText('Featured Project');

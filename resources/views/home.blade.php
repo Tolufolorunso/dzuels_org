@@ -242,80 +242,140 @@
     </section>
 
     {{-- 6. Our Causes Section --}}
+    {{-- 6. Our Impact Causes Section --}}
     @php
         $causeSec = $sections['causes'] ?? null;
+        $defaultPillars = [
+            [
+                'title' => 'Education Support',
+                'ministry' => "Paul's academy",
+                'description' => 'Paying school fees, supplying curriculum textbooks, notebooks, uniforms, and educational kits to keep children in classrooms.',
+                'icon' => '🎓',
+            ],
+            [
+                'title' => 'Skills Acquisition',
+                'ministry' => "Peter's net",
+                'description' => 'Hands-on digital literacy, computer coding, and practical vocational training equipping youth with 21st-century self-reliance.',
+                'icon' => '💻',
+            ],
+            [
+                'title' => 'Advocacy',
+                'ministry' => 'Deborah congress',
+                'description' => 'Championing child protection, education policy awareness, equal opportunity for indigent girls, and youth rights.',
+                'icon' => '📢',
+            ],
+            [
+                'title' => 'Feeding families',
+                'ministry' => "Naomi's kitchen",
+                'description' => 'Targeted nutritional relief, food assistance, and hunger alleviation ensuring indigent pupils have the energy to learn.',
+                'icon' => '🍲',
+            ],
+            [
+                'title' => 'Transformative leadership Training',
+                'ministry' => "Priscilla's upper room",
+                'description' => 'Values-driven mentorship, ethical leadership training, and mindset transformation for emerging community leaders.',
+                'icon' => '🌟',
+            ],
+            [
+                'title' => 'Health awareness and support',
+                'ministry' => "Luke's Tent",
+                'description' => 'Health education, medical screenings, personal hygiene kits, and basic medical support for vulnerable children and families.',
+                'icon' => '🩺',
+            ],
+        ];
+        $activePillars = $causeSec?->meta_data['pillars'] ?? $defaultPillars;
+        $taglineBanner = $causeSec?->meta_data['tagline'] ?? 'AN INTEGRATED APPROACH TO THE TOTAL WELL BEING OF THE CHILD';
     @endphp
-    <section class="py-20 lg:py-28 bg-[var(--bg)] transition-colors">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
-                <span class="text-xs font-bold uppercase tracking-widest text-crimson dark:text-[var(--accent-cream)]">
-                    {{ $causeSec?->subheadline ?: 'Our Causes' }}
+    <section class="py-20 lg:py-28 bg-[var(--bg)] transition-colors relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            {{-- Section Heading --}}
+            <div class="text-center max-w-3xl mx-auto mb-12 lg:mb-16 space-y-4">
+                <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-maroon/10 dark:bg-maroon/20 text-maroon dark:text-[var(--accent-cream)] border border-maroon/15 dark:border-maroon/30">
+                    <span>🌟</span> {{ $causeSec?->subheadline ?: 'Our 6 Impact Causes' }}
                 </span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-[var(--heading)] tracking-tight">
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[var(--heading)] tracking-tight">
                     {{ $causeSec?->headline ?: 'Holistic support for youth & community development' }}
                 </h2>
-                <p class="text-[var(--text-muted)] text-base sm:text-lg">
-                    {{ $causeSec?->body_text ?: 'We combine direct education sponsorship with family stability and health awareness.' }}
+                <p class="text-[var(--text-muted)] text-base sm:text-lg leading-relaxed">
+                    {{ $causeSec?->body_text ?: 'We combine direct education sponsorship with practical skills, advocacy, family stability, transformative leadership, and community health.' }}
                 </p>
+
+                {{-- Foundational Tagline Banner (from cause.jpg) --}}
+                @if(!empty($taglineBanner))
+                    <div class="pt-2">
+                        <div class="inline-block px-5 py-2.5 rounded-2xl bg-[var(--surface-alt)] border border-[var(--border)] shadow-xs">
+                            <span class="text-xs sm:text-sm font-extrabold text-maroon dark:text-[var(--accent-cream)] tracking-wider uppercase font-sans">
+                                ✦ {{ $taglineBanner }} ✦
+                            </span>
+                        </div>
+                    </div>
+                @endif
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                {{-- Image Column --}}
-                <div class="lg:col-span-5">
-                    <img src="{{ $causeSec?->getImageUrl() ?: asset('front/images/cause.webp') }}" 
-                         alt="Nigerian children and community beneficiaries supported by Dzuels Foundation" 
-                         loading="lazy"
-                         decoding="async"
-                         class="w-full h-[380px] sm:h-[440px] object-cover rounded-3xl shadow-xl border border-[var(--border)]" />
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+                {{-- Left Side: Visual Foundation Graphic / Imagery Frame --}}
+                <div class="lg:col-span-5 relative group">
+                    <div class="absolute -top-3 -left-3 sm:-top-4 sm:-left-4 w-full h-full border-3 border-[var(--accent-cream)] dark:border-maroon/40 rounded-3xl z-0 pointer-events-none group-hover:translate-x-1 group-hover:translate-y-1 transition-transform duration-300"></div>
+                    <div class="relative z-10 overflow-hidden rounded-3xl shadow-xl border border-[var(--border)] bg-[var(--surface)]">
+                        <img src="{{ $causeSec?->getImageUrl() ?: asset('front/images/cause.webp') }}" 
+                             alt="Dzuels Educational Foundation - An Integrated Approach to the Total Well Being of the Child" 
+                             loading="lazy"
+                             decoding="async"
+                             class="w-full h-[420px] sm:h-[480px] lg:h-[520px] object-cover transition-transform duration-500 group-hover:scale-102" />
+                        
+                        {{-- Overlay Pill Badge --}}
+                        <div class="absolute bottom-4 left-4 right-4 p-4 rounded-2xl bg-[var(--surface)]/95 backdrop-blur-md border border-[var(--border)] shadow-lg flex items-center gap-3">
+                            <span class="w-10 h-10 rounded-xl bg-maroon/10 text-maroon dark:text-[var(--accent-cream)] flex items-center justify-center text-lg shrink-0">
+                                🤝
+                            </span>
+                            <div>
+                                <span class="text-xs font-bold text-[var(--heading)] block leading-tight">Authentic Ministry Pillars</span>
+                                <span class="text-[11px] text-[var(--text-muted)]">Targeted community transformation in Nigeria</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                {{-- Checklist Column --}}
+                {{-- Right Side: The 6 Authentic Pillars Grid --}}
                 <div class="lg:col-span-7 space-y-6">
-                    <span class="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-bold bg-[var(--accent-cream)] text-maroon">
-                        Integrated Intervention
-                    </span>
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <span class="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-bold bg-[var(--accent-cream)] text-maroon">
+                            6 Foundational Pillars
+                        </span>
+                        <a href="{{ url('/donate') }}" class="text-xs font-bold text-maroon dark:text-[var(--accent-cream)] hover:underline inline-flex items-center gap-1">
+                            <span>Sponsor a Cause</span>
+                            <span aria-hidden="true">&rarr;</span>
+                        </a>
+                    </div>
 
-                    <h3 class="text-2xl sm:text-3xl font-extrabold text-[var(--heading)] leading-snug">
-                        We empower indigent children across 8 key pillars
-                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        @foreach ($activePillars as $index => $pillar)
+                            <div class="p-5 rounded-2xl bg-[var(--surface)] border border-[var(--border)] shadow-2xs hover:shadow-md hover:border-maroon/30 dark:hover:border-maroon/50 transition-all duration-200 flex flex-col justify-between group">
+                                <div>
+                                    <div class="flex items-center justify-between gap-2 mb-2.5">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-7 h-7 rounded-lg bg-[var(--bg-alt)] border border-[var(--border)] text-sm flex items-center justify-center shrink-0 shadow-2xs">
+                                                {{ $pillar['icon'] ?? '🌟' }}
+                                            </span>
+                                            <span class="text-xs font-black text-stone-400 dark:text-stone-500 font-mono">0{{ $index + 1 }}</span>
+                                        </div>
+                                        @if(!empty($pillar['ministry']))
+                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-maroon/10 text-maroon dark:bg-mint/15 dark:text-mint border border-maroon/15 dark:border-mint/20">
+                                                {{ $pillar['ministry'] }}
+                                            </span>
+                                        @endif
+                                    </div>
 
-                    <p class="text-[var(--text)] text-base leading-relaxed">
-                        Every intervention is targeted to keep children in classrooms and give youth real 21st-century earning capabilities.
-                    </p>
+                                    <h4 class="text-base font-bold text-[var(--heading)] group-hover:text-maroon dark:group-hover:text-[var(--accent-cream)] transition-colors mb-1.5 leading-snug">
+                                        {{ $pillar['title'] ?? '' }}
+                                    </h4>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                        <div class="flex items-center gap-3">
-                            <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0">✓</span>
-                            <span class="text-sm sm:text-base font-medium text-[var(--text)]">Paying school fees</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0">✓</span>
-                            <span class="text-sm sm:text-base font-medium text-[var(--text)]">Supplying books & kits</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0">✓</span>
-                            <span class="text-sm sm:text-base font-medium text-[var(--text)]">Equipping non-profit labs</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0">✓</span>
-                            <span class="text-sm sm:text-base font-medium text-[var(--text)]">Mentoring beneficiaries</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0">✓</span>
-                            <span class="text-sm sm:text-base font-medium text-[var(--text)]">Transformational leadership</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0">✓</span>
-                            <span class="text-sm sm:text-base font-medium text-[var(--text)]">Feeding indigent families</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0">✓</span>
-                            <span class="text-sm sm:text-base font-medium text-[var(--text)]">Enabling health services</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0">✓</span>
-                            <span class="text-sm sm:text-base font-medium text-[var(--text)]">Social vices awareness</span>
-                        </div>
+                                    <p class="text-xs text-[var(--text-muted)] leading-relaxed">
+                                        {{ $pillar['description'] ?? '' }}
+                                    </p>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </div>

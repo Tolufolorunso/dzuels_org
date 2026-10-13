@@ -41,7 +41,7 @@
     <header class="bg-[var(--surface)] border-b border-[var(--border)] py-4 px-4 sm:px-8">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
             <a href="{{ url('/') }}" class="flex items-center gap-3">
-                <img src="{{ asset('front/images/logo.png') }}" alt="Dzuels Educational Foundation" class="h-10 sm:h-11 w-auto object-contain">
+                <img src="{{ \App\Models\Setting::getLogoUrl() }}" alt="Dzuels Educational Foundation" class="h-10 sm:h-11 w-auto object-contain">
                 <span class="sr-only">Dzuels Educational Foundation</span>
             </a>
             <div class="flex items-center gap-3">

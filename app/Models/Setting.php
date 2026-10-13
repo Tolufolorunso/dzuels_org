@@ -69,6 +69,25 @@ class Setting extends Model
     }
 
     /**
+     * Retrieve the site logo public URL with fallback to default brand asset.
+     */
+    public static function getLogoUrl(): string
+    {
+        $logo = static::get('site_logo');
+
+        if ($logo && is_string($logo) && trim($logo) !== '') {
+            $trimmed = trim($logo);
+            if (str_starts_with($trimmed, 'http://') || str_starts_with($trimmed, 'https://')) {
+                return $trimmed;
+            }
+
+            return asset($trimmed);
+        }
+
+        return asset('front/images/logo.png');
+    }
+
+    /**
      * Set or update a setting value.
      */
     public static function set(string $key, mixed $value, string $type = 'string', string $group = 'general'): self

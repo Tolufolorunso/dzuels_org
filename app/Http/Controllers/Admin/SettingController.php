@@ -47,7 +47,10 @@ class SettingController extends Controller
             'contact_timezone' => ['string', 'contact'],
             'contact_working_days_note' => ['string', 'contact'],
 
+            'site_logo' => ['string', 'general'],
+
             'flutterwave_url' => ['string', 'banking'],
+            'givebutter_url' => ['string', 'banking'],
             'bank_name' => ['string', 'banking'],
             'bank_account_name' => ['string', 'banking'],
             'bank_account_number' => ['string', 'banking'],

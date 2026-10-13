@@ -42,8 +42,12 @@ class UpdateSettingsRequest extends FormRequest
             'contact_timezone' => ['nullable', 'string', 'max:50'],
             'contact_working_days_note' => ['nullable', 'string', 'max:100'],
 
+            // Brand & Identity
+            'site_logo' => ['nullable', 'string', 'max:500'],
+
             // Banking & Giving
             'flutterwave_url' => ['required', 'url', 'max:255'],
+            'givebutter_url' => ['nullable', 'url', 'max:255'],
             'bank_name' => ['required', 'string', 'max:100'],
             'bank_account_name' => ['required', 'string', 'max:100'],
             'bank_account_number' => ['required', 'string', 'max:30'],

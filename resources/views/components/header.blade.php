@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between h-20">
             <!-- Brand Logo -->
             <a href="{{ url('/') }}" class="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-maroon rounded-lg p-1">
-                <img src="{{ asset('front/images/logo.png') }}" alt="Dzuels Educational Foundation" class="h-11 sm:h-12 w-auto object-contain transition-transform group-hover:scale-105 duration-200">
+                <img src="{{ \App\Models\Setting::getLogoUrl() }}" alt="Dzuels Educational Foundation" class="h-11 sm:h-12 w-auto object-contain transition-transform group-hover:scale-105 duration-200">
                 <span class="sr-only">Dzuels Educational Foundation</span>
             </a>
 
