@@ -22,10 +22,28 @@ class ContactController extends Controller
         $sections = PageSection::getPageSections('contact');
         $address = Setting::get('contact_address', '12b Doherty Road, Ijero-Ekiti, Ekiti State, Nigeria') ?: '12b Doherty Road, Ijero-Ekiti, Ekiti State, Nigeria';
         $email = Setting::get('contact_email', 'info@dzuelsfoundation.org') ?: 'info@dzuelsfoundation.org';
-        $phone1 = Setting::get('contact_phone_1', '+234 707 664 6780') ?: '+234 707 664 6780';
-        $phone2 = Setting::get('contact_phone_2', '+234 904 249 3883') ?: '+234 904 249 3883';
+        $phoneNumbers = Setting::getPhoneNumbers();
+        if (empty($phoneNumbers)) {
+            $phoneNumbers = [Setting::getPrimaryPhone()];
+        }
+        $workingHours = Setting::get('contact_working_hours', 'Mon – Fri: 8:00 AM – 5:00 PM') ?: 'Mon – Fri: 8:00 AM – 5:00 PM';
+        $timezone = Setting::get('contact_timezone', 'GMT +1') ?: 'GMT +1';
+        $workingDaysNote = Setting::get('contact_working_days_note', 'Closed on public holidays') ?: 'Closed on public holidays';
 
-        return view('contact.index', compact('sections', 'address', 'email', 'phone1', 'phone2'));
+        $phone1 = $phoneNumbers[0] ?? Setting::getPrimaryPhone();
+        $phone2 = $phoneNumbers[1] ?? null;
+
+        return view('contact.index', compact(
+            'sections',
+            'address',
+            'email',
+            'phoneNumbers',
+            'workingHours',
+            'timezone',
+            'workingDaysNote',
+            'phone1',
+            'phone2'
+        ));
     }
 
     /**

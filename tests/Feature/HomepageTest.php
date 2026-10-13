@@ -3,12 +3,20 @@
 namespace Tests\Feature;
 
 use App\Models\Setting;
+use Database\Seeders\PartnerSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class HomepageTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->seed(PartnerSeeder::class);
+    }
 
     public function test_homepage_renders_successfully_with_all_core_sections(): void
     {

@@ -16,7 +16,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
-                    <span>12b Doherty Road, Ijero-Ekiti, Ekiti State, Nigeria</span>
+                    <span>{{ \App\Models\Setting::get('contact_address', '12b Doherty Road, Ijero-Ekiti, Ekiti State, Nigeria') }}</span>
                 </div>
             </div>
 
@@ -74,14 +74,15 @@
                     Have questions, want to volunteer, or interested in partnering with our educational initiatives?
                 </p>
                 <div class="space-y-3 text-xs text-[var(--footer-muted)]">
-                    <p class="flex items-center gap-2">
-                        <span class="text-[var(--accent-cream)] font-semibold">Email:</span>
-                        <a href="mailto:info@dzuelsfoundation.org" class="hover:text-white transition-colors">info@dzuelsfoundation.org</a>
-                    </p>
                     @php
-                        $footerPhone = \App\Models\Setting::get('contact_phone_1', '+234 904 249 3883');
+                        $footerEmail = \App\Models\Setting::get('contact_email', 'info@dzuelsfoundation.org');
+                        $footerPhone = \App\Models\Setting::getPrimaryPhone();
                         $footerPhoneClean = preg_replace('/[^0-9+]/', '', $footerPhone);
                     @endphp
+                    <p class="flex items-center gap-2">
+                        <span class="text-[var(--accent-cream)] font-semibold">Email:</span>
+                        <a href="mailto:{{ $footerEmail }}" class="hover:text-white transition-colors">{{ $footerEmail }}</a>
+                    </p>
                     <p class="flex items-center gap-2">
                         <span class="text-[var(--accent-cream)] font-semibold">Phone:</span>
                         <a href="tel:{{ $footerPhoneClean }}" class="hover:text-white transition-colors">{{ $footerPhone }}</a>

@@ -33,8 +33,14 @@ class UpdateSettingsRequest extends FormRequest
             // Contact
             'contact_phone_1' => ['required', 'string', 'max:50'],
             'contact_phone_2' => ['nullable', 'string', 'max:50'],
+            'contact_phone_3' => ['nullable', 'string', 'max:50'],
+            'contact_phone_4' => ['nullable', 'string', 'max:50'],
+            'contact_phone_5' => ['nullable', 'string', 'max:50'],
             'contact_email' => ['required', 'email', 'max:100'],
             'contact_address' => ['required', 'string', 'max:255'],
+            'contact_working_hours' => ['nullable', 'string', 'max:100'],
+            'contact_timezone' => ['nullable', 'string', 'max:50'],
+            'contact_working_days_note' => ['nullable', 'string', 'max:100'],
 
             // Banking & Giving
             'flutterwave_url' => ['required', 'url', 'max:255'],

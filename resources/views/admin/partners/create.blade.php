@@ -34,12 +34,18 @@
                            placeholder="e.g. ASCEND Education Foundation" />
                 </div>
 
-                {{-- Logo File --}}
-                <div class="space-y-1.5">
-                    <label for="logo" class="block text-xs font-bold uppercase tracking-wider text-stone-700">Partner Logo *</label>
-                    <input type="file" id="logo" name="logo" accept="image/jpeg,image/png,image/webp,image/svg+xml" required 
-                           class="w-full px-3.5 py-2 rounded-xl border border-stone-300 focus:border-maroon focus:ring-1 focus:ring-maroon text-sm outline-none file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-stone-100 file:text-stone-700 hover:file:bg-stone-200" />
-                    <p class="text-[11px] text-stone-500">PNG, JPG, WebP, or SVG (max 4MB). Transparent background recommended.</p>
+                {{-- Partner Logo via Media Picker --}}
+                <div>
+                    <x-admin.media-picker 
+                        name="logo" 
+                        :value="old('logo')" 
+                        label="Partner Logo" 
+                        :required="true"
+                        help="Choose from the media gallery or upload a new logo (automatically optimized to WebP). Transparent PNG, SVG, or WebP recommended." 
+                    />
+                    @error('logo')
+                        <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 {{-- Website URL --}}

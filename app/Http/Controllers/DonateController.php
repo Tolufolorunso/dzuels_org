@@ -20,7 +20,7 @@ class DonateController extends Controller
             'bank_account_name' => Setting::get('bank_account_name') ?: 'Dzuels Educational Foundation',
             'bank_account_number' => Setting::get('bank_account_number') ?: '0450072850',
             'contact_email' => Setting::get('contact_email') ?: 'info@dzuelsfoundation.org',
-            'contact_phone' => Setting::get('contact_phone_1') ?: '+234 904 249 3883',
+            'contact_phone' => Setting::getPrimaryPhone(),
             'registration_number' => Setting::get('registration_number') ?: 'CAC/IT/NO 123456',
         ];
 
@@ -100,7 +100,7 @@ class DonateController extends Controller
             ],
             [
                 'question' => 'How can I get an official receipt for my bank transfer?',
-                'answer' => 'After completing a direct bank transfer, please send your transaction reference or receipt screenshot to info@dzuelsfoundation.org or via WhatsApp to +234 904 249 3883. Our finance team will issue an official foundation acknowledgment.',
+                'answer' => 'After completing a direct bank transfer, please send your transaction reference or receipt screenshot to '.(Setting::get('contact_email') ?: 'info@dzuelsfoundation.org').' or via WhatsApp to '.Setting::getPrimaryPhone().'. Our finance team will issue an official foundation acknowledgment.',
             ],
             [
                 'question' => 'Can I donate materials, laptops, or books instead of cash?',

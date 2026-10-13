@@ -147,60 +147,162 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-6">
                     <div>
-                        <label for="contact_phone_1" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
-                            Primary Hotline
-                        </label>
-                        <input 
-                            id="contact_phone_1" 
-                            type="text" 
-                            name="contact_phone_1" 
-                            value="{{ old('contact_phone_1', $settings['contact_phone_1'] ?? '+234 904 249 3883') }}" 
-                            required 
-                            class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon focus:border-transparent transition-all"
-                        >
+                        <h3 class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-3">Telephone Hotlines (Up to 5 Lines)</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                            <div>
+                                <label for="contact_phone_1" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
+                                    Primary Hotline *
+                                </label>
+                                <input 
+                                    id="contact_phone_1" 
+                                    type="text" 
+                                    name="contact_phone_1" 
+                                    value="{{ old('contact_phone_1', $settings['contact_phone_1'] ?? '+234 904 249 3883') }}" 
+                                    required 
+                                    class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon focus:border-transparent transition-all"
+                                    placeholder="+234 904 249 3883"
+                                >
+                                <p class="text-[11px] text-stone-500 mt-1">Main number on utility bar & footer</p>
+                            </div>
+
+                            <div>
+                                <label for="contact_phone_2" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
+                                    Phone Line 2 (Optional)
+                                </label>
+                                <input 
+                                    id="contact_phone_2" 
+                                    type="text" 
+                                    name="contact_phone_2" 
+                                    value="{{ old('contact_phone_2', $settings['contact_phone_2'] ?? '') }}" 
+                                    class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon focus:border-transparent transition-all"
+                                    placeholder="+234 810 000 0000"
+                                >
+                            </div>
+
+                            <div>
+                                <label for="contact_phone_3" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
+                                    Phone Line 3 (Optional)
+                                </label>
+                                <input 
+                                    id="contact_phone_3" 
+                                    type="text" 
+                                    name="contact_phone_3" 
+                                    value="{{ old('contact_phone_3', $settings['contact_phone_3'] ?? '') }}" 
+                                    class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon focus:border-transparent transition-all"
+                                    placeholder="+234 700 000 0000"
+                                >
+                            </div>
+
+                            <div>
+                                <label for="contact_phone_4" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
+                                    Phone Line 4 (Optional)
+                                </label>
+                                <input 
+                                    id="contact_phone_4" 
+                                    type="text" 
+                                    name="contact_phone_4" 
+                                    value="{{ old('contact_phone_4', $settings['contact_phone_4'] ?? '') }}" 
+                                    class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon focus:border-transparent transition-all"
+                                    placeholder="+234 800 000 0000"
+                                >
+                            </div>
+
+                            <div>
+                                <label for="contact_phone_5" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
+                                    Phone Line 5 (Optional)
+                                </label>
+                                <input 
+                                    id="contact_phone_5" 
+                                    type="text" 
+                                    name="contact_phone_5" 
+                                    value="{{ old('contact_phone_5', $settings['contact_phone_5'] ?? '') }}" 
+                                    class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon focus:border-transparent transition-all"
+                                    placeholder="+234 900 000 0000"
+                                >
+                            </div>
+                        </div>
                     </div>
 
-                    <div>
-                        <label for="contact_phone_2" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
-                            Secondary Phone Number (Optional)
-                        </label>
-                        <input 
-                            id="contact_phone_2" 
-                            type="text" 
-                            name="contact_phone_2" 
-                            value="{{ old('contact_phone_2', $settings['contact_phone_2'] ?? '+234 810 000 0000') }}" 
-                            class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon focus:border-transparent transition-all"
-                        >
+                    <div class="pt-4 border-t border-stone-100">
+                        <h3 class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-3">Email & Physical Address</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label for="contact_email" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
+                                    Official Inquiries Email *
+                                </label>
+                                <input 
+                                    id="contact_email" 
+                                    type="email" 
+                                    name="contact_email" 
+                                    value="{{ old('contact_email', $settings['contact_email'] ?? 'info@dzuelsfoundation.org') }}" 
+                                    required 
+                                    class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon focus:border-transparent transition-all"
+                                >
+                            </div>
+
+                            <div>
+                                <label for="contact_address" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
+                                    Physical Headquarters Address *
+                                </label>
+                                <input 
+                                    id="contact_address" 
+                                    type="text" 
+                                    name="contact_address" 
+                                    value="{{ old('contact_address', $settings['contact_address'] ?? '12b Doherty Road, Ijero-Ekiti, Ekiti State, Nigeria') }}" 
+                                    required 
+                                    class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon focus:border-transparent transition-all"
+                                >
+                            </div>
+                        </div>
                     </div>
 
-                    <div>
-                        <label for="contact_email" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
-                            Official Inquiries Email
-                        </label>
-                        <input 
-                            id="contact_email" 
-                            type="email" 
-                            name="contact_email" 
-                            value="{{ old('contact_email', $settings['contact_email'] ?? 'info@dzuelsfoundation.org') }}" 
-                            required 
-                            class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon focus:border-transparent transition-all"
-                        >
-                    </div>
+                    <div class="pt-4 border-t border-stone-100">
+                        <h3 class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-3">Operating Schedule & Timezone</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                            <div>
+                                <label for="contact_working_hours" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
+                                    Working Hours
+                                </label>
+                                <input 
+                                    id="contact_working_hours" 
+                                    type="text" 
+                                    name="contact_working_hours" 
+                                    value="{{ old('contact_working_hours', $settings['contact_working_hours'] ?? 'Mon – Fri: 8:00 AM – 5:00 PM') }}" 
+                                    class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon focus:border-transparent transition-all"
+                                    placeholder="Mon – Fri: 8:00 AM – 5:00 PM"
+                                >
+                            </div>
 
-                    <div>
-                        <label for="contact_address" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
-                            Physical Headquarters Address
-                        </label>
-                        <input 
-                            id="contact_address" 
-                            type="text" 
-                            name="contact_address" 
-                            value="{{ old('contact_address', $settings['contact_address'] ?? '12b Doherty Road, Ijero-Ekiti, Ekiti State, Nigeria') }}" 
-                            required 
-                            class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon focus:border-transparent transition-all"
-                        >
+                            <div>
+                                <label for="contact_timezone" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
+                                    Timezone (e.g. GMT +1)
+                                </label>
+                                <input 
+                                    id="contact_timezone" 
+                                    type="text" 
+                                    name="contact_timezone" 
+                                    value="{{ old('contact_timezone', $settings['contact_timezone'] ?? 'GMT +1') }}" 
+                                    class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon focus:border-transparent transition-all"
+                                    placeholder="GMT +1"
+                                >
+                            </div>
+
+                            <div>
+                                <label for="contact_working_days_note" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
+                                    Holiday / Schedule Note
+                                </label>
+                                <input 
+                                    id="contact_working_days_note" 
+                                    type="text" 
+                                    name="contact_working_days_note" 
+                                    value="{{ old('contact_working_days_note', $settings['contact_working_days_note'] ?? 'Closed on public holidays') }}" 
+                                    class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon focus:border-transparent transition-all"
+                                    placeholder="Closed on public holidays"
+                                >
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

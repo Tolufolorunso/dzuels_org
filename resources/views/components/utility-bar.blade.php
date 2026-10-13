@@ -1,8 +1,10 @@
 <div class="bg-[var(--utility-bg)] text-[#F1E6E0] text-[11px] sm:text-xs py-2 px-3 sm:px-4 border-b border-white/10 transition-colors duration-200 overflow-hidden">
     <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2 sm:gap-3">
         @php
-            $contactPhone = \App\Models\Setting::get('contact_phone_1', '+234 904 249 3883');
+            $contactPhone = \App\Models\Setting::getPrimaryPhone();
             $contactPhoneClean = preg_replace('/[^0-9+]/', '', $contactPhone);
+            $contactEmail = \App\Models\Setting::get('contact_email', 'info@dzuelsfoundation.org');
+            $contactAddress = \App\Models\Setting::get('contact_address', 'Ijero-Ekiti, Ekiti State, Nigeria');
         @endphp
         <!-- Contact & Location Info -->
         <div class="flex flex-wrap items-center gap-2.5 sm:gap-6">
@@ -12,18 +14,18 @@
                 </svg>
                 <span>{{ $contactPhone }}</span>
             </a>
-            <a href="mailto:info@dzuelsfoundation.org" class="inline-flex items-center gap-1.5 opacity-90 hover:opacity-100 hover:text-[var(--accent-cream)] transition-colors truncate max-w-[200px] sm:max-w-none">
+            <a href="mailto:{{ $contactEmail }}" class="inline-flex items-center gap-1.5 opacity-90 hover:opacity-100 hover:text-[var(--accent-cream)] transition-colors truncate max-w-[200px] sm:max-w-none">
                 <svg class="w-3.5 h-3.5 text-[var(--accent-cream)] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
-                <span class="truncate">info@dzuelsfoundation.org</span>
+                <span class="truncate">{{ $contactEmail }}</span>
             </a>
             <span class="hidden md:inline-flex items-center gap-1.5 text-white/70">
                 <svg class="w-3.5 h-3.5 text-[var(--accent-cream)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                <span>Ijero-Ekiti, Ekiti State, Nigeria</span>
+                <span class="truncate max-w-[260px]">{{ $contactAddress }}</span>
             </span>
         </div>
 

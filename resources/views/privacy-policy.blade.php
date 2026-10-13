@@ -175,9 +175,20 @@
                     </p>
                     <div class="p-6 rounded-2xl bg-[var(--surface-raised)] border border-[var(--border)] text-sm space-y-3">
                         <p class="font-bold text-[var(--text-strong)]">Dzuels Educational Foundation</p>
-                        <p class="text-[var(--text-muted)]"><strong>Office Address:</strong> AAoJ Memorial Learning Center, Ijero-Ekiti, Ekiti State, Nigeria</p>
-                        <p class="text-[var(--text-muted)]"><strong>Email:</strong> <a href="mailto:info@dzuelsfoundation.org" class="text-maroon dark:text-[var(--accent-cream)] font-medium underline">info@dzuelsfoundation.org</a></p>
-                        <p class="text-[var(--text-muted)]"><strong>Telephone:</strong> <a href="tel:+2349042493883" class="text-maroon dark:text-[var(--accent-cream)] font-medium underline">+234 904 249 3883</a> / <a href="tel:+2347076646780" class="text-maroon dark:text-[var(--accent-cream)] font-medium underline">+234 707 664 6780</a></p>
+                        @php
+                            $privacyAddress = \App\Models\Setting::get('contact_address', 'AAoJ Memorial Learning Center, Ijero-Ekiti, Ekiti State, Nigeria');
+                            $privacyEmail = \App\Models\Setting::get('contact_email', 'info@dzuelsfoundation.org');
+                            $privacyPhones = \App\Models\Setting::getPhoneNumbers();
+                        @endphp
+                        <p class="text-[var(--text-muted)]"><strong>Office Address:</strong> {{ $privacyAddress }}</p>
+                        <p class="text-[var(--text-muted)]"><strong>Email:</strong> <a href="mailto:{{ $privacyEmail }}" class="text-maroon dark:text-[var(--accent-cream)] font-medium underline">{{ $privacyEmail }}</a></p>
+                        <p class="text-[var(--text-muted)]"><strong>Telephone:</strong>
+                            @forelse ($privacyPhones as $phone)
+                                <a href="tel:{{ preg_replace('/[^0-9+]/', '', $phone) }}" class="text-maroon dark:text-[var(--accent-cream)] font-medium underline">{{ $phone }}</a>{{ !$loop->last ? ' / ' : '' }}
+                            @empty
+                                <a href="tel:{{ preg_replace('/[^0-9+]/', '', \App\Models\Setting::getPrimaryPhone()) }}" class="text-maroon dark:text-[var(--accent-cream)] font-medium underline">{{ \App\Models\Setting::getPrimaryPhone() }}</a>
+                            @endforelse
+                        </p>
                     </div>
                 </div>
 

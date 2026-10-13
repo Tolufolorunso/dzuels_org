@@ -529,6 +529,7 @@
     </section>
 
     {{-- 10. Partners Strip --}}
+    @if (isset($partners) && $partners->isNotEmpty())
     <section class="py-16 sm:py-20 bg-[var(--bg-alt)] text-center transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <span class="text-xs font-bold uppercase tracking-widest text-crimson dark:text-[var(--accent-cream)]">
@@ -539,49 +540,27 @@
             </h3>
 
             <div class="flex flex-wrap items-center justify-center gap-8 sm:gap-14 max-w-5xl mx-auto">
-                @if (isset($partners) && $partners->isNotEmpty())
-                    @foreach ($partners as $partner)
-                        @if ($partner->website_url)
-                            <a href="{{ $partner->website_url }}" target="_blank" rel="noopener noreferrer" class="inline-block transition-transform hover:scale-105" title="{{ $partner->name }}">
-                                <img src="{{ $partner->logo_url }}" 
-                                     alt="{{ $partner->name }}" 
-                                     loading="lazy"
-                                     decoding="async"
-                                     class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 transition-all duration-300 opacity-80 hover:opacity-100" />
-                            </a>
-                        @else
+                @foreach ($partners as $partner)
+                    @if ($partner->website_url)
+                        <a href="{{ $partner->website_url }}" target="_blank" rel="noopener noreferrer" class="inline-block transition-transform hover:scale-105" title="{{ $partner->name }}">
                             <img src="{{ $partner->logo_url }}" 
                                  alt="{{ $partner->name }}" 
                                  loading="lazy"
                                  decoding="async"
-                                 class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
-                        @endif
-                    @endforeach
-                @else
-                    <img src="{{ asset('front/images/ascend.jpg') }}" 
-                         alt="ASCEND Education Foundation" 
-                         loading="lazy"
-                         decoding="async"
-                         class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
-                    <img src="{{ asset('front/images/SAA.jpg') }}" 
-                         alt="Solape Adesuyi Associates" 
-                         loading="lazy"
-                         decoding="async"
-                         class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
-                    <img src="{{ asset('front/images/helpmeetaneed.png') }}" 
-                         alt="Help Meet A Need" 
-                         loading="lazy"
-                         decoding="async"
-                         class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
-                    <img src="{{ asset('front/images/intinternational.png') }}" 
-                         alt="Int International" 
-                         loading="lazy"
-                         decoding="async"
-                         class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
-                @endif
+                                 class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 transition-all duration-300 opacity-80 hover:opacity-100" />
+                        </a>
+                    @else
+                        <img src="{{ $partner->logo_url }}" 
+                             alt="{{ $partner->name }}" 
+                             loading="lazy"
+                             decoding="async"
+                             class="h-12 sm:h-14 w-auto object-contain rounded-lg p-2 bg-white dark:bg-white/90 shadow-sm filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300 opacity-80 hover:opacity-100" />
+                    @endif
+                @endforeach
             </div>
         </div>
     </section>
+    @endif
 
     {{-- 11. Final Call to Action Banner --}}
     @php

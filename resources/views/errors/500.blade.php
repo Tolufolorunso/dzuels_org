@@ -105,8 +105,13 @@
                 <p>
                     Need urgent assistance or have questions regarding our educational programs?
                 </p>
+                @php
+                    $supportPhone = \App\Models\Setting::getPrimaryPhone();
+                    $supportPhoneClean = preg_replace('/[^0-9+]/', '', $supportPhone);
+                    $supportEmail = \App\Models\Setting::get('contact_email', 'info@dzuelsfoundation.org');
+                @endphp
                 <p class="font-medium text-[var(--text-strong)]">
-                    Email us directly at <a href="mailto:info@dzuelsfoundation.org" class="text-maroon dark:text-[var(--accent-cream)] underline">info@dzuelsfoundation.org</a> or call <a href="tel:+2349042493883" class="text-maroon dark:text-[var(--accent-cream)] underline">+234 904 249 3883</a>.
+                    Email us directly at <a href="mailto:{{ $supportEmail }}" class="text-maroon dark:text-[var(--accent-cream)] underline">{{ $supportEmail }}</a> or call <a href="tel:{{ $supportPhoneClean }}" class="text-maroon dark:text-[var(--accent-cream)] underline">{{ $supportPhone }}</a>.
                 </p>
             </div>
 

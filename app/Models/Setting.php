@@ -37,6 +37,38 @@ class Setting extends Model
     }
 
     /**
+     * Retrieve all configured non-empty contact phone numbers in priority order.
+     *
+     * @return array<int, string>
+     */
+    public static function getPhoneNumbers(): array
+    {
+        $numbers = [];
+        for ($i = 1; $i <= 5; $i++) {
+            $phone = trim((string) static::get("contact_phone_{$i}", ''));
+            if ($phone !== '') {
+                $numbers[] = $phone;
+            }
+        }
+
+        if (empty($numbers)) {
+            $numbers[] = '+234 904 249 3883';
+        }
+
+        return $numbers;
+    }
+
+    /**
+     * Retrieve the primary contact telephone number with safe fallback.
+     */
+    public static function getPrimaryPhone(): string
+    {
+        $numbers = static::getPhoneNumbers();
+
+        return $numbers[0] ?? '+234 904 249 3883';
+    }
+
+    /**
      * Set or update a setting value.
      */
     public static function set(string $key, mixed $value, string $type = 'string', string $group = 'general'): self

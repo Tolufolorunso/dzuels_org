@@ -6,11 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StorePartnerRequest;
 use App\Http\Requests\Admin\UpdatePartnerRequest;
 use App\Models\Partner;
+use App\Services\ImageOptimizerService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class PartnerController extends Controller
 {
+    public function __construct(
+        protected ImageOptimizerService $optimizer
+    ) {}
+
     /**
      * Display a listing of partner organizations.
      */
@@ -41,10 +46,15 @@ class PartnerController extends Controller
         $validated['sort_order'] = (int) ($validated['sort_order'] ?? 0);
 
         if ($request->hasFile('logo')) {
-            $file = $request->file('logo');
-            $filename = time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
-            $file->move(public_path('uploads/partners'), $filename);
-            $validated['logo'] = 'uploads/partners/'.$filename;
+            $validated['logo'] = $this->optimizer->optimize(
+                $request->file('logo'),
+                'uploads/partners',
+                600,
+                300,
+                85
+            );
+        } elseif ($request->filled('logo')) {
+            $validated['logo'] = $request->input('logo');
         }
 
         Partner::create($validated);
@@ -72,10 +82,17 @@ class PartnerController extends Controller
         $validated['sort_order'] = (int) ($validated['sort_order'] ?? 0);
 
         if ($request->hasFile('logo')) {
-            $file = $request->file('logo');
-            $filename = time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
-            $file->move(public_path('uploads/partners'), $filename);
-            $validated['logo'] = 'uploads/partners/'.$filename;
+            $validated['logo'] = $this->optimizer->optimize(
+                $request->file('logo'),
+                'uploads/partners',
+                600,
+                300,
+                85
+            );
+        } elseif ($request->filled('logo')) {
+            $validated['logo'] = $request->input('logo');
+        } else {
+            unset($validated['logo']);
         }
 
         $partner->update($validated);

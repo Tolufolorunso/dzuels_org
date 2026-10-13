@@ -129,4 +129,34 @@ class ContactPageTest extends TestCase
         $response = $this->post('/contact', $validPayload);
         $response->assertStatus(429);
     }
+
+    public function test_contact_page_renders_up_to_five_configured_phone_numbers_and_dynamic_operating_schedule(): void
+    {
+        Setting::set('contact_phone_1', '+234 901 111 1111');
+        Setting::set('contact_phone_2', '+234 902 222 2222');
+        Setting::set('contact_phone_3', '+234 903 333 3333');
+        Setting::set('contact_phone_4', '+234 904 444 4444');
+        Setting::set('contact_phone_5', '+234 905 555 5555');
+        Setting::set('contact_working_hours', 'Mon – Sat: 8:00 AM – 6:00 PM');
+        Setting::set('contact_timezone', 'GMT +1');
+        Setting::set('contact_working_days_note', 'Closed on public holidays');
+
+        $response = $this->get('/contact');
+
+        $response->assertOk();
+        $response->assertSeeText('+234 901 111 1111');
+        $response->assertSeeText('+234 902 222 2222');
+        $response->assertSeeText('+234 903 333 3333');
+        $response->assertSeeText('+234 904 444 4444');
+        $response->assertSeeText('+234 905 555 5555');
+
+        $response->assertSee('tel:+2349011111111');
+        $response->assertSee('tel:+2349022222222');
+        $response->assertSee('tel:+2349033333333');
+        $response->assertSee('tel:+2349044444444');
+        $response->assertSee('tel:+2349055555555');
+
+        $response->assertSeeText('Mon – Sat: 8:00 AM – 6:00 PM (GMT +1)');
+        $response->assertSeeText('Closed on public holidays');
+    }
 }

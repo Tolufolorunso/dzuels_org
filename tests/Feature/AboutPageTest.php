@@ -180,6 +180,6 @@ class AboutPageTest extends TestCase
         $response->assertSeeText('Trustee profiles are currently being updated.');
         $response->assertSeeText('Management profiles are currently being updated.');
         $response->assertSeeText('Advisory board roster is currently being updated.');
-        $response->assertSee('alt="ASCEND Education Foundation"', false);
+        $response->assertSeeText('Interested in partnering with Dzuels Educational Foundation?');
     }
 }

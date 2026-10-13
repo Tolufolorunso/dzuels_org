@@ -34,18 +34,17 @@
                            class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-maroon focus:ring-1 focus:ring-maroon text-sm outline-none transition-colors" />
                 </div>
 
-                {{-- Logo File with Current Preview --}}
-                <div class="space-y-2">
-                    <label for="logo" class="block text-xs font-bold uppercase tracking-wider text-stone-700">Partner Logo</label>
-                    <div class="flex items-center gap-4 p-3 rounded-xl bg-stone-50 border border-stone-200">
-                        <div class="h-10 w-24 bg-white rounded p-1 flex items-center justify-center border border-stone-200 shrink-0">
-                            <img src="{{ $partner->logo_url }}" alt="{{ $partner->name }}" class="max-h-full max-w-full object-contain" />
-                        </div>
-                        <span class="text-xs text-stone-500">Current logo</span>
-                    </div>
-                    <input type="file" id="logo" name="logo" accept="image/jpeg,image/png,image/webp,image/svg+xml" 
-                           class="w-full px-3.5 py-2 rounded-xl border border-stone-300 focus:border-maroon focus:ring-1 focus:ring-maroon text-sm outline-none file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-stone-100 file:text-stone-700 hover:file:bg-stone-200" />
-                    <p class="text-[11px] text-stone-500">Leave blank to retain current logo. PNG, JPG, WebP, or SVG (max 4MB).</p>
+                {{-- Partner Logo via Media Picker --}}
+                <div>
+                    <x-admin.media-picker 
+                        name="logo" 
+                        :value="old('logo', $partner->logo)" 
+                        label="Partner Logo" 
+                        help="Choose from the media gallery or upload a new logo (automatically optimized to WebP). Leave unchanged to retain the current logo." 
+                    />
+                    @error('logo')
+                        <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 {{-- Website URL --}}

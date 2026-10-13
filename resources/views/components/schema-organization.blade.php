@@ -15,7 +15,7 @@
         'logo' => asset('front/images/logo.png'),
         'description' => 'Dzuels Educational Foundation is a Nigerian non-profit organisation addressing poverty through quality education, youth literacy interventions, and digital skills acquisition in Ekiti State and beyond.',
         'email' => \App\Models\Setting::get('contact_email', 'info@dzuelsfoundation.org'),
-        'telephone' => \App\Models\Setting::get('contact_phone_1', '+234 904 249 3883'),
+        'telephone' => \App\Models\Setting::getPrimaryPhone(),
         'address' => [
             '@type' => 'PostalAddress',
             'streetAddress' => \App\Models\Setting::get('contact_address', 'AAoJ Memorial Learning Center, Ijero-Ekiti'),
@@ -27,7 +27,7 @@
         'contactPoint' => [
             [
                 '@type' => 'ContactPoint',
-                'telephone' => \App\Models\Setting::get('contact_phone_1', '+234 904 249 3883'),
+                'telephone' => \App\Models\Setting::getPrimaryPhone(),
                 'contactType' => 'General Inquiries',
                 'areaServed' => 'NG',
                 'availableLanguage' => ['English', 'Yoruba'],

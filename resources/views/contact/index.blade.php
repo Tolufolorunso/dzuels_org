@@ -11,6 +11,9 @@
         {{-- 1. Hero Section --}}
         @php
             $heroSec = $sections['hero'] ?? null;
+            $officeSec = $sections['office'] ?? null;
+            $formSec = $sections['form'] ?? null;
+            $mapSec = $sections['map'] ?? null;
             $heroBgImage = $heroSec?->image_url ?: asset('front/images/gallery/optimized/general-05.webp');
         @endphp
         <section class="relative bg-maroon text-white py-16 sm:py-24 overflow-hidden">
@@ -65,10 +68,10 @@
                                 📍
                             </div>
                             <span class="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] block mb-1">
-                                Headquarters
+                                {{ $officeSec?->subheadline ?: 'Headquarters' }}
                             </span>
                             <h3 class="text-base font-bold text-[var(--heading)] mb-2">
-                                Visit Our Office
+                                {{ $officeSec?->headline ?: 'Visit Our Office' }}
                             </h3>
                             <p class="text-sm text-[var(--text-muted)] leading-relaxed">
                                 {{ $address }}
@@ -88,19 +91,20 @@
                             <h3 class="text-base font-bold text-[var(--heading)] mb-2">
                                 Call Us
                             </h3>
-                            <div class="space-y-1 text-sm">
-                                <div>
-                                    <a href="tel:{{ preg_replace('/[^0-9+]/', '', $phone1) }}" class="font-medium text-maroon dark:text-[var(--accent-cream)] hover:underline">
-                                        {{ $phone1 }}
-                                    </a>
-                                </div>
-                                @if($phone2 && $phone2 !== $phone1)
+                            <div class="space-y-1.5 text-sm">
+                                @forelse($phoneNumbers as $phone)
                                     <div>
-                                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $phone2) }}" class="font-medium text-maroon dark:text-[var(--accent-cream)] hover:underline">
-                                            {{ $phone2 }}
+                                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $phone) }}" class="font-medium text-maroon dark:text-[var(--accent-cream)] hover:underline">
+                                            {{ $phone }}
                                         </a>
                                     </div>
-                                @endif
+                                @empty
+                                    <div>
+                                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $phone1) }}" class="font-medium text-maroon dark:text-[var(--accent-cream)] hover:underline">
+                                            {{ $phone1 }}
+                                        </a>
+                                    </div>
+                                @endforelse
                             </div>
                         </div>
                     </div>
@@ -138,8 +142,8 @@
                                 Operating Schedule
                             </h3>
                             <p class="text-sm text-[var(--text-muted)] leading-relaxed">
-                                Mon – Fri: 8:00 AM – 5:00 PM (WAT)<br>
-                                Closed on public holidays
+                                {{ $workingHours }} ({{ $timezone }})<br>
+                                {{ $workingDaysNote }}
                             </p>
                         </div>
                     </div>
@@ -187,10 +191,10 @@
                     <div class="lg:col-span-7 bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-6 sm:p-10 shadow-sm transition-colors">
                         <div class="mb-8 border-b border-[var(--border)] pb-6">
                             <h2 class="text-2xl sm:text-3xl font-extrabold text-[var(--heading)] tracking-tight">
-                                Send Us a Message
+                                {{ $formSec?->headline ?: 'Send Us a Message' }}
                             </h2>
                             <p class="text-sm text-[var(--text-muted)] mt-1.5 leading-relaxed">
-                                Fill out the form below and a representative from Dzuels Educational Foundation will get in touch with you promptly.
+                                {{ $formSec?->body_text ?: 'Fill out the form below and a representative from Dzuels Educational Foundation will get in touch with you promptly.' }}
                             </p>
                         </div>
 
@@ -341,7 +345,7 @@
                         <div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-6 sm:p-8 shadow-sm transition-colors overflow-hidden">
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-xl font-bold text-[var(--heading)]">
-                                    Headquarters Location
+                                    {{ $mapSec?->headline ?: 'Headquarters Location' }}
                                 </h3>
                                 <span class="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-mint border border-emerald-200 dark:border-emerald-800">
                                     <span>📍</span> Ijero-Ekiti
@@ -349,7 +353,7 @@
                             </div>
 
                             <p class="text-sm text-[var(--text-muted)] mb-5 leading-relaxed">
-                                Our central educational center and community operations are based in Ijero-Ekiti, Ekiti State, Nigeria.
+                                {{ $mapSec?->body_text ?: 'Our central educational center and community operations are based in Ijero-Ekiti, Ekiti State, Nigeria.' }}
                             </p>
 
                             {{-- Responsive Google Map Embed --}}
@@ -365,7 +369,7 @@
                             </div>
 
                             <div class="mt-5 p-4 rounded-2xl bg-[var(--bg)] border border-[var(--border)] text-xs text-[var(--text-muted)] leading-relaxed">
-                                <strong>Visiting Hours:</strong> Physical visits by appointment are warmly welcomed. Please call in advance so our field coordinators can assist with your schedule.
+                                <strong>Visiting Hours:</strong> {{ $mapSec?->subheadline ?: 'Physical visits by appointment are warmly welcomed. Please call in advance so our field coordinators can assist with your schedule.' }}
                             </div>
                         </div>
 

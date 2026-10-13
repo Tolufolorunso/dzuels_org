@@ -233,6 +233,52 @@ class PageSectionSeeder extends Seeder
                 'button_url' => null,
                 'sort_order' => 2,
             ],
+
+            // 7. Contact Page
+            [
+                'page_key' => 'contact',
+                'section_key' => 'hero',
+                'headline' => 'We Are Always Available to Connect With You',
+                'subheadline' => 'Get in Touch',
+                'body_text' => 'Have a question regarding our youth literacy initiatives, school computer labs, or community partnerships? Send us a message or visit our headquarters in Ijero-Ekiti.',
+                'image_path' => 'front/images/gallery/optimized/general-05.webp',
+                'button_text' => null,
+                'button_url' => null,
+                'sort_order' => 1,
+            ],
+            [
+                'page_key' => 'contact',
+                'section_key' => 'office',
+                'headline' => 'Our Head Office & Learning Centers',
+                'subheadline' => 'Visit Our Office',
+                'body_text' => 'Our doors are open to students, teachers, volunteers, and partners working towards educational equity.',
+                'image_path' => null,
+                'button_text' => null,
+                'button_url' => null,
+                'sort_order' => 2,
+            ],
+            [
+                'page_key' => 'contact',
+                'section_key' => 'form',
+                'headline' => 'Send Us a Message',
+                'subheadline' => 'Online Inquiry',
+                'body_text' => 'Fill out the form below and a representative from Dzuels Educational Foundation will get in touch with you promptly.',
+                'image_path' => null,
+                'button_text' => null,
+                'button_url' => null,
+                'sort_order' => 3,
+            ],
+            [
+                'page_key' => 'contact',
+                'section_key' => 'map',
+                'headline' => 'Headquarters Location',
+                'subheadline' => 'Physical visits by appointment are warmly welcomed. Please call in advance so our field coordinators can assist with your schedule.',
+                'body_text' => 'Our central educational center and community operations are based in Ijero-Ekiti, Ekiti State, Nigeria.',
+                'image_path' => null,
+                'button_text' => null,
+                'button_url' => null,
+                'sort_order' => 4,
+            ],
         ];
 
         foreach ($sections as $section) {

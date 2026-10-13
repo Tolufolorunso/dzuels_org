@@ -38,8 +38,14 @@ class SettingController extends Controller
 
             'contact_phone_1' => ['string', 'contact'],
             'contact_phone_2' => ['string', 'contact'],
+            'contact_phone_3' => ['string', 'contact'],
+            'contact_phone_4' => ['string', 'contact'],
+            'contact_phone_5' => ['string', 'contact'],
             'contact_email' => ['string', 'contact'],
             'contact_address' => ['string', 'contact'],
+            'contact_working_hours' => ['string', 'contact'],
+            'contact_timezone' => ['string', 'contact'],
+            'contact_working_days_note' => ['string', 'contact'],
 
             'flutterwave_url' => ['string', 'banking'],
             'bank_name' => ['string', 'banking'],

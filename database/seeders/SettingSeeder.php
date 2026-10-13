@@ -45,7 +45,7 @@ class SettingSeeder extends Seeder
                 'group' => 'impact',
             ],
 
-            // Contact Information
+            // Contact Information & Multi-Line Hotlines
             [
                 'key' => 'contact_phone_1',
                 'value' => '+234 904 249 3883',
@@ -59,6 +59,24 @@ class SettingSeeder extends Seeder
                 'group' => 'contact',
             ],
             [
+                'key' => 'contact_phone_3',
+                'value' => null,
+                'type' => 'string',
+                'group' => 'contact',
+            ],
+            [
+                'key' => 'contact_phone_4',
+                'value' => null,
+                'type' => 'string',
+                'group' => 'contact',
+            ],
+            [
+                'key' => 'contact_phone_5',
+                'value' => null,
+                'type' => 'string',
+                'group' => 'contact',
+            ],
+            [
                 'key' => 'contact_email',
                 'value' => 'info@dzuelsfoundation.org',
                 'type' => 'string',
@@ -67,6 +85,24 @@ class SettingSeeder extends Seeder
             [
                 'key' => 'contact_address',
                 'value' => '12b Doherty Road, Ijero-Ekiti, Ekiti State, Nigeria',
+                'type' => 'string',
+                'group' => 'contact',
+            ],
+            [
+                'key' => 'contact_working_hours',
+                'value' => 'Mon – Fri: 8:00 AM – 5:00 PM',
+                'type' => 'string',
+                'group' => 'contact',
+            ],
+            [
+                'key' => 'contact_timezone',
+                'value' => 'GMT +1',
+                'type' => 'string',
+                'group' => 'contact',
+            ],
+            [
+                'key' => 'contact_working_days_note',
+                'value' => 'Closed on public holidays',
                 'type' => 'string',
                 'group' => 'contact',
             ],

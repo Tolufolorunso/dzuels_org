@@ -554,19 +554,12 @@
                     @endforeach
                 </div>
             @else
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 items-center justify-center opacity-80">
-                    <div class="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6 flex items-center justify-center h-28">
-                        <img src="{{ asset('front/images/ascend.jpg') }}" alt="ASCEND Education Foundation" class="max-h-14 max-w-[80%] object-contain">
-                    </div>
-                    <div class="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6 flex items-center justify-center h-28">
-                        <img src="{{ asset('front/images/SAA.jpg') }}" alt="Solape Adesuyi Associates" class="max-h-14 max-w-[80%] object-contain">
-                    </div>
-                    <div class="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6 flex items-center justify-center h-28">
-                        <img src="{{ asset('front/images/helpmeetaneed.png') }}" alt="Help Meet A Need" class="max-h-14 max-w-[80%] object-contain">
-                    </div>
-                    <div class="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6 flex items-center justify-center h-28">
-                        <img src="{{ asset('front/images/intinternational.png') }}" alt="Int International" class="max-h-14 max-w-[80%] object-contain">
-                    </div>
+                <div class="text-center py-8">
+                    <p class="text-sm text-[var(--text-muted)]">Interested in partnering with Dzuels Educational Foundation?</p>
+                    <a href="{{ url('/get-involved') }}" class="inline-flex items-center gap-1.5 mt-3 text-xs font-bold uppercase tracking-wider text-maroon dark:text-[var(--accent-cream)] hover:underline">
+                        <span>Join Our Institutional Partners</span>
+                        <span>&rarr;</span>
+                    </a>
                 </div>
             @endif
         </div>
