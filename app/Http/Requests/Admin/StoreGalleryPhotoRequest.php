@@ -23,9 +23,9 @@ class StoreGalleryPhotoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'photos' => ['required_without:photo', 'array'],
-            'photos.*' => ['image', 'mimes:jpeg,png,jpg,webp', 'max:10240'],
-            'photo' => ['required_without:photos', 'image', 'mimes:jpeg,png,jpg,webp', 'max:10240'],
+            'photos' => ['required_without:photo', 'array', 'min:1', 'max:50'],
+            'photos.*' => ['image', 'mimes:jpeg,png,jpg,webp,gif', 'max:10240'],
+            'photo' => ['required_without:photos', 'image', 'mimes:jpeg,png,jpg,webp,gif', 'max:10240'],
             'caption' => ['nullable', 'string', 'max:255'],
             'alt_text' => ['nullable', 'string', 'max:255'],
             'year' => ['nullable', 'string', 'max:10'],

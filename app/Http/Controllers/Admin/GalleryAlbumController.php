@@ -14,6 +14,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class GalleryAlbumController extends Controller
@@ -198,6 +199,7 @@ class GalleryAlbumController extends Controller
     public function uploadPhotos(StoreGalleryPhotoRequest $request, GalleryAlbum $album): RedirectResponse
     {
         $uploadedCount = 0;
+        $failedCount = 0;
         $maxSortOrder = (int) $album->photos()->max('sort_order');
 
         $files = [];
@@ -212,7 +214,13 @@ class GalleryAlbumController extends Controller
         $year = $request->input('year');
 
         foreach ($files as $file) {
-            if ($file && $file->isValid()) {
+            if (! $file || ! $file->isValid()) {
+                $failedCount++;
+
+                continue;
+            }
+
+            try {
                 $optimizedPath = $this->optimizer->optimize(
                     $file,
                     'uploads/gallery/photos',
@@ -231,11 +239,24 @@ class GalleryAlbumController extends Controller
                 ]);
 
                 $uploadedCount++;
+            } catch (\Throwable $e) {
+                Log::error('Failed to upload gallery photo: '.$e->getMessage());
+                $failedCount++;
             }
         }
 
+        if ($uploadedCount === 0 && $failedCount > 0) {
+            return redirect()->route('admin.gallery.photos', $album)
+                ->with('error', 'Failed to upload selected photo(s). Please verify the file formats and try again.');
+        }
+
+        $message = "{$uploadedCount} photo(s) uploaded successfully.";
+        if ($failedCount > 0) {
+            $message .= " ({$failedCount} photo(s) failed to process).";
+        }
+
         return redirect()->route('admin.gallery.photos', $album)
-            ->with('success', "{$uploadedCount} photo(s) added and optimized successfully.");
+            ->with('success', $message);
     }
 
     /**

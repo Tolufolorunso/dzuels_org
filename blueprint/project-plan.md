@@ -27,7 +27,7 @@ Finalized production readiness for live deployment on Namecheap cPanel (`server1
 - **Contextual Hero Section Imagery**: Enrich About Us, Programmes, and Contact page heroes with rich, contextual background imagery and maroon gradient overlays.
 - **Spelling Bee Programme Image Fix**: Replace placeholder with authentic Spelling Bee championship photo (`spelling-01.webp`).
 
-### Milestone 4: Dynamic Media Hub, Gallery Overhaul, Famoyinka Memorial Library & Global Admin Controls (Active Target)
+### Milestone 4: Dynamic Media Hub, Gallery Overhaul, Famoyinka Memorial Library & Global Admin Controls (Completed & Shipped)
 Empowering foundation staff with full media flexibility and addressing visual storytelling feedback:
 - **Automated Upload Image Optimization**: Native PHP GD processing on every dashboard image upload: automatically resize, convert to WebP, save to public uploads, and delete the unoptimized original. Compatible with PHP 8.3 & 8.4.
 - **Global Media Library Picker**: A reusable media modal component across all dashboard edit forms (events, programmes, page sections, partners) allowing staff to either upload a new image or pick an existing photo from the gallery.
@@ -36,15 +36,31 @@ Empowering foundation staff with full media flexibility and addressing visual st
 - **Multi-Phone Site Settings (Up to 5 Lines)**: Expand site settings to store up to 5 contact hotlines (`contact_phone_1` through `contact_phone_5`), unifying all site-wide phone displays (header utility bar, mobile nav, footer, contact cards, error pages) to read strictly from site settings with empty numbers gracefully omitted.
 - **Fully Dynamic Contact Page & Dynamic Partners Strip**: Remove all hardcoded copy on `/contact` (office hours and timezone configurable from dashboard, e.g. "Mon – Fri: 8:00 AM – 5:00 PM (GMT +1)"); and render the "Our Valued Partners - Collaborating for greater impact" logo strip dynamically on both Home (`/`) and About (`/about`) with full management in `/admin/partners`.
 
+### Milestone 5: Production Launch Hardening, Resilient Media Pipeline, Givebutter Diaspora Donations & 6 Impact Causes CMS (Active Target)
+Finalizing the web platform for live release and addressing critical operational feedback:
+- **Resilient Upload Engine & GD Fallback**: Eliminate `imagecreatefromjpeg` crashes by correctly scoping GD functions in the global namespace (`\imagecreatefrom...`), checking extension availability, and implementing a graceful fallback to direct storage so photo uploads always succeed without crashing regardless of server GD configuration.
+- **Gallery Multi-Photo Bulk Upload**: Streamline gallery management by allowing staff to select and upload multiple images simultaneously into an album, with subsequent per-photo metadata editing (caption, year label, alt text, sort order).
+- **Dynamic Site Logo Management**: Empower staff to upload or select a brand logo directly in `/admin/settings`, with real-time propagation across the header navbar, footer, and admin layout.
+- **U.S. Diaspora Giving (Givebutter)**: Expand giving channels on `/donate` with an official Givebutter link (`https://givebutter.com/dzuels-foundation`) labeled "For U.S. Donors Only", fully manageable from site settings (`givebutter_url`).
+- **Authentic 6 Key Impact Pillars (`cause.jpg`)**: Replace the generic causes with the foundation's official 6 pillars:
+  1. Education Support (Paul's academy)
+  2. Skills Acquisition (Peter's net)
+  3. Advocacy (Deborah congress)
+  4. Feeding families (Naomi's kitchen)
+  5. Transformative leadership Training (Priscilla's upper room)
+  6. Health awareness and support (Luke's Tent)
+  Anchored by the philosophy *"An Integrated Approach to the Total Well Being of the Child"*, editable in `/admin/pages/home`.
+- **Production Export & Launch Readiness**: Re-export `dzuels_database.sql` containing all updated seeders, settings, and causes for 1-click phpMyAdmin import on Namecheap cPanel (`server161.web-hosting.com`), update `cpanel_changed_files.txt`, and verify deployment integrity.
+
 ## 2. Users - Who is this for?
 
-- **Prospective donors**: Seeking transparency, impact evidence, and seamless donation channels.
+- **Prospective donors**: Seeking transparency, impact evidence, and seamless donation channels (including U.S. Givebutter diaspora giving).
 - **Volunteers & Partners**: Submitting applications and exploring organizational partnerships.
 - **Event participants & schools**: Attending ITD 2026, reading competitions, and spelling bees.
 - **Beneficiaries, parents & students**: Accessing educational literacy, community activities, and the Famoyinka Memorial Children's Library.
 - **Foundation Staff (Admin Users)**:
-  - **Super Admin**: Managing staff accounts, role permissions, global site settings (up to 5 phone lines, office hours/timezone), and database exports.
-  - **Editor / Content Manager**: Updating page content, programmes (including the library), events, sponsors, partner logos, and managing the gallery collections and photos.
+  - **Super Admin**: Managing staff accounts, role permissions, global site settings (logo, up to 5 phone lines, Givebutter link, office hours/timezone), and database exports.
+  - **Editor / Content Manager**: Updating page content (including the 6 impact pillars in `/admin/pages/home`), programmes, events, sponsors, partner logos, and managing gallery photos with bulk upload.
   - **Support / Viewer**: Viewing incoming contact messages, volunteer applications, and event registrations.
 
 ## 3. Features & Milestones
@@ -60,7 +76,7 @@ Empowering foundation staff with full media flexibility and addressing visual st
 ### Milestone 3: Production Server Readiness & Launch Refinements (Shipped, Feature 21)
 - 21. Production MariaDB configuration, root SQL dump, phone hotline update and hero imagery refinements.
 
-### Milestone 4: Dynamic Media Hub, Gallery Overhaul, Famoyinka Memorial Library & Global Admin Controls (Features 22–24)
+### Milestone 4: Dynamic Media Hub, Gallery Overhaul, Famoyinka Memorial Library & Global Admin Controls (Shipped, Features 22–24)
 - 22. **Automated image optimization, global media picker and gallery collection/photo management**:
   - Auto-convert all dashboard uploads to WebP and delete original uncompressed files using PHP 8.3/8.4 native GD.
   - Reusable Media Library picker modal in admin forms to upload or choose existing gallery images.
@@ -77,9 +93,24 @@ Empowering foundation staff with full media flexibility and addressing visual st
   - Make `/contact` 100% dynamic (custom office hours and timezone like "GMT +1", address, card descriptions).
   - Dynamic "Our Valued Partners" strip on Home and About pages driven by `/admin/partners`.
 
+### Milestone 5: Production Launch Hardening, Resilient Media Pipeline, Givebutter Diaspora Donations & 6 Impact Causes CMS (Features 25–27)
+- 25. **Resilient image optimization pipeline, upload fallback & gallery bulk uploader**:
+  - Resolve GD global namespace scoping and extension availability checks in `ImageOptimizerService`.
+  - Graceful direct-save fallback ensuring zero-crash uploads even without GD.
+  - Multi-file bulk upload in `/admin/gallery` with per-photo metadata editing.
+- 26. **Dynamic site logo in settings, Givebutter U.S. diaspora donations & 6 Impact Causes CMS**:
+  - Dynamic site logo upload and selection in `/admin/settings` propagating site-wide.
+  - Givebutter donation channel (`https://givebutter.com/dzuels-foundation`) with "For U.S. Donors Only" badge and admin setting.
+  - 6 Key Impact Causes on Home page matching `cause.jpg` editable via `/admin/pages/home`.
+- 27. **Production release suite, updated MariaDB database export & launch verification**:
+  - Root `dzuels_database.sql` update via `php artisan db:export-sql`.
+  - Synchronization of `cpanel_changed_files.txt` deployment manifest.
+  - Comprehensive test suite, code style audit, and production configuration check.
+
 ## 4. Data - What are we storing?
 
-- **settings**: extended key/values for `contact_phone_1` through `contact_phone_5`, `office_hours` (e.g. "Mon – Fri: 8:00 AM – 5:00 PM"), `office_timezone` (e.g. "GMT +1"), impact numbers, banking, and registration.
+- **settings**: extended key/values for `site_logo`, `givebutter_url`, `contact_phone_1` through `contact_phone_5`, `office_hours` (e.g. "Mon – Fri: 8:00 AM – 5:00 PM"), `office_timezone` (e.g. "GMT +1"), impact numbers, banking, and registration.
+- **page_sections**: includes Home page section `causes` with structured 6-pillar copy, subtitle, and icons.
 - **gallery_albums**: id, title, slug, kicker, description, cover_image, sort_order, is_active, timestamps.
 - **gallery_photos**: id, gallery_album_id, image_path, caption, alt_text, year, sort_order, timestamps.
 - **programmes**: id, title, slug, excerpt, description, image_path, is_active, sort_order, timestamps (including `famoyinka-memorial-library`).

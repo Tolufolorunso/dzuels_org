@@ -3,6 +3,10 @@
         selectedPhotos: [],
         selectAll: false,
         editingPhoto: null,
+        uploadFilesCount: 0,
+        handleFileSelect(e) {
+            this.uploadFilesCount = e.target.files.length;
+        },
         toggleAll() {
             if (this.selectAll) {
                 this.selectedPhotos = {{ json_encode($photos->pluck('id')->values()) }};
@@ -52,10 +56,17 @@
             </div>
         </div>
 
-        {{-- Upload New Photos Card --}}
+        {{-- Upload New Photos Card (Supports Multi-Photo Bulk Upload) --}}
         <div class="bg-white rounded-2xl border border-stone-200 shadow-xs p-6">
-            <h2 class="text-base font-bold text-stone-900 mb-1">Upload & Optimize Photos</h2>
-            <p class="text-xs text-stone-500 mb-4">Select image(s). Uploaded files are automatically optimized to modern WebP via GD and resized to eliminate raw uncompressed overhead.</p>
+            <div class="flex items-center justify-between mb-2">
+                <h2 class="text-base font-bold text-stone-900">Upload & Optimize Photos (Bulk Uploader)</h2>
+                <span class="text-xs font-medium px-2.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg">
+                    ⚡ Resilient Auto-WebP Pipeline
+                </span>
+            </div>
+            <p class="text-xs text-stone-500 mb-4">
+                Select one or multiple photos to upload at once. Files are automatically optimized to modern WebP with aspect ratio preservation and zero-crash storage fallback.
+            </p>
 
             <form method="POST" action="{{ route('admin.gallery.photos.upload', $album) }}" enctype="multipart/form-data" class="space-y-4">
                 @csrf
@@ -72,7 +83,14 @@
                                multiple 
                                required 
                                accept="image/*" 
+                               @change="handleFileSelect($event)"
                                class="w-full text-sm text-stone-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-stone-100 file:text-stone-700 hover:file:bg-stone-200 cursor-pointer">
+                        <template x-if="uploadFilesCount > 0">
+                            <p class="text-xs font-semibold text-emerald-700 mt-1.5 flex items-center gap-1">
+                                <span>✓</span>
+                                <span x-text="uploadFilesCount + ' file(s) selected for bulk upload'"></span>
+                            </p>
+                        </template>
                         @error('photos')
                             <p class="text-xs text-rose-500 mt-1.5">{{ $message }}</p>
                         @enderror
@@ -170,7 +188,7 @@
                         📸
                     </div>
                     <p class="text-stone-600 font-medium text-sm">No photos in this album yet.</p>
-                    <p class="text-xs text-stone-400">Use the form above to upload images to this collection.</p>
+                    <p class="text-xs text-stone-400">Use the form above to batch upload images to this collection.</p>
                 </div>
             @else
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
