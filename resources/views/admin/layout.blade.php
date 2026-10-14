@@ -34,6 +34,9 @@
                     <a href="{{ route('admin.pages.index') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors {{ request()->routeIs('admin.pages*') ? 'bg-white/15 text-white' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
                         Pages CMS
                     </a>
+                    <a href="{{ route('admin.media.index') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors {{ request()->routeIs('admin.media*') ? 'bg-white/15 text-white' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
+                        Media Library
+                    </a>
                     <a href="{{ route('admin.programmes.index') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors {{ request()->routeIs('admin.programmes*') ? 'bg-white/15 text-white' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
                         Programmes
                     </a>

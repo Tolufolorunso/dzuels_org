@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ForgotPasswordController as AdminForgotPasswordCo
 use App\Http\Controllers\Admin\GalleryAlbumController as AdminGalleryAlbumController;
 use App\Http\Controllers\Admin\InquiryController;
 use App\Http\Controllers\Admin\MediaController;
+use App\Http\Controllers\Admin\MediaLibraryController;
 use App\Http\Controllers\Admin\NewsletterSubscriberController as AdminNewsletterSubscriberController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PartnerController;
@@ -87,9 +88,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['admin'])->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-        // Media Library Picker API
+        // Central Media Library & Modal Picker API
+        Route::get('/media', [MediaLibraryController::class, 'index'])->name('media.index');
+        Route::get('/media/picker-items', [MediaLibraryController::class, 'pickerItems'])->name('media.picker-items');
+        Route::post('/media/upload', [MediaLibraryController::class, 'upload'])->name('media.upload');
+        Route::put('/media/{mediaItem}', [MediaLibraryController::class, 'update'])->name('media.update');
+        Route::delete('/media/{mediaItem}', [MediaLibraryController::class, 'destroy'])->name('media.destroy');
+        Route::post('/media/bulk-delete', [MediaLibraryController::class, 'bulkDestroy'])->name('media.bulk-destroy');
         Route::get('/media/photos', [MediaController::class, 'photos'])->name('media.photos');
-        Route::post('/media/upload', [MediaController::class, 'upload'])->name('media.upload');
 
         // Staff Profile & Password Security
         Route::get('/profile', [AdminProfileController::class, 'edit'])->name('profile.password');

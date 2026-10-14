@@ -16,45 +16,45 @@
     activeTab: 'browse',
     selectedPath: '{{ $initialPath }}',
     selectedUrl: '{{ $initialUrl }}',
-    photos: [],
-    albums: [],
+    items: [],
     loading: false,
     uploading: false,
     search: '',
-    selectedAlbumId: '',
+    dateFilter: 'all',
+    category: 'all',
     errorMessage: '',
 
     init() {
         this.$watch('modalOpen', value => {
-            if (value && this.photos.length === 0) {
-                this.loadPhotos();
+            if (value && this.items.length === 0) {
+                this.loadItems();
             }
         });
     },
 
-    loadPhotos() {
+    loadItems() {
         this.loading = true;
         this.errorMessage = '';
-        let url = '{{ route('admin.media.photos') }}?';
-        if (this.selectedAlbumId) url += 'album_id=' + encodeURIComponent(this.selectedAlbumId) + '&';
+        let url = '{{ route('admin.media.picker-items') }}?';
         if (this.search) url += 'search=' + encodeURIComponent(this.search) + '&';
+        if (this.dateFilter && this.dateFilter !== 'all') url += 'date_filter=' + encodeURIComponent(this.dateFilter) + '&';
+        if (this.category && this.category !== 'all') url += 'category=' + encodeURIComponent(this.category) + '&';
 
         fetch(url, { credentials: 'same-origin', headers: { 'Accept': 'application/json' } })
             .then(res => res.json())
             .then(data => {
-                this.photos = data.photos || [];
-                this.albums = data.albums || [];
+                this.items = data.items || [];
                 this.loading = false;
             })
             .catch(err => {
-                this.errorMessage = 'Failed to load gallery photos. Please try again.';
+                this.errorMessage = 'Failed to load media library items. Please try again.';
                 this.loading = false;
             });
     },
 
-    selectPhoto(photo) {
-        this.selectedPath = photo.image_path;
-        this.selectedUrl = photo.image_url;
+    selectItem(item) {
+        this.selectedPath = item.file_path;
+        this.selectedUrl = item.image_url;
         this.modalOpen = false;
     },
 
@@ -84,9 +84,10 @@
             return res.json();
         })
         .then(data => {
-            if (data.success) {
-                this.selectedPath = data.image_path;
-                this.selectedUrl = data.image_url;
+            if (data.success && (data.item || data.image_path)) {
+                const item = data.item || {};
+                this.selectedPath = item.file_path || data.image_path;
+                this.selectedUrl = item.image_url || data.image_url;
                 this.uploading = false;
                 this.modalOpen = false;
             } else {
@@ -94,7 +95,7 @@
             }
         })
         .catch(err => {
-            this.errorMessage = 'Upload failed. Ensure the image is valid and under 10MB.';
+            this.errorMessage = 'Upload failed. Ensure the image is valid and under 15MB.';
             this.uploading = false;
         });
     }
@@ -131,14 +132,14 @@
                 <div class="mb-2">
                     <p class="text-xs font-mono font-bold text-stone-800 truncate" x-text="selectedPath"></p>
                     <span class="text-[10px] text-emerald-600 font-semibold inline-flex items-center gap-1">
-                        ✓ Selected & optimized
+                        ✓ Selected & optimized WebP
                     </span>
                 </div>
             </template>
             <template x-if="!selectedPath">
                 <div class="mb-2">
                     <p class="text-xs font-medium text-stone-600">No image chosen yet.</p>
-                    <p class="text-[11px] text-stone-400">Choose from gallery or upload a new image.</p>
+                    <p class="text-[11px] text-stone-400">Choose from Media Library or upload a new photo.</p>
                 </div>
             </template>
 
@@ -149,7 +150,7 @@
                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    Choose from Gallery
+                    Choose from Library
                 </button>
 
                 <button type="button" 
@@ -183,13 +184,13 @@
          class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
         
         <div @click.away="modalOpen = false" 
-             class="bg-white rounded-3xl max-w-3xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-stone-200 overflow-hidden">
+             class="bg-white rounded-3xl max-w-4xl w-full max-h-[88vh] flex flex-col shadow-2xl border border-stone-200 overflow-hidden">
             
             {{-- Modal Header & Tabs --}}
             <div class="px-6 py-4 border-b border-stone-100 flex items-center justify-between">
                 <div>
                     <h3 class="text-base font-bold text-stone-900">Select or Upload Media</h3>
-                    <p class="text-xs text-stone-500">Pick an existing gallery photo or upload an optimized image.</p>
+                    <p class="text-xs text-stone-500">Pick from foundation media catalog (search by name, date uploaded) or upload an optimized image.</p>
                 </div>
                 <button type="button" @click="modalOpen = false" class="p-1.5 text-stone-400 hover:text-stone-700 rounded-lg cursor-pointer">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -204,35 +205,46 @@
                         @click="activeTab = 'browse'" 
                         :class="activeTab === 'browse' ? 'border-maroon text-maroon' : 'border-transparent text-stone-500 hover:text-stone-800'"
                         class="py-3 border-b-2 transition-colors cursor-pointer flex items-center gap-2">
-                    <span>🖼️ Gallery Photos</span>
+                    <span>🖼️ Media Library Catalog</span>
                 </button>
                 <button type="button" 
                         @click="activeTab = 'upload'" 
                         :class="activeTab === 'upload' ? 'border-maroon text-maroon' : 'border-transparent text-stone-500 hover:text-stone-800'"
                         class="py-3 border-b-2 transition-colors cursor-pointer flex items-center gap-2">
-                    <span>⚡ Upload & Optimize</span>
+                    <span>⚡ Upload & Optimize (&le; 180 KB)</span>
                 </button>
             </div>
 
-            {{-- Tab 1: Browse Gallery --}}
+            {{-- Tab 1: Browse Media Library --}}
             <div x-show="activeTab === 'browse'" class="flex-1 overflow-y-auto p-6 space-y-4">
-                {{-- Search & Album Filter Controls --}}
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <div class="flex-1">
+                {{-- Search & Multi-filter Controls --}}
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
                         <input type="text" 
                                x-model="search" 
-                               @input.debounce.300ms="loadPhotos()" 
-                               placeholder="Search caption, year, or title..." 
-                               class="w-full px-4 py-2 rounded-xl border border-stone-300 text-xs focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
+                               @input.debounce.300ms="loadItems()" 
+                               placeholder="Search by photo name, filename..." 
+                               class="w-full px-3.5 py-2 rounded-xl border border-stone-300 text-xs focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
                     </div>
-                    <div class="sm:w-56">
-                        <select x-model="selectedAlbumId" 
-                                @change="loadPhotos()" 
+                    <div>
+                        <select x-model="dateFilter" 
+                                @change="loadItems()" 
                                 class="w-full px-3 py-2 rounded-xl border border-stone-300 text-xs focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
-                            <option value="">All Collections</option>
-                            <template x-for="album in albums" :key="album.id">
-                                <option :value="album.id" x-text="album.title"></option>
-                            </template>
+                            <option value="all">All Dates Uploaded</option>
+                            <option value="today">Uploaded Today</option>
+                            <option value="this_week">This Week</option>
+                            <option value="this_month">This Month</option>
+                            <option value="past_year">Past Year</option>
+                        </select>
+                    </div>
+                    <div>
+                        <select x-model="category" 
+                                @change="loadItems()" 
+                                class="w-full px-3 py-2 rounded-xl border border-stone-300 text-xs focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
+                            <option value="all">All Categories</option>
+                            <option value="gallery">Gallery Collections</option>
+                            <option value="site">Site & CMS Assets</option>
+                            <option value="general">Uploaded Media</option>
                         </select>
                     </div>
                 </div>
@@ -240,35 +252,35 @@
                 {{-- Loading Spinner --}}
                 <div x-show="loading" class="py-16 text-center text-stone-500 text-xs">
                     <div class="w-8 h-8 border-2 border-maroon border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-                    Loading gallery photos...
+                    Searching foundation media...
                 </div>
 
                 {{-- Error notification --}}
                 <div x-show="errorMessage" x-text="errorMessage" class="p-3 bg-rose-50 text-rose-700 text-xs rounded-xl border border-rose-200"></div>
 
-                {{-- Photos Grid --}}
-                <div x-show="!loading" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
-                    <template x-for="photo in photos" :key="photo.id">
-                        <div @click="selectPhoto(photo)" 
+                {{-- Items Grid --}}
+                <div x-show="!loading" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                    <template x-for="item in items" :key="item.id">
+                        <div @click="selectItem(item)" 
                              class="group relative aspect-square bg-stone-100 rounded-xl overflow-hidden border border-stone-200 hover:border-maroon hover:ring-2 hover:ring-maroon/30 transition-all cursor-pointer">
-                            <img :src="photo.image_url" :alt="photo.caption" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
+                            <img :src="item.image_url" :alt="item.alt_text || item.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
                             
                             {{-- Info overlay --}}
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-2 flex flex-col justify-end text-white text-[10px]">
-                                <span class="font-bold truncate" x-text="photo.display_label"></span>
-                                <span class="text-stone-300 truncate" x-text="photo.album_title"></span>
+                                <span class="font-bold truncate" x-text="item.title"></span>
+                                <span class="text-stone-300 truncate" x-text="item.formatted_size + ' • ' + item.date_formatted"></span>
                             </div>
 
-                            {{-- Year tag --}}
-                            <template x-if="photo.year">
-                                <span class="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded bg-black/70 backdrop-blur-xs text-white text-[9px] font-bold" x-text="photo.year"></span>
-                            </template>
+                            {{-- Badges --}}
+                            <div class="absolute top-1.5 right-1.5 flex items-center gap-1">
+                                <span class="px-1.5 py-0.5 rounded bg-black/70 backdrop-blur-xs text-white text-[9px] font-bold" x-text="item.formatted_size"></span>
+                            </div>
                         </div>
                     </template>
                 </div>
 
-                <div x-show="!loading && photos.length === 0" class="py-12 text-center text-stone-400 text-xs">
-                    No matching photos found in the gallery.
+                <div x-show="!loading && items.length === 0" class="py-12 text-center text-stone-400 text-xs">
+                    No matching photos found in the media library.
                 </div>
             </div>
 
@@ -279,7 +291,7 @@
                         ⚡
                     </div>
                     <h4 class="font-bold text-stone-900 text-sm">Upload & Automatically Optimize to WebP</h4>
-                    <p class="text-xs text-stone-500">Supports JPEG, PNG, WEBP up to 10MB. The image will be resized, converted to lightweight WebP, and selected automatically.</p>
+                    <p class="text-xs text-stone-500">Supports JPEG, PNG, WEBP up to 15MB. The image will be compressed to &le; 180 KB WebP, cataloged in the Media Library, and selected automatically.</p>
 
                     <label class="inline-block mt-3 px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-maroon text-white hover:bg-crimson transition-all shadow-xs cursor-pointer">
                         <span x-show="!uploading">Select File to Upload</span>
@@ -289,7 +301,7 @@
 
                     <div x-show="uploading" class="pt-2 text-xs text-maroon font-semibold flex items-center justify-center gap-2">
                         <div class="w-4 h-4 border-2 border-maroon border-t-transparent rounded-full animate-spin"></div>
-                        <span>Processing with GD...</span>
+                        <span>Processing with GD & cataloging...</span>
                     </div>
 
                     <div x-show="errorMessage" x-text="errorMessage" class="pt-2 text-xs text-rose-600 font-semibold"></div>

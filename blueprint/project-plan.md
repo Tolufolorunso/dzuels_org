@@ -6,68 +6,26 @@ Dzuels Educational Foundation website rebuild (https://dzuelsfoundation.org), bu
 
 Dzuels Educational Foundation is a Nigerian charity, founded on 22 June 2015 and registered the same year. It provides education support and skills acquisition for indigent Nigerian children and youth, creates awareness of social vices and mitigating measures, and feeds poor families, among other social responsibilities. Its current work includes free literacy support and digital skills training for teachers and students in Ijero-Ekiti (Ekiti State, Southwest Nigeria), plus yearly flagship events such as Innovation and Tech Day (ITD), a Reading Competition, and a Spelling Bee, alongside the Famoyinka Memorial Children's Library.
 
-### Milestone 1: Core Web Platform (Completed & Shipped)
-The foundation's web presence was rebuilt into a modern, fast, accessible, SEO-optimized Laravel application with verified WCAG 2.2 AA compliance, brand color tokens, dynamic settings, team/partner/programme showcases, payment details, contact forms, and security safeguards across 17 completed features.
+### Milestones 1–7 (Completed & Shipped, Features 1–29)
+The foundation's platform has been successfully built, hardened, and deployed:
+- **Milestone 1 (Shipped):** Core Web Platform across 17 features (WCAG 2.2 AA accessibility, responsive design, SEO foundation, dynamic settings, event showcase, WebP gallery, donation channels, contact/volunteer inboxes).
+- **Milestone 2 (Shipped):** Brand identity & full favicon suite, ITD 2026 overhaul (October 3, 2026, AI empowerment objective), server-rendered gallery lightbox, WordPress-style Page Content CMS, multi-tier RBAC (`super_admin`, `editor`, `support`), password recovery, and MySQL export tooling.
+- **Milestone 3 (Shipped):** Production MariaDB configuration, root `dzuels_database.sql` export, hotline update (`+234 904 249 3883`), hero imagery overlays, and Spelling Bee photo fixes.
+- **Milestone 4 (Shipped):** Dynamic Media Hub, Gallery Overhaul, Famoyinka Memorial Children's Library Integration, multi-phone settings (up to 5 lines), dynamic contact CMS (custom schedule/timezone), and dynamic partners strip on Home and About.
+- **Milestone 5 (Shipped):** Resilient media pipeline with GD fallback, gallery multi-photo bulk uploader, dynamic site logo in settings, Givebutter U.S. diaspora donations, and the authentic 6 Key Impact Causes CMS.
+- **Milestone 6 (Shipped):** Production refinements, image optimizer hardening (strict $\le 180\text{ KB}$ WebP ceiling), full unclipped causes graphic on Home, dynamic 4-photo Famoyinka Library CMS, and Get Involved UI overhaul.
+- **Milestone 7 (Shipped):** Universal gallery media picker `<x-admin.media-picker>` across Gallery Album, Programme, News, and Team forms, centralized cover photo optimization, and dual-input request validators.
 
-### Milestone 2: Polish, Dynamic CMS, Access Control & cPanel Deployment (Completed & Shipped)
-To make the platform independent and self-manageable by non-technical staff:
-- **Brand Identity & Favicons**: Complete the brand asset suite (`favicon.ico`, PNG touch icons, webmanifest) using the foundation logo.
-- **ITD 2026 Refinements & Historical Separation**: Updated the flagship event page for October 3, 2026 with the backdrop extracted from the official PDF, the new AI empowerment objective, SeedDev and public registration forms removed, 3 dynamic sponsors with flexible admin controls, and distinct past event archives.
-- **Gallery Stability & Polish**: Server-rendered responsive masonry grid, filter chips, and working lightbox.
-- **WordPress-Style Page Content Management**: Visual section editor in `/admin/pages` for Home, About, Programmes, Contact, and Donate.
-- **Role-Based Access Control & Password Recovery**: Super Admin, Editor, and Support roles with password reset workflows.
-- **MySQL Database Export Suite**: Automated `php artisan db:export-sql` generating clean SQL dumps for phpMyAdmin on cPanel.
-
-### Milestone 3: Production Server Readiness & Launch Refinements (Completed & Shipped)
-Finalized production readiness for live deployment on Namecheap cPanel (`server161.web-hosting.com` running MariaDB):
-- **MariaDB / MySQL Architecture**: Transition `.env` and `.env.example` to default to MariaDB/MySQL. Provide root `dzuels_database.sql` for 1-click phpMyAdmin import.
-- **Dynamic Database-Driven Content**: Ensure layout elements, impact statistics, and contacts pull dynamically from the database.
-- **Hotline & Contact Update**: Completely replace old telephone numbers with `+234 904 249 3883` site-wide.
-- **Giving Channels Refinement**: Hide the Diaspora & International Wire transfers channel on `/donate` for now.
-- **Contextual Hero Section Imagery**: Enrich About Us, Programmes, and Contact page heroes with rich, contextual background imagery and maroon gradient overlays.
-- **Spelling Bee Programme Image Fix**: Replace placeholder with authentic Spelling Bee championship photo (`spelling-01.webp`).
-
-### Milestone 4: Dynamic Media Hub, Gallery Overhaul, Famoyinka Memorial Library & Global Admin Controls (Completed & Shipped)
-Empowering foundation staff with full media flexibility and addressing visual storytelling feedback:
-- **Automated Upload Image Optimization**: Native PHP GD processing on every dashboard image upload: automatically resize, convert to WebP, save to public uploads, and delete the unoptimized original. Compatible with PHP 8.3 & 8.4.
-- **Global Media Library Picker**: A reusable media modal component across all dashboard edit forms (events, programmes, page sections, partners) allowing staff to either upload a new image or pick an existing photo from the gallery.
-- **Gallery & Collection Overhaul**: Full CRUD and sort reordering for collections/categories (moving beyond fixed albums); single and bulk photo deletion; photo metadata editing; and standardized event and year labeling across all photos (e.g. "Spelling Bee 2024", "Reading Competition 2024", "Famoyinka Library 2025").
-- **Famoyinka Memorial Children's Library Integration**: Dedicated official programme at `/programmes/famoyinka-memorial-library` and dedicated gallery collection; visual curation introducing authentic action photography of children (crafts, transformational leadership games, Ikogosi trip, library reading and book borrowing); pruning repetitive photos; and cross-linking the library across Home and About.
-- **Multi-Phone Site Settings (Up to 5 Lines)**: Expand site settings to store up to 5 contact hotlines (`contact_phone_1` through `contact_phone_5`), unifying all site-wide phone displays (header utility bar, mobile nav, footer, contact cards, error pages) to read strictly from site settings with empty numbers gracefully omitted.
-- **Fully Dynamic Contact Page & Dynamic Partners Strip**: Remove all hardcoded copy on `/contact` (office hours and timezone configurable from dashboard, e.g. "Mon – Fri: 8:00 AM – 5:00 PM (GMT +1)"); and render the "Our Valued Partners - Collaborating for greater impact" logo strip dynamically on both Home (`/`) and About (`/about`) with full management in `/admin/partners`.
-
-### Milestone 5: Production Launch Hardening, Resilient Media Pipeline, Givebutter Diaspora Donations & 6 Impact Causes CMS (Completed & Shipped)
-Finalizing the web platform for live release and addressing critical operational feedback:
-- **Resilient Upload Engine & GD Fallback**: Eliminate `imagecreatefromjpeg` crashes by correctly scoping GD functions in the global namespace (`\imagecreatefrom...`), checking extension availability, and implementing a graceful fallback to direct storage so photo uploads always succeed without crashing regardless of server GD configuration.
-- **Gallery Multi-Photo Bulk Upload**: Streamline gallery management by allowing staff to select and upload multiple images simultaneously into an album, with subsequent per-photo metadata editing (caption, year label, alt text, sort order).
-- **Dynamic Site Logo Management**: Empower staff to upload or select a brand logo directly in `/admin/settings`, with real-time propagation across the header navbar, footer, and admin layout.
-- **U.S. Diaspora Giving (Givebutter)**: Expand giving channels on `/donate` with an official Givebutter link (`https://givebutter.com/dzuels-foundation`) labeled "For U.S. Donors Only", fully manageable from site settings (`givebutter_url`).
-- **Authentic 6 Key Impact Pillars (`cause.jpg`)**: Replace the generic causes with the foundation's official 6 pillars:
-  1. Education Support (Paul's academy)
-  2. Skills Acquisition (Peter's net)
-  3. Advocacy (Deborah congress)
-  4. Feeding families (Naomi's kitchen)
-  5. Transformative leadership Training (Priscilla's upper room)
-  6. Health awareness and support (Luke's Tent)
-  Anchored by the philosophy *"An Integrated Approach to the Total Well Being of the Child"*, editable in `/admin/pages/home`.
-- **Production Export & Launch Readiness**: Re-export `dzuels_database.sql` containing all updated seeders, settings, and causes for 1-click phpMyAdmin import on Namecheap cPanel (`server161.web-hosting.com`), update `cpanel_changed_files.txt`, and verify deployment integrity.
-
-### Milestone 6: Production Refinements, Image Optimizer Hardening (<= 180 KB WebP), Dynamic Library Photos & Get Involved UI Overhaul (Completed & Shipped)
-- **High-Performance WebP Optimizer (<= 180 KB Ceiling)**: Hard limit of 180 KB for every uploaded photo across gallery and CMS, with iterative quality reduction and dimensional scaling to preserve sharpness without distortion. Original source files deleted immediately. Retroactive conversion of all legacy uploads.
-- **Full Unclipped Causes Graphic**: Display the 6 Impact Causes banner uncropped and unclipped on the homepage with natural aspect ratio and clean responsive layout.
-- **Dynamic 4-Photo Famoyinka Memorial Library CMS**: Section management in `/admin/pages/home` with media pickers for all 4 mosaic action photos and captions.
-- **Get Involved Layout & Responsive Overhaul**: Tab-synchronized sidebar with dedicated corporate partner metrics, CSR alignment, sticky placement, and Tailwind v4 gradient styling.
-
-### Milestone 7: Universal Gallery Media Picker & Centralized Cover Photo Optimizer (Active Target)
-Empowering foundation staff with full visual asset reuse and ensuring comprehensive image optimization across all content management modules:
-- **Universal "Select from Gallery" Media Picker**: Replace raw `<input type="file">` elements with the reusable `<x-admin.media-picker>` component across all remaining dashboard forms:
-  1. Gallery Collection / Album create & edit (`cover_image`)
-  2. Foundation Programme create & edit (`cover_image`)
-  3. News / Blog Article create & edit (`cover_image`)
-  4. Team Member create & edit (`photo`)
-  Staff can either browse and select any existing high-resolution photo from the gallery (with album filters, search, and thumbnail preview) or upload a new image.
-- **Centralized Cover Photo Optimization**: Guarantee that every cover photo uploaded anywhere in the admin dashboard passes through `ImageOptimizerService`, strictly converting to `.webp`, enforcing a hard $\le 180\text{ KB}$ ($184,320\text{ bytes}$) file size ceiling, and automatically purging original uncompressed files.
-- **Dual-Input Controllers & Form Requests**: Update controllers (`GalleryAlbumController`, `ProgrammeController`, `PostController`, `TeamMemberController`) and form request validators (`StoreGalleryAlbumRequest`, `UpdateGalleryAlbumRequest`, `StoreProgrammeRequest`, `UpdateProgrammeRequest`, `StorePostRequest`, `UpdatePostRequest`, `StoreTeamMemberRequest`, `UpdateTeamMemberRequest`) to gracefully accept both direct file uploads and existing selected gallery image paths.
+### Milestone 8: Unified Central Media Hub, Global Asset Management & cPanel Public Path Hardening (Active Target)
+Empowering foundation staff with a single, centralized Media Library dashboard to manage and reuse all optimized visual assets across the entire foundation, while eliminating cPanel path mismatches:
+- **cPanel Public Web Path Resolution**: Explicitly bind `$app->usePublicPath(__DIR__)` in `public/index.php` and verify directory write permissions so that image uploads in cPanel shared hosting write directly to the active web root (`public_html/uploads/...`), eliminating broken 404 image URLs. Ensure GD WebP extension handling operates smoothly on live hosting.
+- **Dedicated Central Media Library (`/admin/media`)**: Introduce a prominent, top-level "Media Library" section in the admin navigation. Staff can browse all optimized foundation photos in a clean visual grid, with:
+  - **Comprehensive Multi-Param Search**: Instant search by **photo name** (filename, title, caption, or original file name).
+  - **Date Uploaded Filtering**: Filter by date uploaded (date picker and quick timeframes like "This Week", "This Month", "Past Year"), plus sorting (Newest to Oldest, Oldest to Newest, Alphabetical).
+  - **Category Tabs**: Filter between *"All Media"*, *"Gallery Collections"*, and *"Site & Page Assets"*.
+  - **Asset Inspection & Actions**: File size badges (confirming WebP $\le 180\text{ KB}$), pixel dimensions, date uploaded badge, copyable public URLs, photo preview, and single/bulk deletion.
+- **Centralized Drag-and-Drop Uploader**: Fast, standalone upload zone in `/admin/media` where staff can drag and drop new photos at any time. Uploads are instantly resized, converted to WebP under the strict 180 KB ceiling, and stored in the central repository ready for immediate use.
+- **Enhanced Modal Picker Integration**: Upgrade `<x-admin.media-picker>` across all dashboard editors (Pages CMS, Programmes, Events, Partners, Team) to include this exact search by name, date filter, and category tabs for seamless 1-click selection or instant upload.
 
 ## 2. Users - Who is this for?
 
@@ -76,85 +34,33 @@ Empowering foundation staff with full visual asset reuse and ensuring comprehens
 - **Event participants & schools**: Attending ITD 2026, reading competitions, and spelling bees.
 - **Beneficiaries, parents & students**: Accessing educational literacy, community activities, and the Famoyinka Memorial Children's Library.
 - **Foundation Staff (Admin Users)**:
-  - **Super Admin**: Managing staff accounts, role permissions, global site settings (logo, up to 5 phone lines, Givebutter link, office hours/timezone), and database exports.
-  - **Editor / Content Manager**: Updating page content (including the 6 impact pillars in `/admin/pages/home`), programmes, events, sponsors, partner logos, and managing gallery photos with bulk upload.
+  - **Super Admin**: Managing staff accounts, role permissions, global site settings (logo, up to 5 phone lines, Givebutter link, office hours/timezone), media library deletions, and database exports.
+  - **Editor / Content Manager**: Accessing the Central Media Library to upload and organize assets, updating page content, programmes, events, sponsors, partner logos, and gallery photos.
   - **Support / Viewer**: Viewing incoming contact messages, volunteer applications, and event registrations.
 
 ## 3. Features & Milestones
 
-### Milestone 1: Core Web Platform (Shipped, Features 1–17)
-- 1–17. Public layout, brand theme, admin dashboard, dynamic settings, home, about, programmes, events, gallery, donate, volunteer, contact, news, newsletter, responsiveness overhaul, SEO foundation, accessibility compliance.
+### Milestones 1–7 (Shipped, Features 1–29)
+Features 1–29 fully completed, tested, and shipped.
 
-### Milestone 2: Polish, Dynamic CMS, Access Control & cPanel Deployment (Shipped, Features 18–20)
-- 18. Brand assets, ITD 2026 event overhaul, and gallery optimization.
-- 19. Site-wide page content management, user access control, and password recovery.
-- 20. MySQL database export and cPanel phpMyAdmin migration suite.
-
-### Milestone 3: Production Server Readiness & Launch Refinements (Shipped, Feature 21)
-- 21. Production MariaDB configuration, root SQL dump, phone hotline update and hero imagery refinements.
-
-### Milestone 4: Dynamic Media Hub, Gallery Overhaul, Famoyinka Memorial Library & Global Admin Controls (Shipped, Features 22–24)
-- 22. **Automated image optimization, global media picker and gallery collection/photo management**:
-  - Auto-convert all dashboard uploads to WebP and delete original uncompressed files using PHP 8.3/8.4 native GD.
-  - Reusable Media Library picker modal in admin forms to upload or choose existing gallery images.
-  - CRUD and reordering for gallery collections/categories.
-  - Single and bulk photo deletion in `/admin/gallery`.
-  - Photo metadata editing with standardized year labels across all collections (e.g., "Spelling Bee 2024").
-- 23. **Famoyinka Memorial Children's Library programme integration and curated visual outreach**:
-  - Dedicated public programme at `/programmes/famoyinka-memorial-library` and dedicated gallery collection.
-  - Prune repetitive gallery photos and seed diverse action photos of children (crafts, transformational leadership games, Ikogosi trip, library reading and book borrowing).
-  - Prominent cross-linking of the library on Home and About pages.
-- 24. **Site-wide multi-phone settings, dynamic contact CMS and dynamic partners strip**:
-  - Support up to 5 contact phone numbers in `/admin/settings` (`contact_phone_1` to `contact_phone_5`).
-  - Unify all site-wide phone displays (header utility bar, mobile menu, footer, contact cards, error pages) to pull from site settings.
-  - Make `/contact` 100% dynamic (custom office hours and timezone like "GMT +1", address, card descriptions).
-  - Dynamic "Our Valued Partners" strip on Home and About pages driven by `/admin/partners`.
-
-### Milestone 5: Production Launch Hardening, Resilient Media Pipeline, Givebutter Diaspora Donations & 6 Impact Causes CMS (Features 25–27, Shipped)
-- 25. **Resilient image optimization pipeline, upload fallback & gallery bulk uploader**:
-  - Resolve GD global namespace scoping and extension availability checks in `ImageOptimizerService`.
-  - Graceful direct-save fallback ensuring zero-crash uploads even without GD.
-  - Multi-file bulk upload in `/admin/gallery` with per-photo metadata editing.
-- 26. **Dynamic site logo in settings, Givebutter U.S. diaspora donations & 6 Impact Causes CMS**:
-  - Dynamic site logo upload and selection in `/admin/settings` propagating site-wide.
-  - Givebutter donation channel (`https://givebutter.com/dzuels-foundation`) with "For U.S. Donors Only" badge and admin setting.
-  - 6 Key Impact Causes on Home page matching `cause.jpg` editable via `/admin/pages/home`.
-- 27. **Production release suite, updated MariaDB database export & launch verification**:
-  - Root `dzuels_database.sql` update via `php artisan db:export-sql`.
-  - Synchronization of `cpanel_changed_files.txt` deployment manifest.
-  - Comprehensive test suite, code style audit, and production configuration check.
-
-### Milestone 6: Production Refinements, Image Optimizer Hardening (<= 180 KB WebP), Dynamic Library Photos & Get Involved UI Overhaul (Feature 28, Shipped)
-- 28. **High-performance WebP image optimizer (<= 180 KB ceiling), full unclipped causes display, dynamic Famoyinka Library photos in CMS & Get Involved UI overhaul**:
-  - Harden `ImageOptimizerService` to strictly encode WebP files with a maximum size ceiling of 180 KB (184,320 bytes) using iterative quality reduction and dimensional scaling.
-  - Automatically delete original uncompressed files after WebP creation.
-  - Retroactively optimize legacy photos in `public/uploads/` so all photos are <= 180 KB WebP.
-  - Unify all dashboard photo upload routes through the optimizer.
-  - Display the homepage 6 Impact Causes graphic unclipped with natural aspect ratio and clean layout.
-  - Enable dashboard management for the 4 Famoyinka Memorial Children's Library action photos and labels in `/admin/pages/home`.
-  - Overhaul `/get-involved` with tab-synchronized sidebar content for volunteers vs corporate partners, Tailwind v4 linear gradients, and responsive sticky layout.
-
-### Milestone 7: Universal Gallery Media Picker & Centralized Cover Photo Optimizer (Feature 29, Active Target)
-- 29. **Universal gallery media picker and centralized cover photo optimization**:
-  - Integrate `<x-admin.media-picker>` across Gallery Album create/edit, Programme create/edit, News create/edit, and Team Member create/edit forms.
-  - Enable staff to choose existing photos from any gallery collection or upload and optimize new cover images.
-  - Update Form Requests to validate both string paths (from gallery) and valid image files.
-  - Enforce `ImageOptimizerService` on all cover photo uploads ($\le 180\text{ KB}$ WebP ceiling, original cleanup).
-  - Update deployment manifest and verify full regression suite.
+### Milestone 8 (Active Target, Feature 30)
+- 30. **Unified Central Media Hub, global asset management & cPanel public web path resolution**:
+  - Bind `$app->usePublicPath(__DIR__)` in `public/index.php` and verify directory creation with correct permissions so uploaded media on cPanel saves directly to the active web folder and serves without 404s.
+  - Build top-level `/admin/media` interface with visual grid, multi-param search by photo name/caption/filename, date uploaded filters (date picker & quick ranges), sort controls (newest, oldest, A-Z), category tabs (*All Media*, *Gallery Collections*, *Site Assets*), file size badges ($\le 180\text{ KB}$ WebP), dimensions, and copyable public URLs.
+  - Direct drag-and-drop WebP uploading into the central hub with strict $\le 180\text{ KB}$ ceiling and original file deletion.
+  - Connect `<x-admin.media-picker>` across all CMS editors to the unified media catalog with the same search and date filters.
 
 ## 4. Data - What are we storing?
 
-- **settings**: extended key/values for `site_logo`, `givebutter_url`, `contact_phone_1` through `contact_phone_5`, `office_hours` (e.g. "Mon – Fri: 8:00 AM – 5:00 PM"), `office_timezone` (e.g. "GMT +1"), impact numbers, banking, and registration.
-- **page_sections**: includes Home page section `causes` with structured 6-pillar copy, subtitle, and icons.
+- **settings**: `site_logo`, `givebutter_url`, `contact_phone_1` through `contact_phone_5`, `office_hours`, `office_timezone`, impact numbers, banking, and registration.
 - **gallery_albums**: id, title, slug, kicker, description, cover_image, sort_order, is_active, timestamps.
 - **gallery_photos**: id, gallery_album_id, image_path, caption, alt_text, year, sort_order, timestamps.
-- **programmes**: id, title, slug, excerpt, description, image_path, is_active, sort_order, timestamps (including `famoyinka-memorial-library`).
-- **partners**: id, name, logo, website_url, sort_order, is_active, timestamps.
-- **users**, **page_sections**, **event_sponsors**, **events**, **team_members**, **contact_messages**, **volunteer_applications**.
+- **media_uploads / site assets**: centralized cataloging of non-gallery uploads (heroes, banners, partner logos, team photos, cause graphics) with filename, file_path, file_size, mime_type, and dimensions.
+- **page_sections**, **programmes**, **partners**, **users**, **events**, **event_sponsors**, **team_members**, **contact_messages**, **volunteer_applications**.
 
 ## 5. Tech - What stack are we using?
 
-- **Backend:** Laravel 13 on PHP 8.3 / 8.4, MariaDB 10.3+ / MySQL 8.0+.
+- **Backend:** Laravel 12 on PHP 8.3 / 8.4, MariaDB 10.3+ / MySQL 8.0+.
 - **Image Processing:** Native PHP GD (`imagewebp`, `imagecopyresampled`) with zero external package dependencies.
 - **Frontend:** Blade templates, Tailwind CSS v4, Alpine.js (modals, gallery masonry, media picker).
 - **Deployment Tracking:** Root `cpanel_changed_files.txt` manifest tracking all modified files for cPanel uploads.
@@ -162,6 +68,7 @@ Empowering foundation staff with full visual asset reuse and ensuring comprehens
 ## 6. Deployment - cPanel & Production
 
 - Hosted on Namecheap cPanel (`server161.web-hosting.com`) running MariaDB with PHP 8.3/8.4.
-- Domain: `dzuelsfoundation.org`.
+- Domain: `dzuelsfoundation.org` (and `dzf.dzuelsfoundation.org`).
+- Web root alignment: `public_path()` bound to `__DIR__` in `index.php` for seamless asset serving from `public_html/`.
 - Database exportable via `php artisan db:export-sql` and root `dzuels_database.sql`.
 - File synchronization facilitated by `cpanel_changed_files.txt`.

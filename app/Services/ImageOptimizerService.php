@@ -209,7 +209,7 @@ class ImageOptimizerService
 
             return trim(str_replace('\\', '/', $destinationRelativeDir), '/').'/'.$filename;
         } catch (Throwable $e) {
-            Log::warning('Image optimization encountered an error, falling back to direct storage: '.$e->getMessage());
+            Log::warning('Image optimization encountered an error, falling back to direct storage: '.$e->getMessage().' in '.$e->getFile().':'.$e->getLine());
 
             return $this->storeDirectFallback($file, $destinationDir, $destinationRelativeDir, $origExt);
         } finally {
@@ -253,6 +253,11 @@ class ImageOptimizerService
     ): string {
         $safeExt = in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg']) ? strtolower($extension) : 'jpg';
         $filename = time().'_'.Str::random(12).'.'.$safeExt;
+
+        if (! file_exists($destinationDir)) {
+            @mkdir($destinationDir, 0755, true);
+        }
+
         $fullDestinationPath = $destinationDir.DIRECTORY_SEPARATOR.$filename;
 
         if ($file instanceof UploadedFile) {
