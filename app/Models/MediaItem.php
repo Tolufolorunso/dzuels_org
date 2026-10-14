@@ -28,6 +28,7 @@ class MediaItem extends Model
         'caption',
         'alt_text',
         'source_type',
+        'gallery_album_id',
         'gallery_photo_id',
     ];
 
@@ -42,7 +43,16 @@ class MediaItem extends Model
             'file_size' => 'integer',
             'width' => 'integer',
             'height' => 'integer',
+            'gallery_album_id' => 'integer',
         ];
+    }
+
+    /**
+     * Associated gallery album / collection if linked.
+     */
+    public function galleryAlbum(): BelongsTo
+    {
+        return $this->belongsTo(GalleryAlbum::class, 'gallery_album_id');
     }
 
     /**
@@ -145,7 +155,7 @@ class MediaItem extends Model
     }
 
     /**
-     * Scope for filtering by source category.
+     * Scope for filtering by source category or dynamic collection.
      */
     public function scopeBySourceType(Builder $query, ?string $source): Builder
     {
@@ -153,15 +163,27 @@ class MediaItem extends Model
             return $query;
         }
 
+        if ($source === 'site' || $source === 'site-assets') {
+            return $query->where(function (Builder $q) {
+                $q->whereIn('source_type', ['general', 'cms', 'partner', 'programme', 'team'])
+                    ->whereNull('gallery_album_id');
+            });
+        }
+
         if ($source === 'gallery') {
-            return $query->where('source_type', 'gallery');
+            return $query->where(function (Builder $q) {
+                $q->where('source_type', 'gallery')
+                    ->orWhereNotNull('gallery_album_id');
+            });
         }
 
-        if ($source === 'site') {
-            return $query->whereIn('source_type', ['general', 'cms', 'partner', 'programme', 'team']);
-        }
-
-        return $query->where('source_type', $source);
+        return $query->where(function (Builder $q) use ($source) {
+            $q->where('source_type', $source)
+                ->orWhere('gallery_album_id', $source)
+                ->orWhereHas('galleryAlbum', function (Builder $albumQuery) use ($source) {
+                    $albumQuery->where('slug', $source);
+                });
+        });
     }
 
     /**

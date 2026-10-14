@@ -24,6 +24,7 @@ class GalleryAlbum extends Model
         'cover_image',
         'sort_order',
         'is_active',
+        'is_public',
     ];
 
     /**
@@ -35,6 +36,7 @@ class GalleryAlbum extends Model
     {
         return [
             'is_active' => 'boolean',
+            'is_public' => 'boolean',
             'sort_order' => 'integer',
         ];
     }
@@ -50,11 +52,29 @@ class GalleryAlbum extends Model
     }
 
     /**
+     * Get media items cataloged under this collection.
+     */
+    public function mediaItems(): HasMany
+    {
+        return $this->hasMany(MediaItem::class, 'gallery_album_id')
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc');
+    }
+
+    /**
      * Scope a query to only include active albums.
      */
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope a query to only include public albums.
+     */
+    public function scopePublic(Builder $query): Builder
+    {
+        return $query->where('is_public', true);
     }
 
     /**

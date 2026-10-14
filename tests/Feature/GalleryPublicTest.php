@@ -139,4 +139,28 @@ class GalleryPublicTest extends TestCase
         $this->assertNotNull($reading);
         $this->assertEquals(8, $reading->photos()->count());
     }
+
+    public function test_internal_only_album_is_hidden_from_public_gallery(): void
+    {
+        $internalAlbum = GalleryAlbum::create([
+            'title' => 'Internal Staff Retrospective',
+            'slug' => 'internal-staff-retrospective',
+            'is_active' => true,
+            'is_public' => false,
+            'sort_order' => 99,
+        ]);
+
+        $internalAlbum->photos()->create([
+            'image_path' => 'uploads/media/staff_private.webp',
+            'caption' => 'Private Session',
+            'sort_order' => 1,
+        ]);
+
+        $response = $this->get('/gallery');
+        $response->assertOk();
+        $response->assertDontSeeText('Internal Staff Retrospective');
+
+        $detailResponse = $this->get('/gallery/internal-staff-retrospective');
+        $detailResponse->assertNotFound();
+    }
 }

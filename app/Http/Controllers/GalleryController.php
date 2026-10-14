@@ -14,6 +14,7 @@ class GalleryController extends Controller
     public function index(Request $request): View
     {
         $albums = GalleryAlbum::active()
+            ->public()
             ->ordered()
             ->with(['photos' => function ($query) {
                 $query->orderBy('sort_order', 'asc')->orderBy('id', 'asc');
@@ -31,6 +32,7 @@ class GalleryController extends Controller
     public function album(string $slug): View
     {
         $selectedAlbum = GalleryAlbum::active()
+            ->public()
             ->where('slug', $slug)
             ->with(['photos' => function ($query) {
                 $query->orderBy('sort_order', 'asc')->orderBy('id', 'asc');
@@ -38,6 +40,7 @@ class GalleryController extends Controller
             ->firstOrFail();
 
         $albums = GalleryAlbum::active()
+            ->public()
             ->ordered()
             ->with(['photos' => function ($query) {
                 $query->orderBy('sort_order', 'asc')->orderBy('id', 'asc');

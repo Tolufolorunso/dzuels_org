@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\GalleryAlbum;
 use App\Models\MediaItem;
 use App\Services\ImageOptimizerService;
 use Illuminate\Http\JsonResponse;
@@ -45,8 +46,12 @@ class MediaLibraryController extends Controller
             $totalSizeFormatted = number_format($totalBytes / 1024, 0).' KB';
         }
 
+        // Retrieve dynamic collections from GalleryAlbum
+        $collections = GalleryAlbum::ordered()->get();
+
         return view('admin.media.index', [
             'mediaItems' => $mediaItems,
+            'collections' => $collections,
             'totalCount' => $totalCount,
             'totalSizeFormatted' => $totalSizeFormatted,
             'webpRate' => $webpRate,
@@ -58,6 +63,51 @@ class MediaLibraryController extends Controller
     }
 
     /**
+     * Create a new media collection / gallery album on the fly from the dashboard.
+     */
+    public function storeCollection(Request $request): JsonResponse|RedirectResponse
+    {
+        $validated = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'kicker' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:1000'],
+            'is_public' => ['nullable', 'boolean'],
+            'cover_image' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $slug = Str::slug($validated['title']);
+        $originalSlug = $slug;
+        $counter = 1;
+        while (GalleryAlbum::where('slug', $slug)->exists()) {
+            $slug = $originalSlug.'-'.$counter++;
+        }
+
+        $maxOrder = GalleryAlbum::max('sort_order') ?? 0;
+
+        $album = GalleryAlbum::create([
+            'title' => $validated['title'],
+            'slug' => $slug,
+            'kicker' => $validated['kicker'] ?? 'Foundation Programme',
+            'description' => $validated['description'] ?? null,
+            'is_active' => true,
+            'is_public' => $request->boolean('is_public', true),
+            'sort_order' => $maxOrder + 10,
+            'cover_image' => $validated['cover_image'] ?? null,
+        ]);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => "Collection '{$album->title}' created successfully.",
+                'collection' => $album,
+            ], 201);
+        }
+
+        return redirect()->route('admin.media.index', ['category' => $album->slug])
+            ->with('success', "Collection '{$album->title}' created successfully.");
+    }
+
+    /**
      * Handle single or batch drag-and-drop file uploads into the library.
      */
     public function upload(Request $request, ImageOptimizerService $optimizer): JsonResponse
@@ -65,6 +115,9 @@ class MediaLibraryController extends Controller
         $request->validate([
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp,gif', 'max:15360'],
             'images.*' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp,gif', 'max:15360'],
+            'gallery_album_id' => ['nullable', 'integer', 'exists:gallery_albums,id'],
+            'collection_id' => ['nullable', 'integer', 'exists:gallery_albums,id'],
+            'source_type' => ['nullable', 'string', 'max:50'],
         ]);
 
         $uploadedFiles = [];
@@ -80,6 +133,9 @@ class MediaLibraryController extends Controller
                 'message' => 'No valid image file was uploaded.',
             ], 422);
         }
+
+        $albumId = $request->input('gallery_album_id') ?: $request->input('collection_id');
+        $sourceType = $albumId ? 'gallery' : ($request->input('source_type') ?: 'general');
 
         $createdItems = [];
 
@@ -108,7 +164,8 @@ class MediaLibraryController extends Controller
                 'title' => $humanTitle,
                 'caption' => null,
                 'alt_text' => $humanTitle,
-                'source_type' => 'general',
+                'source_type' => $sourceType,
+                'gallery_album_id' => $albumId,
                 'gallery_photo_id' => null,
             ]);
 
@@ -124,6 +181,7 @@ class MediaLibraryController extends Controller
                 'dimensions' => $item->dimensions,
                 'date_formatted' => $item->formatted_date,
                 'source_type' => $item->source_type,
+                'gallery_album_id' => $item->gallery_album_id,
             ];
         }
 
@@ -140,7 +198,7 @@ class MediaLibraryController extends Controller
     }
 
     /**
-     * Update metadata (title, caption, alt_text) for a media item.
+     * Update metadata (title, caption, alt_text, gallery_album_id) for a media item.
      */
     public function update(Request $request, MediaItem $mediaItem): JsonResponse|RedirectResponse
     {
@@ -148,7 +206,12 @@ class MediaLibraryController extends Controller
             'title' => ['nullable', 'string', 'max:255'],
             'caption' => ['nullable', 'string', 'max:1000'],
             'alt_text' => ['nullable', 'string', 'max:500'],
+            'gallery_album_id' => ['nullable', 'integer', 'exists:gallery_albums,id'],
         ]);
+
+        if (array_key_exists('gallery_album_id', $validated)) {
+            $validated['source_type'] = $validated['gallery_album_id'] ? 'gallery' : 'general';
+        }
 
         $mediaItem->update($validated);
 
@@ -242,11 +305,15 @@ class MediaLibraryController extends Controller
                 'dimensions' => $item->dimensions,
                 'date_formatted' => $item->formatted_date,
                 'source_type' => $item->source_type,
+                'gallery_album_id' => $item->gallery_album_id,
             ];
         });
 
+        $collections = GalleryAlbum::ordered()->get(['id', 'title', 'slug', 'is_public']);
+
         return response()->json([
             'items' => $items,
+            'collections' => $collections,
         ]);
     }
 }

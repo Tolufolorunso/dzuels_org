@@ -17,6 +17,7 @@
     selectedPath: '{{ $initialPath }}',
     selectedUrl: '{{ $initialUrl }}',
     items: [],
+    collections: [],
     loading: false,
     uploading: false,
     search: '',
@@ -44,6 +45,9 @@
             .then(res => res.json())
             .then(data => {
                 this.items = data.items || [];
+                if (data.collections) {
+                    this.collections = data.collections;
+                }
                 this.loading = false;
             })
             .catch(err => {
@@ -242,9 +246,18 @@
                                 @change="loadItems()" 
                                 class="w-full px-3 py-2 rounded-xl border border-stone-300 text-xs focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
                             <option value="all">All Categories</option>
-                            <option value="gallery">Gallery Collections</option>
-                            <option value="site">Site & CMS Assets</option>
-                            <option value="general">Uploaded Media</option>
+                            <optgroup label="System Categories">
+                                <option value="gallery">All Gallery Photos</option>
+                                <option value="site">Site & CMS Assets</option>
+                                <option value="general">Unassigned Media</option>
+                            </optgroup>
+                            <template x-if="collections && collections.length > 0">
+                                <optgroup label="Collections & Programs">
+                                    <template x-for="col in collections" :key="col.id">
+                                        <option :value="col.slug" x-text="col.title + (!col.is_public ? ' (Internal)' : '')"></option>
+                                    </template>
+                                </optgroup>
+                            </template>
                         </select>
                     </div>
                 </div>

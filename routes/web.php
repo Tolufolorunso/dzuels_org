@@ -91,6 +91,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Central Media Library & Modal Picker API
         Route::get('/media', [MediaLibraryController::class, 'index'])->name('media.index');
         Route::get('/media/picker-items', [MediaLibraryController::class, 'pickerItems'])->name('media.picker-items');
+        Route::post('/media/collections', [MediaLibraryController::class, 'storeCollection'])->name('media.collections.store');
         Route::post('/media/upload', [MediaLibraryController::class, 'upload'])->name('media.upload');
         Route::put('/media/{mediaItem}', [MediaLibraryController::class, 'update'])->name('media.update');
         Route::delete('/media/{mediaItem}', [MediaLibraryController::class, 'destroy'])->name('media.destroy');

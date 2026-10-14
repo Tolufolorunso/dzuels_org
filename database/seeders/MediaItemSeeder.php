@@ -51,7 +51,7 @@ class MediaItemSeeder extends Seeder
                     $title .= ' ('.$photo->year.')';
                 }
 
-                MediaItem::firstOrCreate(
+                MediaItem::updateOrCreate(
                     ['file_path' => $filePath],
                     [
                         'filename' => basename($filePath),
@@ -63,6 +63,7 @@ class MediaItemSeeder extends Seeder
                         'caption' => $photo->caption,
                         'alt_text' => $photo->alt_text ?: $photo->caption,
                         'source_type' => 'gallery',
+                        'gallery_album_id' => $photo->gallery_album_id,
                         'gallery_photo_id' => $photo->id,
                     ]
                 );

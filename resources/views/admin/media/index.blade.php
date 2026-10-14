@@ -14,6 +14,50 @@
         previewItem: null,
         editingItem: null,
         copiedId: null,
+        showNewCollectionModal: false,
+        newCollection: {
+            title: '',
+            kicker: 'Foundation Programme',
+            description: '',
+            is_public: true,
+            isSubmitting: false,
+            errorMessage: ''
+        },
+
+        async createCollection() {
+            if (!this.newCollection.title.trim()) {
+                this.newCollection.errorMessage = 'Please provide a collection title.';
+                return;
+            }
+            this.newCollection.isSubmitting = true;
+            this.newCollection.errorMessage = '';
+            try {
+                const response = await fetch('{{ route('admin.media.collections.store') }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        title: this.newCollection.title,
+                        kicker: this.newCollection.kicker,
+                        description: this.newCollection.description,
+                        is_public: this.newCollection.is_public
+                    })
+                });
+                const data = await response.json();
+                if (response.ok && data.success) {
+                    window.location.href = '{{ route('admin.media.index') }}?category=' + data.collection.slug;
+                } else {
+                    this.newCollection.errorMessage = data.message || 'Failed to create collection.';
+                    this.newCollection.isSubmitting = false;
+                }
+            } catch (e) {
+                this.newCollection.errorMessage = 'Network error while creating collection.';
+                this.newCollection.isSubmitting = false;
+            }
+        },
 
         toggleSelectAll() {
             if (this.selectAll) {
@@ -116,7 +160,8 @@
                     body: JSON.stringify({
                         title: this.editingItem.title,
                         caption: this.editingItem.caption,
-                        alt_text: this.editingItem.alt_text
+                        alt_text: this.editingItem.alt_text,
+                        gallery_album_id: this.editingItem.gallery_album_id || null
                     })
                 });
 
@@ -146,6 +191,14 @@
             </div>
 
             <div class="flex items-center gap-3">
+                <button type="button" 
+                        @click="showNewCollectionModal = true" 
+                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-white text-stone-700 hover:text-maroon border border-stone-200 hover:border-maroon/30 transition-all shadow-2xs cursor-pointer">
+                    <svg class="w-4 h-4 text-maroon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    <span>+ New Collection</span>
+                </button>
                 <button type="button" 
                         @click="$refs.fileInput.click()" 
                         class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-maroon text-white hover:bg-crimson transition-all shadow-xs cursor-pointer">
@@ -302,15 +355,24 @@
 
                 {{-- Category Switcher --}}
                 <div>
-                    <label for="category-filter" class="block text-[11px] font-bold uppercase tracking-wider text-stone-400 mb-1.5">Asset Category</label>
+                    <label for="category-filter" class="block text-[11px] font-bold uppercase tracking-wider text-stone-400 mb-1.5">Asset Category / Collection</label>
                     <select id="category-filter" 
                             name="category" 
                             x-model="category"
                             class="w-full px-3 py-2.5 rounded-xl border border-stone-200 text-xs font-medium text-stone-800 bg-white focus:outline-none focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
-                        <option value="all">All Categories</option>
-                        <option value="gallery">Gallery Collections</option>
-                        <option value="site">Site & CMS Assets</option>
-                        <option value="general">Uploaded Media</option>
+                        <option value="all">All Media</option>
+                        <optgroup label="System Categories">
+                            <option value="gallery">All Gallery Photos</option>
+                            <option value="site">Site & CMS Assets</option>
+                            <option value="general">Unassigned Media</option>
+                        </optgroup>
+                        @if(isset($collections) && $collections->count())
+                            <optgroup label="Collections & Programs">
+                                @foreach($collections as $col)
+                                    <option value="{{ $col->slug }}">{{ $col->title }}{{ !$col->is_public ? ' (Internal Only)' : '' }}</option>
+                                @endforeach
+                            </optgroup>
+                        @endif
                     </select>
                 </div>
 
@@ -560,6 +622,20 @@
                     </div>
 
                     <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1">Assigned Collection / Category</label>
+                        <select x-model="editingItem.gallery_album_id" 
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
+                            <option value="">Unassigned / Site Asset</option>
+                            @if(isset($collections) && $collections->count())
+                                @foreach($collections as $col)
+                                    <option value="{{ $col->id }}">{{ $col->title }}{{ !$col->is_public ? ' (Internal Only)' : '' }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                        <p class="text-[11px] text-stone-400 mt-1">Assign photo to an authentic program or gallery collection.</p>
+                    </div>
+
+                    <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1">Caption</label>
                         <textarea x-model="editingItem.caption" 
                                   rows="2" 
@@ -583,6 +659,91 @@
                         Save Changes
                     </button>
                 </div>
+            </div>
+        </div>
+
+        {{-- New Collection Modal --}}
+        <div x-show="showNewCollectionModal" 
+             x-cloak 
+             class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/80 backdrop-blur-sm"
+             @click.self="showNewCollectionModal = false">
+            <div class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl border border-white/20 animate-in fade-in zoom-in duration-200"
+                 x-show="showNewCollectionModal" 
+                 x-transition>
+                
+                <div class="p-5 flex items-center justify-between border-b border-stone-100 bg-stone-50/50">
+                    <div class="flex items-center gap-2.5">
+                        <span class="p-2 rounded-xl bg-crimson/10 text-crimson">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                            </svg>
+                        </span>
+                        <div>
+                            <h3 class="text-sm font-bold text-stone-900">New Collection / Category</h3>
+                            <p class="text-[11px] text-stone-500">Add a program category or gallery collection.</p>
+                        </div>
+                    </div>
+                    <button type="button" @click="showNewCollectionModal = false" class="p-1.5 text-stone-400 hover:text-stone-700 rounded-xl hover:bg-stone-100">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <form @submit.prevent="createCollection()" class="p-6 space-y-4">
+                    <template x-if="newCollection.errorMessage">
+                        <div class="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium" x-text="newCollection.errorMessage"></div>
+                    </template>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1">Collection Title <span class="text-crimson">*</span></label>
+                        <input type="text" 
+                               x-model="newCollection.title" 
+                               placeholder="e.g. Essay Competition, Robotics Camp" 
+                               required
+                               class="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1">Tagline / Category Kicker</label>
+                        <input type="text" 
+                               x-model="newCollection.kicker" 
+                               placeholder="e.g. Foundation Programme, Community Welfare" 
+                               class="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1">Description</label>
+                        <textarea x-model="newCollection.description" 
+                                  rows="2" 
+                                  placeholder="Brief overview of this initiative..." 
+                                  class="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-maroon/20 focus:border-maroon"></textarea>
+                    </div>
+
+                    <div class="p-3.5 rounded-2xl bg-stone-50 border border-stone-200/80">
+                        <label class="flex items-start gap-3 cursor-pointer">
+                            <input type="checkbox" 
+                                   x-model="newCollection.is_public" 
+                                   class="w-4 h-4 mt-0.5 rounded text-maroon focus:ring-maroon border-stone-300">
+                            <div>
+                                <span class="text-xs font-bold text-stone-800">Show in Public Gallery</span>
+                                <p class="text-[11px] text-stone-500 leading-relaxed mt-0.5">When checked, this album appears on the public /gallery page. Uncheck for internal/dashboard organization only.</p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="pt-3 flex items-center justify-end gap-2 border-t border-stone-100">
+                        <button type="button" @click="showNewCollectionModal = false" class="px-4 py-2 rounded-xl text-xs font-semibold text-stone-600 hover:bg-stone-200 transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit" 
+                                :disabled="newCollection.isSubmitting"
+                                class="px-4 py-2.5 rounded-xl text-xs font-bold bg-maroon text-white hover:bg-crimson transition-colors shadow-2xs disabled:opacity-50 flex items-center gap-2 cursor-pointer">
+                            <span x-show="newCollection.isSubmitting" class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                            <span>Save Collection</span>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
 

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Models\GalleryAlbum;
 use App\Models\MediaItem;
 use App\Models\User;
 use App\Services\ImageOptimizerService;
@@ -322,5 +323,90 @@ class MediaLibraryTest extends TestCase
 
         $response->assertJsonCount(1, 'items');
         $response->assertJsonPath('items.0.title', 'Mathematics Competition 2026');
+    }
+
+    public function test_admin_can_create_new_collection_and_dynamic_album(): void
+    {
+        $response = $this->actingAs($this->admin)->postJson('/admin/media/collections', [
+            'title' => 'Essay Competition 2026',
+            'kicker' => 'Academic Excellence',
+            'description' => 'Annual student essay competition in Ijero-Ekiti.',
+            'is_public' => true,
+        ]);
+
+        $response->assertCreated();
+        $response->assertJsonPath('success', true);
+        $response->assertJsonPath('collection.title', 'Essay Competition 2026');
+        $response->assertJsonPath('collection.slug', 'essay-competition-2026');
+        $response->assertJsonPath('collection.is_public', true);
+
+        $this->assertDatabaseHas('gallery_albums', [
+            'title' => 'Essay Competition 2026',
+            'slug' => 'essay-competition-2026',
+            'is_public' => true,
+        ]);
+    }
+
+    public function test_admin_can_create_internal_only_collection(): void
+    {
+        $response = $this->actingAs($this->admin)->post('/admin/media/collections', [
+            'title' => 'Staff Offsite Archive',
+            'is_public' => false,
+        ]);
+
+        $response->assertRedirect('/admin/media?category=staff-offsite-archive');
+
+        $this->assertDatabaseHas('gallery_albums', [
+            'title' => 'Staff Offsite Archive',
+            'is_public' => false,
+        ]);
+    }
+
+    public function test_media_item_can_be_assigned_to_collection_and_filtered_by_slug(): void
+    {
+        $album = GalleryAlbum::create([
+            'title' => 'WDADA Community Outreach',
+            'slug' => 'wdada-community-outreach',
+            'kicker' => 'Community',
+            'is_active' => true,
+            'is_public' => true,
+            'sort_order' => 1,
+        ]);
+
+        $item1 = MediaItem::create([
+            'filename' => 'wdada_01.webp',
+            'file_path' => 'uploads/media/wdada_01.webp',
+            'file_size' => 110000,
+            'mime_type' => 'image/webp',
+            'title' => 'WDADA Event Photo',
+            'source_type' => 'gallery',
+            'gallery_album_id' => $album->id,
+        ]);
+
+        $item2 = MediaItem::create([
+            'filename' => 'other_01.webp',
+            'file_path' => 'uploads/media/other_01.webp',
+            'file_size' => 90000,
+            'mime_type' => 'image/webp',
+            'title' => 'General Photo',
+            'source_type' => 'general',
+            'gallery_album_id' => null,
+        ]);
+
+        // Filter by dynamic slug
+        $response = $this->actingAs($this->admin)->get('/admin/media?category=wdada-community-outreach');
+        $response->assertOk();
+        $response->assertSee('WDADA Event Photo');
+        $response->assertDontSee('other_01.webp');
+
+        // Test picker returns collections
+        $pickerResponse = $this->actingAs($this->admin)->getJson('/admin/media/picker-items');
+        $pickerResponse->assertOk();
+        $pickerResponse->assertJsonStructure([
+            'items',
+            'collections' => [
+                '*' => ['id', 'title', 'slug', 'is_public'],
+            ],
+        ]);
     }
 }
