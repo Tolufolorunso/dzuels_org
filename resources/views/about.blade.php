@@ -541,13 +541,13 @@
                                    title="{{ $partner->name }}">
                                     <img src="{{ $partner->logo_url }}" 
                                          alt="{{ $partner->name }}" 
-                                         class="max-h-16 max-w-[85%] object-contain grayscale group-hover:grayscale-0 transition-all duration-300"
+                                         class="max-h-16 max-w-[85%] object-contain group-hover:grayscale-0 transition-all duration-300"
                                          loading="lazy">
                                 </a>
                             @else
                                 <img src="{{ $partner->logo_url }}" 
                                      alt="{{ $partner->name }}" 
-                                     class="max-h-16 max-w-[85%] object-contain grayscale group-hover:grayscale-0 transition-all duration-300"
+                                     class="max-h-16 max-w-[85%] object-contain group-hover:grayscale-0 transition-all duration-300"
                                      loading="lazy">
                             @endif
                         </div>

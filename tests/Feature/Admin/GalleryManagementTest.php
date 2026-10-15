@@ -330,36 +330,6 @@ class GalleryManagementTest extends TestCase
         $this->assertEquals(2, $album1->fresh()->sort_order);
     }
 
-    public function test_admin_can_query_media_picker_photos_json(): void
-    {
-        $album = GalleryAlbum::create([
-            'title' => 'Media Library Album',
-            'slug' => 'media-library-album',
-            'is_active' => true,
-        ]);
-
-        $photo = $album->photos()->create([
-            'image_path' => 'front/images/gallery/optimized/general-04.webp',
-            'caption' => 'Kids Coding Robotics',
-            'year' => '2024',
-            'sort_order' => 1,
-        ]);
-
-        $response = $this->actingAs($this->admin)->getJson('/admin/media/photos?search=Robotics');
-
-        $response->assertOk();
-        $response->assertJsonStructure([
-            'photos' => [
-                '*' => ['id', 'image_path', 'image_url', 'caption', 'year', 'display_label', 'album_id', 'album_title'],
-            ],
-            'albums' => [
-                '*' => ['id', 'title'],
-            ],
-        ]);
-
-        $this->assertTrue(collect($response->json('photos'))->contains('id', $photo->id));
-    }
-
     public function test_admin_can_upload_and_optimize_image_via_media_endpoint(): void
     {
         $fakeImage = UploadedFile::fake()->image('dashboard-banner.jpg', 1200, 800);

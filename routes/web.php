@@ -8,7 +8,6 @@ use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\ForgotPasswordController as AdminForgotPasswordController;
 use App\Http\Controllers\Admin\GalleryAlbumController as AdminGalleryAlbumController;
 use App\Http\Controllers\Admin\InquiryController;
-use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\MediaLibraryController;
 use App\Http\Controllers\Admin\NewsletterSubscriberController as AdminNewsletterSubscriberController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
@@ -45,7 +44,7 @@ Route::get('/programmes', [ProgrammeController::class, 'index'])->name('programm
 Route::get('/programmes/{slug}', [ProgrammeController::class, 'show'])->name('programmes.show');
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/{slug}', [EventController::class, 'show'])->name('events.show');
-Route::post('/events/{slug}/register', [EventController::class, 'register'])->name('events.register');
+Route::post('/events/{slug}/register', [EventController::class, 'register'])->middleware('throttle:6,1')->name('events.register');
 Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
 Route::get('/gallery/{slug}', [GalleryController::class, 'album'])->name('gallery.album');
 Route::get('/news', [NewsController::class, 'index'])->name('news.index');
@@ -96,7 +95,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('/media/{mediaItem}', [MediaLibraryController::class, 'update'])->name('media.update');
         Route::delete('/media/{mediaItem}', [MediaLibraryController::class, 'destroy'])->name('media.destroy');
         Route::post('/media/bulk-delete', [MediaLibraryController::class, 'bulkDestroy'])->name('media.bulk-destroy');
-        Route::get('/media/photos', [MediaController::class, 'photos'])->name('media.photos');
 
         // Staff Profile & Password Security
         Route::get('/profile', [AdminProfileController::class, 'edit'])->name('profile.password');

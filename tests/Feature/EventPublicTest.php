@@ -195,4 +195,32 @@ class EventPublicTest extends TestCase
 
         $response->assertSessionHasErrors(['full_name', 'email', 'phone']);
     }
+
+    public function test_event_registration_is_rate_limited_after_excessive_attempts(): void
+    {
+        $event = Event::create([
+            'title' => 'Throttled Event',
+            'slug' => 'throttled-event',
+            'summary' => 'Summary',
+            'description' => 'Description',
+            'is_active' => true,
+            'is_registration_open' => true,
+        ]);
+
+        for ($i = 0; $i < 6; $i++) {
+            $this->post('/events/throttled-event/register', [
+                'full_name' => "Attendee {$i}",
+                'email' => "attendee{$i}@example.com",
+                'phone' => "0801122334{$i}",
+            ]);
+        }
+
+        $blocked = $this->post('/events/throttled-event/register', [
+            'full_name' => 'Blocked Attendee',
+            'email' => 'blocked@example.com',
+            'phone' => '08099887766',
+        ]);
+
+        $blocked->assertStatus(429);
+    }
 }

@@ -17,9 +17,10 @@ class AboutController extends Controller
         $sections = PageSection::getPageSections('about');
 
         try {
-            $trustees = TeamMember::active()->byGroup('trustee')->ordered()->get();
-            $management = TeamMember::active()->byGroup('management')->ordered()->get();
-            $advisors = TeamMember::active()->byGroup('advisor')->ordered()->get();
+            $teamByGroup = TeamMember::active()->ordered()->get()->groupBy('group');
+            $trustees = $teamByGroup->get('trustee', collect());
+            $management = $teamByGroup->get('management', collect());
+            $advisors = $teamByGroup->get('advisor', collect());
             $partners = Partner::active()->ordered()->get();
         } catch (\Throwable) {
             $trustees = collect();
