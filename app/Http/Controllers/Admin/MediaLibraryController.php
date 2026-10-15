@@ -9,6 +9,7 @@ use App\Services\ImageOptimizerService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -59,6 +60,7 @@ class MediaLibraryController extends Controller
             'currentDateFilter' => $dateFilter,
             'currentCategory' => $category,
             'currentSort' => $sort,
+            'effectiveMaxUploadSize' => ini_get('upload_max_filesize') ?: '16M',
         ]);
     }
 
@@ -112,12 +114,29 @@ class MediaLibraryController extends Controller
      */
     public function upload(Request $request, ImageOptimizerService $optimizer): JsonResponse
     {
+        if ($failureMessage = $this->getUploadFailureMessage($request)) {
+            return response()->json([
+                'success' => false,
+                'message' => $failureMessage,
+                'errors' => [
+                    'image' => [$failureMessage],
+                ],
+            ], 422);
+        }
+
         $request->validate([
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp,gif', 'max:15360'],
             'images.*' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp,gif', 'max:15360'],
             'gallery_album_id' => ['nullable', 'integer', 'exists:gallery_albums,id'],
             'collection_id' => ['nullable', 'integer', 'exists:gallery_albums,id'],
             'source_type' => ['nullable', 'string', 'max:50'],
+        ], [
+            'image.image' => 'The uploaded file must be an image (JPEG, PNG, WebP, or GIF).',
+            'image.mimes' => 'The image must be a file of type: jpeg, png, jpg, webp, gif.',
+            'image.max' => 'The image must not exceed 15 MB.',
+            'images.*.image' => 'Each uploaded file must be an image (JPEG, PNG, WebP, or GIF).',
+            'images.*.mimes' => 'Each image must be a file of type: jpeg, png, jpg, webp, gif.',
+            'images.*.max' => 'Each image must not exceed 15 MB.',
         ]);
 
         $uploadedFiles = [];
@@ -131,6 +150,9 @@ class MediaLibraryController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'No valid image file was uploaded.',
+                'errors' => [
+                    'image' => ['No valid image file was uploaded.'],
+                ],
             ], 422);
         }
 
@@ -153,12 +175,21 @@ class MediaLibraryController extends Controller
             $dimensions = @getimagesize($fullPath);
             $origName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
             $humanTitle = Str::title(str_replace(['-', '_'], ' ', $origName));
+            $extension = strtolower(pathinfo($optimizedPath, PATHINFO_EXTENSION));
+            $mimeType = match ($extension) {
+                'webp' => 'image/webp',
+                'jpg', 'jpeg' => 'image/jpeg',
+                'png' => 'image/png',
+                'svg' => 'image/svg+xml',
+                'gif' => 'image/gif',
+                default => ($dimensions['mime'] ?? (File::exists($fullPath) ? File::mimeType($fullPath) : 'image/webp')),
+            };
 
             $item = MediaItem::create([
                 'filename' => basename($optimizedPath),
                 'file_path' => $optimizedPath,
                 'file_size' => $fileSize,
-                'mime_type' => 'image/webp',
+                'mime_type' => $mimeType,
                 'width' => $dimensions[0] ?? null,
                 'height' => $dimensions[1] ?? null,
                 'title' => $humanTitle,
@@ -315,5 +346,74 @@ class MediaLibraryController extends Controller
             'items' => $items,
             'collections' => $collections,
         ]);
+    }
+
+    /**
+     * Inspect request and raw uploaded files for PHP runtime upload limit failures.
+     */
+    protected function getUploadFailureMessage(Request $request): ?string
+    {
+        $contentLength = (int) $request->server('CONTENT_LENGTH', 0);
+        $postMaxSize = ini_get('post_max_size') ?: '8M';
+        $postMaxBytes = $this->parseIniSize($postMaxSize);
+
+        if ($contentLength > 0 && $postMaxBytes > 0 && $contentLength > $postMaxBytes && empty($request->all()) && empty($request->allFiles())) {
+            return "The uploaded payload exceeds the server maximum POST limit of {$postMaxSize}.";
+        }
+
+        $rawImage = $request->file('image');
+        if ($rawImage instanceof UploadedFile && ! $rawImage->isValid()) {
+            return $this->formatUploadedFileError($rawImage);
+        }
+
+        $rawImages = $request->file('images');
+        if (is_array($rawImages)) {
+            foreach ($rawImages as $file) {
+                if ($file instanceof UploadedFile && ! $file->isValid()) {
+                    return $this->formatUploadedFileError($file);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Map PHP upload error codes to informative error messages.
+     */
+    protected function formatUploadedFileError(UploadedFile $file): string
+    {
+        $name = $file->getClientOriginalName() ?: 'The file';
+        $maxFileSize = ini_get('upload_max_filesize') ?: '2M';
+
+        return match ($file->getError()) {
+            UPLOAD_ERR_INI_SIZE => "{$name} exceeds the server maximum upload limit of {$maxFileSize}.",
+            UPLOAD_ERR_FORM_SIZE => "{$name} exceeds the form upload limit.",
+            UPLOAD_ERR_PARTIAL => "{$name} was only partially uploaded. Please try again.",
+            UPLOAD_ERR_NO_TMP_DIR => 'Server temporary directory is missing. Please contact administrator.',
+            UPLOAD_ERR_CANT_WRITE => 'Failed to write upload to server disk.',
+            default => "{$name} failed to upload.",
+        };
+    }
+
+    /**
+     * Parse php.ini size strings (e.g. 16M, 32M, 1G) into bytes.
+     */
+    protected function parseIniSize(string $size): int
+    {
+        $size = trim($size);
+        if ($size === '') {
+            return 0;
+        }
+
+        $unit = strtolower(substr($size, -1));
+        $value = (int) $size;
+
+        return match ($unit) {
+            'g' => $value * 1024 * 1024 * 1024,
+            'm' => $value * 1024 * 1024,
+            'k' => $value * 1024,
+            default => $value,
+        };
     }
 }

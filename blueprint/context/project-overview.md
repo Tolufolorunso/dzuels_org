@@ -6,20 +6,18 @@
 
 ## Problem
 
-Dzuels Educational Foundation is a Nigerian charity (registered 2015) providing education support, digital skills, poverty relief, and youth empowerment in Ijero-Ekiti and beyond.
+Dzuels Educational Foundation is a Nigerian charity (founded June 2015, registered 2015) providing education support, literacy resources, digital skills acquisition for indigent children and youth, and social welfare relief in Ijero-Ekiti and surrounding communities.
 
-- **Milestones 1–8 (Shipped):** Overhauled platform across 30 features: WCAG 2.2 AA accessibility, responsive design, brand asset suite, ITD 2026 overhaul, server-rendered lightbox, WordPress-style Page CMS, multi-tier RBAC (`super_admin`, `editor`, `support`), MySQL export tooling, hotline updates, hero overlays, dynamic contact CMS, dynamic partners strip, resilient media pipeline with GD fallback, multi-photo bulk uploader, dynamic site logo in settings, Givebutter U.S. donations, authentic 6 Impact Causes CMS, $\le 180\text{ KB}$ WebP optimization engine, dynamic 4-photo Famoyinka Library CMS, Get Involved overhaul, universal media picker `<x-admin.media-picker>`, and the Central Media Hub (`/admin/media`) with multi-criteria search, date filters, drag-and-drop WebP uploading, and cPanel public path resolution.
-- **Milestone 9 (Active Target):** Dynamic Media Collections, Authentic Photo Integration & cPanel Root Alignment:
-  1. **Dynamic Collections & Dashboard Category Creation**: Unify Gallery Albums and Media Collections under `GalleryAlbum`. Pre-seed authentic foundation collections: *Essay Competition*, *Girls Day*, *ITD (Ijero Tech Day)*, *Reading / Library*, *Spelling Bee*, *WDADA Outreach*, *General Community*, and system collection *Site & CMS Assets*. Provide a "+ New Collection" modal on `/admin/media` so staff can create new collections with title, description, and an optional "Show in Public Gallery" toggle.
-  2. **Authentic Photo Curation & Optimization from `picture/` Archive**: Curate high-impact photos from the 4,000+ photo archive in `picture/` across all 7 program categories. Convert selected photos to crisp WebP format ($\le 180\text{ KB}$ ceiling), populate albums, Home hero/causes, Famoyinka Library, and catalog them into `MediaItem`. Completely delete the temporary `picture/` directory upon completion.
-  3. **cPanel Root Deployment Alignment**: Provide root `index.php` and root `.htaccess` supporting direct execution in `/home/dzuefjel/dzuels_org` (where `index.php`, `.htaccess`, `front/`, `build/`, and `uploads/` sit at the root) without breaking local development (`php artisan serve` and `npm run dev`).
-  4. **Complete MySQL / MariaDB Database Dump**: Run `php artisan db:export-sql` to produce the updated `database/dumps/dzuels_database.sql` and root `dzuels_database.sql` for 1-click phpMyAdmin import.
+The web application was rebuilt from the ground up to establish an authentic, high-performance, mobile-first platform for donors, volunteers, event attendees, and beneficiaries.
+
+- **Milestones 1–8 (Completed & Shipped):** Overhauled platform across 30 features: WCAG 2.2 AA accessibility, responsive design, brand asset suite, ITD 2026 overhaul, server-rendered lightbox, WordPress-style Page CMS, multi-tier RBAC (`super_admin`, `editor`, `support`), MySQL export tooling, hotline updates, hero overlays, dynamic contact CMS, dynamic partners strip, resilient media pipeline with GD fallback, multi-photo bulk uploader, dynamic site logo in settings, Givebutter U.S. donations, authentic 6 Impact Causes CMS, $\le 180\text{ KB}$ WebP optimization engine, dynamic 4-photo Famoyinka Library CMS, Get Involved overhaul, universal media picker `<x-admin.media-picker>`, and the Central Media Hub (`/admin/media`) with multi-criteria search, date filters, drag-and-drop WebP uploading, and cPanel public path resolution.
+- **Milestone 9 (Completed & Shipped):** Dynamic Media Collections, Authentic Photo Integration & cPanel Root Alignment across Feature 31: unified `GalleryAlbum` collections with in-dashboard "+ New Collection" modal, authentic photo curation and $\le 180\text{ KB}$ WebP optimization across 7 program albums, CMS hero/cause seeding, deletion of temporary `picture/` directory, universal root `index.php` and `.htaccess` deployment config, and fresh MariaDB dump export (`dzuels_database.sql`).
 
 ## Users
 
 - **Donors (Nigeria & Diaspora/USA):** Seek transparency, verified impact numbers, quick Flutterwave online giving, GTBank transfer details, and Givebutter U.S. giving.
 - **Volunteers & Partners:** Apply for mentorship or submit corporate partnership inquiries.
-- **Event Participants & Schools:** Students and educators attending ITD 2026 to learn AI tools, spelling bees, and reading competitions.
+- **Event Participants & Schools:** Students and educators attending ITD 2026 to learn AI tools, spelling bees, essay contests, and reading competitions.
 - **Beneficiaries, Parents & Students:** Community members accessing literacy resources, activities, and the Famoyinka Memorial Children's Library.
 - **Foundation Staff (Role-Based Admin Users):**
   - **Super Admin:** Full platform control, managing staff accounts, role permissions, global settings (logo, multi-phone lines, Givebutter link, hours/timezone), media library collections, deletions, and database exports.
@@ -69,11 +67,11 @@ Dzuels Educational Foundation is a Nigerian charity (registered 2015) providing 
 
 ### Milestone 8 Features (Completed & Shipped)
 
-30. **Unified Central Media Hub, global asset management & cPanel public web path resolution** - bind `$app->usePublicPath(__DIR__)` in `public/index.php` and verify directory creation with correct permissions so uploaded media on cPanel saves directly to the active web folder and serves without 404s; create a top-level **Media Library** dashboard at `/admin/media` with an admin navbar tab; present a unified visual grid showcasing all foundation media (both gallery collection photos and general site/CMS assets) with multi-criteria search by photo name/caption/filename, date uploaded filters (date picker & quick ranges), sort controls (newest, oldest, A-Z), category tabs (*All Media*, *Gallery Collections*, *Site Assets*), file size badges ($\le 180\text{ KB}$ WebP), dimensions, and copyable public URLs; add direct drag-and-drop WebP uploading into the central hub; and connect `<x-admin.media-picker>` across all CMS editors to the unified media catalog with the same search and date filters. *(Completed)*
+30. **Unified Central Media Hub, global asset management & cPanel public web path resolution** - Bind `$app->usePublicPath(__DIR__)` in `public/index.php`; top-level **Media Library** dashboard at `/admin/media` with unified visual grid, search by name/caption/filename, date filters, sort controls, category tabs (*All Media*, *Gallery Collections*, *Site Assets*), $\le 180\text{ KB}$ WebP badges, copyable URLs, drag-and-drop WebP uploading, and connected `<x-admin.media-picker>`. *(Completed)*
 
-### Milestone 9 Features (Active Build Order)
+### Milestone 9 Features (Completed & Shipped)
 
-31. **Dynamic media collections/categories, authentic photo curation from picture archive, database SQL export & cPanel root architecture alignment** - unify Media Categories with `GalleryAlbum` so categories in the Central Media Hub (`/admin/media`) and `<x-admin.media-picker>` are dynamic, with a "+ New Collection" creation modal and optional public gallery toggle; curate, optimize ($\le 180\text{ KB}$ WebP), and seed authentic photos from `picture/` across Essay Competition, Girls Day, ITD, Reading/Library, Spelling Bee, WDADA, and General Community; update CMS heroes, causes, and page sections with real imagery and catalog them in `MediaItem`; delete the temporary `picture/` folder; add root deployment configuration (`index.php`, `.htaccess`) supporting direct execution in `/home/dzuefjel/dzuels_org` without breaking local development; and export a fresh `dzuels_database.sql` for 1-click phpMyAdmin import.
+31. **Dynamic media collections/categories, authentic photo curation from picture archive, database SQL export & cPanel root architecture alignment** - Unify Media Categories with `GalleryAlbum` so categories in the Central Media Hub (`/admin/media`) and `<x-admin.media-picker>` are dynamic, with a "+ New Collection" creation modal and optional public gallery toggle; curate, optimize ($\le 180\text{ KB}$ WebP), and seed authentic photos from `picture/` across Essay Competition, Girls Day, ITD, Reading/Library, Spelling Bee, WDADA, and General Community; update CMS heroes, causes, and page sections with real imagery and catalog them in `MediaItem`; delete the temporary `picture/` folder; add root deployment configuration (`index.php`, `.htaccess`) supporting direct execution in `/home/dzuefjel/dzuels_org` without breaking local development; and export a fresh `dzuels_database.sql` for 1-click phpMyAdmin import. *(Completed)*
 
 ### Deferred Ideas (Non-Roadmap)
 
@@ -127,7 +125,7 @@ Dzuels Educational Foundation is a Nigerian charity (registered 2015) providing 
 
 - **Backend:** Laravel 12 on PHP 8.3 / 8.4, MariaDB 10.3+ / MySQL 8.0+ in development and production (`server161.web-hosting.com`), Eloquent ORM.
 - **Image Optimization & Upload Pipeline:** Native PHP GD (`imagewebp`, `imagecopyresampled`) with zero external package dependencies. Strict iterative optimization loop enforcing <= 180 KB WebP output and automated uncompressed original deletion.
-- **Admin Panel:** Tailored SaaS administrative dashboard at `/admin` with role-based authorization (Super Admin, Editor, Support).
+- **Admin Panel:** Tailored administrative dashboard at `/admin` with role-based authorization (Super Admin, Editor, Support).
 - **Frontend Templates:** Blade server-side templates with modular components.
 - **Styling:** Tailwind CSS v4 (`@tailwindcss/vite`) using CSS tokens. Strict zero-horizontal-overflow rules with `max-w-full`.
 - **JavaScript:** Lightweight Alpine.js for interactive widgets, lightbox, multi-photo bulk upload, central media manager, and media picker modal.
@@ -163,4 +161,5 @@ Non-profit charity donations. The platform does not sell products or show advert
 
 ## Open questions
 
-*(None. All requirements for Milestone 9 / Feature 31 confirmed and ready for implementation.)*
+- **Plan alignment:** All 31 planned features across Milestones 1–9 are completed and shipped in `blueprint/build-plan.md` and archived under `blueprint/history/features/`. In `blueprint/project-plan.md`, Milestone 9 / Feature 31 is still labeled "(Active Target)"; updating `project-plan.md` to label Milestone 9 as "(Completed & Shipped)" will keep both planning documents completely synchronized.
+- **Open findings:** The findings ledger (`blueprint/context/findings.md`) contains 6 open P1 findings (F-01 through F-06) regarding PHP upload limits and fallback storage that should be resolved with `/fix` before adding new features or preparing a production release.

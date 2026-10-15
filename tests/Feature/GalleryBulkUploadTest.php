@@ -117,4 +117,19 @@ class GalleryBulkUploadTest extends TestCase
         $response->assertSee('Upload & Optimize Photos (Bulk Uploader)', false);
         $response->assertSee('View test photo');
     }
+
+    public function test_bulk_upload_rejects_more_than_twenty_photos(): void
+    {
+        $photos = [];
+        for ($i = 0; $i < 21; $i++) {
+            $photos[] = UploadedFile::fake()->image("pic{$i}.jpg", 100, 100);
+        }
+
+        $response = $this->actingAs($this->admin)
+            ->post(route('admin.gallery.photos.upload', $this->album), [
+                'photos' => $photos,
+            ]);
+
+        $response->assertSessionHasErrors(['photos']);
+    }
 }

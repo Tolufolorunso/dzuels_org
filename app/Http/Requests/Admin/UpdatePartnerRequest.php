@@ -19,7 +19,9 @@ class UpdatePartnerRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'logo' => ['nullable'],
+            'logo' => $this->hasFile('logo')
+                ? ['nullable', 'image', 'mimes:jpeg,png,jpg,webp,svg', 'max:10240']
+                : ['nullable', 'string', 'max:255'],
             'website_url' => ['nullable', 'url', 'max:255'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['nullable', 'boolean'],

@@ -19,7 +19,9 @@ class StorePartnerRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'logo' => ['required'],
+            'logo' => $this->hasFile('logo')
+                ? ['required', 'image', 'mimes:jpeg,png,jpg,webp,svg', 'max:10240']
+                : ['required', 'string', 'max:255'],
             'website_url' => ['nullable', 'url', 'max:255'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['nullable', 'boolean'],

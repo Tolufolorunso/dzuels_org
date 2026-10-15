@@ -160,4 +160,33 @@ class PartnerManagementTest extends TestCase
             'id' => $partner->id,
         ]);
     }
+
+    public function test_partner_creation_rejects_non_image_logo_file(): void
+    {
+        $file = UploadedFile::fake()->create('document.pdf', 500, 'application/pdf');
+
+        $response = $this->actingAs($this->admin)->post('/admin/partners', [
+            'name' => 'Partner Org',
+            'logo' => $file,
+        ]);
+
+        $response->assertSessionHasErrors(['logo']);
+    }
+
+    public function test_partner_update_rejects_non_image_logo_file(): void
+    {
+        $partner = Partner::create([
+            'name' => 'Partner Org',
+            'logo' => 'front/images/SAA.jpg',
+        ]);
+
+        $file = UploadedFile::fake()->create('archive.zip', 500, 'application/zip');
+
+        $response = $this->actingAs($this->admin)->put("/admin/partners/{$partner->id}", [
+            'name' => 'Updated Org',
+            'logo' => $file,
+        ]);
+
+        $response->assertSessionHasErrors(['logo']);
+    }
 }

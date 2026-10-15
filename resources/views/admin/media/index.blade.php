@@ -105,44 +105,75 @@
             if (files.length > 0) {
                 this.uploadFiles(files);
             }
+            e.target.value = '';
         },
 
         async uploadFiles(files) {
+            if (!files || files.length === 0) return;
             this.isUploading = true;
-            this.uploadProgress = 10;
-            this.uploadMessage = 'Uploading and optimizing images to WebP...';
+            this.uploadProgress = 0;
+            const total = files.length;
+            let successCount = 0;
+            const errors = [];
+            const csrfToken = document.querySelector('meta[name=csrf-token]')?.content || '';
 
-            const formData = new FormData();
-            for (let i = 0; i < files.length; i++) {
-                formData.append('images[]', files[i]);
+            for (let i = 0; i < total; i++) {
+                const file = files[i];
+                this.uploadProgress = Math.round((i / total) * 100);
+                this.uploadMessage = `Uploading and optimizing image ${i + 1} of ${total}: ${file.name}...`;
+
+                const formData = new FormData();
+                formData.append('image', file);
+
+                try {
+                    const response = await fetch('{{ route('admin.media.upload') }}', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json'
+                        },
+                        body: formData
+                    });
+
+                    let data = null;
+                    const contentType = response.headers.get('content-type') || '';
+                    if (contentType.includes('application/json')) {
+                        data = await response.json();
+                    }
+
+                    if (response.ok && data && data.success) {
+                        successCount++;
+                    } else {
+                        let errMsg = data?.message;
+                        if (!errMsg && data?.errors) {
+                            errMsg = Object.values(data.errors).flat()[0];
+                        }
+                        if (!errMsg) {
+                            errMsg = response.status === 413
+                                ? 'File exceeds maximum upload size allowed by the server.'
+                                : `Server error (status ${response.status}).`;
+                        }
+                        errors.push(`${file.name}: ${errMsg}`);
+                    }
+                } catch (err) {
+                    errors.push(`${file.name}: Network connection error during upload.`);
+                }
             }
 
-            try {
-                const response = await fetch('{{ route('admin.media.upload') }}', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content,
-                        'Accept': 'application/json'
-                    },
-                    body: formData
-                });
+            this.uploadProgress = 100;
 
-                this.uploadProgress = 80;
-
-                const data = await response.json();
-                if (response.ok && data.success) {
-                    this.uploadProgress = 100;
-                    this.uploadMessage = 'Optimization complete! Reloading library...';
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 600);
-                } else {
-                    alert(data.message || 'Error uploading image. Please check file format and size.');
-                    this.isUploading = false;
-                }
-            } catch (err) {
-                alert('Upload failed. Please check network connection.');
+            if (errors.length === 0) {
+                this.uploadMessage = `All ${total} image(s) optimized successfully! Reloading...`;
+                setTimeout(() => {
+                    window.location.reload();
+                }, 600);
+            } else if (successCount > 0) {
+                this.uploadMessage = `Uploaded ${successCount} of ${total} images.`;
+                alert(`Uploaded ${successCount} of ${total} image(s) successfully.\n\nThe following files failed:\n• ` + errors.join('\n• '));
+                window.location.reload();
+            } else {
                 this.isUploading = false;
+                alert(`Upload failed for all ${total} file(s):\n\n• ` + errors.join('\n• '));
             }
         },
 
@@ -165,17 +196,23 @@
                     })
                 });
 
-                const data = await response.json();
-                if (response.ok && data.success) {
+                let data = null;
+                const contentType = response.headers.get('content-type') || '';
+                if (contentType.includes('application/json')) {
+                    data = await response.json();
+                }
+
+                if (response.ok && data && data.success) {
                     window.location.reload();
                 } else {
-                    alert(data.message || 'Failed to update media details.');
+                    alert(data?.message || `Failed to update media details (status ${response.status}).`);
                 }
             } catch (e) {
                 alert('An error occurred while saving.');
             }
         }
     }" class="space-y-8">
+
 
         {{-- Top Heading & Quick Actions --}}
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-6 border-b border-stone-200">
@@ -299,7 +336,7 @@
                         Drag and drop photos here, or <span class="text-maroon underline">browse files</span>
                     </p>
                     <p class="text-xs text-stone-500 mt-1">
-                        JPEG, PNG, or WebP. Images are automatically optimized into high-performance WebP (&le; 180 KB) with original file deletion.
+                        JPEG, PNG, or WebP (up to {{ $effectiveMaxUploadSize ?? '16M' }}). Images are automatically optimized into high-performance WebP (&le; 180 KB) with original file deletion.
                     </p>
                 </div>
             </div>

@@ -409,4 +409,85 @@ class MediaLibraryTest extends TestCase
             ],
         ]);
     }
+
+    public function test_upload_returns_structured_422_when_php_upload_err_ini_size_occurs(): void
+    {
+        $tempFile = tempnam(sys_get_temp_dir(), 'test_upload_');
+        file_put_contents($tempFile, 'simulated image content');
+        $file = new UploadedFile($tempFile, 'oversized.jpg', 'image/jpeg', UPLOAD_ERR_INI_SIZE, true);
+
+        $response = $this->actingAs($this->admin)->postJson('/admin/media/upload', [
+            'image' => $file,
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJson([
+            'success' => false,
+        ]);
+        $response->assertJsonStructure([
+            'message',
+            'errors' => ['image'],
+        ]);
+
+        @unlink($tempFile);
+    }
+
+    public function test_upload_returns_structured_422_for_invalid_file_type(): void
+    {
+        $file = UploadedFile::fake()->create('document.pdf', 500, 'application/pdf');
+
+        $response = $this->actingAs($this->admin)->postJson('/admin/media/upload', [
+            'image' => $file,
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['image']);
+        $this->assertStringContainsString('The uploaded file must be an image', $response->json('errors.image.0'));
+    }
+
+    public function test_upload_returns_structured_422_when_no_files_provided(): void
+    {
+        $response = $this->actingAs($this->admin)->postJson('/admin/media/upload', []);
+
+        $response->assertStatus(422);
+        $response->assertJson([
+            'success' => false,
+            'message' => 'No valid image file was uploaded.',
+            'errors' => [
+                'image' => ['No valid image file was uploaded.'],
+            ],
+        ]);
+    }
+
+    public function test_upload_preserves_accurate_mime_type_for_fallback_file(): void
+    {
+        $fallbackRelative = 'uploads/media/test_fallback.png';
+        $fullPath = public_path($fallbackRelative);
+        @mkdir(dirname($fullPath), 0755, true);
+        file_put_contents($fullPath, 'simulated png content');
+
+        $mockOptimizer = \Mockery::mock(ImageOptimizerService::class);
+        $mockOptimizer->shouldReceive('optimize')
+            ->once()
+            ->andReturn($fallbackRelative);
+        $this->app->instance(ImageOptimizerService::class, $mockOptimizer);
+
+        $file = UploadedFile::fake()->image('photo.png', 200, 200);
+
+        $response = $this->actingAs($this->admin)->postJson('/admin/media/upload', [
+            'image' => $file,
+        ]);
+
+        $response->assertOk();
+        $itemId = $response->json('items.0.id');
+        $item = MediaItem::find($itemId);
+
+        $this->assertNotNull($item);
+        $this->assertEquals('image/png', $item->mime_type);
+        $this->assertStringEndsWith('.png', $item->file_path);
+
+        if (file_exists($fullPath)) {
+            @unlink($fullPath);
+        }
+    }
 }

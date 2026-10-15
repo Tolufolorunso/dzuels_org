@@ -90,32 +90,41 @@ class TeamMemberController extends Controller
         $validated['is_active'] = $request->boolean('is_active');
         $validated['sort_order'] = (int) ($validated['sort_order'] ?? 0);
 
-        if ($request->boolean('remove_photo') || ($request->has('photo') && $request->input('photo') === null)) {
-            if ($team->photo && str_starts_with($team->photo, 'uploads/team/') && file_exists(public_path($team->photo))) {
-                @unlink(public_path($team->photo));
-            }
-            $validated['photo'] = null;
-        } elseif ($request->hasFile('photo')) {
-            if ($team->photo && str_starts_with($team->photo, 'uploads/team/') && file_exists(public_path($team->photo))) {
-                @unlink(public_path($team->photo));
-            }
-            $validated['photo'] = $this->optimizer->optimize(
+        $oldPhotoToDelete = null;
+
+        if ($request->hasFile('photo')) {
+            $newPhoto = $this->optimizer->optimize(
                 $request->file('photo'),
                 'uploads/team',
                 800,
                 800
             );
+
+            if ($team->photo && str_starts_with($team->photo, 'uploads/team/') && file_exists(public_path($team->photo))) {
+                $oldPhotoToDelete = public_path($team->photo);
+            }
+
+            $validated['photo'] = $newPhoto;
         } elseif ($request->filled('photo')) {
             $newPhoto = $request->input('photo');
             if ($team->photo && $team->photo !== $newPhoto && str_starts_with($team->photo, 'uploads/team/') && file_exists(public_path($team->photo))) {
-                @unlink(public_path($team->photo));
+                $oldPhotoToDelete = public_path($team->photo);
             }
             $validated['photo'] = $newPhoto;
+        } elseif ($request->boolean('remove_photo') || ($request->has('photo') && $request->input('photo') === null)) {
+            if ($team->photo && str_starts_with($team->photo, 'uploads/team/') && file_exists(public_path($team->photo))) {
+                $oldPhotoToDelete = public_path($team->photo);
+            }
+            $validated['photo'] = null;
         } else {
             unset($validated['photo']);
         }
 
         $team->update($validated);
+
+        if ($oldPhotoToDelete && file_exists($oldPhotoToDelete)) {
+            @unlink($oldPhotoToDelete);
+        }
 
         return redirect()->route('admin.team.index')->with('success', 'Team member updated successfully.');
     }

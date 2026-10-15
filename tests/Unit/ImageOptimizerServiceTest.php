@@ -114,4 +114,37 @@ class ImageOptimizerServiceTest extends TestCase
             @unlink($savedFullPath);
         }
     }
+
+    public function test_optimizer_fallback_safely_stores_svg_with_svg_extension(): void
+    {
+        $svgPath = tempnam(sys_get_temp_dir(), 'test_svg_').'.svg';
+        file_put_contents($svgPath, '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="100"><rect width="200" height="100" fill="blue"/></svg>');
+
+        $savedRelativePath = $this->optimizer->optimize(
+            $svgPath,
+            'uploads/test_unit'
+        );
+
+        $savedFullPath = public_path($savedRelativePath);
+        $this->assertFileExists($savedFullPath);
+        $this->assertStringEndsWith('.svg', $savedRelativePath);
+
+        if (file_exists($savedFullPath)) {
+            @unlink($savedFullPath);
+        }
+    }
+
+    public function test_optimizer_rejects_unsupported_extension_on_fallback(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unsupported image format for fallback storage');
+
+        $txtPath = tempnam(sys_get_temp_dir(), 'test_script_').'.sh';
+        file_put_contents($txtPath, '#!/bin/bash\necho "hello"');
+
+        $this->optimizer->optimize(
+            $txtPath,
+            'uploads/test_unit'
+        );
+    }
 }

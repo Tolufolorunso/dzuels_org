@@ -176,9 +176,9 @@ class ImageOptimizerService
             }
 
             // Iteration phase 2: If still exceeding maxBytes, iteratively downscale canvas dimensions
-            while ($currentSize > $maxBytes && $targetWidth > 320 && $targetHeight > 240) {
-                $targetWidth = max(240, (int) round($targetWidth * 0.9));
-                $targetHeight = max(180, (int) round($targetHeight * 0.9));
+            while ($currentSize > $maxBytes && ($targetWidth > 160 || $targetHeight > 120)) {
+                $targetWidth = max(160, (int) round($targetWidth * 0.85));
+                $targetHeight = max(120, (int) round($targetHeight * 0.85));
 
                 $scaledCanvas = \imagecreatetruecolor($targetWidth, $targetHeight);
                 \imagealphablending($scaledCanvas, false);
@@ -199,6 +199,14 @@ class ImageOptimizerService
                 \imagedestroy($dstImage);
                 $dstImage = $scaledCanvas;
 
+                \imagewebp($dstImage, $fullDestinationPath, $currentQuality);
+                \clearstatcache(true, $fullDestinationPath);
+                $currentSize = (int) filesize($fullDestinationPath);
+            }
+
+            // Iteration phase 3: Further quality reduction if still over ceiling
+            while ($currentSize > $maxBytes && $currentQuality > 20) {
+                $currentQuality -= self::QUALITY_STEP;
                 \imagewebp($dstImage, $fullDestinationPath, $currentQuality);
                 \clearstatcache(true, $fullDestinationPath);
                 $currentSize = (int) filesize($fullDestinationPath);
@@ -251,8 +259,17 @@ class ImageOptimizerService
         string $destinationRelativeDir,
         string $extension
     ): string {
-        $safeExt = in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg']) ? strtolower($extension) : 'jpg';
-        $filename = time().'_'.Str::random(12).'.'.$safeExt;
+        $ext = strtolower($extension);
+        if (! in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg'])) {
+            throw new InvalidArgumentException("Unsupported image format for fallback storage: .{$extension}");
+        }
+
+        $sourceSize = $file instanceof UploadedFile ? $file->getSize() : (@filesize($file) ?: 0);
+        if ($sourceSize > 16 * 1024 * 1024) {
+            throw new InvalidArgumentException('File exceeds maximum allowed upload size for fallback storage.');
+        }
+
+        $filename = time().'_'.Str::random(12).'.'.$ext;
 
         if (! file_exists($destinationDir)) {
             @mkdir($destinationDir, 0755, true);

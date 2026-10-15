@@ -83,24 +83,43 @@
             body: formData,
             headers: { 'Accept': 'application/json' }
         })
-        .then(res => {
-            if (!res.ok) throw new Error('Upload failed');
-            return res.json();
+        .then(async res => {
+            const contentType = res.headers.get('content-type') || '';
+            let data = null;
+            if (contentType.includes('application/json')) {
+                data = await res.json();
+            }
+            if (!res.ok) {
+                let msg = data?.message;
+                if (!msg && data?.errors) {
+                    msg = Object.values(data.errors).flat()[0];
+                }
+                if (!msg) {
+                    msg = res.status === 413
+                        ? 'The uploaded file exceeds the maximum size allowed by the server.'
+                        : `Upload failed with server status ${res.status}.`;
+                }
+                throw new Error(msg);
+            }
+            return data;
         })
         .then(data => {
-            if (data.success && (data.item || data.image_path)) {
+            if (data && data.success && (data.item || data.image_path)) {
                 const item = data.item || {};
                 this.selectedPath = item.file_path || data.image_path;
                 this.selectedUrl = item.image_url || data.image_url;
                 this.uploading = false;
                 this.modalOpen = false;
             } else {
-                throw new Error(data.message || 'Optimization failed');
+                throw new Error(data?.message || 'Optimization failed');
             }
         })
         .catch(err => {
-            this.errorMessage = 'Upload failed. Ensure the image is valid and under 15MB.';
+            this.errorMessage = err.message || 'Upload failed. Please verify the image file format and size.';
             this.uploading = false;
+        })
+        .finally(() => {
+            if (e.target) e.target.value = '';
         });
     }
 }" class="space-y-2">
@@ -304,7 +323,7 @@
                         ⚡
                     </div>
                     <h4 class="font-bold text-stone-900 text-sm">Upload & Automatically Optimize to WebP</h4>
-                    <p class="text-xs text-stone-500">Supports JPEG, PNG, WEBP up to 15MB. The image will be compressed to &le; 180 KB WebP, cataloged in the Media Library, and selected automatically.</p>
+                    <p class="text-xs text-stone-500">Supports JPEG, PNG, or WebP. The image will be compressed to &le; 180 KB WebP, cataloged in the Media Library, and selected automatically.</p>
 
                     <label class="inline-block mt-3 px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-maroon text-white hover:bg-crimson transition-all shadow-xs cursor-pointer">
                         <span x-show="!uploading">Select File to Upload</span>

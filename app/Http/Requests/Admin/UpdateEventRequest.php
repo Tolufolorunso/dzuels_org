@@ -33,7 +33,9 @@ class UpdateEventRequest extends FormRequest
             'end_date' => ['nullable', 'date'],
             'venue' => ['nullable', 'string', 'max:255'],
             'theme' => ['nullable', 'string', 'max:255'],
-            'banner_image' => ['nullable'],
+            'banner_image' => $this->hasFile('banner_image')
+                ? ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:10240']
+                : ['nullable', 'string', 'max:255'],
             'banner_image_path' => ['nullable', 'string', 'max:255'],
             'schedule' => ['nullable'],
             'is_registration_open' => ['nullable', 'boolean'],

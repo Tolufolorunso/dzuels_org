@@ -256,4 +256,39 @@ class EventManagementTest extends TestCase
 
         $response->assertSessionHasErrors(['title', 'summary', 'description']);
     }
+
+    public function test_event_creation_rejects_non_image_banner_file(): void
+    {
+        $file = UploadedFile::fake()->create('document.pdf', 500, 'application/pdf');
+
+        $response = $this->actingAs($this->admin)->post('/admin/events', [
+            'title' => 'Tech Summit',
+            'summary' => 'Summary text',
+            'description' => 'Description text',
+            'banner_image' => $file,
+        ]);
+
+        $response->assertSessionHasErrors(['banner_image']);
+    }
+
+    public function test_event_update_rejects_non_image_banner_file(): void
+    {
+        $event = Event::create([
+            'title' => 'Existing Event',
+            'slug' => 'existing-event',
+            'summary' => 'Summary',
+            'description' => 'Description',
+        ]);
+
+        $file = UploadedFile::fake()->create('script.sh', 100, 'text/x-shellscript');
+
+        $response = $this->actingAs($this->admin)->put("/admin/events/{$event->id}", [
+            'title' => 'Updated Event',
+            'summary' => 'Summary',
+            'description' => 'Description',
+            'banner_image' => $file,
+        ]);
+
+        $response->assertSessionHasErrors(['banner_image']);
+    }
 }

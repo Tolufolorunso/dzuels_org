@@ -96,26 +96,30 @@ class ProgrammeController extends Controller
             $validated['slug'] = Str::slug($validated['title']);
         }
 
-        if ($request->hasFile('cover_image')) {
-            if ($programme->cover_image && str_starts_with($programme->cover_image, 'uploads/programmes/') && file_exists(public_path($programme->cover_image))) {
-                @unlink(public_path($programme->cover_image));
-            }
+        $oldImageToDelete = null;
 
-            $validated['cover_image'] = $this->optimizer->optimize(
+        if ($request->hasFile('cover_image')) {
+            $newCover = $this->optimizer->optimize(
                 $request->file('cover_image'),
                 'uploads/programmes',
                 1600,
                 1200
             );
+
+            if ($programme->cover_image && str_starts_with($programme->cover_image, 'uploads/programmes/') && file_exists(public_path($programme->cover_image))) {
+                $oldImageToDelete = public_path($programme->cover_image);
+            }
+
+            $validated['cover_image'] = $newCover;
         } elseif ($request->filled('cover_image')) {
             $newCover = $request->input('cover_image');
             if ($programme->cover_image && $programme->cover_image !== $newCover && str_starts_with($programme->cover_image, 'uploads/programmes/') && file_exists(public_path($programme->cover_image))) {
-                @unlink(public_path($programme->cover_image));
+                $oldImageToDelete = public_path($programme->cover_image);
             }
             $validated['cover_image'] = $newCover;
         } elseif ($request->boolean('remove_cover_image') || ($request->has('cover_image') && $request->input('cover_image') === null)) {
             if ($programme->cover_image && str_starts_with($programme->cover_image, 'uploads/programmes/') && file_exists(public_path($programme->cover_image))) {
-                @unlink(public_path($programme->cover_image));
+                $oldImageToDelete = public_path($programme->cover_image);
             }
             $validated['cover_image'] = null;
         } else {
@@ -127,6 +131,10 @@ class ProgrammeController extends Controller
         $validated['sort_order'] = (int) ($validated['sort_order'] ?? 0);
 
         $programme->update($validated);
+
+        if ($oldImageToDelete && file_exists($oldImageToDelete)) {
+            @unlink($oldImageToDelete);
+        }
 
         return redirect()->route('admin.programmes.index')
             ->with('success', 'Programme updated successfully.');

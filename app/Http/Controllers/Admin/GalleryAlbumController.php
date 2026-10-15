@@ -104,26 +104,30 @@ class GalleryAlbumController extends Controller
             $validated['slug'] = Str::slug($validated['title']);
         }
 
-        if ($request->hasFile('cover_image')) {
-            if ($album->cover_image && str_starts_with($album->cover_image, 'uploads/') && file_exists(public_path($album->cover_image))) {
-                @unlink(public_path($album->cover_image));
-            }
+        $oldCoverToDelete = null;
 
-            $validated['cover_image'] = $this->optimizer->optimize(
+        if ($request->hasFile('cover_image')) {
+            $newCover = $this->optimizer->optimize(
                 $request->file('cover_image'),
                 'uploads/gallery/covers',
                 1200,
                 800
             );
+
+            if ($album->cover_image && str_starts_with($album->cover_image, 'uploads/') && file_exists(public_path($album->cover_image))) {
+                $oldCoverToDelete = public_path($album->cover_image);
+            }
+
+            $validated['cover_image'] = $newCover;
         } elseif ($request->filled('cover_image')) {
             $newCover = $request->input('cover_image');
             if ($album->cover_image && $album->cover_image !== $newCover && str_starts_with($album->cover_image, 'uploads/gallery/covers/') && file_exists(public_path($album->cover_image))) {
-                @unlink(public_path($album->cover_image));
+                $oldCoverToDelete = public_path($album->cover_image);
             }
             $validated['cover_image'] = $newCover;
         } elseif ($request->boolean('remove_cover_image') || ($request->has('cover_image') && $request->input('cover_image') === null)) {
             if ($album->cover_image && str_starts_with($album->cover_image, 'uploads/') && file_exists(public_path($album->cover_image))) {
-                @unlink(public_path($album->cover_image));
+                $oldCoverToDelete = public_path($album->cover_image);
             }
             $validated['cover_image'] = null;
         } else {
@@ -134,6 +138,10 @@ class GalleryAlbumController extends Controller
         $validated['sort_order'] = (int) ($validated['sort_order'] ?? 0);
 
         $album->update($validated);
+
+        if ($oldCoverToDelete && file_exists($oldCoverToDelete)) {
+            @unlink($oldCoverToDelete);
+        }
 
         return redirect()->route('admin.gallery.index')
             ->with('success', "Album '{$album->title}' updated successfully.");

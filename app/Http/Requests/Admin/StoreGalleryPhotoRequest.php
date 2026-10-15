@@ -23,12 +23,24 @@ class StoreGalleryPhotoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'photos' => ['required_without:photo', 'array', 'min:1', 'max:50'],
+            'photos' => ['required_without:photo', 'array', 'min:1', 'max:20'],
             'photos.*' => ['image', 'mimes:jpeg,png,jpg,webp,gif', 'max:10240'],
             'photo' => ['required_without:photos', 'image', 'mimes:jpeg,png,jpg,webp,gif', 'max:10240'],
             'caption' => ['nullable', 'string', 'max:255'],
             'alt_text' => ['nullable', 'string', 'max:255'],
             'year' => ['nullable', 'string', 'max:10'],
+        ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'photos.max' => 'You cannot upload more than 20 photos in a single request.',
+            'photos.*.max' => 'Each photo must not exceed 10 MB.',
+            'photo.max' => 'The photo must not exceed 10 MB.',
         ];
     }
 }
