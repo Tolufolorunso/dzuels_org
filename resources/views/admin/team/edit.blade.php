@@ -36,7 +36,17 @@
 
                 {{-- Role --}}
                 <div class="space-y-1.5">
-                    <label for="role" class="block text-xs font-bold uppercase tracking-wider text-stone-700">Role / Title *</label>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label for="role" class="block text-xs font-bold uppercase tracking-wider text-stone-700">Role / Title *</label>
+                        <x-admin.ai-button 
+                            for="role" 
+                            field-name="role" 
+                            field-label="Team Role" 
+                            page-context="Team Directory" 
+                            section-context="Leadership & Staff" 
+                            :sibling-selectors="['name' => '#name', 'group' => '#group', 'field' => '#field']" 
+                        />
+                    </div>
                     <input type="text" id="role" name="role" value="{{ old('role', $member->role) }}" required 
                            class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-maroon focus:ring-1 focus:ring-maroon text-sm outline-none transition-colors" />
                 </div>
@@ -87,7 +97,18 @@
 
                 {{-- Bio --}}
                 <div class="sm:col-span-2 space-y-1.5">
-                    <label for="bio" class="block text-xs font-bold uppercase tracking-wider text-stone-700">Short Bio</label>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label for="bio" class="block text-xs font-bold uppercase tracking-wider text-stone-700">Short Bio</label>
+                        <x-admin.ai-button 
+                            for="bio" 
+                            field-name="bio" 
+                            field-label="Team Member Biography" 
+                            page-context="Team Directory" 
+                            section-context="Professional Biography" 
+                            :image-path="$member->photo"
+                            :sibling-selectors="['name' => '#name', 'role' => '#role', 'group' => '#group', 'field' => '#field']" 
+                        />
+                    </div>
                     <textarea id="bio" name="bio" rows="3" 
                               class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-maroon focus:ring-1 focus:ring-maroon text-sm outline-none transition-colors">{{ old('bio', $member->bio) }}</textarea>
                 </div>

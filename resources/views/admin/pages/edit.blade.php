@@ -54,9 +54,20 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Headline -->
                             <div>
-                                <label for="{{ $section->section_key }}_headline" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
-                                    Section Headline
-                                </label>
+                                <div class="flex items-center justify-between mb-2">
+                                    <label for="{{ $section->section_key }}_headline" class="block text-xs font-bold text-stone-700 uppercase tracking-wider">
+                                        Section Headline
+                                    </label>
+                                    <x-admin.ai-button 
+                                        for="{{ $section->section_key }}_headline" 
+                                        field-name="headline" 
+                                        field-label="Section Headline" 
+                                        page-context="{{ ucfirst($page) }} Page" 
+                                        section-context="{{ $section->headline ?: $section->section_key }}"
+                                        :image-path="$section->image_path"
+                                        :sibling-selectors="['subheadline' => '#'.$section->section_key.'_subheadline', 'body' => '#'.$section->section_key.'_body_text']"
+                                    />
+                                </div>
                                 <input type="text" 
                                        id="{{ $section->section_key }}_headline" 
                                        name="headline" 
@@ -67,9 +78,20 @@
 
                             <!-- Subheadline -->
                             <div>
-                                <label for="{{ $section->section_key }}_subheadline" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
-                                    Subheadline / Eyebrow Badge
-                                </label>
+                                <div class="flex items-center justify-between mb-2">
+                                    <label for="{{ $section->section_key }}_subheadline" class="block text-xs font-bold text-stone-700 uppercase tracking-wider">
+                                        Subheadline / Eyebrow Badge
+                                    </label>
+                                    <x-admin.ai-button 
+                                        for="{{ $section->section_key }}_subheadline" 
+                                        field-name="subheadline" 
+                                        field-label="Subheadline" 
+                                        page-context="{{ ucfirst($page) }} Page" 
+                                        section-context="{{ $section->headline ?: $section->section_key }}"
+                                        :image-path="$section->image_path"
+                                        :sibling-selectors="['headline' => '#'.$section->section_key.'_headline', 'body' => '#'.$section->section_key.'_body_text']"
+                                    />
+                                </div>
                                 <input type="text" 
                                        id="{{ $section->section_key }}_subheadline" 
                                        name="subheadline" 
@@ -81,9 +103,20 @@
 
                         <!-- Body Text -->
                         <div>
-                            <label for="{{ $section->section_key }}_body_text" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
-                                Section Description / Body Copy
-                            </label>
+                            <div class="flex items-center justify-between mb-2">
+                                <label for="{{ $section->section_key }}_body_text" class="block text-xs font-bold text-stone-700 uppercase tracking-wider">
+                                    Section Description / Body Copy
+                                </label>
+                                <x-admin.ai-button 
+                                    for="{{ $section->section_key }}_body_text" 
+                                    field-name="body_text" 
+                                    field-label="Section Description" 
+                                    page-context="{{ ucfirst($page) }} Page" 
+                                    section-context="{{ $section->headline ?: $section->section_key }}"
+                                    :image-path="$section->image_path"
+                                    :sibling-selectors="['headline' => '#'.$section->section_key.'_headline', 'subheadline' => '#'.$section->section_key.'_subheadline']"
+                                />
+                            </div>
                             <textarea id="{{ $section->section_key }}_body_text" 
                                       name="body_text" 
                                       rows="4" 
@@ -95,9 +128,19 @@
                         <!-- Button Text & URL -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
                             <div>
-                                <label for="{{ $section->section_key }}_button_text" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
-                                    Button Text (Optional)
-                                </label>
+                                <div class="flex items-center justify-between mb-2">
+                                    <label for="{{ $section->section_key }}_button_text" class="block text-xs font-bold text-stone-700 uppercase tracking-wider">
+                                        Button Text (Optional)
+                                    </label>
+                                    <x-admin.ai-button 
+                                        for="{{ $section->section_key }}_button_text" 
+                                        field-name="button_text" 
+                                        field-label="Button Call to Action" 
+                                        page-context="{{ ucfirst($page) }} Page" 
+                                        section-context="{{ $section->headline ?: $section->section_key }}"
+                                        :sibling-selectors="['headline' => '#'.$section->section_key.'_headline']"
+                                    />
+                                </div>
                                 <input type="text" 
                                        id="{{ $section->section_key }}_button_text" 
                                        name="button_text" 

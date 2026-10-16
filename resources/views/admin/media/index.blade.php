@@ -650,9 +650,29 @@
                 </div>
 
                 <div class="p-6 space-y-4">
+                    <div class="flex items-center gap-3.5 p-3 bg-stone-50 rounded-2xl border border-stone-200/80" x-show="editingItem?.image_url">
+                        <img :src="editingItem?.image_url" id="admin_media_edit_preview_img" alt="Photo Preview" class="w-14 h-14 object-cover rounded-xl border border-stone-200 shrink-0">
+                        <div class="min-w-0 text-xs">
+                            <p class="font-bold text-stone-800 truncate" x-text="editingItem?.filename || 'Photo Asset'"></p>
+                            <p class="text-[11px] text-stone-400" x-text="(editingItem?.dimensions ? editingItem.dimensions + ' • ' : '') + (editingItem?.formatted_size || '')"></p>
+                        </div>
+                    </div>
+
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1">Display Title / Name</label>
+                        <div class="flex items-center justify-between mb-1">
+                            <label for="admin_media_edit_title" class="block text-xs font-bold uppercase tracking-wider text-stone-700">Display Title / Name</label>
+                            <x-admin.ai-button 
+                                for="admin_media_edit_title" 
+                                field-name="title" 
+                                field-label="Photo Title" 
+                                page-context="Media Library" 
+                                section-context="Photo Item" 
+                                image-selector="#admin_media_edit_preview_img" 
+                                :sibling-selectors="['caption' => '#admin_media_edit_caption']" 
+                            />
+                        </div>
                         <input type="text" 
+                               id="admin_media_edit_title"
                                x-model="editingItem.title" 
                                class="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
                         <p class="text-[11px] text-stone-400 mt-1">Used for library search and administrative labels.</p>
@@ -673,15 +693,39 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1">Caption</label>
-                        <textarea x-model="editingItem.caption" 
+                        <div class="flex items-center justify-between mb-1">
+                            <label for="admin_media_edit_caption" class="block text-xs font-bold uppercase tracking-wider text-stone-700">Caption</label>
+                            <x-admin.ai-button 
+                                for="admin_media_edit_caption" 
+                                field-name="caption" 
+                                field-label="Photo Caption" 
+                                page-context="Media Library" 
+                                section-context="Photo Asset" 
+                                image-selector="#admin_media_edit_preview_img" 
+                                :sibling-selectors="['title' => '#admin_media_edit_title']" 
+                            />
+                        </div>
+                        <textarea id="admin_media_edit_caption"
+                                  x-model="editingItem.caption" 
                                   rows="2" 
                                   class="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-maroon/20 focus:border-maroon"></textarea>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1">Alt Text (Accessibility)</label>
+                        <div class="flex items-center justify-between mb-1">
+                            <label for="admin_media_edit_alt_text" class="block text-xs font-bold uppercase tracking-wider text-stone-700">Alt Text (Accessibility)</label>
+                            <x-admin.ai-button 
+                                for="admin_media_edit_alt_text" 
+                                field-name="alt_text" 
+                                field-label="Photo Alt Text" 
+                                page-context="Media Library" 
+                                section-context="Accessibility & Screen Readers" 
+                                image-selector="#admin_media_edit_preview_img" 
+                                :sibling-selectors="['title' => '#admin_media_edit_title', 'caption' => '#admin_media_edit_caption']" 
+                            />
+                        </div>
                         <input type="text" 
+                               id="admin_media_edit_alt_text"
                                x-model="editingItem.alt_text" 
                                class="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
                         <p class="text-[11px] text-stone-400 mt-1">Recommended for screen readers and SEO.</p>
@@ -733,8 +777,18 @@
                     </template>
 
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1">Collection Title <span class="text-crimson">*</span></label>
+                        <div class="flex items-center justify-between mb-1">
+                            <label for="new_collection_title" class="block text-xs font-bold uppercase tracking-wider text-stone-700">Collection Title <span class="text-crimson">*</span></label>
+                            <x-admin.ai-button 
+                                for="new_collection_title" 
+                                field-name="title" 
+                                field-label="Collection Title" 
+                                page-context="Media Hub" 
+                                section-context="New Collection" 
+                            />
+                        </div>
                         <input type="text" 
+                               id="new_collection_title"
                                x-model="newCollection.title" 
                                placeholder="e.g. Essay Competition, Robotics Camp" 
                                required
@@ -742,16 +796,38 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1">Tagline / Category Kicker</label>
+                        <div class="flex items-center justify-between mb-1">
+                            <label for="new_collection_kicker" class="block text-xs font-bold uppercase tracking-wider text-stone-700">Tagline / Category Kicker</label>
+                            <x-admin.ai-button 
+                                for="new_collection_kicker" 
+                                field-name="kicker" 
+                                field-label="Collection Kicker" 
+                                page-context="Media Hub" 
+                                section-context="Collection Tagline" 
+                                :sibling-selectors="['title' => '#new_collection_title']" 
+                            />
+                        </div>
                         <input type="text" 
+                               id="new_collection_kicker"
                                x-model="newCollection.kicker" 
                                placeholder="e.g. Foundation Programme, Community Welfare" 
                                class="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1">Description</label>
-                        <textarea x-model="newCollection.description" 
+                        <div class="flex items-center justify-between mb-1">
+                            <label for="new_collection_desc" class="block text-xs font-bold uppercase tracking-wider text-stone-700">Description</label>
+                            <x-admin.ai-button 
+                                for="new_collection_desc" 
+                                field-name="description" 
+                                field-label="Collection Description" 
+                                page-context="Media Hub" 
+                                section-context="Collection Summary" 
+                                :sibling-selectors="['title' => '#new_collection_title', 'kicker' => '#new_collection_kicker']" 
+                            />
+                        </div>
+                        <textarea id="new_collection_desc"
+                                  x-model="newCollection.description" 
                                   rows="2" 
                                   placeholder="Brief overview of this initiative..." 
                                   class="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-maroon/20 focus:border-maroon"></textarea>

@@ -20,9 +20,19 @@
                 {{-- Title & Slug Grid --}}
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                        <label for="title" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                            Article Title <span class="text-rose-500">*</span>
-                        </label>
+                        <div class="flex items-center justify-between mb-2">
+                            <label for="title" class="block text-xs font-bold uppercase tracking-wider text-stone-700">
+                                Article Title <span class="text-rose-500">*</span>
+                            </label>
+                            <x-admin.ai-button 
+                                target="#title" 
+                                field-name="title" 
+                                field-label="News Article Title" 
+                                page-context="news" 
+                                section-context="admin_news_create" 
+                                :sibling-targets="['#excerpt' => 'Summary', '#body' => 'Article Body']" 
+                            />
+                        </div>
                         <input type="text" 
                                name="title" 
                                id="title" 
@@ -105,9 +115,19 @@
 
                 {{-- Excerpt --}}
                 <div>
-                    <label for="excerpt" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                        Summary / Excerpt <span class="text-stone-400 font-normal">(Brief summary for cards and search results)</span>
-                    </label>
+                    <div class="flex items-center justify-between mb-2">
+                        <label for="excerpt" class="block text-xs font-bold uppercase tracking-wider text-stone-700">
+                            Summary / Excerpt <span class="text-stone-400 font-normal">(Brief summary for cards and search results)</span>
+                        </label>
+                        <x-admin.ai-button 
+                            target="#excerpt" 
+                            field-name="excerpt" 
+                            field-label="Article Summary / Excerpt" 
+                            page-context="news" 
+                            section-context="admin_news_create" 
+                            :sibling-targets="['#title' => 'Article Title', '#body' => 'Article Body']" 
+                        />
+                    </div>
                     <textarea name="excerpt" 
                               id="excerpt" 
                               rows="2" 
@@ -120,9 +140,19 @@
 
                 {{-- Article Body --}}
                 <div>
-                    <label for="body" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                        Article Body <span class="text-rose-500">*</span>
-                    </label>
+                    <div class="flex items-center justify-between mb-2">
+                        <label for="body" class="block text-xs font-bold uppercase tracking-wider text-stone-700">
+                            Article Body <span class="text-rose-500">*</span>
+                        </label>
+                        <x-admin.ai-button 
+                            target="#body" 
+                            field-name="body" 
+                            field-label="News Article Body Narrative" 
+                            page-context="news" 
+                            section-context="admin_news_create" 
+                            :sibling-targets="['#title' => 'Article Title', '#excerpt' => 'Summary']" 
+                        />
+                    </div>
                     <textarea name="body" 
                               id="body" 
                               rows="12" 
@@ -151,9 +181,19 @@
                     <h3 class="text-xs font-bold uppercase tracking-wider text-stone-900">Search Engine Optimization (SEO)</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
-                            <label for="seo_title" class="block text-xs font-semibold text-stone-600 mb-1">
-                                Meta Title
-                            </label>
+                            <div class="flex items-center justify-between mb-1">
+                                <label for="seo_title" class="block text-xs font-semibold text-stone-600">
+                                    Meta Title
+                                </label>
+                                <x-admin.ai-button 
+                                    target="#seo_title" 
+                                    field-name="seo_title" 
+                                    field-label="SEO Meta Title" 
+                                    page-context="news" 
+                                    section-context="admin_news_create" 
+                                    :sibling-targets="['#title' => 'Article Title', '#excerpt' => 'Summary']" 
+                                />
+                            </div>
                             <input type="text" 
                                    name="seo_title" 
                                    id="seo_title" 
@@ -162,9 +202,19 @@
                                    class="w-full px-4 py-2 rounded-xl border border-stone-300 focus:border-maroon focus:ring-1 focus:ring-maroon text-sm">
                         </div>
                         <div>
-                            <label for="seo_description" class="block text-xs font-semibold text-stone-600 mb-1">
-                                Meta Description
-                            </label>
+                            <div class="flex items-center justify-between mb-1">
+                                <label for="seo_description" class="block text-xs font-semibold text-stone-600">
+                                    Meta Description
+                                </label>
+                                <x-admin.ai-button 
+                                    target="#seo_description" 
+                                    field-name="seo_description" 
+                                    field-label="SEO Meta Description" 
+                                    page-context="news" 
+                                    section-context="admin_news_create" 
+                                    :sibling-targets="['#title' => 'Article Title', '#excerpt' => 'Summary']" 
+                                />
+                            </div>
                             <input type="text" 
                                    name="seo_description" 
                                    id="seo_description" 

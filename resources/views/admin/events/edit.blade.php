@@ -44,9 +44,18 @@
                 {{-- Title & Slug --}}
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                        <label for="title" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                            Event Title <span class="text-rose-500">*</span>
-                        </label>
+                        <div class="flex items-center justify-between mb-2">
+                            <label for="title" class="block text-xs font-bold uppercase tracking-wider text-stone-700">
+                                Event Title <span class="text-rose-500">*</span>
+                            </label>
+                            <x-admin.ai-button 
+                                for="title" 
+                                field-name="title" 
+                                field-label="Event Title" 
+                                page-context="Events Management" 
+                                section-context="Community Event" 
+                            />
+                        </div>
                         <input type="text" 
                                id="title" 
                                name="title" 
@@ -106,9 +115,19 @@
                     </div>
 
                     <div>
-                        <label for="venue" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                            Venue Location
-                        </label>
+                        <div class="flex items-center justify-between mb-2">
+                            <label for="venue" class="block text-xs font-bold uppercase tracking-wider text-stone-700">
+                                Venue Location
+                            </label>
+                            <x-admin.ai-button 
+                                for="venue" 
+                                field-name="venue" 
+                                field-label="Event Venue" 
+                                page-context="Events Management" 
+                                section-context="Location in Ekiti State / Nigeria" 
+                                :sibling-selectors="['title' => '#title']" 
+                            />
+                        </div>
                         <input type="text" 
                                id="venue" 
                                name="venue" 
@@ -121,9 +140,19 @@
                     </div>
 
                     <div>
-                        <label for="theme" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                            Theme / Slogan
-                        </label>
+                        <div class="flex items-center justify-between mb-2">
+                            <label for="theme" class="block text-xs font-bold uppercase tracking-wider text-stone-700">
+                                Theme / Slogan
+                            </label>
+                            <x-admin.ai-button 
+                                for="theme" 
+                                field-name="theme" 
+                                field-label="Theme or Slogan" 
+                                page-context="Events Management" 
+                                section-context="Inspirational Motto" 
+                                :sibling-selectors="['title' => '#title']" 
+                            />
+                        </div>
                         <input type="text" 
                                id="theme" 
                                name="theme" 
@@ -138,9 +167,20 @@
 
                 {{-- Summary --}}
                 <div>
-                    <label for="summary" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                        Short Summary / Teaser <span class="text-rose-500">*</span>
-                    </label>
+                    <div class="flex items-center justify-between mb-2">
+                        <label for="summary" class="block text-xs font-bold uppercase tracking-wider text-stone-700">
+                            Short Summary / Teaser <span class="text-rose-500">*</span>
+                        </label>
+                        <x-admin.ai-button 
+                            for="summary" 
+                            field-name="summary" 
+                            field-label="Event Summary" 
+                            page-context="Events Management" 
+                            section-context="Event Teaser & Highlights" 
+                            :image-path="$event->banner_image"
+                            :sibling-selectors="['title' => '#title', 'theme' => '#theme', 'venue' => '#venue']" 
+                        />
+                    </div>
                     <textarea id="summary" 
                               name="summary" 
                               rows="2" 
@@ -153,9 +193,20 @@
 
                 {{-- Detailed Description --}}
                 <div>
-                    <label for="description" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                        Full Event Narrative & Overview <span class="text-rose-500">*</span>
-                    </label>
+                    <div class="flex items-center justify-between mb-2">
+                        <label for="description" class="block text-xs font-bold uppercase tracking-wider text-stone-700">
+                            Full Event Narrative & Overview <span class="text-rose-500">*</span>
+                        </label>
+                        <x-admin.ai-button 
+                            for="description" 
+                            field-name="description" 
+                            field-label="Event Narrative" 
+                            page-context="Events Management" 
+                            section-context="Comprehensive Event Details" 
+                            :image-path="$event->banner_image"
+                            :sibling-selectors="['title' => '#title', 'theme' => '#theme', 'summary' => '#summary', 'venue' => '#venue']" 
+                        />
+                    </div>
                     <textarea id="description" 
                               name="description" 
                               rows="6" 
@@ -280,9 +331,19 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-stone-100">
                     <div>
-                        <label for="seo_title" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                            SEO Meta Title
-                        </label>
+                        <div class="flex items-center justify-between mb-2">
+                            <label for="seo_title" class="block text-xs font-bold uppercase tracking-wider text-stone-700">
+                                SEO Meta Title
+                            </label>
+                            <x-admin.ai-button 
+                                for="seo_title" 
+                                field-name="seo_title" 
+                                field-label="SEO Meta Title" 
+                                page-context="Events SEO" 
+                                section-context="Search Engine Optimization" 
+                                :sibling-selectors="['title' => '#title']" 
+                            />
+                        </div>
                         <input type="text" 
                                id="seo_title" 
                                name="seo_title" 
@@ -292,9 +353,19 @@
                     </div>
 
                     <div>
-                        <label for="seo_description" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                            SEO Meta Description
-                        </label>
+                        <div class="flex items-center justify-between mb-2">
+                            <label for="seo_description" class="block text-xs font-bold uppercase tracking-wider text-stone-700">
+                                SEO Meta Description
+                            </label>
+                            <x-admin.ai-button 
+                                for="seo_description" 
+                                field-name="seo_description" 
+                                field-label="SEO Meta Description" 
+                                page-context="Events SEO" 
+                                section-context="Search Engine Optimization" 
+                                :sibling-selectors="['title' => '#title', 'summary' => '#summary']" 
+                            />
+                        </div>
                         <input type="text" 
                                id="seo_description" 
                                name="seo_description" 

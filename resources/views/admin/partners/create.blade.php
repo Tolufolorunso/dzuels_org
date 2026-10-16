@@ -28,7 +28,16 @@
             <div class="space-y-5">
                 {{-- Organization Name --}}
                 <div class="space-y-1.5">
-                    <label for="name" class="block text-xs font-bold uppercase tracking-wider text-stone-700">Organization Name *</label>
+                    <div class="flex items-center justify-between">
+                        <label for="name" class="block text-xs font-bold uppercase tracking-wider text-stone-700">Organization Name *</label>
+                        <x-admin.ai-button 
+                            target="#name" 
+                            field-name="name" 
+                            field-label="Partner Organization Name" 
+                            page-context="partners" 
+                            section-context="admin_partners_create" 
+                        />
+                    </div>
                     <input type="text" id="name" name="name" value="{{ old('name') }}" required 
                            class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:border-maroon focus:ring-1 focus:ring-maroon text-sm outline-none transition-colors" 
                            placeholder="e.g. ASCEND Education Foundation" />

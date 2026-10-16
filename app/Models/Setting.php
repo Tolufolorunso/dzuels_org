@@ -156,6 +156,26 @@ class Setting extends Model
     }
 
     /**
+     * Retrieve the configured Google Gemini API key with fallback to .env.
+     */
+    public static function getGeminiApiKey(): ?string
+    {
+        $dbKey = trim((string) static::get('gemini_api_key', ''));
+
+        return $dbKey !== '' ? $dbKey : env('GEMINI_API_KEY');
+    }
+
+    /**
+     * Retrieve the configured Google Gemini model with fallback to default.
+     */
+    public static function getGeminiModel(): string
+    {
+        $model = trim((string) static::get('gemini_model', ''));
+
+        return $model !== '' ? $model : env('GEMINI_MODEL', 'gemini-1.5-flash');
+    }
+
+    /**
      * Invalidate the settings cache.
      */
     public static function clearCache(): void

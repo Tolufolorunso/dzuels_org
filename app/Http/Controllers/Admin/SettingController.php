@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UpdateSettingsRequest;
 use App\Models\Setting;
+use App\Services\GeminiService;
 use App\Services\ImpactStatsService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class SettingController extends Controller
@@ -60,6 +63,9 @@ class SettingController extends Controller
             'social_facebook' => ['string', 'social'],
             'social_twitter' => ['string', 'social'],
             'social_instagram' => ['string', 'social'],
+
+            'gemini_api_key' => ['string', 'ai'],
+            'gemini_model' => ['string', 'ai'],
         ];
 
         foreach ($typeMap as $key => [$type, $group]) {
@@ -69,6 +75,19 @@ class SettingController extends Controller
 
         return redirect()->route('admin.settings')
             ->with('success', 'Site settings updated successfully.');
+    }
+
+    /**
+     * Test the configured or submitted Google Gemini API connection.
+     */
+    public function testGemini(Request $request, GeminiService $geminiService): JsonResponse
+    {
+        $apiKey = $request->input('api_key');
+        $model = $request->input('model');
+
+        $result = $geminiService->testConnection($apiKey, $model);
+
+        return response()->json($result);
     }
 
     /**

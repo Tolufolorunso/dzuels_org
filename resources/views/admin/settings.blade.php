@@ -272,9 +272,18 @@
                             </div>
 
                             <div>
-                                <label for="contact_address" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
-                                    Physical Headquarters Address *
-                                </label>
+                                <div class="flex items-center justify-between mb-2">
+                                    <label for="contact_address" class="block text-xs font-bold text-stone-700 uppercase tracking-wider">
+                                        Physical Headquarters Address *
+                                    </label>
+                                    <x-admin.ai-button 
+                                        for="contact_address" 
+                                        field-name="contact_address" 
+                                        field-label="Headquarters Address" 
+                                        page-context="Site Settings" 
+                                        section-context="Foundation Secretariat" 
+                                    />
+                                </div>
                                 <input 
                                     id="contact_address" 
                                     type="text" 
@@ -291,9 +300,18 @@
                         <h3 class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-3">Operating Schedule & Timezone</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
                             <div>
-                                <label for="contact_working_hours" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
-                                    Working Hours
-                                </label>
+                                <div class="flex items-center justify-between mb-2">
+                                    <label for="contact_working_hours" class="block text-xs font-bold text-stone-700 uppercase tracking-wider">
+                                        Working Hours
+                                    </label>
+                                    <x-admin.ai-button 
+                                        for="contact_working_hours" 
+                                        field-name="contact_working_hours" 
+                                        field-label="Working Hours" 
+                                        page-context="Site Settings" 
+                                        section-context="Operating Schedule" 
+                                    />
+                                </div>
                                 <input 
                                     id="contact_working_hours" 
                                     type="text" 
@@ -319,9 +337,18 @@
                             </div>
 
                             <div>
-                                <label for="contact_working_days_note" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
-                                    Holiday / Schedule Note
-                                </label>
+                                <div class="flex items-center justify-between mb-2">
+                                    <label for="contact_working_days_note" class="block text-xs font-bold text-stone-700 uppercase tracking-wider">
+                                        Holiday / Schedule Note
+                                    </label>
+                                    <x-admin.ai-button 
+                                        for="contact_working_days_note" 
+                                        field-name="contact_working_days_note" 
+                                        field-label="Schedule Note" 
+                                        page-context="Site Settings" 
+                                        section-context="Office Availability" 
+                                    />
+                                </div>
                                 <input 
                                     id="contact_working_days_note" 
                                     type="text" 
@@ -493,6 +520,152 @@
                             value="{{ old('social_instagram', $settings['social_instagram'] ?? 'https://instagram.com') }}" 
                             class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon focus:border-transparent transition-all"
                         >
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 6: AI Content Assistant (Google Gemini) -->
+            <div 
+                x-data="{
+                    testing: false,
+                    status: null,
+                    message: '',
+                    testConnection() {
+                        const key = document.getElementById('gemini_api_key')?.value || '';
+                        const model = document.getElementById('gemini_model')?.value || '';
+                        this.testing = true;
+                        this.status = null;
+                        this.message = '';
+
+                        fetch('{{ route('admin.settings.test-gemini') }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({ api_key: key, model: model })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            this.status = data.success ? 'success' : 'error';
+                            this.message = data.message;
+                        })
+                        .catch(err => {
+                            this.status = 'error';
+                            this.message = 'Network error while contacting server.';
+                        })
+                        .finally(() => {
+                            this.testing = false;
+                        });
+                    }
+                }"
+                class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200/80 shadow-xs space-y-6"
+            >
+                <div class="flex items-center justify-between pb-4 border-b border-stone-100 flex-wrap gap-4">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-purple-100 text-purple-800 flex items-center justify-center font-bold text-sm">6</span>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h2 class="text-base font-bold text-stone-900">AI Writing Assistant (Google Gemini)</h2>
+                                <span class="px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide bg-purple-100 text-purple-700 rounded-md">New</span>
+                            </div>
+                            <p class="text-xs text-stone-500">Powers contextual text generation, prompt tweaks, and multimodal vision photo captions across the dashboard</p>
+                        </div>
+                    </div>
+
+                    <button 
+                        type="button" 
+                        @click="testConnection()" 
+                        :disabled="testing"
+                        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-stone-900 text-white hover:bg-stone-800 transition-colors shadow-xs disabled:opacity-50 cursor-pointer"
+                    >
+                        <template x-if="testing">
+                            <svg class="animate-spin w-3.5 h-3.5 text-cream" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                            </svg>
+                        </template>
+                        <template x-if="!testing">
+                            <svg class="w-3.5 h-3.5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </template>
+                        <span x-text="testing ? 'Testing Connection...' : 'Test Connection'"></span>
+                    </button>
+                </div>
+
+                <!-- Test Connection Feedback Banner -->
+                <div x-show="message" x-cloak class="p-3.5 rounded-2xl text-xs font-medium transition-all"
+                     :class="status === 'success' ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-rose-50 text-rose-800 border border-rose-200'">
+                    <div class="flex items-center gap-2">
+                        <template x-if="status === 'success'">
+                            <svg class="w-4 h-4 text-emerald-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                        </template>
+                        <template x-if="status === 'error'">
+                            <svg class="w-4 h-4 text-rose-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                        </template>
+                        <span x-text="message"></span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-2 space-y-2" x-data="{ showKey: false }">
+                        <label for="gemini_api_key" class="block text-xs font-bold text-stone-700 uppercase tracking-wider">
+                            Google Gemini API Key
+                        </label>
+                        <div class="relative">
+                            <input 
+                                id="gemini_api_key" 
+                                :type="showKey ? 'text' : 'password'" 
+                                name="gemini_api_key" 
+                                value="{{ old('gemini_api_key', $settings['gemini_api_key'] ?? '') }}" 
+                                placeholder="AIzaSy..."
+                                class="w-full pl-4 pr-11 py-2.5 rounded-xl border border-stone-300 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-maroon focus:border-transparent transition-all"
+                            >
+                            <button 
+                                type="button" 
+                                @click="showKey = !showKey" 
+                                class="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 cursor-pointer"
+                                :title="showKey ? 'Hide key' : 'Show key'"
+                            >
+                                <svg x-show="!showKey" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                                <svg x-show="showKey" x-cloak class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
+                                </svg>
+                            </button>
+                        </div>
+                        <p class="text-[11px] text-stone-500">
+                            Obtain a free API key from <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="text-maroon underline font-medium">Google AI Studio</a>. If left empty, falls back to <code class="font-mono text-stone-600 bg-stone-100 px-1 py-0.5 rounded">GEMINI_API_KEY</code> in your environment.
+                        </p>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="gemini_model" class="block text-xs font-bold text-stone-700 uppercase tracking-wider">
+                            AI Model
+                        </label>
+                        <select 
+                            id="gemini_model" 
+                            name="gemini_model" 
+                            class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon focus:border-transparent transition-all bg-white"
+                        >
+                            @php
+                                $selectedModel = old('gemini_model', $settings['gemini_model'] ?? 'gemini-1.5-flash');
+                            @endphp
+                            <option value="gemini-1.5-flash" {{ $selectedModel === 'gemini-1.5-flash' ? 'selected' : '' }}>Gemini 1.5 Flash (Fast, Multimodal - Recommended)</option>
+                            <option value="gemini-2.0-flash" {{ $selectedModel === 'gemini-2.0-flash' ? 'selected' : '' }}>Gemini 2.0 Flash (Next-Gen)</option>
+                            <option value="gemini-1.5-pro" {{ $selectedModel === 'gemini-1.5-pro' ? 'selected' : '' }}>Gemini 1.5 Pro (Deep Reasoning)</option>
+                        </select>
+                        <p class="text-[11px] text-stone-500">
+                            All listed models support multimodal vision for analyzing uploaded gallery and section photos.
+                        </p>
                     </div>
                 </div>
             </div>

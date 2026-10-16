@@ -1,6 +1,6 @@
 # Dzuels Educational Foundation - Project Overview
 
-<!-- blueprint:source-hash 0e7e68dedf1e6211b4fefe69bde56b8efd995ddae9c85b3ee7a26b3aa852894d -->
+<!-- blueprint:source-hash 40baa8274c789794196bb6bb07535c2741da735dee04d68b8e2b75613d68cb3f -->
 
 > Rebuild of dzuelsfoundation.org as a modern, high-trust, mobile-first Laravel web application powering education support, digital literacy, and community welfare in Nigeria.
 
@@ -12,6 +12,7 @@ The web application was rebuilt from the ground up to establish an authentic, hi
 
 - **Milestones 1–8 (Completed & Shipped):** Overhauled platform across 30 features: WCAG 2.2 AA accessibility, responsive design, brand asset suite, ITD 2026 overhaul, server-rendered lightbox, WordPress-style Page CMS, multi-tier RBAC (`super_admin`, `editor`, `support`), MySQL export tooling, hotline updates, hero overlays, dynamic contact CMS, dynamic partners strip, resilient media pipeline with GD fallback, multi-photo bulk uploader, dynamic site logo in settings, Givebutter U.S. donations, authentic 6 Impact Causes CMS, $\le 180\text{ KB}$ WebP optimization engine, dynamic 4-photo Famoyinka Library CMS, Get Involved overhaul, universal media picker `<x-admin.media-picker>`, and the Central Media Hub (`/admin/media`) with multi-criteria search, date filters, drag-and-drop WebP uploading, and cPanel public path resolution.
 - **Milestone 9 (Completed & Shipped):** Dynamic Media Collections, Authentic Photo Integration & cPanel Root Alignment across Feature 31: unified `GalleryAlbum` collections with in-dashboard "+ New Collection" modal, authentic photo curation and $\le 180\text{ KB}$ WebP optimization across 7 program albums, CMS hero/cause seeding, deletion of temporary `picture/` directory, universal root `index.php` and `.htaccess` deployment config, and fresh MariaDB dump export (`dzuels_database.sql`).
+- **Milestone 10: Gemini AI Content Assistant & Multimodal Admin Suite (Active Target):** Integrate Google Gemini into the admin dashboard to assist staff in generating and refining text across all CMS page sections, site settings, programmes, events, team bios, and media collections. Provide context-aware suggestions, prompt tweaks, and multimodal photo inspection for accurate alt text and captions, with zero heavy package dependencies, British English defaults, and Core FTP tracking.
 
 ## Users
 
@@ -20,8 +21,8 @@ The web application was rebuilt from the ground up to establish an authentic, hi
 - **Event Participants & Schools:** Students and educators attending ITD 2026 to learn AI tools, spelling bees, essay contests, and reading competitions.
 - **Beneficiaries, Parents & Students:** Community members accessing literacy resources, activities, and the Famoyinka Memorial Children's Library.
 - **Foundation Staff (Role-Based Admin Users):**
-  - **Super Admin:** Full platform control, managing staff accounts, role permissions, global settings (logo, multi-phone lines, Givebutter link, hours/timezone), media library collections, deletions, and database exports.
-  - **Editor / Content Manager:** Accessing the Central Media Library to create collections, upload and organize photos, update page content, programmes, events, sponsors, partner logos, and gallery photos.
+  - **Super Admin:** Full platform control, managing staff accounts, AI configuration and Gemini API keys, role permissions, global settings (logo, multi-phone lines, Givebutter link, hours/timezone), media library collections, deletions, and database exports.
+  - **Editor / Content Manager:** Accessing the Central Media Library to create collections, upload and organize photos, update page content, programmes, events, sponsors, partner logos, and generate text with the Gemini AI assistant.
   - **Support / Viewer:** Reading incoming contact enquiries, volunteer submissions, and event records.
 
 ## Usage model
@@ -73,6 +74,10 @@ The web application was rebuilt from the ground up to establish an authentic, hi
 
 31. **Dynamic media collections/categories, authentic photo curation from picture archive, database SQL export & cPanel root architecture alignment** - Unify Media Categories with `GalleryAlbum` so categories in the Central Media Hub (`/admin/media`) and `<x-admin.media-picker>` are dynamic, with a "+ New Collection" creation modal and optional public gallery toggle; curate, optimize ($\le 180\text{ KB}$ WebP), and seed authentic photos from `picture/` across Essay Competition, Girls Day, ITD, Reading/Library, Spelling Bee, WDADA, and General Community; update CMS heroes, causes, and page sections with real imagery and catalog them in `MediaItem`; delete the temporary `picture/` folder; add root deployment configuration (`index.php`, `.htaccess`) supporting direct execution in `/home/dzuefjel/dzuels_org` without breaking local development; and export a fresh `dzuels_database.sql` for 1-click phpMyAdmin import. *(Completed)*
 
+### Milestone 10 Features (Active Target)
+
+32. **Gemini AI content assistant, multimodal image analysis & universal admin input integration** - Create native `GeminiService` calling the Google GenAI REST API using Laravel's `Http` client (zero heavy packages); add `gemini_api_key` and model selector in Site Settings (`/admin/settings`) with an interactive "Test Connection" button, falling back to `.env`; implement secure endpoint `POST /admin/ai/generate` enforcing British English and injecting page, section, field label, and sibling context; build reusable `<x-admin.ai-button>` with an Alpine.js floating popover offering loading feedback, suggestion preview, prompt tweak input, and `Insert`/`Regenerate`/`Cancel` controls; support multimodal vision inspection for photos to generate accurate alt text, captions, and section copy; deploy across CMS Page Sections, Site Settings, Programmes, Events, Team, and Central Media Hub / Gallery; and track all modified files in `cpanel_changed_files.txt` for Core FTP deployment.
+
 ### Deferred Ideas (Non-Roadmap)
 
 - **Annual reports and downloads**: PDF uploads on a public Reports page.
@@ -104,7 +109,7 @@ The web application was rebuilt from the ground up to establish an authentic, hi
 - `event_sponsors`: `id`, `event_id` (FK), `name`, `logo_path`, `tier`, `website_url`, `sort_order`, `timestamps`
 
 ### Setting
-- `id` (bigint, PK), `key` (string, unique) - `site_logo`, `givebutter_url`, `contact_phone_1` through `contact_phone_5`, `contact_working_hours`, `contact_timezone`, `contact_working_days_note`, impact numbers, banking, registration, `value` (text, nullable), `type` (text, integer, json, boolean), `timestamps`
+- `id` (bigint, PK), `key` (string, unique) - `gemini_api_key`, `gemini_model`, `site_logo`, `givebutter_url`, `contact_phone_1` through `contact_phone_5`, `contact_working_hours`, `contact_timezone`, `contact_working_days_note`, impact numbers, banking, registration, `value` (text, nullable), `type` (text, integer, json, boolean), `timestamps`
 
 ### Programme
 - `id` (bigint, PK), `title` (string), `slug` (string, unique), `summary` (text), `body` (longText), `cover_image` (string, nullable), `partner_name` (string, nullable), `sort_order` (integer), `is_featured` (boolean), `timestamps`
@@ -124,12 +129,13 @@ The web application was rebuilt from the ground up to establish an authentic, hi
 ## Tech stack
 
 - **Backend:** Laravel 12 on PHP 8.3 / 8.4, MariaDB 10.3+ / MySQL 8.0+ in development and production (`server161.web-hosting.com`), Eloquent ORM.
+- **AI Integration:** Google Gemini REST API via native Laravel `Http` client (`GeminiService`), zero external dependencies, multimodal vision support.
 - **Image Optimization & Upload Pipeline:** Native PHP GD (`imagewebp`, `imagecopyresampled`) with zero external package dependencies. Strict iterative optimization loop enforcing <= 180 KB WebP output and automated uncompressed original deletion.
 - **Admin Panel:** Tailored administrative dashboard at `/admin` with role-based authorization (Super Admin, Editor, Support).
 - **Frontend Templates:** Blade server-side templates with modular components.
 - **Styling:** Tailwind CSS v4 (`@tailwindcss/vite`) using CSS tokens. Strict zero-horizontal-overflow rules with `max-w-full`.
-- **JavaScript:** Lightweight Alpine.js for interactive widgets, lightbox, multi-photo bulk upload, central media manager, and media picker modal.
-- **Deployment Manifest:** Project root `cpanel_changed_files.txt` tracking created and modified files for selective cPanel synchronization.
+- **JavaScript:** Lightweight Alpine.js for interactive widgets, lightbox, multi-photo bulk upload, central media manager, media picker modal, and AI preview popover.
+- **Deployment Manifest:** Project root `cpanel_changed_files.txt` tracking created and modified files for Core FTP synchronization.
 - **Testing & Quality:** PHPUnit 12 (`php artisan test`) and Laravel Pint code style formatting.
 
 ## Monetization
@@ -146,14 +152,14 @@ Non-profit charity donations. The platform does not sell products or show advert
   - Maroon Heading: `#6A0406` | Crimson Primary: `#B4070A` | Warm Cream: `#F9DEC9` | Soft Mint Accent: `#56E39F` | Body Text: `#3B4456`
   - Page Background (Light default): `#FFFFFF` | Dark Mode Background: `#140607` | Dark Mode Surface: `#241012` | Footer Background: `#2B0203`
 - **Core Public Routes:**
-  - `/` (Home), `/about` (About Us), `/programmes` & `/programmes/{slug}`, `/events` & `/events/{slug}`, `/gallery` & `/gallery/{album}`, `/donate`, `/get-involved`, `/contact`, `/privacy-policy`, `/admin` (Dashboard & Central Media Hub).
+  - `/` (Home), `/about` (About Us), `/programmes` & `/programmes/{slug}`, `/events` & `/events/{slug}`, `/gallery` & `/gallery/{album}`, `/donate`, `/get-involved`, `/contact`, `/privacy-policy`, `/admin` (Dashboard, Media Hub, Settings).
 
 ## Deployment
 
 - **Target Hosting:** Namecheap cPanel (`server161.web-hosting.com`) with PHP 8.3/8.4 and MariaDB 10.3+ under root folder `/home/dzuefjel/dzuels_org`.
 - **Root Document Root Support:** Universal `index.php` and `.htaccess` at the repository root allowing direct execution where `index.php`, `.htaccess`, `front/`, `build/`, and `uploads/` sit at root level, while preserving local `public/index.php` development.
 - **Database Migration:** Managed via root `dzuels_database.sql` and `php artisan db:export-sql` for 1-click import into cPanel phpMyAdmin.
-- **File Upload Tracking:** Active `cpanel_changed_files.txt` at project root.
+- **File Upload Tracking:** Active `cpanel_changed_files.txt` at project root formatted for Core FTP.
 - **Web Root Alignment:** Explicit binding of `$app->usePublicPath(__DIR__)` ensuring all uploaded assets write directly to the active web folder without 404 path mismatches.
 - **Domain:** `dzuelsfoundation.org` with AutoSSL / Let's Encrypt certificates.
 - **Build Sequence:** `composer install --no-dev --optimize-autoloader`, `npm run build`, `php artisan optimize`.
@@ -161,5 +167,4 @@ Non-profit charity donations. The platform does not sell products or show advert
 
 ## Open questions
 
-- **Plan alignment:** All 31 planned features across Milestones 1–9 are completed and shipped in `blueprint/build-plan.md` and archived under `blueprint/history/features/`. In `blueprint/project-plan.md`, Milestone 9 / Feature 31 is still labeled "(Active Target)"; updating `project-plan.md` to label Milestone 9 as "(Completed & Shipped)" will keep both planning documents completely synchronized.
-- **Open findings:** The findings ledger (`blueprint/context/findings.md`) contains 6 open P1 findings (F-01 through F-06) regarding PHP upload limits and fallback storage that should be resolved with `/fix` before adding new features or preparing a production release.
+None. The project plan and build plan are completely aligned on Milestone 10 (Feature 32).

@@ -29,9 +29,18 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {{-- Title --}}
                 <div class="sm:col-span-2">
-                    <label for="title" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                        Collection Title <span class="text-rose-500">*</span>
-                    </label>
+                    <div class="flex items-center justify-between mb-2">
+                        <label for="title" class="block text-xs font-bold uppercase tracking-wider text-stone-700">
+                            Collection Title <span class="text-rose-500">*</span>
+                        </label>
+                        <x-admin.ai-button 
+                            for="title" 
+                            field-name="title" 
+                            field-label="Collection Title" 
+                            page-context="Photo Gallery" 
+                            section-context="Photo Album Collection" 
+                        />
+                    </div>
                     <input type="text" 
                            id="title" 
                            name="title" 
@@ -60,9 +69,19 @@
 
                 {{-- Kicker --}}
                 <div>
-                    <label for="kicker" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                        Kicker Badge / Sub-heading
-                    </label>
+                    <div class="flex items-center justify-between mb-2">
+                        <label for="kicker" class="block text-xs font-bold uppercase tracking-wider text-stone-700">
+                            Kicker Badge / Sub-heading
+                        </label>
+                        <x-admin.ai-button 
+                            for="kicker" 
+                            field-name="kicker" 
+                            field-label="Collection Kicker" 
+                            page-context="Photo Gallery" 
+                            section-context="Album Category Badge" 
+                            :sibling-selectors="['title' => '#title']" 
+                        />
+                    </div>
                     <input type="text" 
                            id="kicker" 
                            name="kicker" 
@@ -75,9 +94,20 @@
 
                 {{-- Description --}}
                 <div class="sm:col-span-2">
-                    <label for="description" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                        Description / Summary
-                    </label>
+                    <div class="flex items-center justify-between mb-2">
+                        <label for="description" class="block text-xs font-bold uppercase tracking-wider text-stone-700">
+                            Description / Summary
+                        </label>
+                        <x-admin.ai-button 
+                            for="description" 
+                            field-name="description" 
+                            field-label="Collection Description" 
+                            page-context="Photo Gallery" 
+                            section-context="Album Overview" 
+                            :image-path="$album->cover_image"
+                            :sibling-selectors="['title' => '#title', 'kicker' => '#kicker']" 
+                        />
+                    </div>
                     <textarea id="description" 
                               name="description" 
                               rows="3" 

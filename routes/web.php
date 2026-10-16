@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\Admin\AiContentController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -96,6 +97,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/media/{mediaItem}', [MediaLibraryController::class, 'destroy'])->name('media.destroy');
         Route::post('/media/bulk-delete', [MediaLibraryController::class, 'bulkDestroy'])->name('media.bulk-destroy');
 
+        // AI Content Generation Assistant
+        Route::post('/ai/generate', [AiContentController::class, 'generate'])->name('ai.generate')->middleware('throttle:30,1');
+
         // Staff Profile & Password Security
         Route::get('/profile', [AdminProfileController::class, 'edit'])->name('profile.password');
         Route::put('/profile/password', [AdminProfileController::class, 'updatePassword'])->name('profile.password.update');
@@ -110,6 +114,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/settings', [SettingController::class, 'index'])->name('settings');
             Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
             Route::post('/settings/sync', [SettingController::class, 'syncApi'])->name('settings.sync');
+            Route::post('/settings/test-gemini', [SettingController::class, 'testGemini'])->name('settings.test-gemini');
 
             // Staff User Management
             Route::patch('/users/{user}/toggle', [AdminUserController::class, 'toggleActive'])->name('users.toggle');

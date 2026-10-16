@@ -19,6 +19,31 @@ class DatabaseExportService
     ];
 
     /**
+     * Tables that should only have their schema exported (zero rows dumped).
+     * Transient cache, session, and job queue state should not pollute shared SQL dumps.
+     *
+     * @var array<int, string>
+     */
+    protected array $schemaOnlyTables = [
+        'cache',
+        'cache_locks',
+        'sessions',
+        'jobs',
+        'job_batches',
+        'failed_jobs',
+        'password_reset_tokens',
+    ];
+
+    /**
+     * Settings keys that hold sensitive API keys or credentials and must be redacted.
+     *
+     * @var array<int, string>
+     */
+    protected array $redactedSettingKeys = [
+        'gemini_api_key',
+    ];
+
+    /**
      * Specific priority table ordering to respect foreign key hierarchies.
      * Independent parent tables first, followed by child tables.
      *
@@ -83,7 +108,8 @@ class DatabaseExportService
             $ddl = $this->generateTableDdl($table);
             fwrite($handle, $ddl."\n\n");
 
-            $rowCount = DB::table($table)->count();
+            $isSchemaOnly = in_array($table, $this->schemaOnlyTables, true);
+            $rowCount = $isSchemaOnly ? 0 : DB::table($table)->count();
             $tableStats[$table] = $rowCount;
 
             $dml = $this->dumpTableData($table, $rowCount);
@@ -357,8 +383,12 @@ class DatabaseExportService
         foreach ($chunks as $chunk) {
             $valueRows = [];
             foreach ($chunk as $row) {
+                $rowArray = (array) $row;
+                if ($table === 'settings' && isset($rowArray['key']) && in_array($rowArray['key'], $this->redactedSettingKeys, true)) {
+                    $rowArray['value'] = null;
+                }
                 $values = [];
-                foreach ((array) $row as $val) {
+                foreach ($rowArray as $val) {
                     $values[] = $this->formatSqlValue($val);
                 }
                 $valueRows[] = '('.implode(', ', $values).')';

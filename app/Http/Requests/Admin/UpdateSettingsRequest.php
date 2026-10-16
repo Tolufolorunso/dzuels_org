@@ -58,6 +58,10 @@ class UpdateSettingsRequest extends FormRequest
             'social_facebook' => ['nullable', 'url', 'max:255'],
             'social_twitter' => ['nullable', 'url', 'max:255'],
             'social_instagram' => ['nullable', 'url', 'max:255'],
+
+            // AI Writing Assistant (Google Gemini)
+            'gemini_api_key' => ['nullable', 'string', 'max:255'],
+            'gemini_model' => ['nullable', 'string', 'max:100'],
         ];
     }
 }

@@ -20,9 +20,18 @@
                 {{-- Title & Slug Grid --}}
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                        <label for="title" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                            Programme Title <span class="text-rose-500">*</span>
-                        </label>
+                        <div class="flex items-center justify-between mb-2">
+                            <label for="title" class="block text-xs font-bold uppercase tracking-wider text-stone-700">
+                                Programme Title <span class="text-rose-500">*</span>
+                            </label>
+                            <x-admin.ai-button 
+                                for="title" 
+                                field-name="title" 
+                                field-label="Programme Title" 
+                                page-context="Programmes Management" 
+                                section-context="Educational Initiative" 
+                            />
+                        </div>
                         <input type="text" 
                                name="title" 
                                id="title" 
@@ -83,9 +92,19 @@
 
                 {{-- Summary --}}
                 <div>
-                    <label for="summary" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                        Short Summary <span class="text-rose-500">*</span>
-                    </label>
+                    <div class="flex items-center justify-between mb-2">
+                        <label for="summary" class="block text-xs font-bold uppercase tracking-wider text-stone-700">
+                            Short Summary <span class="text-rose-500">*</span>
+                        </label>
+                        <x-admin.ai-button 
+                            for="summary" 
+                            field-name="summary" 
+                            field-label="Programme Summary" 
+                            page-context="Programmes Management" 
+                            section-context="Programme Overview" 
+                            :sibling-selectors="['title' => '#title', 'partner_name' => '#partner_name']" 
+                        />
+                    </div>
                     <textarea name="summary" 
                               id="summary" 
                               rows="3" 
@@ -99,9 +118,19 @@
 
                 {{-- Narrative Body --}}
                 <div>
-                    <label for="body" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                        Full Programme Narrative (Body) <span class="text-rose-500">*</span>
-                    </label>
+                    <div class="flex items-center justify-between mb-2">
+                        <label for="body" class="block text-xs font-bold uppercase tracking-wider text-stone-700">
+                            Full Programme Narrative (Body) <span class="text-rose-500">*</span>
+                        </label>
+                        <x-admin.ai-button 
+                            for="body" 
+                            field-name="body" 
+                            field-label="Programme Narrative" 
+                            page-context="Programmes Management" 
+                            section-context="Full Initiative Narrative" 
+                            :sibling-selectors="['title' => '#title', 'summary' => '#summary', 'partner_name' => '#partner_name']" 
+                        />
+                    </div>
                     <textarea name="body" 
                               id="body" 
                               rows="8" 
@@ -158,7 +187,17 @@
                     
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
-                            <label for="seo_title" class="block text-xs font-medium text-stone-700 mb-1">SEO Title</label>
+                            <div class="flex items-center justify-between mb-1">
+                                <label for="seo_title" class="block text-xs font-medium text-stone-700">SEO Title</label>
+                                <x-admin.ai-button 
+                                    for="seo_title" 
+                                    field-name="seo_title" 
+                                    field-label="SEO Meta Title" 
+                                    page-context="Programmes SEO" 
+                                    section-context="Search Engine Optimization" 
+                                    :sibling-selectors="['title' => '#title']" 
+                                />
+                            </div>
                             <input type="text" 
                                    name="seo_title" 
                                    id="seo_title" 
@@ -168,7 +207,17 @@
                         </div>
 
                         <div>
-                            <label for="seo_description" class="block text-xs font-medium text-stone-700 mb-1">SEO Description</label>
+                            <div class="flex items-center justify-between mb-1">
+                                <label for="seo_description" class="block text-xs font-medium text-stone-700">SEO Description</label>
+                                <x-admin.ai-button 
+                                    for="seo_description" 
+                                    field-name="seo_description" 
+                                    field-label="SEO Meta Description" 
+                                    page-context="Programmes SEO" 
+                                    section-context="Search Engine Optimization" 
+                                    :sibling-selectors="['title' => '#title', 'summary' => '#summary']" 
+                                />
+                            </div>
                             <input type="text" 
                                    name="seo_description" 
                                    id="seo_description" 

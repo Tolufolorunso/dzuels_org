@@ -178,6 +178,20 @@ class SettingSeeder extends Seeder
                 'type' => 'string',
                 'group' => 'social',
             ],
+
+            // AI Content Assistant (Google Gemini)
+            [
+                'key' => 'gemini_api_key',
+                'value' => null,
+                'type' => 'string',
+                'group' => 'ai',
+            ],
+            [
+                'key' => 'gemini_model',
+                'value' => 'gemini-1.5-flash',
+                'type' => 'string',
+                'group' => 'ai',
+            ],
         ];
 
         foreach ($defaults as $setting) {

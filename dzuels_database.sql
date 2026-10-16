@@ -1,7 +1,7 @@
 -- =====================================================================
 -- Dzuels Educational Foundation - Production Database Export
 -- Target: cPanel phpMyAdmin / MySQL 5.7+ / MariaDB 10.3+
--- Generated: 2026-10-14 22:06:16 UTC
+-- Generated: 2026-10-16 08:00:07 UTC
 -- Laravel: 13.35.0 | PHP: 8.4.7
 -- =====================================================================
 
@@ -123,16 +123,7 @@ CREATE TABLE `sessions` (
   KEY `sessions_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `sessions` (1 rows)
---
-
-LOCK TABLES `sessions` WRITE;
-/*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
-INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('ziRlanGLRgBFLUziiaq3wWyKLJqGkuOK9gcWXspE', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJFT3M0cUhSaVozT2lMRzlHRENURkdDdmVBT2NaU3BPQUJmanl3N3NiIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL2xvY2FsaG9zdDo4MDAwXC9hZG1pblwvcGFnZXNcL2hvbWUiLCJyb3V0ZSI6ImFkbWluLnBhZ2VzLmVkaXQifSwiX2ZsYXNoIjp7Im9sZCI6W10sIm5ldyI6W119LCJ1cmwiOltdLCJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI6MSwicGFzc3dvcmRfaGFzaF93ZWIiOiJkZTFkMjcwNDlmZGJjODdmOGE5MzQyYzVkNmM4N2IyYmE3YTk1NWI4NWM3MTEzMmViNWY4Y2E5YmQ1ZDA1NzgxIn0=', 1792010776);
-/*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
-UNLOCK TABLES;
+-- Dumping data for table `sessions`: 0 rows (empty)
 
 --
 -- Table structure for table `cache`
@@ -147,16 +138,7 @@ CREATE TABLE `cache` (
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `cache` (1 rows)
---
-
-LOCK TABLES `cache` WRITE;
-/*!40000 ALTER TABLE `cache` DISABLE KEYS */;
-INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('dzuels-cache-dzuels_site_settings', 'a:26:{s:17:"stat_ict_students";i:165;s:22:"stat_literacy_students";i:591;s:22:"stat_schools_supported";i:15;s:14:"stat_feed_mode";s:6:"manual";s:17:"stat_api_endpoint";s:0:"";s:15:"contact_phone_1";s:17:"+234 904 249 3883";s:15:"contact_phone_2";s:17:"+234 810 000 0000";s:13:"contact_email";s:25:"info@dzuelsfoundation.org";s:15:"contact_address";s:51:"12b Doherty Road, Ijero-Ekiti, Ekiti State, Nigeria";s:15:"flutterwave_url";s:40:"https://flutterwave.com/pay/j0byxgjs0nma";s:9:"bank_name";s:33:"Guaranty Trust Bank (GTBank) Plc.";s:17:"bank_account_name";s:29:"Dzuels Educational Foundation";s:19:"bank_account_number";s:10:"0450072850";s:19:"registration_number";s:16:"CAC/IT/NO 123456";s:15:"social_linkedin";s:20:"https://linkedin.com";s:15:"social_facebook";s:20:"https://facebook.com";s:14:"social_twitter";s:19:"https://twitter.com";s:16:"social_instagram";s:21:"https://instagram.com";s:15:"contact_phone_3";s:0:"";s:15:"contact_phone_4";s:0:"";s:15:"contact_phone_5";s:0:"";s:21:"contact_working_hours";s:32:"Mon – Fri: 8:00 AM – 5:00 PM";s:16:"contact_timezone";s:6:"GMT +1";s:25:"contact_working_days_note";s:25:"Closed on public holidays";s:9:"site_logo";s:21:"front/images/logo.png";s:14:"givebutter_url";s:40:"https://givebutter.com/dzuels-foundation";}', 2107270282);
-/*!40000 ALTER TABLE `cache` ENABLE KEYS */;
-UNLOCK TABLES;
+-- Dumping data for table `cache`: 0 rows (empty)
 
 --
 -- Table structure for table `cache_locks`
@@ -252,7 +234,7 @@ CREATE TABLE `settings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `settings` (26 rows)
+-- Dumping data for table `settings` (28 rows)
 --
 
 LOCK TABLES `settings` WRITE;
@@ -282,8 +264,10 @@ INSERT INTO `settings` (`id`, `key`, `value`, `type`, `group`, `created_at`, `up
 (22, 'contact_working_hours', 'Mon – Fri: 8:00 AM – 5:00 PM', 'string', 'contact', '2026-10-13 14:30:55', '2026-10-13 16:51:02'),
 (23, 'contact_timezone', 'GMT +1', 'string', 'contact', '2026-10-13 14:30:55', '2026-10-13 14:30:55'),
 (24, 'contact_working_days_note', 'Closed on public holidays', 'string', 'contact', '2026-10-13 14:30:55', '2026-10-13 14:30:55'),
-(25, 'site_logo', 'front/images/logo.png', 'string', 'general', '2026-10-13 16:51:02', '2026-10-13 16:51:02'),
-(26, 'givebutter_url', 'https://givebutter.com/dzuels-foundation', 'string', 'banking', '2026-10-13 16:51:02', '2026-10-13 16:51:02');
+(25, 'site_logo', 'front/images/logo.png', 'string', 'general', '2026-10-13 16:51:02', '2026-10-16 06:20:51'),
+(26, 'givebutter_url', 'https://givebutter.com/dzuels-foundation', 'string', 'banking', '2026-10-13 16:51:02', '2026-10-13 16:51:02'),
+(27, 'gemini_api_key', NULL, 'string', 'ai', '2026-10-16 06:20:51', '2026-10-16 06:26:36'),
+(28, 'gemini_model', 'gemini-2.0-flash', 'string', 'ai', '2026-10-16 06:20:51', '2026-10-16 06:27:05');
 /*!40000 ALTER TABLE `settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -351,7 +335,7 @@ CREATE TABLE `partners` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `partners` (4 rows)
+-- Dumping data for table `partners` (5 rows)
 --
 
 LOCK TABLES `partners` WRITE;
@@ -360,7 +344,8 @@ INSERT INTO `partners` (`id`, `name`, `logo`, `website_url`, `sort_order`, `is_a
 (1, 'ASCEND Education Foundation', 'front/images/ascend.webp', 'https://ascendedufoundation.org/', 1, 1, '2026-10-11 16:36:13', '2026-10-13 14:47:21'),
 (2, 'Solape Adesuyi Associates', 'front/images/SAA.webp', NULL, 2, 1, '2026-10-11 16:36:13', '2026-10-13 14:47:21'),
 (3, 'Help Meet A Need', 'front/images/helpmeetaneed.webp', NULL, 3, 1, '2026-10-11 16:36:13', '2026-10-13 14:47:21'),
-(4, 'Int International', 'front/images/intinternational.webp', NULL, 4, 1, '2026-10-11 16:36:13', '2026-10-13 14:47:21');
+(4, 'Int International', 'front/images/intinternational.webp', NULL, 4, 1, '2026-10-11 16:36:13', '2026-10-13 14:47:21'),
+(5, 'SeedDev', 'uploads/media/1792016934_ToVkJsS2iVvn.webp', NULL, 4, 1, '2026-10-14 22:29:09', '2026-10-14 22:29:09');
 /*!40000 ALTER TABLE `partners` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -526,7 +511,7 @@ CREATE TABLE `gallery_albums` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `gallery_albums` (10 rows)
+-- Dumping data for table `gallery_albums` (11 rows)
 --
 
 LOCK TABLES `gallery_albums` WRITE;
@@ -541,7 +526,8 @@ INSERT INTO `gallery_albums` (`id`, `title`, `slug`, `kicker`, `description`, `c
 (7, 'Essay Competition', 'essay-competition', 'Academic Literacy & Critical Thinking', 'Annual student essay competition fostering critical thinking, literature appreciation, and writing skills among youth in Ijero-Ekiti and Ekiti State.', 'front/images/gallery/optimized/essay-competition-01.webp', 2, 1, 1, '2026-10-14 22:04:36', '2026-10-14 22:04:36'),
 (8, 'Girls in Tech & Leadership', 'girls-day', 'Empowerment & Digital Inclusion', 'Dedicated workshops inspiring young female students to embrace computer science, coding, creative digital design, and career leadership.', 'front/images/gallery/optimized/girls-day-01.webp', 3, 1, 1, '2026-10-14 22:04:36', '2026-10-14 22:04:36'),
 (9, 'Innovation and Tech Day (ITD)', 'itd', 'Flagship Yearly Festival', 'Flagship yearly celebration uniting innovators, students, tech enthusiasts, educators, and community leaders for digital empowerment in Ijero-Ekiti.', 'front/images/gallery/optimized/itd-01.webp', 4, 1, 1, '2026-10-14 22:04:36', '2026-10-14 22:04:36'),
-(10, 'WDADA Community Outreach', 'wdada-community-outreach', 'Grassroots Relief & Welfare', 'Grassroots community development, nutritional relief, and education welfare reaching indigent children and families across Ekiti communities.', 'front/images/gallery/optimized/wdada-01.webp', 7, 1, 1, '2026-10-14 22:04:36', '2026-10-14 22:04:36');
+(10, 'WDADA Community Outreach', 'wdada-community-outreach', 'Grassroots Relief & Welfare', 'Grassroots community development, nutritional relief, and education welfare reaching indigent children and families across Ekiti communities.', 'front/images/gallery/optimized/wdada-01.webp', 7, 1, 1, '2026-10-14 22:04:36', '2026-10-14 22:04:36'),
+(11, 'Reading Competition 2026', 'reading-competition-2026', 'Foundation Programme', NULL, 'uploads/media/1792076764_ZIjbP3mcONQk.webp', 18, 1, 1, '2026-10-15 11:08:43', '2026-10-15 15:09:55');
 /*!40000 ALTER TABLE `gallery_albums` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -566,7 +552,7 @@ CREATE TABLE `gallery_photos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `gallery_photos` (151 rows)
+-- Dumping data for table `gallery_photos` (156 rows)
 --
 
 LOCK TABLES `gallery_photos` WRITE;
@@ -725,7 +711,12 @@ INSERT INTO `gallery_photos` (`id`, `gallery_album_id`, `image_path`, `caption`,
 (227, 5, 'front/images/gallery/optimized/general-14.webp', 'Community Impact Moment #14', 'General Community & Cohorts - Community Impact Moment #14 in Ijero-Ekiti', '2024', 14, '2026-10-14 22:04:36', '2026-10-14 22:04:36'),
 (228, 5, 'front/images/gallery/optimized/general-15.webp', 'Community Impact Moment #15', 'General Community & Cohorts - Community Impact Moment #15 in Ijero-Ekiti', '2024', 15, '2026-10-14 22:04:36', '2026-10-14 22:04:36');
 INSERT INTO `gallery_photos` (`id`, `gallery_album_id`, `image_path`, `caption`, `alt_text`, `year`, `sort_order`, `created_at`, `updated_at`) VALUES
-(229, 5, 'front/images/gallery/optimized/general-16.webp', 'Community Impact Moment #16', 'General Community & Cohorts - Community Impact Moment #16 in Ijero-Ekiti', '2024', 16, '2026-10-14 22:04:36', '2026-10-14 22:04:36');
+(229, 5, 'front/images/gallery/optimized/general-16.webp', 'Community Impact Moment #16', 'General Community & Cohorts - Community Impact Moment #16 in Ijero-Ekiti', '2024', 16, '2026-10-14 22:04:36', '2026-10-14 22:04:36'),
+(230, 11, 'uploads/gallery/photos/1792077050_4rWnuC1rsDW0.webp', NULL, 'Reading Competition 2026', '2026', 1, '2026-10-15 15:10:51', '2026-10-15 15:10:51'),
+(231, 11, 'uploads/gallery/photos/1792077051_49u9qRYMadAn.webp', NULL, 'Reading Competition 2026', '2026', 2, '2026-10-15 15:10:51', '2026-10-15 15:10:51'),
+(232, 11, 'uploads/gallery/photos/1792077052_bKup0lu7ey0C.webp', NULL, 'Reading Competition 2026', '2026', 3, '2026-10-15 15:10:52', '2026-10-15 15:10:52'),
+(233, 11, 'uploads/gallery/photos/1792077053_BiHRAVrjQKV3.webp', NULL, 'Reading Competition 2026', '2026', 4, '2026-10-15 15:10:53', '2026-10-15 15:10:53'),
+(234, 11, 'uploads/gallery/photos/1792077054_6hSdbZxbbsFi.webp', NULL, 'Reading Competition 2026', '2026', 5, '2026-10-15 15:10:54', '2026-10-15 15:10:54');
 /*!40000 ALTER TABLE `gallery_photos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -875,9 +866,9 @@ INSERT INTO `page_sections` (`id`, `page_key`, `section_key`, `headline`, `subhe
 (2, 'home', 'who_we_are', 'Dedicated to Transforming Lives and Communities Through Education', 'Who We Are', 'Dzuels Educational Foundation is a non-profit organisation dedicated to addressing poverty by providing quality education and skills acquisition for indigent children and youth across Nigeria. Founded in 2015, we bridge educational inequality by equipping underserved communities with modern digital skills, literacy support, and vital infrastructure.\n\nOur initiatives ensure that children from low-income backgrounds have the tools, guidance, and environments required to thrive in a rapidly changing world.', 'front/images/about_1.webp', 'Learn More About Us', '/about', NULL, 2, '2026-10-11 16:36:13', '2026-10-11 17:10:32'),
 (3, 'home', 'vision_mission', 'Our Core Purpose & Guiding Principles', 'Vision & Mission', 'Vision: An equitable society where every child, irrespective of socio-economic background, has access to quality education, modern digital literacy, and the opportunity to achieve their highest human potential.\r\n\r\nMission: To dismantle educational barriers for indigent youth in Nigeria by deploying digital classrooms, scholarship support, literacy outreach, and mentorship that spark lifelong empowerment.', 'front/images/gallery/optimized/famoyinka-08.webp', NULL, NULL, NULL, 3, '2026-10-11 16:36:13', '2026-10-13 20:19:06'),
 (4, 'home', 'values', 'Our DRNICER Core Values', 'Guiding Principles', 'Dynamism, Resilience, Novelty, Integrity, Compassion, Excellence, Responsibility — these principles define every classroom we build and partnership we form.', NULL, NULL, NULL, NULL, 4, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
-(5, 'home', 'causes', 'Holistic support for youth & community development', 'Our 6 Impact Causes', 'We combine direct education sponsorship with skills acquisition, advocacy, family stability, transformative leadership, and community health.', 'front/images/cause.webp', NULL, NULL, '{"tagline":"AN INTEGRATED APPROACH TO THE TOTAL WELL BEING OF THE CHILD","pillars":[{"title":"Education Support","ministry":"Paul\'s academy","description":"Paying school fees, supplying curriculum textbooks, notebooks, uniforms, and educational kits to keep children in classrooms.","icon":"\\ud83c\\udf93"},{"title":"Skills Acquisition","ministry":"Peter\'s net","description":"Hands-on digital literacy, computer coding, and practical vocational training equipping youth with 21st-century self-reliance.","icon":"\\ud83d\\udcbb"},{"title":"Advocacy","ministry":"Deborah congress","description":"Championing child protection, education policy awareness, equal opportunity for indigent girls, and youth rights.","icon":"\\ud83d\\udce2"},{"title":"Feeding families","ministry":"Naomi\'s kitchen","description":"Targeted nutritional relief, food assistance, and hunger alleviation ensuring indigent pupils have the energy to learn.","icon":"\\ud83c\\udf72"},{"title":"Transformative leadership Training","ministry":"Priscilla\'s upper room","description":"Values-driven mentorship, ethical leadership training, and mindset transformation for emerging community leaders.","icon":"\\ud83c\\udf1f"},{"title":"Health awareness and support","ministry":"Luke\'s Tent","description":"Health education, medical screenings, personal hygiene kits, and basic medical support for vulnerable children and families.","icon":"\\ud83e\\ude7a"}]}', 5, '2026-10-11 16:36:13', '2026-10-13 16:50:56'),
-(6, 'home', 'featured_project', 'Ijero-Ekiti Digital Infrastructure and Literacy Initiative', 'Flagship Project', 'Establishing modern computer laboratories and solar-powered learning facilities in public schools across Ijero-Ekiti, equipping over 165 students with practical coding and computer skills.', 'front/images/dzuelsCollage.webp', 'Explore Our Programmes', '/programmes', NULL, 7, '2026-10-11 16:36:13', '2026-10-13 18:00:55'),
-(7, 'home', 'cta', 'Join Us in Shaping the Future of Nigeria\'s Youth', 'Take Action Today', 'Whether through corporate sponsorship, volunteer mentoring, or financial donations, your partnership empowers the next generation.', NULL, 'Get Involved Today', '/get-involved', NULL, 8, '2026-10-11 16:36:13', '2026-10-13 18:00:55'),
+(5, 'home', 'causes', 'Programs That Bridge the Opportunity Divide', 'Our 6 Impact Causes', 'From digital hubs in Ijero-Ekiti to annual literacy contests, and much more in between, our causes are designed to uplift communities from the ground up', 'front/images/cause.webp', NULL, NULL, '{"tagline":"AN INTEGRATED APPROACH TO THE TOTAL WELL BEING OF THE CHILD","pillars":[{"title":"Education Support","ministry":"Paul\'s academy","description":"Paying school fees, supplying curriculum textbooks, notebooks, uniforms, and educational kits to keep children in classrooms.","icon":"\\ud83c\\udf93"},{"title":"Skills Acquisition","ministry":"Peter\'s net","description":"Hands-on digital literacy, computer coding, and practical vocational training equipping youth with 21st-century self-reliance.","icon":"\\ud83d\\udcbb"},{"title":"Advocacy","ministry":"Deborah congress","description":"Championing child protection, education policy awareness, equal opportunity for indigent girls, and youth rights.","icon":"\\ud83d\\udce2"},{"title":"Feeding families","ministry":"Naomi\'s kitchen","description":"Targeted nutritional relief, food assistance, and hunger alleviation ensuring indigent pupils have the energy to learn.","icon":"\\ud83c\\udf72"},{"title":"Transformative leadership Training","ministry":"Priscilla\'s upper room","description":"Values-driven mentorship, ethical leadership training, and mindset transformation for emerging community leaders.","icon":"\\ud83c\\udf1f"},{"title":"Health awareness and support","ministry":"Luke\'s Tent","description":"Health education, medical screenings, personal hygiene kits, and basic medical support for vulnerable children and families.","icon":"\\ud83e\\ude7a"}]}', 5, '2026-10-11 16:36:13', '2026-10-14 22:35:46'),
+(6, 'home', 'featured_project', 'Ijero-Ekiti Digital Infrastructure and Literacy Initiative', 'Flagship Project', 'Establishing a well-equipped computer laboratory and a resourceful library at Dzuels Foundation, providing children with access to practical computer training, coding skills, reading materials, and a supportive learning environment. To date, over 500 students have benefited from these learning opportunities.', 'front/images/dzuelsCollage.webp', 'Explore Our Programmes', '/programmes', NULL, 7, '2026-10-11 16:36:13', '2026-10-15 05:13:13'),
+(7, 'home', 'cta', 'Join Us in Shaping the Future of Nigeria\'s Youth', 'Take Action Today', 'Whether through individual, family or corporate sponsorship, volunteer mentorship, financial donations or legacy giving, your partnership empowers the next generation.', NULL, 'Get Involved Today', '/get-involved', NULL, 8, '2026-10-11 16:36:13', '2026-10-15 05:15:37'),
 (8, 'about', 'hero', 'A Decade of Impact, Education & Hope', 'About Dzuels Educational Foundation', 'Founded in 2015, Dzuels Educational Foundation has grown from a local literacy initiative in Ekiti State into an impactful non-profit organisation driving digital empowerment and community welfare across Nigeria.', 'front/images/gallery/optimized/general-01.webp', 'Support Our Mission', '/donate', NULL, 1, '2026-10-11 16:36:13', '2026-10-11 17:10:32'),
 (9, 'about', 'story', 'Our 10-Year Journey of Community Empowerment', 'Our Story', 'What started as an urgent response to learning resource shortages in rural schools has evolved into a comprehensive educational movement.\n\nOver the past ten years, we have trained hundreds of young Nigerians in modern computational thinking, distributed essential learning supplies, and renovated learning spaces in public secondary and primary schools.', 'front/images/about_1.webp', NULL, NULL, NULL, 2, '2026-10-11 16:36:13', '2026-10-11 17:10:32'),
 (10, 'about', 'approach', 'Grassroots Engagement & Sustainable Innovation', 'Our Approach', 'We partner directly with schools, community leaders, and local governments to identify critical gaps and deploy sustainable, high-impact educational solutions tailored to underserved youth.', NULL, NULL, NULL, NULL, 3, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
@@ -892,7 +883,7 @@ INSERT INTO `page_sections` (`id`, `page_key`, `section_key`, `headline`, `subhe
 (19, 'get_involved', 'intro', 'Volunteer or Partner With Dzuels', 'Create Lasting Change', 'Whether you want to mentor young coders during Ijero Tech Day or sponsor a digital laboratory in a public school, there is a place for you in our mission.', NULL, NULL, NULL, NULL, 2, '2026-10-11 16:36:13', '2026-10-11 16:36:13'),
 (20, 'contact', 'form', 'Send Us a Message', 'Online Inquiry', 'Fill out the form below and a representative from Dzuels Educational Foundation will get in touch with you promptly.', NULL, NULL, NULL, NULL, 3, '2026-10-13 14:39:14', '2026-10-13 14:39:14'),
 (21, 'contact', 'map', 'Headquarters Location', 'Physical visits by appointment are warmly welcomed. Please call in advance so our field coordinators can assist with your schedule.', 'Our central educational center and community operations are based in Ijero-Ekiti, Ekiti State, Nigeria.', NULL, NULL, NULL, NULL, 4, '2026-10-13 14:39:14', '2026-10-13 14:39:14'),
-(22, 'home', 'famoyinka_library', 'Famoyinka Memorial Children\'s Library', 'Permanent Literacy Sanctuary', 'An active, community-anchored hub dedicated to childhood literacy, creative self-expression, and transformational leadership in Southwest Nigeria.', NULL, 'Explore Library Programme', '/programmes/famoyinka-memorial-library', '{"photos":[{"image":"front\\/images\\/gallery\\/optimized\\/famoyinka-01.webp","label":"Free Book Loans","alt":"Student selecting books at Famoyinka Memorial Children\'s Library"},{"image":"front\\/images\\/techday.webp","label":"Creative Arts","alt":"Creative watercolor art workshop"},{"image":null,"label":"Leadership Games","alt":"Leadership teamwork games and sports"},{"image":"uploads\\/media\\/1791915201_LilvyZhc6aTE.jpg","label":"Ikogosi Excursion","alt":"Ikogosi Warm Springs educational excursion"}]}', 6, '2026-10-13 18:00:55', '2026-10-14 20:46:16');
+(22, 'home', 'famoyinka_library', 'Famoyinka Memorial Children\'s Library', 'Permanent Literacy Sanctuary', 'An active, community-anchored hub dedicated to childhood literacy, creative self-expression, and transformational leadership in Southwest Nigeria.', NULL, 'Explore Library Programme', '/programmes/famoyinka-memorial-library', '{"photos":[{"image":"uploads\\/media\\/1792078897_zAjnMbzHGBbx.webp","label":"Free Book Loans","alt":"Student selecting books at Famoyinka Memorial Children\'s Library"},{"image":"front\\/images\\/gallery\\/optimized\\/reading-06.webp","label":"Creative Arts","alt":"Creative watercolor art workshop"},{"image":"front\\/images\\/gallery\\/optimized\\/famoyinka-03.webp","label":"Leadership Games","alt":"Leadership teamwork games and sports"},{"image":"front\\/images\\/gallery\\/optimized\\/reading-04.webp","label":"Check-in and Check-out","alt":"Check-in and Check-out"}]}', 6, '2026-10-13 18:00:55', '2026-10-15 15:45:49');
 /*!40000 ALTER TABLE `page_sections` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -928,7 +919,7 @@ CREATE TABLE `media_items` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `media_items` (284 rows)
+-- Dumping data for table `media_items` (293 rows)
 --
 
 LOCK TABLES `media_items` WRITE;
@@ -1222,7 +1213,16 @@ INSERT INTO `media_items` (`id`, `filename`, `file_path`, `file_size`, `mime_typ
 (281, 'wdada-13.webp', 'front/images/gallery/optimized/wdada-13.webp', 98158, 'image/webp', 1600, 1067, 'Community Relief Outreach #13 (2026)', 'Community Relief Outreach #13', 'WDADA Community Outreach - Community Relief Outreach #13 in Ijero-Ekiti', 'gallery', 10, 222, '2026-10-14 22:04:43', '2026-10-14 22:04:43'),
 (282, 'wdada-14.webp', 'front/images/gallery/optimized/wdada-14.webp', 122538, 'image/webp', 1600, 1067, 'Community Relief Outreach #14 (2026)', 'Community Relief Outreach #14', 'WDADA Community Outreach - Community Relief Outreach #14 in Ijero-Ekiti', 'gallery', 10, 223, '2026-10-14 22:04:43', '2026-10-14 22:04:43'),
 (283, 'wdada-15.webp', 'front/images/gallery/optimized/wdada-15.webp', 164960, 'image/webp', 1600, 1067, 'Community Relief Outreach #15 (2026)', 'Community Relief Outreach #15', 'WDADA Community Outreach - Community Relief Outreach #15 in Ijero-Ekiti', 'gallery', 10, 224, '2026-10-14 22:04:43', '2026-10-14 22:04:43'),
-(284, 'wdada-16.webp', 'front/images/gallery/optimized/wdada-16.webp', 125818, 'image/webp', 1600, 1067, 'Community Relief Outreach #16 (2026)', 'Community Relief Outreach #16', 'WDADA Community Outreach - Community Relief Outreach #16 in Ijero-Ekiti', 'gallery', 10, 225, '2026-10-14 22:04:43', '2026-10-14 22:04:43');
+(284, 'wdada-16.webp', 'front/images/gallery/optimized/wdada-16.webp', 125818, 'image/webp', 1600, 1067, 'Community Relief Outreach #16 (2026)', 'Community Relief Outreach #16', 'WDADA Community Outreach - Community Relief Outreach #16 in Ijero-Ekiti', 'gallery', 10, 225, '2026-10-14 22:04:43', '2026-10-14 22:04:43'),
+(285, '1792016726_SYMNmlJ8jkYV.webp', 'uploads/media/1792016726_SYMNmlJ8jkYV.webp', 137408, 'image/webp', 1920, 1280, 'Img 5488', NULL, 'Img 5488', 'general', NULL, NULL, '2026-10-14 22:25:27', '2026-10-14 22:25:27'),
+(290, '1792016863_CUU3rBdDr0wQ.webp', 'uploads/media/1792016863_CUU3rBdDr0wQ.webp', 90186, 'image/webp', 1920, 1280, 'Img 5626', NULL, 'Img 5626', 'general', NULL, NULL, '2026-10-14 22:27:44', '2026-10-14 22:27:44'),
+(291, '1792016905_uoUTGJ4dSOBp.webp', 'uploads/media/1792016905_uoUTGJ4dSOBp.webp', 3980, 'image/webp', 222, 86, 'Seeddev', NULL, 'Seeddev', 'general', NULL, NULL, '2026-10-14 22:28:25', '2026-10-14 22:28:25'),
+(292, '1792016934_ToVkJsS2iVvn.webp', 'uploads/media/1792016934_ToVkJsS2iVvn.webp', 3980, 'image/webp', 222, 86, 'Seeddev', NULL, 'Seeddev', 'general', NULL, NULL, '2026-10-14 22:28:54', '2026-10-14 22:28:54'),
+(293, '1792041671_uGl2MxEHgFQn.webp', 'uploads/media/1792041671_uGl2MxEHgFQn.webp', 25830, 'image/webp', 500, 500, 'New Logo Removebg Preview', NULL, 'New Logo Removebg Preview', 'general', NULL, NULL, '2026-10-15 05:21:11', '2026-10-15 05:21:11'),
+(294, '1792076593_zJG94HkhLVmt.webp', 'uploads/media/1792076593_zJG94HkhLVmt.webp', 3980, 'image/webp', 222, 86, 'Seeddev', NULL, 'Seeddev', 'general', NULL, NULL, '2026-10-15 15:03:13', '2026-10-15 15:03:13'),
+(295, '1792076691_siI064OnGgvK.webp', 'uploads/media/1792076691_siI064OnGgvK.webp', 113446, 'image/webp', 1920, 1280, 'Img 0036', NULL, 'Img 0036', 'general', NULL, NULL, '2026-10-15 15:04:52', '2026-10-15 15:04:52'),
+(296, '1792076764_ZIjbP3mcONQk.webp', 'uploads/media/1792076764_ZIjbP3mcONQk.webp', 104734, 'image/webp', 1920, 1280, 'Img 0023', NULL, 'Img 0023', 'general', NULL, NULL, '2026-10-15 15:06:05', '2026-10-15 15:06:05'),
+(297, '1792078897_zAjnMbzHGBbx.webp', 'uploads/media/1792078897_zAjnMbzHGBbx.webp', 158704, 'image/webp', 1920, 1280, 'Img 0027', NULL, 'Img 0027', 'general', NULL, NULL, '2026-10-15 15:41:38', '2026-10-15 15:41:38');
 /*!40000 ALTER TABLE `media_items` ENABLE KEYS */;
 UNLOCK TABLES;
 

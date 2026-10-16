@@ -101,9 +101,18 @@
 
                     {{-- Default Caption --}}
                     <div>
-                        <label for="caption" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                            Caption <span class="text-stone-400 font-normal lowercase">(optional)</span>
-                        </label>
+                        <div class="flex items-center justify-between mb-2">
+                            <label for="caption" class="block text-xs font-bold uppercase tracking-wider text-stone-700">
+                                Caption <span class="text-stone-400 font-normal lowercase">(optional)</span>
+                            </label>
+                            <x-admin.ai-button 
+                                for="caption" 
+                                field-name="caption" 
+                                field-label="Photo Caption" 
+                                page-context="Gallery Album: {{ $album->title }}" 
+                                section-context="{{ $album->title }} ({{ $album->kicker ?? 'Programme' }})" 
+                            />
+                        </div>
                         <input type="text" 
                                id="caption" 
                                name="caption" 
@@ -126,9 +135,19 @@
 
                     {{-- Default Alt Text & Submit --}}
                     <div>
-                        <label for="alt_text" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                            Alt Text <span class="text-stone-400 font-normal lowercase">(optional)</span>
-                        </label>
+                        <div class="flex items-center justify-between mb-2">
+                            <label for="alt_text" class="block text-xs font-bold uppercase tracking-wider text-stone-700">
+                                Alt Text <span class="text-stone-400 font-normal lowercase">(optional)</span>
+                            </label>
+                            <x-admin.ai-button 
+                                for="alt_text" 
+                                field-name="alt_text" 
+                                field-label="Image Alt Text" 
+                                page-context="Gallery Album: {{ $album->title }}" 
+                                section-context="{{ $album->title }}" 
+                                :sibling-selectors="['caption' => '#caption']" 
+                            />
+                        </div>
                         <div class="flex gap-2">
                             <input type="text" 
                                    id="alt_text" 
@@ -296,7 +315,7 @@
                         @method('PUT')
 
                         <div class="flex items-center gap-4 p-3 bg-stone-50 rounded-xl">
-                            <img :src="editingPhoto.image_url" alt="" class="w-16 h-16 object-cover rounded-lg">
+                            <img :src="editingPhoto.image_url" id="gallery_edit_photo_img" alt="" class="w-16 h-16 object-cover rounded-lg">
                             <div class="text-xs text-stone-500">
                                 <p class="font-bold text-stone-800">Photo #<span x-text="editingPhoto.id"></span></p>
                                 <p class="text-[11px] text-stone-400">Update label, event year, and sort order.</p>
@@ -304,8 +323,18 @@
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">Caption</label>
-                            <input type="text" name="caption" x-model="editingPhoto.caption" class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-sm focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <label for="gallery_edit_photo_caption" class="block text-xs font-bold uppercase tracking-wider text-stone-700">Caption</label>
+                                <x-admin.ai-button 
+                                    for="gallery_edit_photo_caption" 
+                                    field-name="caption" 
+                                    field-label="Photo Caption" 
+                                    page-context="Gallery Album: {{ $album->title }}" 
+                                    section-context="Photo in {{ $album->title }}" 
+                                    image-selector="#gallery_edit_photo_img" 
+                                />
+                            </div>
+                            <input type="text" id="gallery_edit_photo_caption" name="caption" x-model="editingPhoto.caption" class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-sm focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
                         </div>
 
                         <div class="grid grid-cols-2 gap-3">
@@ -320,8 +349,19 @@
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">Alt Text</label>
-                            <input type="text" name="alt_text" x-model="editingPhoto.alt_text" class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-sm focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <label for="gallery_edit_photo_alt" class="block text-xs font-bold uppercase tracking-wider text-stone-700">Alt Text</label>
+                                <x-admin.ai-button 
+                                    for="gallery_edit_photo_alt" 
+                                    field-name="alt_text" 
+                                    field-label="Photo Alt Text" 
+                                    page-context="Gallery Album: {{ $album->title }}" 
+                                    section-context="Photo in {{ $album->title }}" 
+                                    image-selector="#gallery_edit_photo_img" 
+                                    :sibling-selectors="['caption' => '#gallery_edit_photo_caption']" 
+                                />
+                            </div>
+                            <input type="text" id="gallery_edit_photo_alt" name="alt_text" x-model="editingPhoto.alt_text" class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-sm focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
                         </div>
 
                         <div class="flex items-center justify-end gap-3 pt-3 border-t border-stone-100">
