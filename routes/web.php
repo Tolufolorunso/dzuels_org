@@ -115,6 +115,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
             Route::post('/settings/sync', [SettingController::class, 'syncApi'])->name('settings.sync');
             Route::post('/settings/test-gemini', [SettingController::class, 'testGemini'])->name('settings.test-gemini');
+            Route::post('/settings/test-optimizer', [SettingController::class, 'testOptimizer'])->name('settings.test-optimizer');
 
             // Staff User Management
             Route::patch('/users/{user}/toggle', [AdminUserController::class, 'toggleActive'])->name('users.toggle');

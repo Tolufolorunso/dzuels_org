@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UpdateSettingsRequest;
 use App\Models\Setting;
 use App\Services\GeminiService;
+use App\Services\ImageOptimizerService;
 use App\Services\ImpactStatsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -17,12 +18,13 @@ class SettingController extends Controller
     /**
      * Display the site settings administration interface.
      */
-    public function index(ImpactStatsService $statsService): View
+    public function index(ImpactStatsService $statsService, ImageOptimizerService $optimizer): View
     {
         $settings = Setting::allCached();
         $activeStats = $statsService->getStats();
+        $optimizerStatus = $optimizer->getEnvironmentStatus();
 
-        return view('admin.settings', compact('settings', 'activeStats'));
+        return view('admin.settings', compact('settings', 'activeStats', 'optimizerStatus'));
     }
 
     /**
@@ -104,5 +106,19 @@ class SettingController extends Controller
 
         return redirect()->route('admin.settings')
             ->with('error', 'Could not sync from API endpoint. Please verify the URL endpoint format.');
+    }
+
+    /**
+     * Run on-demand diagnostic test for image optimization and WebP pipeline.
+     */
+    public function testOptimizer(ImageOptimizerService $optimizer): JsonResponse
+    {
+        $status = $optimizer->getEnvironmentStatus();
+        $testResult = $optimizer->testCompression();
+
+        return response()->json([
+            'environment' => $status,
+            'test_result' => $testResult,
+        ]);
     }
 }

@@ -147,4 +147,33 @@ class ImageOptimizerServiceTest extends TestCase
             'uploads/test_unit'
         );
     }
+
+    public function test_optimizer_get_environment_status_returns_structured_diagnostics(): void
+    {
+        $status = $this->optimizer->getEnvironmentStatus();
+
+        $this->assertIsArray($status);
+        $this->assertArrayHasKey('is_operational', $status);
+        $this->assertArrayHasKey('active_engine', $status);
+        $this->assertArrayHasKey('gd', $status);
+        $this->assertArrayHasKey('imagick', $status);
+        $this->assertArrayHasKey('php', $status);
+        $this->assertArrayHasKey('storage', $status);
+
+        $this->assertTrue($status['gd']['loaded']);
+        $this->assertTrue($status['gd']['available']);
+        $this->assertSame('gd', $status['active_engine']);
+    }
+
+    public function test_optimizer_test_compression_executes_successfully(): void
+    {
+        $result = $this->optimizer->testCompression();
+
+        $this->assertIsArray($result);
+        $this->assertTrue($result['success']);
+        $this->assertSame('gd', $result['engine']);
+        $this->assertArrayHasKey('output_bytes', $result);
+        $this->assertGreaterThan(0, $result['output_bytes']);
+        $this->assertLessThanOrEqual(ImageOptimizerService::MAX_BYTES, $result['output_bytes']);
+    }
 }

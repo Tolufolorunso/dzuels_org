@@ -670,6 +670,168 @@
                 </div>
             </div>
 
+            <!-- SECTION 7: Image Optimization & WebP Pipeline -->
+            <div 
+                x-data="{
+                    testing: false,
+                    status: null,
+                    message: null,
+                    env: {{ Js::from($optimizerStatus ?? []) }},
+                    testOptimizer() {
+                        this.testing = true;
+                        this.message = null;
+                        this.status = null;
+
+                        fetch('{{ route('admin.settings.test-optimizer') }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            }
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            this.testing = false;
+                            if (data.test_result && data.test_result.success) {
+                                this.status = 'success';
+                                this.message = data.test_result.message;
+                            } else {
+                                this.status = 'error';
+                                this.message = (data.test_result && data.test_result.message) ? data.test_result.message : (data.message || 'Optimizer test failed.');
+                            }
+                            if (data.environment) {
+                                this.env = data.environment;
+                            }
+                        })
+                        .catch(err => {
+                            this.testing = false;
+                            this.status = 'error';
+                            this.message = 'Network error running optimizer test: ' + err.message;
+                        });
+                    }
+                }"
+                class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200/80 shadow-xs space-y-6"
+            >
+                <div class="flex items-center justify-between pb-4 border-b border-stone-100 flex-wrap gap-4">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-sm">7</span>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h2 class="text-base font-bold text-stone-900">Image Optimization & WebP Pipeline</h2>
+                                <template x-if="env.is_operational">
+                                    <span class="px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide bg-emerald-100 text-emerald-700 rounded-md">Operational</span>
+                                </template>
+                                <template x-if="!env.is_operational">
+                                    <span class="px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide bg-rose-100 text-rose-700 rounded-md">Action Required</span>
+                                </template>
+                            </div>
+                            <p class="text-xs text-stone-500">Dual GD/Imagick engine enforcing strict &le; 180 KB WebP output across all uploads</p>
+                        </div>
+                    </div>
+
+                    <button 
+                        type="button" 
+                        @click="testOptimizer()" 
+                        :disabled="testing"
+                        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-stone-900 text-white hover:bg-stone-800 transition-colors shadow-xs disabled:opacity-50 cursor-pointer"
+                    >
+                        <template x-if="testing">
+                            <svg class="animate-spin w-3.5 h-3.5 text-cream" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                            </svg>
+                        </template>
+                        <template x-if="!testing">
+                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </template>
+                        <span x-text="testing ? 'Running Live Test...' : 'Test Image Optimization'"></span>
+                    </button>
+                </div>
+
+                <!-- Test Connection Feedback Banner -->
+                <div x-show="message" x-cloak class="p-3.5 rounded-2xl text-xs font-medium transition-all"
+                     :class="status === 'success' ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-rose-50 text-rose-800 border border-rose-200'">
+                    <div class="flex items-center gap-2">
+                        <template x-if="status === 'success'">
+                            <svg class="w-4 h-4 text-emerald-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                        </template>
+                        <template x-if="status === 'error'">
+                            <svg class="w-4 h-4 text-rose-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                        </template>
+                        <span x-text="message"></span>
+                    </div>
+                </div>
+
+                <!-- Environment Diagnostics Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <!-- Active Engine -->
+                    <div class="p-4 rounded-2xl bg-stone-50 border border-stone-200/60 space-y-1">
+                        <span class="text-[11px] font-bold text-stone-500 uppercase tracking-wider block">Active Engine</span>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="w-2.5 h-2.5 rounded-full" :class="env.is_operational ? 'bg-emerald-500' : 'bg-rose-500'"></span>
+                            <span class="text-sm font-bold text-stone-900 uppercase" x-text="env.active_engine ? env.active_engine : 'NONE'"></span>
+                        </div>
+                        <p class="text-[11px] text-stone-500" x-text="env.is_operational ? (env.active_engine === 'gd' ? 'Primary PHP GD Engine' : 'Secondary Imagick Engine') : 'Uncompressed fallback mode'"></p>
+                    </div>
+
+                    <!-- GD Status -->
+                    <div class="p-4 rounded-2xl bg-stone-50 border border-stone-200/60 space-y-1">
+                        <span class="text-[11px] font-bold text-stone-500 uppercase tracking-wider block">PHP GD Extension</span>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="text-sm font-bold" :class="env.gd?.loaded ? 'text-stone-900' : 'text-rose-600'" x-text="env.gd?.loaded ? 'Loaded' : 'Not Loaded'"></span>
+                            <template x-if="env.gd?.loaded">
+                                <span class="px-1.5 py-0.5 rounded text-[10px] font-semibold" :class="env.gd?.webp_supported ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'" x-text="env.gd?.webp_supported ? 'WebP OK' : 'No WebP'"></span>
+                            </template>
+                        </div>
+                        <p class="text-[11px] text-stone-500" x-text="env.gd?.version || 'N/A'"></p>
+                    </div>
+
+                    <!-- Imagick Status -->
+                    <div class="p-4 rounded-2xl bg-stone-50 border border-stone-200/60 space-y-1">
+                        <span class="text-[11px] font-bold text-stone-500 uppercase tracking-wider block">Imagick Extension</span>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="text-sm font-bold" :class="env.imagick?.loaded ? 'text-stone-900' : 'text-stone-500'" x-text="env.imagick?.loaded ? 'Loaded' : 'Not Loaded'"></span>
+                            <template x-if="env.imagick?.loaded">
+                                <span class="px-1.5 py-0.5 rounded text-[10px] font-semibold" :class="env.imagick?.webp_supported ? 'bg-emerald-100 text-emerald-800' : 'bg-stone-200 text-stone-700'" x-text="env.imagick?.webp_supported ? 'WebP OK' : 'No WebP'"></span>
+                            </template>
+                        </div>
+                        <p class="text-[11px] text-stone-500" x-text="env.imagick?.loaded ? 'Fallback Engine Ready' : 'Optional secondary'"></p>
+                    </div>
+
+                    <!-- Runtime Memory -->
+                    <div class="p-4 rounded-2xl bg-stone-50 border border-stone-200/60 space-y-1">
+                        <span class="text-[11px] font-bold text-stone-500 uppercase tracking-wider block">PHP Memory Limit</span>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="text-sm font-bold text-stone-900" x-text="env.php?.memory_limit || 'N/A'"></span>
+                        </div>
+                        <p class="text-[11px] text-stone-500">Auto-elevated to 512M during photo compression</p>
+                    </div>
+                </div>
+
+                <!-- cPanel Resolution Tip if inactive -->
+                <div x-show="!env.is_operational" x-cloak class="p-4 rounded-2xl bg-amber-50 border border-amber-200/80 text-amber-900 text-xs space-y-2">
+                    <p class="font-bold flex items-center gap-1.5">
+                        <svg class="w-4 h-4 text-amber-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        How to Enable WebP Optimization on cPanel:
+                    </p>
+                    <ol class="list-decimal list-inside space-y-1 text-stone-700">
+                        <li>Log into your <strong>cPanel</strong> dashboard (<code class="bg-amber-100 px-1 py-0.5 rounded font-mono">server161.web-hosting.com</code>).</li>
+                        <li>Click <strong>Select PHP Version</strong> under the <em>Software</em> section.</li>
+                        <li>Switch to the <strong>Extensions</strong> tab and check the box for <strong>gd</strong> (and optionally <strong>imagick</strong>).</li>
+                        <li>In the <strong>Options</strong> tab, verify that <code class="bg-amber-100 px-1 py-0.5 rounded font-mono">memory_limit</code> is set to at least <strong>256M</strong>.</li>
+                    </ol>
+                </div>
+            </div>
+
             <!-- Sticky / Prominent Save Bar -->
             <div class="flex items-center justify-end gap-4 pt-4">
                 <button 

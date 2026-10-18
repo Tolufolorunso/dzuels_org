@@ -9,6 +9,7 @@ use App\Models\Partner;
 use App\Models\Programme;
 use App\Models\Setting;
 use App\Models\TeamMember;
+use App\Services\ImageOptimizerService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -65,6 +66,16 @@ class LaunchCheckCommand extends Command
         } else {
             $this->line('  <fg=yellow>⚠</> Asset manifest missing. Run "npm run build" before deploying.');
             $warnings++;
+        }
+
+        $optimizer = app(ImageOptimizerService::class);
+        $optStatus = $optimizer->getEnvironmentStatus();
+        if ($optStatus['is_operational']) {
+            $engineLabel = strtoupper($optStatus['active_engine']);
+            $this->line("  <fg=green>✔</> Image optimization engine ready ({$engineLabel} with WebP support, memory_limit: {$optStatus['php']['memory_limit']}).");
+        } else {
+            $this->line('  <fg=red>✖</> No functional image optimization engine found (neither GD with WebP nor Imagick is enabled).');
+            $failures++;
         }
 
         $this->newLine();

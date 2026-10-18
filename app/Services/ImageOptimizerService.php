@@ -36,14 +36,74 @@ class ImageOptimizerService
     public const QUALITY_STEP = 5;
 
     /**
-     * Check if the GD extension and core functions are available.
+     * Check if the GD extension and core functions with WebP support are available.
      */
     public function isGdAvailable(): bool
     {
-        return \extension_loaded('gd')
-            && \function_exists('imagecreatefromjpeg')
-            && \function_exists('imagewebp')
-            && \function_exists('imagecreatetruecolor');
+        if (! \extension_loaded('gd')) {
+            return false;
+        }
+
+        $requiredFunctions = [
+            'imagecreatefromjpeg',
+            'imagecreatefrompng',
+            'imagecreatetruecolor',
+            'imagewebp',
+            'imagecopyresampled',
+        ];
+
+        foreach ($requiredFunctions as $fn) {
+            if (! \function_exists($fn)) {
+                return false;
+            }
+        }
+
+        // Verify that GD actually has WebP support compiled in
+        if (\function_exists('imagetypes') && \defined('IMG_WEBP')) {
+            return (bool) (\imagetypes() & IMG_WEBP);
+        }
+
+        if (\function_exists('gd_info')) {
+            $info = \gd_info();
+
+            return ! empty($info['WebP Support']);
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if ImageMagick (Imagick extension) with WebP write support is available.
+     */
+    public function isImagickAvailable(): bool
+    {
+        if (! \extension_loaded('imagick') || ! \class_exists('\Imagick')) {
+            return false;
+        }
+
+        try {
+            $formats = \Imagick::queryFormats('WEBP');
+
+            return ! empty($formats);
+        } catch (Throwable) {
+            return false;
+        }
+    }
+
+    /**
+     * Get the active image optimization engine ('gd', 'imagick', or 'none').
+     */
+    public function getActiveEngine(): string
+    {
+        if ($this->isGdAvailable()) {
+            return 'gd';
+        }
+
+        if ($this->isImagickAvailable()) {
+            return 'imagick';
+        }
+
+        return 'none';
     }
 
     /**
@@ -66,6 +126,9 @@ class ImageOptimizerService
         int $quality = self::DEFAULT_INITIAL_QUALITY,
         int $maxBytes = self::MAX_BYTES
     ): string {
+        // Safeguard against memory exhaustion on high-resolution camera photo uploads
+        @ini_set('memory_limit', '512M');
+
         $sourcePath = $file instanceof UploadedFile ? $file->getRealPath() : $file;
 
         if (! $sourcePath || ! file_exists($sourcePath) || ! is_readable($sourcePath)) {
@@ -85,20 +148,54 @@ class ImageOptimizerService
             $origExt = strtolower(pathinfo($file, PATHINFO_EXTENSION) ?: 'jpg');
         }
 
-        // If GD is missing or unusable, use direct fallback
-        if (! $this->isGdAvailable()) {
-            Log::info('GD extension unavailable. Storing image directly without WebP conversion.');
+        $activeEngine = $this->getActiveEngine();
+
+        // If neither GD nor Imagick can produce WebP, fall back to direct storage
+        if ($activeEngine === 'none') {
+            Log::info('Neither GD (with WebP) nor Imagick is available. Storing image directly without WebP conversion.');
 
             return $this->storeDirectFallback($file, $destinationDir, $destinationRelativeDir, $origExt);
         }
 
+        // If Imagick is the primary available engine
+        if ($activeEngine === 'imagick') {
+            try {
+                return $this->optimizeWithImagick(
+                    $file,
+                    $sourcePath,
+                    $destinationDir,
+                    $destinationRelativeDir,
+                    $origExt,
+                    $maxWidth,
+                    $maxHeight,
+                    $quality,
+                    $maxBytes
+                );
+            } catch (Throwable $e) {
+                Log::warning('Imagick optimization encountered an error, falling back to direct storage: '.$e->getMessage().' in '.$e->getFile().':'.$e->getLine());
+
+                return $this->storeDirectFallback($file, $destinationDir, $destinationRelativeDir, $origExt);
+            }
+        }
+
+        // Otherwise use GD as the primary engine with automatic Imagick secondary fallback on error
         $srcImage = null;
         $dstImage = null;
 
         try {
             $imageInfo = @\getimagesize($sourcePath);
             if ($imageInfo === false) {
-                return $this->storeDirectFallback($file, $destinationDir, $destinationRelativeDir, $origExt);
+                return $this->fallbackOrSecondary(
+                    $file,
+                    $sourcePath,
+                    $destinationDir,
+                    $destinationRelativeDir,
+                    $origExt,
+                    $maxWidth,
+                    $maxHeight,
+                    $quality,
+                    $maxBytes
+                );
             }
 
             [$origWidth, $origHeight, $imageType] = $imageInfo;
@@ -113,7 +210,17 @@ class ImageOptimizerService
             };
 
             if (! $srcImage) {
-                return $this->storeDirectFallback($file, $destinationDir, $destinationRelativeDir, $origExt);
+                return $this->fallbackOrSecondary(
+                    $file,
+                    $sourcePath,
+                    $destinationDir,
+                    $destinationRelativeDir,
+                    $origExt,
+                    $maxWidth,
+                    $maxHeight,
+                    $quality,
+                    $maxBytes
+                );
             }
 
             // Calculate target dimensions maintaining aspect ratio
@@ -129,7 +236,17 @@ class ImageOptimizerService
             // Create target true-color GD canvas
             $dstImage = \imagecreatetruecolor($targetWidth, $targetHeight);
             if (! $dstImage) {
-                return $this->storeDirectFallback($file, $destinationDir, $destinationRelativeDir, $origExt);
+                return $this->fallbackOrSecondary(
+                    $file,
+                    $sourcePath,
+                    $destinationDir,
+                    $destinationRelativeDir,
+                    $origExt,
+                    $maxWidth,
+                    $maxHeight,
+                    $quality,
+                    $maxBytes
+                );
             }
 
             // Preserve alpha transparency for PNG / WebP / GIF
@@ -162,7 +279,17 @@ class ImageOptimizerService
             $saved = \imagewebp($dstImage, $fullDestinationPath, $currentQuality);
 
             if (! $saved || ! file_exists($fullDestinationPath)) {
-                return $this->storeDirectFallback($file, $destinationDir, $destinationRelativeDir, $origExt);
+                return $this->fallbackOrSecondary(
+                    $file,
+                    $sourcePath,
+                    $destinationDir,
+                    $destinationRelativeDir,
+                    $origExt,
+                    $maxWidth,
+                    $maxHeight,
+                    $quality,
+                    $maxBytes
+                );
             }
 
             $currentSize = (int) filesize($fullDestinationPath);
@@ -217,15 +344,320 @@ class ImageOptimizerService
 
             return trim(str_replace('\\', '/', $destinationRelativeDir), '/').'/'.$filename;
         } catch (Throwable $e) {
-            Log::warning('Image optimization encountered an error, falling back to direct storage: '.$e->getMessage().' in '.$e->getFile().':'.$e->getLine());
+            Log::warning('GD image optimization encountered an error: '.$e->getMessage().'. Attempting Imagick secondary fallback.');
 
-            return $this->storeDirectFallback($file, $destinationDir, $destinationRelativeDir, $origExt);
+            return $this->fallbackOrSecondary(
+                $file,
+                $sourcePath,
+                $destinationDir,
+                $destinationRelativeDir,
+                $origExt,
+                $maxWidth,
+                $maxHeight,
+                $quality,
+                $maxBytes
+            );
         } finally {
             if ($srcImage && (\is_resource($srcImage) || (is_object($srcImage) && $srcImage instanceof \GdImage))) {
                 @\imagedestroy($srcImage);
             }
             if ($dstImage && (\is_resource($dstImage) || (is_object($dstImage) && $dstImage instanceof \GdImage))) {
                 @\imagedestroy($dstImage);
+            }
+        }
+    }
+
+    /**
+     * Try Imagick secondary optimization before resorting to uncompressed direct storage.
+     */
+    protected function fallbackOrSecondary(
+        UploadedFile|string $file,
+        string $sourcePath,
+        string $destinationDir,
+        string $destinationRelativeDir,
+        string $origExt,
+        int $maxWidth,
+        int $maxHeight,
+        int $quality,
+        int $maxBytes
+    ): string {
+        if ($this->isImagickAvailable()) {
+            try {
+                return $this->optimizeWithImagick(
+                    $file,
+                    $sourcePath,
+                    $destinationDir,
+                    $destinationRelativeDir,
+                    $origExt,
+                    $maxWidth,
+                    $maxHeight,
+                    $quality,
+                    $maxBytes
+                );
+            } catch (Throwable $ie) {
+                Log::warning('Imagick secondary fallback also failed: '.$ie->getMessage());
+            }
+        }
+
+        return $this->storeDirectFallback($file, $destinationDir, $destinationRelativeDir, $origExt);
+    }
+
+    /**
+     * Optimize an image using ImageMagick (Imagick extension) enforcing <= 180 KB WebP.
+     */
+    protected function optimizeWithImagick(
+        UploadedFile|string $file,
+        string $sourcePath,
+        string $destinationDir,
+        string $destinationRelativeDir,
+        string $origExt,
+        int $maxWidth,
+        int $maxHeight,
+        int $quality,
+        int $maxBytes
+    ): string {
+        $imagick = new \Imagick($sourcePath);
+
+        // Auto-orient based on EXIF if present
+        if (method_exists($imagick, 'autoOrient')) {
+            $imagick->autoOrient();
+        }
+
+        $origWidth = $imagick->getImageWidth();
+        $origHeight = $imagick->getImageHeight();
+
+        $targetWidth = $origWidth;
+        $targetHeight = $origHeight;
+
+        if ($origWidth > $maxWidth || $origHeight > $maxHeight) {
+            $ratio = min($maxWidth / $origWidth, $maxHeight / $origHeight);
+            $targetWidth = max(1, (int) round($origWidth * $ratio));
+            $targetHeight = max(1, (int) round($origHeight * $ratio));
+            $imagick->resizeImage($targetWidth, $targetHeight, \Imagick::FILTER_LANCZOS, 1, true);
+        }
+
+        // Set WebP format and compression quality
+        $imagick->setImageFormat('webp');
+        $currentQuality = max(10, min(100, $quality));
+        $imagick->setImageCompressionQuality($currentQuality);
+
+        // Strip non-essential EXIF metadata to minimize size
+        $imagick->stripImage();
+
+        $filename = time().'_'.Str::random(12).'.webp';
+        $fullDestinationPath = $destinationDir.DIRECTORY_SEPARATOR.$filename;
+
+        $imagick->writeImage($fullDestinationPath);
+        \clearstatcache(true, $fullDestinationPath);
+        $currentSize = (int) @filesize($fullDestinationPath);
+
+        // Iteration phase 1: Reduce quality down to MIN_QUALITY
+        while ($currentSize > $maxBytes && $currentQuality > self::MIN_QUALITY) {
+            $currentQuality -= self::QUALITY_STEP;
+            $imagick->setImageCompressionQuality($currentQuality);
+            $imagick->writeImage($fullDestinationPath);
+            \clearstatcache(true, $fullDestinationPath);
+            $currentSize = (int) @filesize($fullDestinationPath);
+        }
+
+        // Iteration phase 2: Downscale dimensions if still over maxBytes
+        while ($currentSize > $maxBytes && ($targetWidth > 160 || $targetHeight > 120)) {
+            $targetWidth = max(160, (int) round($targetWidth * 0.85));
+            $targetHeight = max(120, (int) round($targetHeight * 0.85));
+            $imagick->resizeImage($targetWidth, $targetHeight, \Imagick::FILTER_LANCZOS, 1, true);
+            $imagick->writeImage($fullDestinationPath);
+            \clearstatcache(true, $fullDestinationPath);
+            $currentSize = (int) @filesize($fullDestinationPath);
+        }
+
+        // Iteration phase 3: Further quality reduction if still over ceiling
+        while ($currentSize > $maxBytes && $currentQuality > 20) {
+            $currentQuality -= self::QUALITY_STEP;
+            $imagick->setImageCompressionQuality($currentQuality);
+            $imagick->writeImage($fullDestinationPath);
+            \clearstatcache(true, $fullDestinationPath);
+            $currentSize = (int) @filesize($fullDestinationPath);
+        }
+
+        $imagick->clear();
+        $imagick->destroy();
+
+        if (! file_exists($fullDestinationPath) || filesize($fullDestinationPath) === 0) {
+            return $this->storeDirectFallback($file, $destinationDir, $destinationRelativeDir, $origExt);
+        }
+
+        // Delete original uncompressed source file
+        $this->cleanupSourceFile($file, $sourcePath, $fullDestinationPath);
+
+        return trim(str_replace('\\', '/', $destinationRelativeDir), '/').'/'.$filename;
+    }
+
+    /**
+     * Inspect the current server PHP environment for image optimization capabilities.
+     *
+     * @return array<string, mixed>
+     */
+    public function getEnvironmentStatus(): array
+    {
+        $gdLoaded = \extension_loaded('gd');
+        $gdWebp = false;
+        $gdVersion = 'N/A';
+
+        if ($gdLoaded && \function_exists('gd_info')) {
+            $info = \gd_info();
+            $gdVersion = $info['GD Version'] ?? 'unknown';
+            $gdWebp = ! empty($info['WebP Support']);
+        } elseif ($gdLoaded && \function_exists('imagetypes') && \defined('IMG_WEBP')) {
+            $gdWebp = (bool) (\imagetypes() & IMG_WEBP);
+        }
+
+        $imagickLoaded = \extension_loaded('imagick') && \class_exists('\Imagick');
+        $imagickWebp = false;
+        $imagickVersion = 'N/A';
+
+        if ($imagickLoaded) {
+            try {
+                $formats = \Imagick::queryFormats('WEBP');
+                $imagickWebp = ! empty($formats);
+                $versionInfo = \Imagick::getVersion();
+                $imagickVersion = $versionInfo['versionString'] ?? 'installed';
+            } catch (Throwable) {
+                $imagickWebp = false;
+            }
+        }
+
+        $activeEngine = $this->getActiveEngine();
+        $isOperational = $activeEngine !== 'none';
+
+        $memoryLimit = ini_get('memory_limit') ?: 'unknown';
+        $uploadMaxFilesize = ini_get('upload_max_filesize') ?: 'unknown';
+        $postMaxSize = ini_get('post_max_size') ?: 'unknown';
+
+        $uploadsDir = public_path('uploads');
+        $isUploadsWritable = file_exists($uploadsDir) ? is_writable($uploadsDir) : is_writable(public_path());
+
+        return [
+            'is_operational' => $isOperational,
+            'active_engine' => $activeEngine,
+            'gd' => [
+                'loaded' => $gdLoaded,
+                'version' => $gdVersion,
+                'webp_supported' => $gdWebp,
+                'available' => $this->isGdAvailable(),
+            ],
+            'imagick' => [
+                'loaded' => $imagickLoaded,
+                'version' => $imagickVersion,
+                'webp_supported' => $imagickWebp,
+                'available' => $this->isImagickAvailable(),
+            ],
+            'php' => [
+                'version' => PHP_VERSION,
+                'memory_limit' => $memoryLimit,
+                'upload_max_filesize' => $uploadMaxFilesize,
+                'post_max_size' => $postMaxSize,
+            ],
+            'storage' => [
+                'uploads_writable' => $isUploadsWritable,
+                'public_path' => public_path(),
+            ],
+        ];
+    }
+
+    /**
+     * Perform an on-demand live test image compression to WebP to verify end-to-end functionality.
+     *
+     * @return array{success: bool, engine: string, message: string, output_bytes?: int, duration_ms?: float}
+     */
+    public function testCompression(): array
+    {
+        $status = $this->getEnvironmentStatus();
+
+        if (! $status['is_operational']) {
+            return [
+                'success' => false,
+                'engine' => 'none',
+                'message' => 'Neither PHP GD with WebP support nor Imagick is enabled on this server.',
+            ];
+        }
+
+        $startTime = microtime(true);
+        $testDir = public_path('uploads/test_diagnostics');
+
+        if (! file_exists($testDir)) {
+            @mkdir($testDir, 0755, true);
+        }
+
+        // Create a 200x200 sample test JPEG in a temp file
+        $tempSource = tempnam(sys_get_temp_dir(), 'test_diag_').'.jpg';
+
+        try {
+            if ($this->isGdAvailable()) {
+                $canvas = \imagecreatetruecolor(200, 200);
+                for ($y = 0; $y < 200; $y += 20) {
+                    $c = \imagecolorallocate($canvas, ($y * 5) % 255, 100, 200);
+                    \imagefilledrectangle($canvas, 0, $y, 200, $y + 20, $c);
+                }
+                \imagejpeg($canvas, $tempSource, 90);
+                \imagedestroy($canvas);
+            } elseif ($this->isImagickAvailable()) {
+                $im = new \Imagick;
+                $im->newImage(200, 200, new \ImagickPixel('crimson'));
+                $im->setImageFormat('jpeg');
+                $im->writeImage($tempSource);
+                $im->clear();
+                $im->destroy();
+            } else {
+                return [
+                    'success' => false,
+                    'engine' => 'none',
+                    'message' => 'No image creation engine available to generate test image.',
+                ];
+            }
+
+            $optimizedRelative = $this->optimize($tempSource, 'uploads/test_diagnostics', 200, 200, 80);
+            $fullOptimized = public_path($optimizedRelative);
+
+            if (! file_exists($fullOptimized)) {
+                return [
+                    'success' => false,
+                    'engine' => $this->getActiveEngine(),
+                    'message' => 'Test file was not created at destination path: '.$fullOptimized,
+                ];
+            }
+
+            $outputBytes = (int) filesize($fullOptimized);
+            $duration = round((microtime(true) - $startTime) * 1000, 2);
+            $extension = strtolower(pathinfo($optimizedRelative, PATHINFO_EXTENSION));
+
+            // Clean up test file
+            @unlink($fullOptimized);
+            @rmdir($testDir);
+
+            if ($extension !== 'webp') {
+                return [
+                    'success' => false,
+                    'engine' => $this->getActiveEngine(),
+                    'message' => "Optimizer returned .{$extension} instead of WebP (fell back to direct storage).",
+                ];
+            }
+
+            return [
+                'success' => true,
+                'engine' => $this->getActiveEngine(),
+                'message' => "Successfully converted and optimized test image to WebP ({$outputBytes} bytes) in {$duration} ms using {$this->getActiveEngine()}.",
+                'output_bytes' => $outputBytes,
+                'duration_ms' => $duration,
+            ];
+        } catch (Throwable $e) {
+            return [
+                'success' => false,
+                'engine' => $this->getActiveEngine(),
+                'message' => 'Live test compression failed: '.$e->getMessage(),
+            ];
+        } finally {
+            if (file_exists($tempSource)) {
+                @unlink($tempSource);
             }
         }
     }
