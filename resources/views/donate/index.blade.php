@@ -1,6 +1,6 @@
 <x-layout 
     title="Donate & Support Quality Education | Dzuels Educational Foundation"
-    description="Support digital literacy, student computer labs, and educational opportunities in Ekiti State, Nigeria. Donate online via Flutterwave or direct bank transfer."
+    description="Support digital literacy, student computer labs, and educational opportunities in Ekiti State, Nigeria. Donate via GTBank direct transfer or Givebutter U.S. giving."
     :canonical="url('/donate')"
     :og-image="asset('front/images/cause.png')"
     :breadcrumbs="[
@@ -82,45 +82,104 @@
             </div>
         </section>
 
-        {{-- 2. Giving Channels Grid --}}
+        {{-- 2. Giving Channels Grid (Balanced 2x2 Layout) --}}
         <section class="py-16 lg:py-20">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto mb-12">
                     <span class="text-xs font-bold uppercase tracking-wider text-maroon dark:text-[var(--accent-cream)] block mb-2">
-                        How You Can Give
+                        Transparent Giving Pathways
                     </span>
                     <h2 class="text-3xl sm:text-4xl font-extrabold text-[var(--heading)] tracking-tight">
                         Choose Your Preferred Giving Channel
                     </h2>
                     <p class="text-sm sm:text-base text-[var(--text-muted)] mt-2">
-                        Whether giving online with a debit card, transferring from your banking app, sending wire transfers from abroad, or donating equipment, every contribution matters.
+                        Whether transferring from your local banking app, giving online via Givebutter from the United States, sending international wires, or donating educational hardware, every gift empowers learners.
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    {{-- Channel 1: Instant Online Payment via Flutterwave --}}
-                    <div class="rounded-3xl bg-[var(--surface)] border-2 border-maroon/30 dark:border-maroon/50 shadow-md p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden group">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+                    {{-- Channel 1: Direct Local Bank Transfer (GTBank NGN) - Primary Local Channel --}}
+                    <div id="bank-transfer" class="rounded-3xl bg-[var(--surface)] border-2 border-maroon/30 dark:border-maroon/50 shadow-md p-6 sm:p-8 flex flex-col justify-between scroll-mt-24 relative overflow-hidden group">
                         <div class="absolute top-4 right-4">
                             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-maroon text-white shadow-xs">
-                                ★ Fastest & Most Popular
+                                ★ Primary Nigerian Channel
                             </span>
                         </div>
 
                         <div>
-                            <div class="w-12 h-12 rounded-2xl bg-maroon/10 text-maroon dark:text-[var(--accent-cream)] flex items-center justify-center text-2xl mb-4">
-                                💳
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-mint flex items-center justify-center text-2xl mb-4">
+                                🏦
                             </div>
-                            <h3 class="text-2xl font-bold text-[var(--heading)] mb-2">Instant Online Donation</h3>
+                            <h3 class="text-2xl font-bold text-[var(--heading)] mb-2">Direct Bank Transfer</h3>
                             <p class="text-sm text-[var(--text-muted)] mb-6">
-                                Give securely in seconds using any Nigerian or International debit card, Apple Pay, Google Pay, USSD, or direct bank transfer via Flutterwave.
+                                Make a local electronic funds transfer (EFT), mobile banking transfer, or cash deposit directly into our registered foundation bank account.
                             </p>
 
+                            {{-- Account Details Card with 1-Click Copy --}}
+                            <div class="p-6 rounded-2xl bg-[var(--bg)] border border-[var(--border)] space-y-4 mb-6">
+                                <div>
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] block">Bank Name</span>
+                                    <div class="flex items-center justify-between gap-2 mt-0.5">
+                                        <span class="text-sm font-bold text-[var(--heading)]">{{ $settings['bank_name'] }}</span>
+                                        <button type="button" 
+                                                @click="copyText('{{ $settings['bank_name'] }}', 'bank_name')" 
+                                                class="text-[11px] font-semibold text-maroon hover:underline cursor-pointer">
+                                            <span x-show="copiedField !== 'bank_name'">Copy</span>
+                                            <span x-show="copiedField === 'bank_name'" x-cloak class="text-emerald-600 dark:text-mint font-bold">✓ Copied</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] block">Account Name</span>
+                                    <div class="flex items-center justify-between gap-2 mt-0.5">
+                                        <span class="text-sm font-bold text-[var(--heading)]">{{ $settings['bank_account_name'] }}</span>
+                                        <button type="button" 
+                                                @click="copyText('{{ $settings['bank_account_name'] }}', 'account_name')" 
+                                                class="text-[11px] font-semibold text-maroon hover:underline cursor-pointer">
+                                            <span x-show="copiedField !== 'account_name'">Copy</span>
+                                            <span x-show="copiedField === 'account_name'" x-cloak class="text-emerald-600 dark:text-mint font-bold">✓ Copied</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] block">Account Number (NGN)</span>
+                                    <div class="flex items-center justify-between gap-3 mt-1 p-3 rounded-xl bg-[var(--surface)] border border-[var(--border)]">
+                                        <span class="text-2xl sm:text-3xl font-mono font-black text-maroon dark:text-[var(--accent-cream)] tracking-wider">
+                                            {{ $settings['bank_account_number'] }}
+                                        </span>
+                                        <button type="button" 
+                                                @click="copyText('{{ $settings['bank_account_number'] }}', 'naira_account')" 
+                                                class="px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5"
+                                                :class="copiedField === 'naira_account' ? 'bg-emerald-600 text-white shadow-xs' : 'bg-maroon text-white hover:bg-crimson shadow-xs'">
+                                            <template x-if="copiedField === 'naira_account'">
+                                                <span class="flex items-center gap-1">
+                                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    Copied!
+                                                </span>
+                                            </template>
+                                            <template x-if="copiedField !== 'naira_account'">
+                                                <span class="flex items-center gap-1">
+                                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                                                    </svg>
+                                                    Copy NGN Account
+                                                </span>
+                                            </template>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
                             {{-- Suggested Impact Tiers --}}
-                            <div class="space-y-3 mb-8">
+                            <div class="space-y-3 mb-6">
                                 <span class="text-xs font-bold uppercase tracking-wider text-[var(--text-strong)] block">
                                     Suggested Giving Amounts:
                                 </span>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                                <div class="grid grid-cols-2 gap-2.5">
                                     @foreach ($givingTiers as $tier)
                                         <div class="p-3 rounded-xl bg-[var(--bg)] border border-[var(--border)] flex flex-col justify-between">
                                             <div class="flex items-center justify-between mb-1">
@@ -136,92 +195,22 @@
                             </div>
                         </div>
 
-                        <div>
-                            <a href="{{ $settings['flutterwave_url'] }}" 
-                               target="_blank" 
-                               rel="noopener noreferrer"
-                               class="w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl text-sm font-bold bg-maroon text-white hover:bg-crimson transition-all shadow-md hover:shadow-xl hover:-translate-y-0.5 cursor-pointer">
-                                <span>Donate Securely via Flutterwave</span>
-                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                </svg>
-                            </a>
-                            <div class="mt-3 flex items-center justify-center gap-4 text-[11px] text-[var(--text-muted)]">
-                                <span>🔒 256-Bit SSL Encrypted</span>
-                                <span>•</span>
-                                <span>Instant Email Receipt</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Channel 2: Direct Local Bank Transfer (GTBank) --}}
-                    <div id="bank-transfer" class="rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-xs p-6 sm:p-8 flex flex-col justify-between scroll-mt-24">
-                        <div>
-                            <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-mint flex items-center justify-center text-2xl mb-4">
-                                🏦
-                            </div>
-                            <h3 class="text-2xl font-bold text-[var(--heading)] mb-2">Direct Bank Transfer</h3>
-                            <p class="text-sm text-[var(--text-muted)] mb-6">
-                                Make a local electronic funds transfer (EFT), mobile bank transfer, or cash deposit directly into the official foundation account.
-                            </p>
-
-                            {{-- Account Details Card --}}
-                            <div class="p-6 rounded-2xl bg-[var(--bg)] border border-[var(--border)] space-y-4 mb-6">
-                                <div>
-                                    <span class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] block">Bank Name</span>
-                                    <span class="text-sm font-bold text-[var(--heading)]">{{ $settings['bank_name'] }}</span>
-                                </div>
-
-                                <div>
-                                    <span class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] block">Account Name</span>
-                                    <span class="text-sm font-bold text-[var(--heading)]">{{ $settings['bank_account_name'] }}</span>
-                                </div>
-
-                                <div>
-                                    <span class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] block">Account Number (NGN)</span>
-                                    <div class="flex items-center justify-between gap-3 mt-1">
-                                        <span class="text-2xl sm:text-3xl font-mono font-black text-maroon dark:text-[var(--accent-cream)] tracking-wider">
-                                            {{ $settings['bank_account_number'] }}
-                                        </span>
-                                        <button type="button" 
-                                                @click="copyText('{{ $settings['bank_account_number'] }}', 'naira_account')" 
-                                                class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5"
-                                                :class="copiedField === 'naira_account' ? 'bg-emerald-600 text-white shadow-xs' : 'bg-stone-200 dark:bg-stone-800 text-[var(--text)] hover:bg-stone-300 dark:hover:bg-stone-700'">
-                                            <template x-if="copiedField === 'naira_account'">
-                                                <span class="flex items-center gap-1">
-                                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    Copied!
-                                                </span>
-                                            </template>
-                                            <template x-if="copiedField !== 'naira_account'">
-                                                <span class="flex items-center gap-1">
-                                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                                                    </svg>
-                                                    Copy
-                                                </span>
-                                            </template>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 text-amber-900 dark:text-amber-200 text-xs space-y-1">
-                            <span class="font-bold block">💡 Transfer Confirmation:</span>
-                            <p>
-                                Kindly email your payment reference to <a href="mailto:{{ $settings['contact_email'] }}" class="underline font-semibold">{{ $settings['contact_email'] }}</a> or WhatsApp <a href="tel:{{ preg_replace('/[^0-9+]/', '', $settings['contact_phone']) }}" class="underline font-semibold">{{ $settings['contact_phone'] }}</a> for your official receipt.
+                        {{-- Transfer Confirmation Box --}}
+                        <div class="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 text-amber-900 dark:text-amber-200 text-xs space-y-1.5">
+                            <span class="font-bold block flex items-center gap-1.5">
+                                <span>💡</span> Instant Official Receipt Acknowledgment:
+                            </span>
+                            <p class="leading-relaxed">
+                                After your transfer, send your receipt screenshot to <a href="mailto:{{ $settings['contact_email'] }}" class="underline font-semibold">{{ $settings['contact_email'] }}</a> or via WhatsApp to <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings['contact_phone']) }}?text={{ urlencode('Hello, I just made a donation to Dzuels Educational Foundation. Here is my receipt.') }}" target="_blank" rel="noopener noreferrer" class="underline font-semibold">{{ $settings['contact_phone'] }}</a>.
                             </p>
                         </div>
                     </div>
 
-                    {{-- Channel 3: U.S. Diaspora Giving via Givebutter --}}
+                    {{-- Channel 2: U.S. & International Diaspora Giving via Givebutter --}}
                     <div class="rounded-3xl bg-[var(--surface)] border-2 border-blue-500/30 dark:border-blue-500/50 shadow-md p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden group">
                         <div class="absolute top-4 right-4">
                             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-600 text-white shadow-xs">
-                                🇺🇸 U.S. Donors
+                                🇺🇸 For U.S. Donors Only.
                             </span>
                         </div>
 
@@ -231,13 +220,13 @@
                             </div>
                             <h3 class="text-2xl font-bold text-[var(--heading)] mb-2">U.S. Diaspora Giving</h3>
                             <p class="text-sm text-[var(--text-muted)] mb-6">
-                                Support our programs directly in USD from anywhere in the United States. Fast, secure, and transparent multi-currency giving tailored for our U.S. community.
+                                Support our programs in USD from anywhere in the United States and abroad. Fast, secure, transparent giving with automated tax receipts powered by Givebutter.
                             </p>
 
                             {{-- Payment Methods Accepted Strip --}}
                             <div class="p-5 rounded-2xl bg-[var(--bg)] border border-[var(--border)] space-y-3 mb-8">
                                 <span class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-strong)] block">
-                                    Supported U.S. Payment Methods:
+                                    Supported Multi-Currency Methods:
                                 </span>
                                 <div class="grid grid-cols-2 gap-2 text-xs font-semibold text-[var(--text)]">
                                     <div class="flex items-center gap-2 p-2 rounded-lg bg-[var(--surface)] border border-[var(--border)]">
@@ -258,6 +247,22 @@
                                     </div>
                                 </div>
                             </div>
+
+                            {{-- Givebutter Impact Highlights --}}
+                            <div class="p-4 rounded-2xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200/50 dark:border-blue-900/40 text-xs text-blue-900 dark:text-blue-200 space-y-2 mb-6">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-base">✨</span>
+                                    <span><strong>$25:</strong> Books & digital stationery for two learners</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-base">🚀</span>
+                                    <span><strong>$50:</strong> Full digital literacy lab seat sponsorship</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-base">☀️</span>
+                                    <span><strong>$100+:</strong> Community school solar power funding</span>
+                                </div>
+                            </div>
                         </div>
 
                         <div>
@@ -265,18 +270,89 @@
                                target="_blank" 
                                rel="noopener noreferrer"
                                class="w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl text-sm font-bold bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-md hover:shadow-xl hover:-translate-y-0.5 cursor-pointer">
+                                <span>Give Online via Givebutter</span>
                                 <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                                 </svg>
-                                <span>For U.S. Donors Only.</span>
                             </a>
                             <div class="mt-3 flex items-center justify-center gap-3 text-[11px] text-[var(--text-muted)]">
                                 <span>🔒 256-Bit SSL Encrypted</span>
                                 <span>•</span>
-                                <span>Powered by Givebutter</span>
+                                <span>Instant Email Receipt</span>
                                 <span>•</span>
-                                <span>Instant Receipt</span>
+                                <span>PCI-DSS Compliant</span>
                             </div>
+                        </div>
+                    </div>
+
+                    {{-- Channel 3: Foreign Currency Wires (GTBank Domiciliary Accounts) --}}
+                    <div class="rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-xs p-6 sm:p-8 flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-2xl bg-stone-100 dark:bg-stone-800 text-maroon dark:text-[var(--accent-cream)] flex items-center justify-center text-2xl mb-4">
+                                🌐
+                            </div>
+                            <h3 class="text-2xl font-bold text-[var(--heading)] mb-2">International Wire Transfers</h3>
+                            <p class="text-sm text-[var(--text-muted)] mb-6">
+                                For donors sending direct foreign currency wire transfers from banks in the UK, Europe, Canada, or worldwide into our GTBank Domiciliary accounts.
+                            </p>
+
+                            <div class="p-6 rounded-2xl bg-[var(--bg)] border border-[var(--border)] space-y-4 mb-6">
+                                <div class="flex items-center justify-between pb-3 border-b border-[var(--border)]">
+                                    <div>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] block">SWIFT / BIC Code</span>
+                                        <span class="font-mono text-base font-black text-maroon dark:text-[var(--accent-cream)]">{{ $diasporaAccounts['swift_code'] }}</span>
+                                    </div>
+                                    <button type="button" 
+                                            @click="copyText('{{ $diasporaAccounts['swift_code'] }}', 'swift_code')" 
+                                            class="text-xs font-bold text-maroon hover:underline cursor-pointer">
+                                        <span x-show="copiedField !== 'swift_code'">Copy</span>
+                                        <span x-show="copiedField === 'swift_code'" x-cloak class="text-emerald-600 dark:text-mint">✓ Copied</span>
+                                    </button>
+                                </div>
+
+                                <div class="flex items-center justify-between pb-3 border-b border-[var(--border)]">
+                                    <div>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] block">USD Account (United States Dollar)</span>
+                                        <span class="font-mono text-sm font-bold text-[var(--text-strong)]">{{ $diasporaAccounts['usd'] }}</span>
+                                    </div>
+                                    <button type="button" 
+                                            @click="copyText('{{ $diasporaAccounts['usd'] }}', 'usd_account')" 
+                                            class="text-xs font-bold text-maroon hover:underline cursor-pointer">
+                                        <span x-show="copiedField !== 'usd_account'">Copy</span>
+                                        <span x-show="copiedField === 'usd_account'" x-cloak class="text-emerald-600 dark:text-mint">✓ Copied</span>
+                                    </button>
+                                </div>
+
+                                <div class="flex items-center justify-between pb-3 border-b border-[var(--border)]">
+                                    <div>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] block">GBP Account (British Pound Sterling)</span>
+                                        <span class="font-mono text-sm font-bold text-[var(--text-strong)]">{{ $diasporaAccounts['gbp'] }}</span>
+                                    </div>
+                                    <button type="button" 
+                                            @click="copyText('{{ $diasporaAccounts['gbp'] }}', 'gbp_account')" 
+                                            class="text-xs font-bold text-maroon hover:underline cursor-pointer">
+                                        <span x-show="copiedField !== 'gbp_account'">Copy</span>
+                                        <span x-show="copiedField === 'gbp_account'" x-cloak class="text-emerald-600 dark:text-mint">✓ Copied</span>
+                                    </button>
+                                </div>
+
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] block">EUR Account (Euro)</span>
+                                        <span class="font-mono text-sm font-bold text-[var(--text-strong)]">{{ $diasporaAccounts['eur'] }}</span>
+                                    </div>
+                                    <button type="button" 
+                                            @click="copyText('{{ $diasporaAccounts['eur'] }}', 'eur_account')" 
+                                            class="text-xs font-bold text-maroon hover:underline cursor-pointer">
+                                        <span x-show="copiedField !== 'eur_account'">Copy</span>
+                                        <span x-show="copiedField === 'eur_account'" x-cloak class="text-emerald-600 dark:text-mint">✓ Copied</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-xs text-[var(--text-muted)] leading-relaxed">
+                            Bank Branch: Guaranty Trust Bank Plc., Ado-Ekiti Branch. Intermediary bank instructions are available upon request via our finance desk.
                         </div>
                     </div>
 

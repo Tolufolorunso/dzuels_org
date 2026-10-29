@@ -16,12 +16,14 @@ class DonatePageTest extends TestCase
 
         $response->assertOk();
         $response->assertSeeText('Your Generosity Powers');
-        $response->assertSeeText('Instant Online Donation');
         $response->assertSeeText('Direct Bank Transfer');
-        $response->assertDontSeeText('Diaspora & International Wire');
+        $response->assertSeeText('U.S. Diaspora Giving');
+        $response->assertSeeText('International Wire Transfers');
         $response->assertSeeText('In-Kind & Equipment Donations');
         $response->assertSeeText('Where Your Contribution Goes');
         $response->assertSeeText('Frequently Asked Questions');
+        $response->assertDontSee('flutterwave', false);
+        $response->assertDontSee('Flutterwave', false);
     }
 
     public function test_donate_page_renders_database_settings_when_configured(): void
@@ -35,7 +37,8 @@ class DonatePageTest extends TestCase
         $response = $this->get('/donate');
 
         $response->assertOk();
-        $response->assertSee('https://flutterwave.com/pay/custom-test-slug');
+        $response->assertDontSee('https://flutterwave.com/pay/custom-test-slug');
+        $response->assertDontSee('Flutterwave');
         $response->assertSeeText('First Bank of Nigeria');
         $response->assertSeeText('Dzuels Community Fund');
         $response->assertSeeText('1234567890');
@@ -50,7 +53,7 @@ class DonatePageTest extends TestCase
         $response = $this->get('/donate');
 
         $response->assertOk();
-        $response->assertSee('https://flutterwave.com/pay/j0byxgjs0nma');
+        $response->assertDontSee('flutterwave.com');
         $response->assertSeeText('0450072850');
         $response->assertSeeText('Guaranty Trust Bank');
     }

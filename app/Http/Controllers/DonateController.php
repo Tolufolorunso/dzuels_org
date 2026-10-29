@@ -93,11 +93,11 @@ class DonateController extends Controller
             ],
             [
                 'question' => 'Are online donations secure?',
-                'answer' => 'All online payments are securely processed by Flutterwave and Givebutter using industry-leading 256-bit encryption and PCI-DSS Level 1 compliance. We do not store your credit card or bank credentials.',
+                'answer' => 'All online payments are securely processed by Givebutter using industry-leading 256-bit encryption and PCI-DSS Level 1 compliance. We do not store your credit card or bank credentials.',
             ],
             [
                 'question' => 'Can I donate from outside Nigeria (USA, UK, Canada, Europe)?',
-                'answer' => 'Yes! Donors in the United States can give directly via Givebutter (Credit/Debit, Venmo, PayPal, Apple Pay, ACH). International donors worldwide can also give using any card on Flutterwave or initiate direct transfers.',
+                'answer' => 'Yes! Donors in the United States and internationally can give directly via Givebutter (Credit/Debit Card, Venmo, PayPal, Apple Pay, ACH) or initiate direct GTBank domiciliary wire transfers.',
             ],
             [
                 'question' => 'How can I get an official receipt for my bank transfer?',

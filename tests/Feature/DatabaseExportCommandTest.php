@@ -37,22 +37,24 @@ class DatabaseExportCommandTest extends TestCase
 
     protected function tearDown(): void
     {
-        // Clean up test dumps if created
-        $customDump = base_path('database/dumps/test_export.sql');
-        if (File::exists($customDump)) {
-            File::delete($customDump);
-        }
+        try {
+            // Clean up test dumps if created
+            $customDump = base_path('database/dumps/test_export.sql');
+            if (File::exists($customDump)) {
+                File::delete($customDump);
+            }
 
-        // Restore original default dump if backed up
-        if ($this->savedDefaultDumpContent !== null) {
-            File::put(database_path('dumps/dzuels_database.sql'), $this->savedDefaultDumpContent);
-        }
+            // Restore original default dump if backed up
+            if ($this->savedDefaultDumpContent !== null) {
+                @file_put_contents(database_path('dumps/dzuels_database.sql'), $this->savedDefaultDumpContent);
+            }
 
-        if ($this->savedRootDumpContent !== null) {
-            File::put(base_path('dzuels_database.sql'), $this->savedRootDumpContent);
+            if ($this->savedRootDumpContent !== null) {
+                @file_put_contents(base_path('dzuels_database.sql'), $this->savedRootDumpContent);
+            }
+        } finally {
+            parent::tearDown();
         }
-
-        parent::tearDown();
     }
 
     public function test_it_runs_db_export_sql_command_successfully_with_default_output(): void

@@ -59,7 +59,7 @@
                         <a href="{{ url('/gallery') }}" class="hover:text-[var(--accent-cream)] transition-colors">Spelling Bee Contests</a>
                     </li>
                     <li>
-                        <a href="{{ url('/donate') }}" class="hover:text-[var(--accent-cream)] transition-colors font-medium text-[var(--accent-cream)]">Online Giving (Flutterwave)</a>
+                        <a href="{{ url('/donate') }}" class="hover:text-[var(--accent-cream)] transition-colors font-medium text-[var(--accent-cream)]">U.S. & Online Giving (Givebutter)</a>
                     </li>
                     <li>
                         <a href="{{ url('/donate#bank-transfer') }}" class="hover:text-[var(--accent-cream)] transition-colors">GTBank Direct Transfer</a>
