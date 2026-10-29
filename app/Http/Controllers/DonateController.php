@@ -25,13 +25,6 @@ class DonateController extends Controller
             'registration_number' => Setting::get('registration_number') ?: 'CAC/IT/NO 123456',
         ];
 
-        $diasporaAccounts = [
-            'swift_code' => 'GTBINGLA',
-            'usd' => '0450072881',
-            'gbp' => '0450073060',
-            'eur' => '0450072898',
-        ];
-
         $givingTiers = [
             [
                 'amount' => '₦5,000',
@@ -97,7 +90,7 @@ class DonateController extends Controller
             ],
             [
                 'question' => 'Can I donate from outside Nigeria (USA, UK, Canada, Europe)?',
-                'answer' => 'Yes! Donors in the United States and internationally can give directly via Givebutter (Credit/Debit Card, Venmo, PayPal, Apple Pay, ACH) or initiate direct GTBank domiciliary wire transfers.',
+                'answer' => 'Yes! Donors in the United States and worldwide can give directly online in USD via our Givebutter platform using any Credit/Debit Card, Venmo, PayPal, Apple Pay, Google Pay, or ACH bank transfer.',
             ],
             [
                 'question' => 'How can I get an official receipt for my bank transfer?',
@@ -109,6 +102,6 @@ class DonateController extends Controller
             ],
         ];
 
-        return view('donate.index', compact('sections', 'settings', 'diasporaAccounts', 'givingTiers', 'impactPillars', 'faqs'));
+        return view('donate.index', compact('sections', 'settings', 'givingTiers', 'impactPillars', 'faqs'));
     }
 }

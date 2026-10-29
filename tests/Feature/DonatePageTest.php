@@ -18,10 +18,11 @@ class DonatePageTest extends TestCase
         $response->assertSeeText('Your Generosity Powers');
         $response->assertSeeText('Direct Bank Transfer');
         $response->assertSeeText('U.S. Diaspora Giving');
-        $response->assertSeeText('International Wire Transfers');
+        $response->assertSeeText('Why Donate to Our Cause');
         $response->assertSeeText('In-Kind & Equipment Donations');
         $response->assertSeeText('Where Your Contribution Goes');
         $response->assertSeeText('Frequently Asked Questions');
+        $response->assertDontSeeText('International Wire Transfers');
         $response->assertDontSee('flutterwave', false);
         $response->assertDontSee('Flutterwave', false);
     }

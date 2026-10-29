@@ -74,6 +74,11 @@
 - [x] 37. **Public Gallery anti-flash performance & Tech Day event UI overhaul with dynamic date status & SEO** - eliminate image loading flashes on `/gallery` with `x-cloak`, fixed-aspect containers, and curated public photo display; dynamically calculate event status ("Upcoming Flagship" vs "Past Festival Highlights") from `event_date`; and elevate the Tech Day event show page with festival typography, edition switcher polish, and full SEO metadata.
 - [x] 38. **Public page UI redesign for `/donate` (Flutterwave removal) and `/get-involved` (balanced, centered layout)** - remove Flutterwave from the public donate page while elevating GTBank transfer with 1-click copy and Givebutter U.S. giving; and redesign `/get-involved` into a balanced, centered layout with distinct pathway cards for volunteers, partners, and sponsors.
 
+## Milestone 13: Giving Stewardship, Tech Day Event UI Centering & Pages CMS Parity
+
+- [x] 39. **Giving channel correction (remove mock wires, add "Why Donate") & Tech Day event show page centered UI overhaul** - purge mock Domiciliary wire accounts and Swift code from `/donate`, replacing them with an authoritative "Why Donate to Our Cause" card highlighting 100% direct learner impact, zero administrative deductions, CAC legal standing, and tangible outcomes; and redesign the Tech Day event show page (`/events/ijero-tech-day-[year]`) from its left-flushed layout into a centered, balanced festival experience with centered hero metrics, edition switcher pills, countdown timer, and balanced narrative and milestones cards.
+- [ ] 40. **Pages CMS overhaul: dynamic public content parity, visibility toggles & section reordering** - add `is_active` to `page_sections` with admin toggle switches and move up/down sort controls; and synchronize CMS sections and seeders across `/about`, `/donate`, `/programmes`, `/contact`, and `/get-involved` with the exact living content the public sees, enabling dynamic editing, reordering, and section show/hide.
+
 ## Deferred Ideas (Not Scheduled as Features)
 
 *(Preserved for future reference, completely removed from the active feature roadmap)*

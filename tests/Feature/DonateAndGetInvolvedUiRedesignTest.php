@@ -48,12 +48,19 @@ class DonateAndGetInvolvedUiRedesignTest extends TestCase
         $response->assertSeeText('Venmo & PayPal');
         $response->assertSeeText('Apple & Google Pay');
 
-        // 4. Foreign Currency Domiciliary Wire Transfers
-        $response->assertSeeText('International Wire Transfers');
-        $response->assertSeeText('0450072881'); // USD
-        $response->assertSeeText('0450073060'); // GBP
-        $response->assertSeeText('0450072898'); // EUR
-        $response->assertSeeText('GTBINGLA');   // SWIFT
+        // 4. Why Donate to Our Cause (Direct Stewardship & Impact Guarantee)
+        $response->assertSeeText('Why Donate to Our Cause');
+        $response->assertSeeText('100% Direct Learner Benefit');
+        $response->assertSeeText('Zero Administrative Deductions');
+        $response->assertSeeText('CAC Certified Non-Profit Standing');
+        $response->assertSeeText('Verified Progress & Photo Updates');
+
+        // Verify unverified foreign currency wires and mock SWIFT details are purged
+        $response->assertDontSeeText('International Wire Transfers');
+        $response->assertDontSeeText('0450072881');
+        $response->assertDontSeeText('0450073060');
+        $response->assertDontSeeText('0450072898');
+        $response->assertDontSeeText('GTBINGLA');
 
         // 5. In-Kind & Equipment Donations Channel
         $response->assertSeeText('In-Kind & Equipment Donations');

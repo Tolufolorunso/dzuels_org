@@ -93,7 +93,7 @@
                         Choose Your Preferred Giving Channel
                     </h2>
                     <p class="text-sm sm:text-base text-[var(--text-muted)] mt-2">
-                        Whether transferring from your local banking app, giving online via Givebutter from the United States, sending international wires, or donating educational hardware, every gift empowers learners.
+                        Whether transferring from your local banking app, giving online via Givebutter from the United States, or donating educational hardware, every gift empowers learners.
                     </p>
                 </div>
 
@@ -285,74 +285,66 @@
                         </div>
                     </div>
 
-                    {{-- Channel 3: Foreign Currency Wires (GTBank Domiciliary Accounts) --}}
-                    <div class="rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-xs p-6 sm:p-8 flex flex-col justify-between">
+                    {{-- Channel 3: Why Donate to Our Cause (Stewardship & Direct Impact Guarantee) --}}
+                    <div class="rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-xs p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden group">
+                        <div class="absolute top-4 right-4">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-mint border border-emerald-200 dark:border-emerald-800">
+                                🛡️ 100% Direct Impact
+                            </span>
+                        </div>
+
                         <div>
-                            <div class="w-12 h-12 rounded-2xl bg-stone-100 dark:bg-stone-800 text-maroon dark:text-[var(--accent-cream)] flex items-center justify-center text-2xl mb-4">
-                                🌐
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-mint flex items-center justify-center text-2xl mb-4">
+                                🤝
                             </div>
-                            <h3 class="text-2xl font-bold text-[var(--heading)] mb-2">International Wire Transfers</h3>
+                            <h3 class="text-2xl font-bold text-[var(--heading)] mb-2">Why Donate to Our Cause</h3>
                             <p class="text-sm text-[var(--text-muted)] mb-6">
-                                For donors sending direct foreign currency wire transfers from banks in the UK, Europe, Canada, or worldwide into our GTBank Domiciliary accounts.
+                                When you give to Dzuels Educational Foundation, your contribution translates directly into measurable learning opportunities for indigent children in Ekiti State.
                             </p>
 
-                            <div class="p-6 rounded-2xl bg-[var(--bg)] border border-[var(--border)] space-y-4 mb-6">
-                                <div class="flex items-center justify-between pb-3 border-b border-[var(--border)]">
+                            <div class="p-5 rounded-2xl bg-[var(--bg)] border border-[var(--border)] space-y-4 mb-6">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-base text-emerald-600 dark:text-mint font-bold shrink-0">✓</span>
                                     <div>
-                                        <span class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] block">SWIFT / BIC Code</span>
-                                        <span class="font-mono text-base font-black text-maroon dark:text-[var(--accent-cream)]">{{ $diasporaAccounts['swift_code'] }}</span>
+                                        <strong class="text-xs font-bold text-[var(--heading)] block">100% Direct Learner Benefit</strong>
+                                        <p class="text-[11px] text-[var(--text-muted)] leading-relaxed mt-0.5">Every Naira and Dollar received directly equips public school computer labs, procures curriculum textbooks, or funds student literacy prizes.</p>
                                     </div>
-                                    <button type="button" 
-                                            @click="copyText('{{ $diasporaAccounts['swift_code'] }}', 'swift_code')" 
-                                            class="text-xs font-bold text-maroon hover:underline cursor-pointer">
-                                        <span x-show="copiedField !== 'swift_code'">Copy</span>
-                                        <span x-show="copiedField === 'swift_code'" x-cloak class="text-emerald-600 dark:text-mint">✓ Copied</span>
-                                    </button>
                                 </div>
 
-                                <div class="flex items-center justify-between pb-3 border-b border-[var(--border)]">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-base text-emerald-600 dark:text-mint font-bold shrink-0">✓</span>
                                     <div>
-                                        <span class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] block">USD Account (United States Dollar)</span>
-                                        <span class="font-mono text-sm font-bold text-[var(--text-strong)]">{{ $diasporaAccounts['usd'] }}</span>
+                                        <strong class="text-xs font-bold text-[var(--heading)] block">Zero Administrative Deductions</strong>
+                                        <p class="text-[11px] text-[var(--text-muted)] leading-relaxed mt-0.5">Foundation administrative overhead, office leases, and staffing are funded independently by our Board of Trustees. Public donations are never eaten by admin fees.</p>
                                     </div>
-                                    <button type="button" 
-                                            @click="copyText('{{ $diasporaAccounts['usd'] }}', 'usd_account')" 
-                                            class="text-xs font-bold text-maroon hover:underline cursor-pointer">
-                                        <span x-show="copiedField !== 'usd_account'">Copy</span>
-                                        <span x-show="copiedField === 'usd_account'" x-cloak class="text-emerald-600 dark:text-mint">✓ Copied</span>
-                                    </button>
                                 </div>
 
-                                <div class="flex items-center justify-between pb-3 border-b border-[var(--border)]">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-base text-emerald-600 dark:text-mint font-bold shrink-0">✓</span>
                                     <div>
-                                        <span class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] block">GBP Account (British Pound Sterling)</span>
-                                        <span class="font-mono text-sm font-bold text-[var(--text-strong)]">{{ $diasporaAccounts['gbp'] }}</span>
+                                        <strong class="text-xs font-bold text-[var(--heading)] block">CAC Certified Non-Profit Standing</strong>
+                                        <p class="text-[11px] text-[var(--text-muted)] leading-relaxed mt-0.5">Incorporated with Nigeria's Corporate Affairs Commission with 10 years of audited community service, 165+ coding students, and 15 partner schools.</p>
                                     </div>
-                                    <button type="button" 
-                                            @click="copyText('{{ $diasporaAccounts['gbp'] }}', 'gbp_account')" 
-                                            class="text-xs font-bold text-maroon hover:underline cursor-pointer">
-                                        <span x-show="copiedField !== 'gbp_account'">Copy</span>
-                                        <span x-show="copiedField === 'gbp_account'" x-cloak class="text-emerald-600 dark:text-mint">✓ Copied</span>
-                                    </button>
                                 </div>
 
-                                <div class="flex items-center justify-between">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-base text-emerald-600 dark:text-mint font-bold shrink-0">✓</span>
                                     <div>
-                                        <span class="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] block">EUR Account (Euro)</span>
-                                        <span class="font-mono text-sm font-bold text-[var(--text-strong)]">{{ $diasporaAccounts['eur'] }}</span>
+                                        <strong class="text-xs font-bold text-[var(--heading)] block">Verified Progress & Photo Updates</strong>
+                                        <p class="text-[11px] text-[var(--text-muted)] leading-relaxed mt-0.5">Contributors receive direct photographic reports and project verification straight from our educational center in Ijero-Ekiti.</p>
                                     </div>
-                                    <button type="button" 
-                                            @click="copyText('{{ $diasporaAccounts['eur'] }}', 'eur_account')" 
-                                            class="text-xs font-bold text-maroon hover:underline cursor-pointer">
-                                        <span x-show="copiedField !== 'eur_account'">Copy</span>
-                                        <span x-show="copiedField === 'eur_account'" x-cloak class="text-emerald-600 dark:text-mint">✓ Copied</span>
-                                    </button>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="text-xs text-[var(--text-muted)] leading-relaxed">
-                            Bank Branch: Guaranty Trust Bank Plc., Ado-Ekiti Branch. Intermediary bank instructions are available upon request via our finance desk.
+                        <div class="pt-2 flex items-center justify-between text-xs text-[var(--text-muted)]">
+                            <span class="flex items-center gap-1.5 font-semibold text-emerald-700 dark:text-mint">
+                                <span>⚖️</span>
+                                <span>Transparent Governance</span>
+                            </span>
+                            <a href="{{ url('/about#trustees') }}" class="font-bold text-maroon hover:underline">
+                                Meet Trustees &rarr;
+                            </a>
                         </div>
                     </div>
 
