@@ -183,11 +183,10 @@ class IngestGalleryPhotosCommand extends Command
                     $photo = GalleryPhoto::create([
                         'gallery_album_id' => $albumId,
                         'image_path' => $optimizedRelativePath,
-                        'title' => $humanTitle,
                         'caption' => "Dzuels Foundation Archive ({$itemYear})",
                         'alt_text' => $humanTitle,
+                        'year' => $itemYear,
                         'sort_order' => $maxOrder + 10,
-                        'is_active' => true,
                     ]);
 
                     $mediaItem->update(['gallery_photo_id' => $photo->id]);

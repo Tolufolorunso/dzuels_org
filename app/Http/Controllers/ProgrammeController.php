@@ -20,7 +20,7 @@ class ProgrammeController extends Controller
 
         try {
             $programmes = Programme::active()
-                ->whereNotIn('slug', ['innovation-and-tech-day', 'itd'])
+                ->whereNotIn('slug', ['innovation-and-tech-day', 'itd', 'ijero-tech-day'])
                 ->ordered()
                 ->get();
             $featured = $programmes->where('is_featured', true)->first();
@@ -42,7 +42,7 @@ class ProgrammeController extends Controller
      */
     public function show(string $slug): View|RedirectResponse
     {
-        if (in_array($slug, ['innovation-and-tech-day', 'itd'], true)) {
+        if (in_array($slug, ['innovation-and-tech-day', 'itd', 'ijero-tech-day'], true)) {
             return redirect()->route('events.show', 'ijero-tech-day-2026', 301);
         }
 

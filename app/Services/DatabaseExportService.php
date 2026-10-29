@@ -68,6 +68,7 @@ class DatabaseExportService
         'event_registrations',
         'gallery_albums',
         'gallery_photos',
+        'media_items',
         'volunteer_applications',
         'partner_enquiries',
         'contact_messages',
