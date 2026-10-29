@@ -28,6 +28,7 @@ class PageSection extends Model
         'button_url',
         'meta_data',
         'sort_order',
+        'is_active',
     ];
 
     /**
@@ -40,7 +41,16 @@ class PageSection extends Model
         return [
             'meta_data' => 'array',
             'sort_order' => 'integer',
+            'is_active' => 'boolean',
         ];
+    }
+
+    /**
+     * Scope a query to only include active sections.
+     */
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('is_active', true);
     }
 
     /**

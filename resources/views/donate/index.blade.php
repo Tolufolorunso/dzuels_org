@@ -45,7 +45,11 @@
         {{-- 1. Hero Section --}}
         @php
             $heroSec = $sections['hero'] ?? null;
+            $channelsSec = $sections['giving_channels'] ?? null;
+            $giftSec = $sections['where_your_gift_goes'] ?? null;
+            $faqSec = $sections['faq'] ?? null;
         @endphp
+        @if ($heroSec?->is_active ?? true)
         <section class="relative py-16 lg:py-24 bg-[var(--surface)] border-b border-[var(--border)] overflow-hidden transition-colors">
             {{-- Decorative ambient background glows --}}
             <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-maroon/5 dark:bg-maroon/10 blur-3xl pointer-events-none"></div>
@@ -81,19 +85,21 @@
                 </div>
             </div>
         </section>
+        @endif
 
         {{-- 2. Giving Channels Grid (Balanced 2x2 Layout) --}}
+        @if ($channelsSec?->is_active ?? true)
         <section class="py-16 lg:py-20">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto mb-12">
                     <span class="text-xs font-bold uppercase tracking-wider text-maroon dark:text-[var(--accent-cream)] block mb-2">
-                        Transparent Giving Pathways
+                        {{ $channelsSec?->subheadline ?: 'Transparent Giving Pathways' }}
                     </span>
                     <h2 class="text-3xl sm:text-4xl font-extrabold text-[var(--heading)] tracking-tight">
-                        Choose Your Preferred Giving Channel
+                        {{ $channelsSec?->headline ?: 'Choose Your Preferred Giving Channel' }}
                     </h2>
                     <p class="text-sm sm:text-base text-[var(--text-muted)] mt-2">
-                        Whether transferring from your local banking app, giving online via Givebutter from the United States, or donating educational hardware, every gift empowers learners.
+                        {{ $channelsSec?->body_text ?: 'Whether transferring from your local banking app, giving online via Givebutter from the United States, or donating educational hardware, every gift empowers learners.' }}
                     </p>
                 </div>
 
@@ -386,19 +392,21 @@
                 </div>
             </div>
         </section>
+        @endif
 
         {{-- 3. Where Your Gift Goes (Transparency Breakdown) --}}
+        @if ($giftSec?->is_active ?? true)
         <section class="py-16 bg-[var(--surface-alt)] border-y border-[var(--border)] transition-colors">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto mb-12">
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-maroon/10 dark:bg-maroon/30 text-maroon dark:text-[var(--accent-cream)] border border-maroon/20 mb-3">
-                        Financial Accountability
+                        {{ $giftSec?->subheadline ?: 'Financial Accountability' }}
                     </span>
                     <h2 class="text-3xl sm:text-4xl font-extrabold text-[var(--heading)] tracking-tight">
-                        Where Your Contribution Goes
+                        {{ $giftSec?->headline ?: 'Where Your Contribution Goes' }}
                     </h2>
                     <p class="text-sm sm:text-base text-[var(--text-muted)] mt-2">
-                        We maintain zero-waste budgeting. Here is how donations are allocated across our community programmes and educational initiatives.
+                        {{ $giftSec?->body_text ?: 'We maintain zero-waste budgeting. Here is how donations are allocated across our community programmes and educational initiatives.' }}
                     </p>
                 </div>
 
@@ -423,19 +431,21 @@
                 </div>
             </div>
         </section>
+        @endif
 
         {{-- 4. Frequently Asked Questions (FAQ) --}}
+        @if ($faqSec?->is_active ?? true)
         <section class="py-16 lg:py-20">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
                     <span class="text-xs font-bold uppercase tracking-wider text-maroon dark:text-[var(--accent-cream)] block mb-2">
-                        Questions & Clarifications
+                        {{ $faqSec?->subheadline ?: 'Questions & Clarifications' }}
                     </span>
                     <h2 class="text-3xl sm:text-4xl font-extrabold text-[var(--heading)] tracking-tight">
-                        Frequently Asked Questions
+                        {{ $faqSec?->headline ?: 'Frequently Asked Questions' }}
                     </h2>
                     <p class="text-sm sm:text-base text-[var(--text-muted)] mt-2">
-                        Everything you need to know about giving to Dzuels Educational Foundation.
+                        {{ $faqSec?->body_text ?: 'Everything you need to know about giving to Dzuels Educational Foundation.' }}
                     </p>
                 </div>
 
@@ -464,6 +474,7 @@
                 </div>
             </div>
         </section>
+        @endif
 
         {{-- 5. Bottom Volunteer & Community CTA --}}
         <section class="py-16 bg-[var(--surface)] border-t border-[var(--border)] transition-colors">

@@ -10,8 +10,12 @@
     {{-- 1. Hero & Breadcrumb Banner --}}
     @php
         $heroSec = $sections['hero'] ?? null;
+        $flagshipSec = $sections['flagship'] ?? null;
+        $catalogSec = $sections['catalog'] ?? null;
+        $ctaSec = $sections['cta'] ?? null;
         $heroBgImage = $heroSec?->image_url ?: asset('front/images/dzuelsCollage.webp');
     @endphp
+    @if ($heroSec?->is_active ?? true)
     <section class="relative bg-maroon text-white py-16 sm:py-24 overflow-hidden">
         {{-- Contextual Background Imagery --}}
         <div class="absolute inset-0 z-0">
@@ -54,6 +58,7 @@
             </div>
         </div>
     </section>
+    @endif
 
     {{-- 2. Featured Initiative Spotlight --}}
     @if ($featured)
@@ -106,6 +111,7 @@
     @endif
 
     {{-- 3. Annual Flagship Event Spotlight --}}
+    @if ($flagshipSec?->is_active ?? true)
     <section class="py-8 bg-[var(--bg)] transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-maroon via-maroon-dark to-stone-900 text-white p-8 sm:p-12 shadow-2xl border border-white/10">
@@ -115,13 +121,13 @@
                 <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                     <div class="lg:col-span-8 space-y-4">
                         <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--accent-cream)]/20 text-[var(--accent-cream)] border border-[var(--accent-cream)]/30 backdrop-blur-xs">
-                            ★ Annual Flagship Festival
+                            {{ $flagshipSec?->subheadline ?: '★ Annual Flagship Festival' }}
                         </div>
                         <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
-                            Ijero Tech Day (ITD)
+                            {{ $flagshipSec?->headline ?: 'Ijero Tech Day (ITD)' }}
                         </h2>
                         <p class="text-base sm:text-lg text-cream/90 leading-relaxed max-w-2xl">
-                            Our premier annual gathering celebrating student innovation, robotics showcases, youth hackathons, and high-impact tech industry mentorship in Ijero-Ekiti.
+                            {{ $flagshipSec?->body_text ?: 'Our premier annual gathering celebrating student innovation, robotics showcases, youth hackathons, and high-impact tech industry mentorship in Ijero-Ekiti.' }}
                         </p>
                         <div class="flex flex-wrap items-center gap-3 pt-2">
                             <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-white/10 text-white border border-white/15">
@@ -133,9 +139,9 @@
                         </div>
                     </div>
                     <div class="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-3 justify-center items-start lg:items-end">
-                        <a href="{{ route('events.show', 'ijero-tech-day-2026') }}" 
+                        <a href="{{ url($flagshipSec?->button_url ?: route('events.show', 'ijero-tech-day-2026')) }}" 
                            class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full text-sm font-bold bg-[var(--accent-cream)] text-maroon hover:bg-white transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer w-full sm:w-auto text-center">
-                            <span>Explore Tech Day Flagship</span>
+                            <span>{{ $flagshipSec?->button_text ?: 'Explore Tech Day Flagship' }}</span>
                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                             </svg>
@@ -149,21 +155,23 @@
             </div>
         </div>
     </section>
+    @endif
 
     {{-- 4. Programmes Catalog Grid --}}
+    @if ($catalogSec?->is_active ?? true)
     <section class="py-16 bg-[var(--bg)] transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
                 <div>
                     <span class="text-xs font-bold uppercase tracking-widest text-crimson dark:text-mint">
-                        Intervention Catalog
+                        {{ $catalogSec?->subheadline ?: 'Intervention Catalog' }}
                     </span>
                     <h2 class="text-3xl font-extrabold text-[var(--heading)] tracking-tight mt-1">
-                        Continuous Educational Initiatives
+                        {{ $catalogSec?->headline ?: 'Continuous Educational Initiatives' }}
                     </h2>
                 </div>
                 <p class="text-sm text-[var(--text-muted)] max-w-md">
-                    Explore our continuous projects supporting classrooms, libraries, digital hubs, and young scholars.
+                    {{ $catalogSec?->body_text ?: 'Explore our continuous projects supporting classrooms, libraries, digital hubs, and young scholars.' }}
                 </p>
             </div>
 
@@ -225,29 +233,31 @@
             @endif
         </div>
     </section>
+    @endif
 
     {{-- 5. Call to Action --}}
+    @if ($ctaSec?->is_active ?? true)
     <section class="relative bg-maroon text-white py-20 overflow-hidden">
         <div class="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-crimson/30 blur-3xl pointer-events-none"></div>
         <div class="absolute -left-20 -top-20 w-80 h-80 rounded-full bg-cream/10 blur-3xl pointer-events-none"></div>
 
         <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
             <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--accent-cream)]/20 text-[var(--accent-cream)] border border-[var(--accent-cream)]/30 backdrop-blur-xs">
-                Empower a Classroom
+                {{ $ctaSec?->subheadline ?: 'Empower a Classroom' }}
             </span>
 
             <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
-                Help Us Expand These <span class="script-accent text-[var(--accent-cream)] text-4xl sm:text-5xl lg:text-6xl font-normal block sm:inline">Transformative Initiatives</span>
+                {{ $ctaSec?->headline ?: 'Help Us Expand These Transformative Initiatives' }}
             </h2>
 
             <p class="text-base sm:text-lg text-white/90 max-w-2xl mx-auto leading-relaxed">
-                Your partnership provides desktop computers, school books, scholarship grants, and expert mentorship to children who need it most.
+                {{ $ctaSec?->body_text ?: 'Your partnership provides desktop computers, school books, scholarship grants, and expert mentorship to children who need it most.' }}
             </p>
 
             <div class="flex flex-wrap items-center justify-center gap-4 pt-4">
-                <a href="{{ url('/donate') }}" 
+                <a href="{{ url($ctaSec?->button_url ?: '/donate') }}" 
                    class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-bold bg-white text-maroon hover:bg-[var(--accent-cream)] transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer">
-                    Sponsor an Initiative
+                    {{ $ctaSec?->button_text ?: 'Sponsor an Initiative' }}
                 </a>
                 <a href="{{ url('/get-involved') }}" 
                    class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-semibold border-2 border-white/80 text-white hover:bg-white/10 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer">
@@ -256,4 +266,5 @@
             </div>
         </div>
     </section>
+    @endif
 </x-layout>

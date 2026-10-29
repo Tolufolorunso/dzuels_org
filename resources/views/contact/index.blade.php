@@ -15,7 +15,10 @@
             $formSec = $sections['form'] ?? null;
             $mapSec = $sections['map'] ?? null;
             $heroBgImage = $heroSec?->image_url ?: asset('front/images/gallery/optimized/general-05.webp');
+            $showForm = $formSec?->is_active ?? true;
+            $showMap = $mapSec?->is_active ?? true;
         @endphp
+        @if ($heroSec?->is_active ?? true)
         <section class="relative bg-maroon text-white py-16 sm:py-24 overflow-hidden">
             {{-- Contextual Background Imagery --}}
             <div class="absolute inset-0 z-0">
@@ -56,8 +59,10 @@
                 </p>
             </div>
         </section>
+        @endif
 
         {{-- 2. Contact Information Cards Grid --}}
+        @if ($officeSec?->is_active ?? true)
         <section class="py-12 border-b border-[var(--border)] bg-[var(--bg)]">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -150,8 +155,10 @@
                 </div>
             </div>
         </section>
+        @endif
 
         {{-- 3. Form & Map Section --}}
+        @if ($showForm || $showMap)
         <section class="py-12 lg:py-20">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 
@@ -188,7 +195,8 @@
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
                     
                     {{-- Left Column: Contact Form --}}
-                    <div class="lg:col-span-7 bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-6 sm:p-10 shadow-sm transition-colors">
+                    @if ($showForm)
+                    <div class="{{ $showMap ? 'lg:col-span-7' : 'lg:col-span-12 max-w-3xl mx-auto' }} bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-6 sm:p-10 shadow-sm transition-colors">
                         <div class="mb-8 border-b border-[var(--border)] pb-6">
                             <h2 class="text-2xl sm:text-3xl font-extrabold text-[var(--heading)] tracking-tight">
                                 {{ $formSec?->headline ?: 'Send Us a Message' }}
@@ -338,9 +346,11 @@
                             </div>
                         </form>
                     </div>
+                    @endif
 
                     {{-- Right Column: Interactive Google Map & Direction Info --}}
-                    <div class="lg:col-span-5 space-y-8">
+                    @if ($showMap)
+                    <div class="{{ $showForm ? 'lg:col-span-5' : 'lg:col-span-12 max-w-3xl mx-auto' }} space-y-8">
                         {{-- Map Card --}}
                         <div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-6 sm:p-8 shadow-sm transition-colors overflow-hidden">
                             <div class="flex items-center justify-between mb-4">
@@ -385,10 +395,13 @@
                             </a>
                         </div>
                     </div>
+                    @endif
 
                 </div>
 
             </div>
         </section>
+        @endif
+    </div>
     </div>
 </x-layout>

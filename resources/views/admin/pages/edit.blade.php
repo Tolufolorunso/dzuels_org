@@ -28,28 +28,114 @@
         <!-- Sections List -->
         <div class="space-y-8">
             @forelse ($sections as $section)
-                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200/80 shadow-xs space-y-6">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-stone-100">
+                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200/80 shadow-xs space-y-6 {{ ! $section->is_active ? 'opacity-90 bg-stone-50/50' : '' }}">
+                    {{-- Section Header with Status & Reordering Controls --}}
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-stone-100">
                         <div class="flex items-center gap-3">
-                            <span class="w-8 h-8 rounded-xl bg-amber-50 text-maroon flex items-center justify-center font-bold text-xs uppercase">
+                            <span class="w-9 h-9 rounded-xl {{ $section->is_active ? 'bg-amber-50 text-maroon' : 'bg-stone-200 text-stone-500' }} flex items-center justify-center font-bold text-xs uppercase shadow-2xs">
                                 {{ substr($section->section_key, 0, 2) }}
                             </span>
                             <div>
-                                <h2 class="text-base font-bold text-stone-900">
-                                    Section: {{ ucwords(str_replace('_', ' ', $section->section_key)) }}
-                                </h2>
+                                <div class="flex items-center gap-2">
+                                    <h2 class="text-base font-bold text-stone-900">
+                                        Section: {{ ucwords(str_replace('_', ' ', $section->section_key)) }}
+                                    </h2>
+                                    @if ($section->is_active)
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                            Active (Visible)
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-stone-100 text-stone-600 border border-stone-200">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-stone-400"></span>
+                                            Hidden from Live Page
+                                        </span>
+                                    @endif
+                                </div>
                                 <span class="text-[11px] font-mono text-stone-400">section_key: {{ $section->section_key }}</span>
                             </div>
                         </div>
 
-                        <span class="text-[11px] text-stone-400">
-                            Last modified: {{ $section->updated_at ? $section->updated_at->diffForHumans() : 'Never' }}
-                        </span>
+                        {{-- Action Controls: 1-Click Toggle Visibility & Move Up / Move Down --}}
+                        <div class="flex flex-wrap items-center gap-2">
+                            {{-- 1-Click Toggle Visibility --}}
+                            <form method="POST" action="{{ route('admin.pages.sections.toggle-status', ['page' => $page, 'section' => $section->section_key]) }}" class="inline">
+                                @csrf
+                                <button type="submit" 
+                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer {{ $section->is_active ? 'bg-stone-100 hover:bg-stone-200 text-stone-700 border-stone-300' : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border-emerald-300' }}">
+                                    <span>{{ $section->is_active ? '👁️ Hide on Site' : '✓ Show on Site' }}</span>
+                                </button>
+                            </form>
+
+                            {{-- Reorder Controls (Move Up / Down) --}}
+                            <div class="flex items-center gap-1 bg-stone-100 p-1 rounded-xl border border-stone-200">
+                                <span class="text-[11px] font-mono font-bold px-2 text-stone-600">
+                                    #{{ $loop->iteration }}
+                                </span>
+
+                                {{-- Move Up --}}
+                                <form method="POST" action="{{ route('admin.pages.sections.move-up', ['page' => $page, 'section' => $section->section_key]) }}" class="inline">
+                                    @csrf
+                                    <button type="submit" 
+                                            @if ($loop->first) disabled @endif
+                                            class="p-1 px-2 rounded-lg border text-xs font-bold transition-all {{ $loop->first ? 'opacity-30 cursor-not-allowed bg-transparent border-transparent text-stone-400' : 'bg-white hover:bg-stone-50 border-stone-300 text-stone-700 cursor-pointer shadow-2xs' }}"
+                                            title="Move section up">
+                                        ▲
+                                    </button>
+                                </form>
+
+                                {{-- Move Down --}}
+                                <form method="POST" action="{{ route('admin.pages.sections.move-down', ['page' => $page, 'section' => $section->section_key]) }}" class="inline">
+                                    @csrf
+                                    <button type="submit" 
+                                            @if ($loop->last) disabled @endif
+                                            class="p-1 px-2 rounded-lg border text-xs font-bold transition-all {{ $loop->last ? 'opacity-30 cursor-not-allowed bg-transparent border-transparent text-stone-400' : 'bg-white hover:bg-stone-50 border-stone-300 text-stone-700 cursor-pointer shadow-2xs' }}"
+                                            title="Move section down">
+                                        ▼
+                                    </button>
+                                </form>
+                            </div>
+
+                            <span class="text-[11px] text-stone-400 pl-1 hidden sm:inline">
+                                {{ $section->updated_at ? $section->updated_at->diffForHumans() : 'Never' }}
+                            </span>
+                        </div>
                     </div>
 
                     <form method="POST" action="{{ route('admin.pages.sections.update', ['page' => $page, 'section' => $section->section_key]) }}" enctype="multipart/form-data" class="space-y-6">
                         @csrf
                         @method('PUT')
+
+                        {{-- Section Settings (Active Toggle & Numeric Sort Order) --}}
+                        <div class="p-4 rounded-2xl bg-stone-50 border border-stone-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <label class="flex items-center gap-2.5 cursor-pointer">
+                                <input type="hidden" name="is_active" value="0">
+                                <input type="checkbox" 
+                                       name="is_active" 
+                                       value="1" 
+                                       {{ old('is_active', $section->is_active) ? 'checked' : '' }} 
+                                       class="w-4 h-4 rounded text-maroon focus:ring-maroon border-stone-300 cursor-pointer">
+                                <div>
+                                    <span class="text-xs font-bold text-stone-800 uppercase tracking-wider block">
+                                        Section Active & Visible
+                                    </span>
+                                    <span class="text-[11px] text-stone-500 block">
+                                        Uncheck to immediately hide this section from the live public website.
+                                    </span>
+                                </div>
+                            </label>
+
+                            <div class="flex items-center gap-2">
+                                <label for="{{ $section->section_key }}_sort_order" class="text-xs font-bold text-stone-600 uppercase tracking-wider whitespace-nowrap">
+                                    Sort Order:
+                                </label>
+                                <input type="number" 
+                                       id="{{ $section->section_key }}_sort_order" 
+                                       name="sort_order" 
+                                       value="{{ old('sort_order', $section->sort_order) }}" 
+                                       class="w-20 px-3 py-1.5 rounded-xl border border-stone-300 text-xs text-stone-900 font-mono text-center focus:border-maroon focus:outline-none">
+                            </div>
+                        </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Headline -->

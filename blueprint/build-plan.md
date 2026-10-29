@@ -77,7 +77,7 @@
 ## Milestone 13: Giving Stewardship, Tech Day Event UI Centering & Pages CMS Parity
 
 - [x] 39. **Giving channel correction (remove mock wires, add "Why Donate") & Tech Day event show page centered UI overhaul** - purge mock Domiciliary wire accounts and Swift code from `/donate`, replacing them with an authoritative "Why Donate to Our Cause" card highlighting 100% direct learner impact, zero administrative deductions, CAC legal standing, and tangible outcomes; and redesign the Tech Day event show page (`/events/ijero-tech-day-[year]`) from its left-flushed layout into a centered, balanced festival experience with centered hero metrics, edition switcher pills, countdown timer, and balanced narrative and milestones cards.
-- [ ] 40. **Pages CMS overhaul: dynamic public content parity, visibility toggles & section reordering** - add `is_active` to `page_sections` with admin toggle switches and move up/down sort controls; and synchronize CMS sections and seeders across `/about`, `/donate`, `/programmes`, `/contact`, and `/get-involved` with the exact living content the public sees, enabling dynamic editing, reordering, and section show/hide.
+- [x] 40. **Pages CMS overhaul: dynamic public content parity, visibility toggles & section reordering** - add `is_active` to `page_sections` with admin toggle switches and move up/down sort controls; and synchronize CMS sections and seeders across `/about`, `/donate`, `/programmes`, `/contact`, and `/get-involved` with the exact living content the public sees, enabling dynamic editing, reordering, and section show/hide.
 
 ## Deferred Ideas (Not Scheduled as Features)
 

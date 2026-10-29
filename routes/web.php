@@ -110,6 +110,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/pages', [AdminPageController::class, 'index'])->name('pages.index');
         Route::get('/pages/{page}', [AdminPageController::class, 'edit'])->name('pages.edit');
         Route::put('/pages/{page}/sections/{section}', [AdminPageController::class, 'updateSection'])->name('pages.sections.update');
+        Route::post('/pages/{page}/sections/{section}/toggle-status', [AdminPageController::class, 'toggleStatus'])->name('pages.sections.toggle-status');
+        Route::post('/pages/{page}/sections/{section}/move-up', [AdminPageController::class, 'moveUp'])->name('pages.sections.move-up');
+        Route::post('/pages/{page}/sections/{section}/move-down', [AdminPageController::class, 'moveDown'])->name('pages.sections.move-down');
 
         // Super Admin Restricted Routes (Settings & Users)
         Route::middleware(['super_admin'])->group(function () {

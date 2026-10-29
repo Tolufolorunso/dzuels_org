@@ -25,7 +25,7 @@
                     <div class="space-y-3">
                         <div class="flex items-center justify-between">
                             <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-stone-100 text-stone-700">
-                                {{ $page['sections_count'] }} {{ Str::plural('Section', $page['sections_count']) }}
+                                {{ $page['active_sections_count'] }} of {{ $page['sections_count'] }} {{ Str::plural('Section', $page['sections_count']) }} Active
                             </span>
                             @if ($page['last_updated'])
                                 <span class="text-[11px] text-stone-400">

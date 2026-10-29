@@ -11,8 +11,15 @@
     @php
         $heroSec = $sections['hero'] ?? null;
         $storySec = $sections['story'] ?? null;
+        $approachSec = $sections['approach'] ?? null;
+        $librarySec = $sections['famoyinka_library'] ?? null;
+        $trusteesSec = $sections['trustees'] ?? null;
+        $managementSec = $sections['management'] ?? null;
+        $advisorsSec = $sections['advisors'] ?? null;
+        $ctaSec = $sections['cta'] ?? null;
         $heroBgImage = $heroSec?->image_url ?: asset('front/images/gallery/optimized/general-01.webp');
     @endphp
+    @if ($heroSec?->is_active ?? true)
     <section class="relative bg-maroon text-white py-16 sm:py-24 overflow-hidden">
         {{-- Contextual Background Imagery --}}
         <div class="absolute inset-0 z-0">
@@ -55,8 +62,10 @@
             </div>
         </div>
     </section>
+    @endif
 
     {{-- 2. Our Story & 10-Year Journey --}}
+    @if ($storySec?->is_active ?? true)
     <section class="py-20 bg-[var(--bg)] transition-colors overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
@@ -141,19 +150,21 @@
             </div>
         </div>
     </section>
+    @endif
 
     {{-- 3. Our Holistic Child Approach (6 Integrated Pillars) --}}
+    @if ($approachSec?->is_active ?? true)
     <section class="py-20 bg-[var(--surface-alt)] border-y border-[var(--border)] transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-maroon/10 text-maroon dark:bg-mint/10 dark:text-mint">
-                    Total Well-Being of the Child
+                    {{ $approachSec?->subheadline ?: 'Total Well-Being of the Child' }}
                 </span>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-[var(--heading)] tracking-tight">
-                    Our Integrated Intervention Approach
+                    {{ $approachSec?->headline ?: 'Our Integrated Intervention Approach' }}
                 </h2>
                 <p class="text-base sm:text-lg text-[var(--text-muted)] leading-relaxed">
-                    We believe sustainable education requires a whole-child model: combining academic sponsorship, classroom infrastructure, moral mentorship, and household nutritional stability.
+                    {{ $approachSec?->body_text ?: 'We believe sustainable education requires a whole-child model: combining academic sponsorship, classroom infrastructure, moral mentorship, and household nutritional stability.' }}
                 </p>
             </div>
 
@@ -238,22 +249,24 @@
             </div>
         </div>
     </section>
+    @endif
 
     {{-- 3b. Permanent Community Sanctuary Showcase: Famoyinka Memorial Children's Library --}}
+    @if ($librarySec?->is_active ?? true)
     <section class="py-16 sm:py-20 bg-[var(--surface)] transition-colors border-b border-[var(--border)] overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-[var(--surface-alt)] border border-[var(--border)] rounded-3xl p-8 sm:p-12 lg:p-14 shadow-lg grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
                 <div class="lg:col-span-7 space-y-6">
                     <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-maroon/10 text-maroon dark:bg-mint/15 dark:text-mint border border-maroon/20 dark:border-mint/30">
-                        <span>🏛️ Permanent Community Hub</span>
+                        <span>🏛️ {{ $librarySec?->subheadline ?: 'Permanent Community Hub' }}</span>
                     </div>
                     
                     <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[var(--heading)] tracking-tight">
-                        Famoyinka Memorial Children's Library
+                        {{ $librarySec?->headline ?: "Famoyinka Memorial Children's Library" }}
                     </h2>
 
                     <p class="text-base sm:text-lg text-[var(--text)] leading-relaxed">
-                        Established as a permanent physical sanctuary in Ijero-Ekiti, the Famoyinka Memorial Children's Library brings our 10-year holistic child development vision to life every day. It provides children and families with open access to rich literature, quiet study workstations, and weekend mentorship circles.
+                        {{ $librarySec?->body_text ?: "Established as a permanent physical sanctuary in Ijero-Ekiti, the Famoyinka Memorial Children's Library brings our 10-year holistic child development vision to life every day. It provides children and families with open access to rich literature, quiet study workstations, and weekend mentorship circles." }}
                     </p>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
@@ -303,19 +316,21 @@
             </div>
         </div>
     </section>
+    @endif
 
     {{-- 4. Board of Trustees --}}
+    @if ($trusteesSec?->is_active ?? true)
     <section id="trustees" class="py-20 bg-[var(--bg)] transition-colors scroll-mt-24">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-maroon/10 text-maroon dark:bg-mint/10 dark:text-mint">
-                    Stewardship & Governance
+                    {{ $trusteesSec?->subheadline ?: 'Stewardship & Governance' }}
                 </span>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-[var(--heading)] tracking-tight">
-                    Board of Trustees
+                    {{ $trusteesSec?->headline ?: 'Board of Trustees' }}
                 </h2>
                 <p class="text-base sm:text-lg text-[var(--text-muted)] leading-relaxed">
-                    Our governing trustees provide strategic guidance, fiduciary integrity, and long-term vision to uphold our educational mission.
+                    {{ $trusteesSec?->body_text ?: 'Our governing trustees provide strategic guidance, fiduciary integrity, and long-term vision to uphold our educational mission.' }}
                 </p>
             </div>
 
@@ -376,19 +391,21 @@
             @endif
         </div>
     </section>
+    @endif
 
     {{-- 5. Management Team --}}
+    @if ($managementSec?->is_active ?? true)
     <section id="management" class="py-20 bg-[var(--surface-alt)] border-y border-[var(--border)] transition-colors scroll-mt-24">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-maroon/10 text-maroon dark:bg-mint/10 dark:text-mint">
-                    Operational Leadership
+                    {{ $managementSec?->subheadline ?: 'Operational Leadership' }}
                 </span>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-[var(--heading)] tracking-tight">
-                    Management Team
+                    {{ $managementSec?->headline ?: 'Management Team' }}
                 </h2>
                 <p class="text-base sm:text-lg text-[var(--text-muted)] leading-relaxed">
-                    Driving day-to-day operations, international partnerships, and grassroots program delivery in Nigeria and abroad.
+                    {{ $managementSec?->body_text ?: 'Driving day-to-day operations, international partnerships, and grassroots program delivery in Nigeria and abroad.' }}
                 </p>
             </div>
 
@@ -453,19 +470,21 @@
             @endif
         </div>
     </section>
+    @endif
 
     {{-- 6. Advisory Board --}}
+    @if ($advisorsSec?->is_active ?? true)
     <section class="py-20 bg-[var(--bg)] transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-maroon/10 text-maroon dark:bg-mint/10 dark:text-mint">
-                    Domain Expertise
+                    {{ $advisorsSec?->subheadline ?: 'Domain Expertise' }}
                 </span>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-[var(--heading)] tracking-tight">
-                    Advisory Board
+                    {{ $advisorsSec?->headline ?: 'Advisory Board' }}
                 </h2>
                 <p class="text-base sm:text-lg text-[var(--text-muted)] leading-relaxed">
-                    Industry leaders, educators, medical practitioners, and technology innovators guiding our programmatic growth.
+                    {{ $advisorsSec?->body_text ?: 'Industry leaders, educators, medical practitioners, and technology innovators guiding our programmatic growth.' }}
                 </p>
             </div>
 
@@ -513,6 +532,7 @@
             @endif
         </div>
     </section>
+    @endif
 
     {{-- 7. Partners in Progress Showcase --}}
     <section class="py-20 bg-[var(--surface-alt)] border-t border-[var(--border)] transition-colors">
@@ -566,6 +586,7 @@
     </section>
 
     {{-- 8. Final Call to Action (CTA) --}}
+    @if ($ctaSec?->is_active ?? true)
     <section class="relative bg-maroon text-white py-20 overflow-hidden">
         {{-- Subtle background circles --}}
         <div class="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-crimson/30 blur-3xl pointer-events-none"></div>
@@ -573,21 +594,21 @@
 
         <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
             <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--accent-cream)]/20 text-[var(--accent-cream)] border border-[var(--accent-cream)]/30 backdrop-blur-xs">
-                Make a Difference Today
+                {{ $ctaSec?->subheadline ?: 'Make a Difference Today' }}
             </span>
 
             <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
-                Join Hands with Us to <span class="script-accent text-[var(--accent-cream)] text-4xl sm:text-5xl lg:text-6xl font-normal block sm:inline">Transform More Lives</span>
+                {{ $ctaSec?->headline ?: 'Join Hands with Us to Transform More Lives' }}
             </h2>
 
             <p class="text-base sm:text-lg text-white/90 max-w-2xl mx-auto leading-relaxed">
-                Whether through volunteer teaching, mentoring, sponsoring an indigent pupil's fees, or corporate partnership, your contribution builds a brighter tomorrow.
+                {{ $ctaSec?->body_text ?: 'Whether through volunteer teaching, mentoring, sponsoring an indigent pupil\'s fees, or corporate partnership, your contribution builds a brighter tomorrow.' }}
             </p>
 
             <div class="flex flex-wrap items-center justify-center gap-4 pt-4">
-                <a href="{{ url('/get-involved') }}" 
+                <a href="{{ url($ctaSec?->button_url ?: '/get-involved') }}" 
                    class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-bold bg-white text-maroon hover:bg-[var(--accent-cream)] transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer">
-                    Become a Volunteer
+                    {{ $ctaSec?->button_text ?: 'Become a Volunteer' }}
                 </a>
                 <a href="{{ url('/donate') }}" 
                    class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-semibold border-2 border-white/80 text-white hover:bg-white/10 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer">
@@ -596,4 +617,5 @@
             </div>
         </div>
     </section>
+    @endif
 </x-layout>

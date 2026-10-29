@@ -62,6 +62,7 @@ class PageController extends Controller
 
         foreach ($this->managedPages as $key => $meta) {
             $sectionsCount = PageSection::where('page_key', $key)->count();
+            $activeSectionsCount = PageSection::where('page_key', $key)->where('is_active', true)->count();
             $lastUpdated = PageSection::where('page_key', $key)->latest('updated_at')->value('updated_at');
 
             $pages[$key] = [
@@ -70,6 +71,7 @@ class PageController extends Controller
                 'description' => $meta['description'],
                 'public_url' => $meta['public_url'],
                 'sections_count' => $sectionsCount,
+                'active_sections_count' => $activeSectionsCount,
                 'last_updated' => $lastUpdated,
             ];
         }
@@ -109,6 +111,8 @@ class PageController extends Controller
             'button_url' => ['nullable', 'string', 'max:255'],
             'image_path' => ['nullable', 'string', 'max:255'],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:10240'],
+            'sort_order' => ['nullable', 'integer', 'min:0'],
+            'is_active' => ['nullable', 'boolean'],
             'meta_data' => ['nullable', 'array'],
             'meta_data.tagline' => ['nullable', 'string', 'max:255'],
             'meta_data.pillars' => ['nullable', 'array'],
@@ -133,6 +137,14 @@ class PageController extends Controller
         $pageSection->button_text = $validated['button_text'] ?? null;
         $pageSection->button_url = $validated['button_url'] ?? null;
 
+        if ($request->has('is_active')) {
+            $pageSection->is_active = $request->boolean('is_active');
+        }
+
+        if (isset($validated['sort_order'])) {
+            $pageSection->sort_order = (int) $validated['sort_order'];
+        }
+
         if ($request->has('meta_data')) {
             $pageSection->meta_data = $validated['meta_data'] ?? null;
         }
@@ -152,5 +164,114 @@ class PageController extends Controller
         $pageSection->save();
 
         return back()->with('success', "Section '{$section}' updated successfully!");
+    }
+
+    /**
+     * Toggle visibility (is_active) for a specific section.
+     */
+    public function toggleStatus(string $page, string $section): RedirectResponse
+    {
+        if (! array_key_exists($page, $this->managedPages)) {
+            abort(404, 'Invalid page key.');
+        }
+
+        $pageSection = PageSection::where('page_key', $page)
+            ->where('section_key', $section)
+            ->firstOrFail();
+
+        $pageSection->is_active = ! $pageSection->is_active;
+        $pageSection->save();
+
+        $statusText = $pageSection->is_active ? 'Active (Visible on Live Page)' : 'Hidden from Live Page';
+
+        return back()->with('success', "Section '{$section}' is now {$statusText}.");
+    }
+
+    /**
+     * Move section up in display order.
+     */
+    public function moveUp(string $page, string $section): RedirectResponse
+    {
+        if (! array_key_exists($page, $this->managedPages)) {
+            abort(404, 'Invalid page key.');
+        }
+
+        $sections = PageSection::where('page_key', $page)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
+
+        $currentIndex = $sections->search(fn ($item) => $item->section_key === $section);
+
+        if ($currentIndex === false) {
+            abort(404, 'Section not found.');
+        }
+
+        if ($currentIndex > 0) {
+            // Normalize all sort orders with step of 10
+            foreach ($sections as $idx => $sec) {
+                $sec->sort_order = ($idx + 1) * 10;
+                $sec->save();
+            }
+
+            // Swap with previous item
+            $current = $sections[$currentIndex];
+            $previous = $sections[$currentIndex - 1];
+
+            $temp = $current->sort_order;
+            $current->sort_order = $previous->sort_order;
+            $previous->sort_order = $temp;
+
+            $current->save();
+            $previous->save();
+
+            return back()->with('success', "Section '{$section}' moved up.");
+        }
+
+        return back()->with('info', "Section '{$section}' is already at the top.");
+    }
+
+    /**
+     * Move section down in display order.
+     */
+    public function moveDown(string $page, string $section): RedirectResponse
+    {
+        if (! array_key_exists($page, $this->managedPages)) {
+            abort(404, 'Invalid page key.');
+        }
+
+        $sections = PageSection::where('page_key', $page)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
+
+        $currentIndex = $sections->search(fn ($item) => $item->section_key === $section);
+
+        if ($currentIndex === false) {
+            abort(404, 'Section not found.');
+        }
+
+        if ($currentIndex < $sections->count() - 1) {
+            // Normalize all sort orders with step of 10
+            foreach ($sections as $idx => $sec) {
+                $sec->sort_order = ($idx + 1) * 10;
+                $sec->save();
+            }
+
+            // Swap with next item
+            $current = $sections[$currentIndex];
+            $next = $sections[$currentIndex + 1];
+
+            $temp = $current->sort_order;
+            $current->sort_order = $next->sort_order;
+            $next->sort_order = $temp;
+
+            $current->save();
+            $next->save();
+
+            return back()->with('success', "Section '{$section}' moved down.");
+        }
+
+        return back()->with('info', "Section '{$section}' is already at the bottom.");
     }
 }

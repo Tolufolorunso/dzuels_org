@@ -22,7 +22,11 @@
         {{-- 1. Hero Section --}}
         @php
             $heroSec = $sections['hero'] ?? null;
+            $pathwaysSec = $sections['pathways'] ?? null;
+            $formSec = $sections['form'] ?? null;
+            $benefitsSec = $sections['benefits'] ?? null;
         @endphp
+        @if ($heroSec?->is_active ?? true)
         <section class="relative py-16 lg:py-24 bg-[var(--surface)] border-b border-[var(--border)] overflow-hidden transition-colors">
             {{-- Decorative ambient background glows --}}
             <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-maroon/5 dark:bg-maroon/10 blur-3xl pointer-events-none"></div>
@@ -58,19 +62,21 @@
                 </div>
             </div>
         </section>
+        @endif
 
         {{-- 2. Balanced 3-Pathway Selector Cards --}}
+        @if ($pathwaysSec?->is_active ?? true)
         <section class="py-12 lg:py-16 bg-[var(--bg)] border-b border-[var(--border)]">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-2xl mx-auto mb-10 space-y-2">
                     <span class="text-xs font-bold uppercase tracking-wider text-maroon dark:text-[var(--accent-cream)] block">
-                        Engagement Pathways
+                        {{ $pathwaysSec?->subheadline ?: 'Engagement Pathways' }}
                     </span>
                     <h2 class="text-2xl sm:text-3xl font-extrabold text-[var(--heading)] tracking-tight">
-                        How Would You Like to Support?
+                        {{ $pathwaysSec?->headline ?: 'How Would You Like to Support?' }}
                     </h2>
                     <p class="text-sm text-[var(--text-muted)]">
-                        Select a pathway below to jump directly to its dedicated application or giving channel.
+                        {{ $pathwaysSec?->body_text ?: 'Select a pathway below to jump directly to its dedicated application or giving channel.' }}
                     </p>
                 </div>
 
@@ -136,8 +142,10 @@
                 </div>
             </div>
         </section>
+        @endif
 
         {{-- 3. Centered Interactive Application Area --}}
+        @if ($formSec?->is_active ?? true)
         <section id="application-form-card" class="py-16 lg:py-24 scroll-mt-24">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -518,8 +526,10 @@
 
             </div>
         </section>
+        @endif
 
         {{-- 4. Balanced 3-Column Governance & Benefits Grid Below Form --}}
+        @if ($benefitsSec?->is_active ?? true)
         <section class="py-16 bg-[var(--surface-alt)] border-t border-[var(--border)] transition-colors">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -607,5 +617,6 @@
                 </div>
             </div>
         </section>
+        @endif
     </div>
 </x-layout>

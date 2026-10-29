@@ -7,6 +7,7 @@
     @php
         $heroSec = $sections['hero'] ?? null;
     @endphp
+    @if ($heroSec?->is_active ?? true)
     <section class="relative bg-maroon text-white py-20 sm:py-28 lg:py-36 overflow-hidden">
         {{-- Background Image with Gradient Overlay --}}
         <div class="absolute inset-0 z-0">
@@ -47,6 +48,7 @@
             </div>
         </div>
     </section>
+    @endif
 
     {{-- 2. Floating Impact Statistics Band --}}
     <section class="relative z-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 sm:-mt-16 mb-8">
@@ -107,6 +109,7 @@
     @php
         $whoSec = $sections['who_we_are'] ?? null;
     @endphp
+    @if ($whoSec?->is_active ?? true)
     <section class="py-16 sm:py-24 bg-[var(--bg)] transition-colors overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -240,8 +243,8 @@
             </div>
         </div>
     </section>
+    @endif
 
-    {{-- 6. Our Causes Section --}}
     {{-- 6. Our Impact Causes Section --}}
     @php
         $causeSec = $sections['causes'] ?? null;
@@ -286,6 +289,7 @@
         $activePillars = $causeSec?->meta_data['pillars'] ?? $defaultPillars;
         $taglineBanner = $causeSec?->meta_data['tagline'] ?? 'AN INTEGRATED APPROACH TO THE TOTAL WELL BEING OF THE CHILD';
     @endphp
+    @if ($causeSec?->is_active ?? true)
     <section class="py-20 lg:py-28 bg-[var(--bg)] transition-colors relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             {{-- Section Heading --}}
@@ -370,6 +374,7 @@
             </div>
         </div>
     </section>
+    @endif
 
     {{-- 7. Famoyinka Memorial Children's Library Showcase --}}
     @php
@@ -386,6 +391,7 @@
         $p3 = $libPhotos[2] ?? $defaultLibPhotos[2];
         $p4 = $libPhotos[3] ?? $defaultLibPhotos[3];
     @endphp
+    @if ($librarySec?->is_active ?? true)
     <section class="py-20 lg:py-28 bg-[var(--surface-alt)] transition-colors relative overflow-hidden border-y border-[var(--border)]">
         {{-- Subtle background pattern --}}
         <div class="absolute inset-0 z-0 opacity-15 pointer-events-none">
@@ -517,11 +523,13 @@
             </div>
         </div>
     </section>
+    @endif
 
     {{-- 8. Featured Project Card --}}
     @php
         $featSec = $sections['featured_project'] ?? null;
     @endphp
+    @if ($featSec?->is_active ?? true)
     <section class="py-16 sm:py-20 bg-[var(--bg-alt)] transition-colors">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl overflow-hidden shadow-xl grid grid-cols-1 lg:grid-cols-12 transition-colors">
@@ -560,6 +568,7 @@
             </div>
         </div>
     </section>
+    @endif
 
     {{-- 8. Upcoming Event Callout / Teaser --}}
     <section class="py-16 sm:py-20 bg-[var(--bg)] transition-colors">
@@ -629,6 +638,7 @@
     @php
         $ctaSec = $sections['cta'] ?? null;
     @endphp
+    @if ($ctaSec?->is_active ?? true)
     <section class="py-20 lg:py-28 text-white text-center relative overflow-hidden bg-radial from-crimson/40 via-maroon to-[#2B0203]">
         <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
@@ -649,4 +659,5 @@
             </div>
         </div>
     </section>
+    @endif
 </x-layout>
