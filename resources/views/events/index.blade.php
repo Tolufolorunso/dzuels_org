@@ -62,9 +62,17 @@
                             </span>
                         </div>
 
-                        {{-- Registration Status Badge --}}
+                        {{-- Registration / Event Status Badge --}}
                         <div class="absolute top-6 right-6 z-10">
-                            @if ($featuredEvent->is_registration_open)
+                            @if ($featuredEvent->is_past)
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-stone-900/95 text-white shadow-md border border-white/20">
+                                    <span>✅</span> {{ $featuredEvent->status_label }}
+                                </span>
+                            @elseif ($featuredEvent->is_today)
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500 text-white shadow-md animate-pulse">
+                                    <span>🔥</span> Happening Today
+                                </span>
+                            @elseif ($featuredEvent->is_registration_open)
                                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500 text-white shadow-md">
                                     <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
                                     Registration Open
@@ -143,7 +151,7 @@
                         <div class="pt-4 flex flex-wrap items-center gap-3">
                             <a href="{{ route('events.show', $featuredEvent->slug) }}" 
                                class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full text-sm font-bold bg-maroon text-white hover:bg-crimson transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5">
-                                <span>{{ $featuredEvent->is_registration_open ? 'Register to Attend' : 'View Event Details' }}</span>
+                                <span>{{ $featuredEvent->is_past ? 'Explore Highlights & Photos' : ($featuredEvent->is_registration_open ? 'Register to Attend' : 'View Event Details') }}</span>
                                 <span>&rarr;</span>
                             </a>
                             <a href="{{ route('events.show', $featuredEvent->slug) }}" 
@@ -175,15 +183,11 @@
                     </div>
                     <div class="flex flex-wrap items-center gap-2.5">
                         @foreach ($techDayEditions as $edition)
-                            @php
-                                $editionYear = $edition->event_date?->year;
-                                $isUpcoming = $editionYear >= 2026;
-                            @endphp
                             <a href="{{ route('events.show', $edition->slug) }}" 
                                class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[var(--surface)] text-[var(--heading)] hover:text-white hover:bg-maroon border border-[var(--border)] shadow-xs transition-all duration-200 hover:-translate-y-0.5">
-                                <span>{{ $editionYear }}</span>
-                                <span class="text-[10px] px-2 py-0.5 rounded-full {{ $isUpcoming ? 'bg-mint/20 text-mint' : 'bg-stone-200 dark:bg-stone-800 text-stone-600 dark:text-stone-300' }}">
-                                    {{ $isUpcoming ? 'Flagship (Upcoming)' : ($editionYear === 2024 ? 'Inaugural' : '2nd Edition') }}
+                                <span>{{ $edition->event_date?->year }}</span>
+                                <span class="text-[10px] px-2 py-0.5 rounded-full {{ $edition->is_future ? 'bg-mint/20 text-mint' : 'bg-stone-200 dark:bg-stone-800 text-stone-600 dark:text-stone-300' }}">
+                                    {{ $edition->edition_badge }}
                                 </span>
                             </a>
                         @endforeach

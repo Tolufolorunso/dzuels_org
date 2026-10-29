@@ -111,6 +111,11 @@ body {
     outline-offset: 2px;
 }
 
+/* Alpine.js cloak directive to prevent FOUC / flashing during initialization */
+[x-cloak] {
+    display: none !important;
+}
+
 button:focus:not(:focus-visible),
 a:focus:not(:focus-visible),
 input:focus:not(:focus-visible),

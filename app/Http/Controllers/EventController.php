@@ -78,7 +78,8 @@ class EventController extends Controller
             $albumSlug = "itd-{$eventYear}";
             $album = GalleryAlbum::where('slug', $albumSlug)
                 ->with(['photos' => function ($q) {
-                    $q->orderBy('sort_order', 'asc');
+                    $q->where('is_public', true)
+                        ->orderBy('sort_order', 'asc');
                 }])
                 ->first();
 

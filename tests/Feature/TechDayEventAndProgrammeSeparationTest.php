@@ -74,7 +74,7 @@ class TechDayEventAndProgrammeSeparationTest extends TestCase
         $response2026->assertSee(route('events.show', 'ijero-tech-day-2026'));
         $response2026->assertSee(route('events.show', 'ijero-tech-day-2025'));
         $response2026->assertSee(route('events.show', 'ijero-tech-day-2024'));
-        $response2026->assertSeeText('Upcoming Flagship');
+        $response2026->assertSeeText('Concluded');
 
         // 2025 Edition
         $response2025 = $this->get('/events/ijero-tech-day-2025');
@@ -99,7 +99,7 @@ class TechDayEventAndProgrammeSeparationTest extends TestCase
         $response->assertSee(route('events.show', 'ijero-tech-day-2026'));
         $response->assertSee(route('events.show', 'ijero-tech-day-2025'));
         $response->assertSee(route('events.show', 'ijero-tech-day-2024'));
-        $response->assertSeeText('Flagship (Upcoming)');
+        $response->assertSeeText('Concluded');
         $response->assertSeeText('2nd Edition');
         $response->assertSeeText('Inaugural');
     }

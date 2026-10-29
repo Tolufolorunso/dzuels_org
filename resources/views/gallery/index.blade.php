@@ -218,7 +218,7 @@
 
                     {{-- Counter indicator --}}
                     <div class="hidden sm:block text-xs text-[var(--text-muted)]">
-                        Showing <strong class="text-[var(--heading)]" x-text="filteredPhotos.length"></strong> photos
+                        Showing <strong class="text-[var(--heading)]" x-text="filteredPhotos.length">{{ isset($selectedAlbum) && $selectedAlbum ? $selectedAlbum->photos->count() : $totalPhotos }}</strong> photos
                     </div>
                 </div>
             </div>
@@ -243,23 +243,30 @@
                     </button>
                 </div>
 
-                {{-- Masonry Grid (Server-Rendered for Instant Display, Filtered by Alpine) --}}
+                {{-- Masonry Grid (Server-Rendered with Fixed 4:3 Aspect Ratios to Eliminate Layout Flashes) --}}
                 <div class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4" id="gallery-masonry-grid">
                     @foreach ($allPhotos as $index => $photo)
+                        @php
+                            $isInitiallyHidden = !empty($activeSlug) && $activeSlug !== 'all' && $photo['album_slug'] !== $activeSlug;
+                        @endphp
                         <div class="gallery-photo-item break-inside-avoid rounded-2xl overflow-hidden bg-[var(--surface)] border border-[var(--border)] shadow-xs hover:shadow-xl transition-all duration-300 group cursor-pointer relative"
                              data-album="{{ $photo['album_slug'] }}"
+                             @if ($isInitiallyHidden) style="display: none;" @endif
                              x-show="currentAlbum === 'all' || currentAlbum === '{{ $photo['album_slug'] }}'"
                              x-transition:enter="transition ease-out duration-300"
                              x-transition:enter-start="opacity-0 scale-95"
                              x-transition:enter-end="opacity-100 scale-100"
                              @click="openLightboxByPhotoId({{ $photo['id'] }})">
                             
-                            {{-- Image --}}
-                            <div class="relative overflow-hidden bg-stone-100 dark:bg-stone-800">
+                            {{-- Image Container with Fixed 4:3 Aspect to Prevent Layout Reflow --}}
+                            <div class="relative overflow-hidden aspect-4/3 bg-stone-100 dark:bg-stone-800">
                                 <img src="{{ $photo['url'] }}" 
                                      alt="{{ $photo['alt'] }}" 
                                      loading="lazy" 
-                                     class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500 block">
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-opacity duration-300 block opacity-0"
+                                     onload="this.classList.remove('opacity-0')"
+                                     onerror="this.classList.remove('opacity-0')"
+                                     x-init="if ($el.complete) $el.classList.remove('opacity-0')">
                                 
                                 {{-- Dark Hover Gradient Overlay with Captions --}}
                                 <div class="absolute inset-0 bg-linear-to-t from-black/85 via-black/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 text-white">

@@ -126,6 +126,72 @@ class Event extends Model
     }
 
     /**
+     * Determine if the event is in the future.
+     */
+    public function getIsFutureAttribute(): bool
+    {
+        return $this->event_date ? ($this->event_date->isFuture() && ! $this->event_date->isToday()) : false;
+    }
+
+    /**
+     * Determine if the event is happening today.
+     */
+    public function getIsTodayAttribute(): bool
+    {
+        return $this->event_date ? $this->event_date->isToday() : false;
+    }
+
+    /**
+     * Get a contextual, human-readable status label.
+     */
+    public function getStatusLabelAttribute(): string
+    {
+        if ($this->is_today) {
+            return 'Happening Today';
+        }
+
+        if ($this->is_future) {
+            return str_contains($this->slug, 'tech-day') || str_contains($this->slug, 'itd')
+                ? 'Upcoming Flagship'
+                : 'Upcoming Gathering';
+        }
+
+        if ($this->is_past) {
+            return match ($this->slug) {
+                'ijero-tech-day-2024' => 'Inaugural Edition (Concluded)',
+                'ijero-tech-day-2025' => '2nd Edition (Concluded)',
+                'ijero-tech-day-2026' => 'Concluded Edition',
+                default => 'Concluded Event',
+            };
+        }
+
+        return 'Scheduled Event';
+    }
+
+    /**
+     * Get a contextual badge string for edition switchers.
+     */
+    public function getEditionBadgeAttribute(): string
+    {
+        $year = $this->event_date?->year;
+
+        if ($this->is_future) {
+            return $year ? "{$year} • Upcoming Flagship" : 'Upcoming Flagship';
+        }
+
+        if ($this->is_today) {
+            return $year ? "{$year} • Happening Today" : 'Happening Today';
+        }
+
+        return match ($this->slug) {
+            'ijero-tech-day-2024' => '2024 • Inaugural',
+            'ijero-tech-day-2025' => '2025 • 2nd Edition',
+            'ijero-tech-day-2026' => '2026 • Concluded',
+            default => $year ? "{$year} • Concluded" : 'Concluded',
+        };
+    }
+
+    /**
      * Format the date nicely for displays.
      */
     public function getFormattedDateAttribute(): string
