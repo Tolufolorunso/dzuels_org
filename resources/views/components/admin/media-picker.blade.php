@@ -18,6 +18,9 @@
     selectedUrl: '{{ $initialUrl }}',
     items: [],
     collections: [],
+    years: [2026, 2025, 2024],
+    yearFilter: 'all',
+    sort: 'newest',
     loading: false,
     uploading: false,
     search: '',
@@ -40,6 +43,8 @@
         if (this.search) url += 'search=' + encodeURIComponent(this.search) + '&';
         if (this.dateFilter && this.dateFilter !== 'all') url += 'date_filter=' + encodeURIComponent(this.dateFilter) + '&';
         if (this.category && this.category !== 'all') url += 'category=' + encodeURIComponent(this.category) + '&';
+        if (this.yearFilter && this.yearFilter !== 'all') url += 'year=' + encodeURIComponent(this.yearFilter) + '&';
+        if (this.sort) url += 'sort=' + encodeURIComponent(this.sort) + '&';
 
         fetch(url, { credentials: 'same-origin', headers: { 'Accept': 'application/json' } })
             .then(res => res.json())
@@ -47,6 +52,9 @@
                 this.items = data.items || [];
                 if (data.collections) {
                     this.collections = data.collections;
+                }
+                if (data.years && data.years.length > 0) {
+                    this.years = data.years;
                 }
                 this.loading = false;
             })
@@ -240,25 +248,38 @@
 
             {{-- Tab 1: Browse Media Library --}}
             <div x-show="activeTab === 'browse'" class="flex-1 overflow-y-auto p-6 space-y-4">
+                {{-- Quick Year Filter Chips --}}
+                <div class="flex flex-wrap items-center gap-1.5 pb-2 border-b border-stone-100">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-stone-400 mr-1 flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span>Year:</span>
+                    </span>
+                    <button type="button" 
+                            @click="yearFilter = 'all'; loadItems()" 
+                            :class="yearFilter === 'all' ? 'bg-maroon text-white shadow-2xs' : 'bg-stone-100 text-stone-600 hover:bg-stone-200 hover:text-stone-900'"
+                            class="px-2.5 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer">
+                        All Years
+                    </button>
+                    <template x-for="yr in years" :key="yr">
+                        <button type="button" 
+                                @click="yearFilter = yr; loadItems()" 
+                                :class="yearFilter == yr ? 'bg-maroon text-white shadow-2xs' : 'bg-stone-100 text-stone-600 hover:bg-stone-200 hover:text-stone-900'"
+                                class="px-2.5 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer"
+                                x-text="yr">
+                        </button>
+                    </template>
+                </div>
+
                 {{-- Search & Multi-filter Controls --}}
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
                     <div>
                         <input type="text" 
                                x-model="search" 
                                @input.debounce.300ms="loadItems()" 
-                               placeholder="Search by photo name, filename..." 
-                               class="w-full px-3.5 py-2 rounded-xl border border-stone-300 text-xs focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
-                    </div>
-                    <div>
-                        <select x-model="dateFilter" 
-                                @change="loadItems()" 
-                                class="w-full px-3 py-2 rounded-xl border border-stone-300 text-xs focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
-                            <option value="all">All Dates Uploaded</option>
-                            <option value="today">Uploaded Today</option>
-                            <option value="this_week">This Week</option>
-                            <option value="this_month">This Month</option>
-                            <option value="past_year">Past Year</option>
-                        </select>
+                               placeholder="Search photos..." 
+                               class="w-full px-3 py-2 rounded-xl border border-stone-300 text-xs focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
                     </div>
                     <div>
                         <select x-model="category" 
@@ -277,6 +298,30 @@
                                     </template>
                                 </optgroup>
                             </template>
+                        </select>
+                    </div>
+                    <div>
+                        <select x-model="dateFilter" 
+                                @change="loadItems()" 
+                                class="w-full px-3 py-2 rounded-xl border border-stone-300 text-xs focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
+                            <option value="all">All Dates Uploaded</option>
+                            <option value="today">Uploaded Today</option>
+                            <option value="this_week">This Week</option>
+                            <option value="this_month">This Month</option>
+                            <option value="past_year">Past Year</option>
+                        </select>
+                    </div>
+                    <div>
+                        <select x-model="sort" 
+                                @change="loadItems()" 
+                                class="w-full px-3 py-2 rounded-xl border border-stone-300 text-xs focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                            <option value="year_desc">Year (Newest)</option>
+                            <option value="year_asc">Year (Oldest)</option>
+                            <option value="name_asc">Name (A &rarr; Z)</option>
+                            <option value="size_asc">Smallest Size</option>
+                            <option value="size_desc">Largest Size</option>
                         </select>
                     </div>
                 </div>
@@ -300,12 +345,15 @@
                             {{-- Info overlay --}}
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-2 flex flex-col justify-end text-white text-[10px]">
                                 <span class="font-bold truncate" x-text="item.title"></span>
-                                <span class="text-stone-300 truncate" x-text="item.formatted_size + ' • ' + item.date_formatted"></span>
+                                <span class="text-stone-300 truncate" x-text="item.formatted_size + (item.year ? ' • ' + item.year : '') + ' • ' + item.date_formatted"></span>
                             </div>
 
                             {{-- Badges --}}
                             <div class="absolute top-1.5 right-1.5 flex items-center gap-1">
                                 <span class="px-1.5 py-0.5 rounded bg-black/70 backdrop-blur-xs text-white text-[9px] font-bold" x-text="item.formatted_size"></span>
+                            </div>
+                            <div class="absolute top-1.5 left-1.5 flex items-center gap-1" x-show="item.year">
+                                <span class="px-1.5 py-0.5 rounded bg-maroon/90 backdrop-blur-xs text-white text-[9px] font-bold" x-text="item.year"></span>
                             </div>
                         </div>
                     </template>

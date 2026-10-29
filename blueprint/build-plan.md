@@ -28,7 +28,7 @@
 
 ## Milestone 3: Production Server Readiness & Launch Refinements (Completed & Shipped)
 
-- [x] 21. **Production MariaDB configuration, root SQL dump, phone hotline update and hero imagery refinements** - MariaDB `.env` configuration, root `dzuels_database.sql`, phone hotline update to `+234 904 249 3883`, hero imagery overlays, Spelling Bee image fix
+- [x] 21. **Production MariaDB configuration, root SQL dump, phone hotline update and hero imagery refinements** - MariaDB `.env` configuration, root `dzuels_database.sql`, phone hotline update to `+234 904 249 3883`, hero imagery overlays, Spelling Bee photo fixes
 
 ## Milestone 4: Dynamic Media Hub, Gallery Overhaul, Famoyinka Memorial Library & Global Admin Controls (Completed & Shipped)
 
@@ -61,6 +61,12 @@
 ## Milestone 10: Gemini AI Content Assistant & Multimodal Admin Suite (Completed & Shipped)
 
 - [x] 32. **Gemini AI content assistant, multimodal image analysis & universal admin input integration** - create native `GeminiService` calling the Google GenAI REST API using Laravel's `Http` client (zero heavy packages); add `gemini_api_key` and model selector in Site Settings (`/admin/settings`) with an interactive "Test Connection" button, falling back to `.env`; implement secure endpoint `POST /admin/ai/generate` enforcing British English and injecting page, section, field label, and sibling context; build reusable `<x-admin.ai-button>` with an Alpine.js floating popover offering loading feedback, suggestion preview, prompt tweak input, and `Insert`/`Regenerate`/`Cancel` controls; support multimodal vision inspection for photos to generate accurate alt text, captions, and section copy; deploy across CMS Page Sections, Site Settings, Programmes, Events, Team, and Central Media Hub / Gallery; and track all modified files in `cpanel_changed_files.txt` for Core FTP deployment.
+
+## Milestone 11: Events Architecture, Tech Day Flagship Showcase & Media Hub Overhaul
+
+- [x] 33. **Media Hub sorting, year filtering & universal photo picker overhaul** - add multi-criteria sorting (by Year, Event/Collection, Newest/Oldest, and A–Z) with quick year filter chips (`2024`, `2025`, `2026`) in the Central Media Hub (`/admin/media`) and modal picker (`<x-admin.media-picker>`); ingest, optimize (<= 180 KB WebP), and catalog authentic photo archives from `gallery/` into structured collections (`reading`, `spelling-bee`, `general-community`).
+- [ ] 34. **Tech Day event architecture, multi-year showcase (2024, 2025, 2026) & programme separation** - separate Tech Day from `/programmes` to highlight it exclusively as the foundation's premier annual flagship event under `/events`; purge legacy techday imagery from storage and database; ingest, optimize (<= 180 KB WebP), and catalog authentic photos from `final/techday2024`, `final/techday2025`, and `final/techday2026`; build a multi-year Tech Day event showcase with edition switcher and authentic photo archives.
+- [ ] 35. **Media integration, production SQL database export & launch verification** - wire new authentic photography into event cards, page heroes, and impact highlights; run full launch checks and verify automated test suite; export fresh root `dzuels_database.sql` for 1-click phpMyAdmin cPanel import; and log all modified files in `cpanel_changed_files.txt` for Core FTP deployment.
 
 ## Deferred Ideas (Not Scheduled as Features)
 

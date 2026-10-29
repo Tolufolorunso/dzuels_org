@@ -3,6 +3,7 @@
         search: '{{ addslashes($currentSearch ?? '') }}',
         dateFilter: '{{ $currentDateFilter ?? 'all' }}',
         category: '{{ $currentCategory ?? 'all' }}',
+        year: '{{ $currentYear ?? 'all' }}',
         sort: '{{ $currentSort ?? 'newest' }}',
         customDate: '{{ preg_match('/^\d{4}-\d{2}-\d{2}$/', $currentDateFilter ?? '') ? $currentDateFilter : '' }}',
         selectedItems: [],
@@ -192,6 +193,7 @@
                         title: this.editingItem.title,
                         caption: this.editingItem.caption,
                         alt_text: this.editingItem.alt_text,
+                        year: this.editingItem.year ? parseInt(this.editingItem.year) : null,
                         gallery_album_id: this.editingItem.gallery_album_id || null
                     })
                 });
@@ -355,6 +357,29 @@
 
         {{-- Search, Date Filter & Category Filter Form --}}
         <form method="GET" action="{{ route('admin.media.index') }}" class="bg-white rounded-3xl p-6 border border-stone-200/80 shadow-2xs space-y-4">
+            <input type="hidden" name="year" value="{{ $currentYear ?? 'all' }}">
+
+            {{-- Quick Year Filter Chips --}}
+            <div class="flex flex-wrap items-center gap-2 pb-3 border-b border-stone-100">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-stone-400 mr-1 flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span>Event Year:</span>
+                </span>
+                <a href="{{ request()->fullUrlWithQuery(['year' => 'all', 'page' => 1]) }}"
+                   class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all {{ ($currentYear ?? 'all') === 'all' ? 'bg-maroon text-white shadow-2xs' : 'bg-stone-100 text-stone-600 hover:bg-stone-200 hover:text-stone-900' }}">
+                    All Years
+                </a>
+                @if(isset($availableYears) && count($availableYears))
+                    @foreach($availableYears as $yr)
+                        <a href="{{ request()->fullUrlWithQuery(['year' => $yr, 'page' => 1]) }}"
+                           class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all {{ ($currentYear ?? 'all') == $yr ? 'bg-maroon text-white shadow-2xs' : 'bg-stone-100 text-stone-600 hover:bg-stone-200 hover:text-stone-900' }}">
+                            {{ $yr }}
+                        </a>
+                    @endforeach
+                @endif
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3.5">
                 
                 {{-- Search by Photo Name / Filename / Caption --}}
@@ -422,6 +447,8 @@
                             class="w-full px-3 py-2.5 rounded-xl border border-stone-200 text-xs font-medium text-stone-800 bg-white focus:outline-none focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
                         <option value="newest">Newest First</option>
                         <option value="oldest">Oldest First</option>
+                        <option value="year_desc">Year (Newest &rarr; Oldest)</option>
+                        <option value="year_asc">Year (Oldest &rarr; Newest)</option>
                         <option value="name_asc">Name (A &rarr; Z)</option>
                         <option value="name_desc">Name (Z &rarr; A)</option>
                         <option value="size_asc">Smallest Size</option>
@@ -434,9 +461,14 @@
             <div class="flex items-center justify-between pt-3 border-t border-stone-100">
                 <div class="text-xs text-stone-500">
                     Showing <span class="font-bold text-stone-900">{{ $mediaItems->total() }}</span> matching {{ Str::plural('photo', $mediaItems->total()) }}
+                    @if(($currentYear ?? 'all') !== 'all')
+                        <span class="ml-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-maroon/10 text-maroon font-semibold">
+                            Year: {{ $currentYear }}
+                        </span>
+                    @endif
                 </div>
                 <div class="flex items-center gap-2">
-                    @if ($currentSearch || ($currentDateFilter && $currentDateFilter !== 'all') || ($currentCategory && $currentCategory !== 'all') || ($currentSort && $currentSort !== 'newest'))
+                    @if ($currentSearch || ($currentDateFilter && $currentDateFilter !== 'all') || ($currentCategory && $currentCategory !== 'all') || (($currentYear ?? 'all') !== 'all') || ($currentSort && $currentSort !== 'newest'))
                         <a href="{{ route('admin.media.index') }}" class="px-3.5 py-2 rounded-xl text-xs font-semibold text-stone-500 hover:text-stone-800 hover:bg-stone-100 transition-colors">
                             Reset Filters
                         </a>
@@ -498,11 +530,16 @@
                                 @endif
                             </div>
 
-                            {{-- Category Indicator --}}
-                            <div class="absolute bottom-3 left-3">
+                            {{-- Category & Year Indicators --}}
+                            <div class="absolute bottom-3 left-3 flex items-center gap-1.5">
                                 <span class="px-2 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-white/90 text-stone-700 backdrop-blur-xs shadow-2xs">
                                     {{ $item->source_type === 'gallery' ? 'Gallery' : ($item->source_type === 'cms' ? 'CMS' : 'General') }}
                                 </span>
+                                @if ($item->year)
+                                    <span class="px-2 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-maroon text-white backdrop-blur-xs shadow-2xs">
+                                        {{ $item->year }}
+                                    </span>
+                                @endif
                             </div>
                         </div>
 
@@ -598,7 +635,7 @@
                 <div class="p-4 sm:p-5 flex items-center justify-between border-b border-stone-100 bg-stone-50/50">
                     <div class="min-w-0 pr-4">
                         <h3 class="text-sm font-bold text-stone-900 truncate" x-text="previewItem ? (previewItem.title || previewItem.filename) : ''"></h3>
-                        <p class="text-[11px] text-stone-500" x-text="previewItem ? (previewItem.formatted_size + ' • ' + previewItem.dimensions + ' • ' + previewItem.formatted_date) : ''"></p>
+                        <p class="text-[11px] text-stone-500" x-text="previewItem ? (previewItem.formatted_size + ' • ' + previewItem.dimensions + (previewItem.year ? ' • Year: ' + previewItem.year : '') + ' • ' + previewItem.formatted_date) : ''"></p>
                     </div>
                     <button type="button" @click="closePreview()" class="p-2 text-stone-400 hover:text-stone-700 rounded-xl hover:bg-stone-100">
                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -678,18 +715,32 @@
                         <p class="text-[11px] text-stone-400 mt-1">Used for library search and administrative labels.</p>
                     </div>
 
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1">Assigned Collection / Category</label>
-                        <select x-model="editingItem.gallery_album_id" 
-                                class="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
-                            <option value="">Unassigned / Site Asset</option>
-                            @if(isset($collections) && $collections->count())
-                                @foreach($collections as $col)
-                                    <option value="{{ $col->id }}">{{ $col->title }}{{ !$col->is_public ? ' (Internal Only)' : '' }}</option>
-                                @endforeach
-                            @endif
-                        </select>
-                        <p class="text-[11px] text-stone-400 mt-1">Assign photo to an authentic program or gallery collection.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1">Assigned Collection</label>
+                            <select x-model="editingItem.gallery_album_id" 
+                                    class="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
+                                <option value="">Unassigned / Site Asset</option>
+                                @if(isset($collections) && $collections->count())
+                                    @foreach($collections as $col)
+                                        <option value="{{ $col->id }}">{{ $col->title }}{{ !$col->is_public ? ' (Internal Only)' : '' }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                            <p class="text-[11px] text-stone-400 mt-1">Assign to a collection.</p>
+                        </div>
+
+                        <div>
+                            <label for="admin_media_edit_year" class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1">Event / Archive Year</label>
+                            <input type="number" 
+                                   id="admin_media_edit_year"
+                                   x-model="editingItem.year" 
+                                   min="2000"
+                                   max="2100"
+                                   placeholder="e.g. 2025"
+                                   class="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
+                            <p class="text-[11px] text-stone-400 mt-1">Year of the event (e.g. 2024, 2025).</p>
+                        </div>
                     </div>
 
                     <div>

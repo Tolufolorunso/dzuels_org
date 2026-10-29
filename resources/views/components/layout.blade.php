@@ -8,17 +8,21 @@
     'ogType' => 'website',
     'twitterCard' => 'summary_large_image',
     'metaRobots' => 'index, follow',
+    'keywords' => null,
     'breadcrumbs' => null,
 ])
 @php
     $pageTitle = !empty($title) ? trim((string)$title) : 'Dzuels Educational Foundation | Quality Education & Skills Acquisition';
     $pageDescription = !empty($description) ? trim((string)$description) : 'Dzuels Educational Foundation is a Nigerian non-profit organisation addressing poverty through quality education, youth literacy interventions, and digital skills acquisition in Ekiti State and beyond.';
+    $pageKeywords = !empty($keywords) ? trim((string)$keywords) : 'Dzuels Educational Foundation, Nigerian charity, education support, youth literacy, digital skills, Ijero-Ekiti, Ekiti State, Innovation and Tech Day, ITD 2026, tech empowerment, children library, spelling bee, reading competition';
     $canonicalUrl = $canonical ?: url()->current();
     $socialTitle = $ogTitle ?: $pageTitle;
     $socialDescription = $ogDescription ?: $pageDescription;
     $socialImage = $ogImage ?: asset('front/images/cause.png');
     $socialType = $ogType ?: 'website';
     $robotsDirective = $metaRobots ?: 'index, follow';
+    $googleVerification = \App\Models\Setting::get('google_site_verification') ?: env('GOOGLE_SITE_VERIFICATION');
+    $bingVerification = \App\Models\Setting::get('bing_site_verification') ?: env('BING_SITE_VERIFICATION');
 @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth overflow-x-hidden max-w-full">
@@ -29,8 +33,16 @@
 
     <title>{{ $pageTitle }}</title>
     <meta name="description" content="{{ $pageDescription }}">
+    <meta name="keywords" content="{{ $pageKeywords }}">
+    <meta name="author" content="Dzuels Educational Foundation">
     <meta name="robots" content="{{ $robotsDirective }}">
     <link rel="canonical" href="{{ $canonicalUrl }}">
+    @if($googleVerification)
+    <meta name="google-site-verification" content="{{ $googleVerification }}">
+    @endif
+    @if($bingVerification)
+    <meta name="msvalidate.01" content="{{ $bingVerification }}">
+    @endif
 
     <!-- Favicon & Brand Icons -->
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
@@ -47,13 +59,19 @@
     <meta property="og:title" content="{{ $socialTitle }}">
     <meta property="og:description" content="{{ $socialDescription }}">
     <meta property="og:image" content="{{ $socialImage }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="{{ $socialTitle }}">
     <meta property="og:locale" content="en_NG">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="{{ $twitterCard }}">
+    <meta name="twitter:site" content="@dzuelsfoundation">
+    <meta name="twitter:creator" content="@dzuelsfoundation">
     <meta name="twitter:title" content="{{ $socialTitle }}">
     <meta name="twitter:description" content="{{ $socialDescription }}">
     <meta name="twitter:image" content="{{ $socialImage }}">
+    <meta name="twitter:image:alt" content="{{ $socialTitle }}">
 
     <!-- Structured Data (JSON-LD) -->
     <x-schema-organization />

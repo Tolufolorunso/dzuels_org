@@ -28,6 +28,7 @@ class MediaItem extends Model
         'caption',
         'alt_text',
         'source_type',
+        'year',
         'gallery_album_id',
         'gallery_photo_id',
     ];
@@ -43,6 +44,7 @@ class MediaItem extends Model
             'file_size' => 'integer',
             'width' => 'integer',
             'height' => 'integer',
+            'year' => 'integer',
             'gallery_album_id' => 'integer',
         ];
     }
@@ -187,12 +189,26 @@ class MediaItem extends Model
     }
 
     /**
+     * Scope for filtering by year.
+     */
+    public function scopeByYear(Builder $query, mixed $year): Builder
+    {
+        if (blank($year) || $year === 'all') {
+            return $query;
+        }
+
+        return $query->where('year', (int) $year);
+    }
+
+    /**
      * Scope for customizable sorting.
      */
     public function scopeOrdered(Builder $query, ?string $sort): Builder
     {
         return match ($sort) {
             'oldest' => $query->orderBy('created_at', 'asc')->orderBy('id', 'asc'),
+            'year_desc' => $query->orderByRaw('year IS NULL, year DESC')->orderBy('created_at', 'desc')->orderBy('id', 'desc'),
+            'year_asc' => $query->orderByRaw('year IS NULL, year ASC')->orderBy('created_at', 'asc')->orderBy('id', 'asc'),
             'name_asc' => $query->orderBy('filename', 'asc'),
             'name_desc' => $query->orderBy('filename', 'desc'),
             'size_asc' => $query->orderBy('file_size', 'asc'),

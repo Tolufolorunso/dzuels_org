@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Event;
 use App\Models\GalleryAlbum;
 use App\Models\Programme;
+use App\Models\Setting;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -322,5 +323,68 @@ class SeoFoundationTest extends TestCase
         $response = $this->get('/partner');
         $response->assertStatus(301);
         $response->assertRedirect('/get-involved');
+    }
+
+    public function test_website_schema_and_google_verification_rendered(): void
+    {
+        Setting::set('google_site_verification', 'test_verification_code_123', 'string', 'general');
+
+        $response = $this->get('/');
+        $response->assertOk();
+        $content = $response->getContent();
+
+        $this->assertStringContainsString('<meta name="google-site-verification" content="test_verification_code_123">', $content);
+        $this->assertStringContainsString('<meta name="keywords"', $content);
+        $this->assertStringContainsString('"@type": "WebSite"', $content);
+    }
+
+    public function test_event_page_renders_event_json_ld_schema(): void
+    {
+        $event = Event::create([
+            'title' => 'Ijero Tech Day 2026',
+            'slug' => 'ijero-tech-day-2026',
+            'summary' => 'Empowering youth with AI tools in Ekiti State',
+            'description' => 'Detailed description of ITD 2026',
+            'event_date' => now()->addDays(30),
+            'venue' => 'AAoJ Memorial Learning Center',
+            'is_registration_open' => true,
+            'is_active' => true,
+        ]);
+
+        $response = $this->get(route('events.show', $event->slug));
+        $response->assertOk();
+        $content = $response->getContent();
+
+        $this->assertStringContainsString('"@type": "Event"', $content);
+        $this->assertStringContainsString('Ijero Tech Day 2026', $content);
+        $this->assertStringContainsString('AAoJ Memorial Learning Center', $content);
+    }
+
+    public function test_programme_page_renders_educational_program_schema(): void
+    {
+        $prog = Programme::create([
+            'title' => 'Digital Skills in Ijero-Ekiti',
+            'slug' => 'digital-skills-ijero-ekiti',
+            'summary' => 'Free computer literacy for youth and teachers',
+            'body' => '<p>Full programme curriculum</p>',
+            'is_active' => true,
+        ]);
+
+        $response = $this->get(route('programmes.show', $prog->slug));
+        $response->assertOk();
+        $content = $response->getContent();
+
+        $this->assertStringContainsString('"@type": "EducationalOccupationalProgram"', $content);
+        $this->assertStringContainsString('Digital Skills in Ijero-Ekiti', $content);
+    }
+
+    public function test_donate_page_renders_donate_action_schema(): void
+    {
+        $response = $this->get('/donate');
+        $response->assertOk();
+        $content = $response->getContent();
+
+        $this->assertStringContainsString('"@type": "DonateAction"', $content);
+        $this->assertStringContainsString('Support Dzuels Educational Foundation', $content);
     }
 }

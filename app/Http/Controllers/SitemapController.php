@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\GalleryAlbum;
+use App\Models\Post;
 use App\Models\Programme;
 use Illuminate\Http\Response;
 
@@ -78,6 +79,25 @@ class SitemapController extends Controller
                 'changefreq' => 'monthly',
                 'priority' => 0.7,
             ];
+        }
+
+        // 5. Dynamic Published Articles & News (if any)
+        try {
+            $posts = Post::where('status', 'published')
+                ->where('published_at', '<=', now())
+                ->orderBy('published_at', 'desc')
+                ->get();
+
+            foreach ($posts as $post) {
+                $urls[] = [
+                    'loc' => route('news.show', $post->slug),
+                    'lastmod' => $post->updated_at?->toAtomString() ?? now()->toAtomString(),
+                    'changefreq' => 'weekly',
+                    'priority' => 0.7,
+                ];
+            }
+        } catch (\Throwable) {
+            // Posts table empty or query failed
         }
 
         return response()

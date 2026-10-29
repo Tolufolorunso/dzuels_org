@@ -53,6 +53,7 @@ class SettingController extends Controller
             'contact_working_days_note' => ['string', 'contact'],
 
             'site_logo' => ['string', 'general'],
+            'google_site_verification' => ['string', 'general'],
 
             'flutterwave_url' => ['string', 'banking'],
             'givebutter_url' => ['string', 'banking'],

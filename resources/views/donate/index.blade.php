@@ -8,6 +8,39 @@
         ['name' => 'Donate', 'url' => url('/donate')]
     ]">
 
+    <x-slot:schema>
+        @php
+            $donateSchema = [
+                '@context' => 'https://schema.org',
+                '@type' => 'DonateAction',
+                'agent' => [
+                    '@type' => 'Organization',
+                    'name' => 'Donors & Philanthropists',
+                ],
+                'recipient' => [
+                    '@type' => 'EducationalOrganization',
+                    'name' => 'Dzuels Educational Foundation',
+                    'url' => url('/'),
+                ],
+                'name' => 'Support Dzuels Educational Foundation',
+                'description' => 'Support quality education, youth literacy interventions, and digital skills acquisition for indigent children in Nigeria.',
+                'actionStatus' => 'https://schema.org/PotentialActionStatus',
+                'target' => [
+                    '@type' => 'EntryPoint',
+                    'urlTemplate' => url('/donate'),
+                    'inLanguage' => 'en',
+                    'actionPlatform' => [
+                        'http://schema.org/DesktopWebPlatform',
+                        'http://schema.org/MobileWebPlatform',
+                    ],
+                ],
+            ];
+        @endphp
+        <script type="application/ld+json">
+        {!! json_encode($donateSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
+        </script>
+    </x-slot:schema>
+
     <div x-data="donateHelper()" class="min-h-screen bg-[var(--bg)] transition-colors">
         {{-- 1. Hero Section --}}
         @php

@@ -10,6 +10,29 @@
     <x-slot:title>{{ $programme->seo_title ?: $programme->title . ' | Dzuels Educational Foundation' }}</x-slot:title>
     <x-slot:description>{{ $programme->seo_description ?: $programme->summary }}</x-slot:description>
 
+    <x-slot:schema>
+        @php
+            $programmeSchema = [
+                '@context' => 'https://schema.org',
+                '@type' => 'EducationalOccupationalProgram',
+                'name' => $programme->title,
+                'description' => $programme->summary ?: strip_tags($programme->body ?? ''),
+                'url' => route('programmes.show', $programme->slug),
+                'provider' => [
+                    '@type' => 'EducationalOrganization',
+                    'name' => 'Dzuels Educational Foundation',
+                    'url' => url('/'),
+                ],
+                'image' => $programme->cover_image_url,
+                'occupationalCategory' => 'Education & Digital Literacy',
+                'programType' => 'Community Literacy & Technical Training Initiative',
+            ];
+        @endphp
+        <script type="application/ld+json">
+        {!! json_encode($programmeSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
+        </script>
+    </x-slot:schema>
+
     {{-- 1. Header Banner & Breadcrumbs --}}
     <section class="relative bg-maroon text-white py-14 sm:py-20 overflow-hidden">
         {{-- Background Pattern & Linear Gradient --}}

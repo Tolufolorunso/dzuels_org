@@ -44,6 +44,7 @@ class UpdateSettingsRequest extends FormRequest
 
             // Brand & Identity
             'site_logo' => ['nullable', 'string', 'max:500'],
+            'google_site_verification' => ['nullable', 'string', 'max:255'],
 
             // Banking & Giving
             'flutterwave_url' => ['required', 'url', 'max:255'],

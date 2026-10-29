@@ -62,6 +62,22 @@
                         </div>
                         <p class="text-[11px] text-stone-400">Current live brand logo rendered across the application.</p>
                     </div>
+
+                    <!-- Google Search Console Verification -->
+                    <div class="sm:col-span-2 space-y-2 pt-2 border-t border-stone-100">
+                        <label for="google_site_verification" class="block text-xs font-bold text-stone-700 uppercase tracking-wider">
+                            Google Search Console Verification Tag
+                        </label>
+                        <input type="text"
+                               name="google_site_verification"
+                               id="google_site_verification"
+                               value="{{ old('google_site_verification', $settings['google_site_verification'] ?? '') }}"
+                               placeholder="e.g. abcdef123456_your_verification_string"
+                               class="w-full px-4 py-2.5 rounded-xl border border-stone-200 text-sm focus:outline-none focus:ring-2 focus:ring-maroon/20 focus:border-maroon font-mono text-xs">
+                        <p class="text-[11px] text-stone-500">
+                            Enter your Google Search Console HTML tag content value here. It will automatically render <code>&lt;meta name="google-site-verification" content="..."&gt;</code> across the public website.
+                        </p>
+                    </div>
                 </div>
             </div>
 

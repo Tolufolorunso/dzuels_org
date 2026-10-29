@@ -1,6 +1,6 @@
 # Dzuels Educational Foundation - Project Overview
 
-<!-- blueprint:source-hash 40baa8274c789794196bb6bb07535c2741da735dee04d68b8e2b75613d68cb3f -->
+<!-- blueprint:source-hash e95e5056d8bb51a680b5d7ac88010d5eb705d865ef383514b24e2109b08d7ce7 -->
 
 > Rebuild of dzuelsfoundation.org as a modern, high-trust, mobile-first Laravel web application powering education support, digital literacy, and community welfare in Nigeria.
 
@@ -12,7 +12,8 @@ The web application was rebuilt from the ground up to establish an authentic, hi
 
 - **Milestones 1–8 (Completed & Shipped):** Overhauled platform across 30 features: WCAG 2.2 AA accessibility, responsive design, brand asset suite, ITD 2026 overhaul, server-rendered lightbox, WordPress-style Page CMS, multi-tier RBAC (`super_admin`, `editor`, `support`), MySQL export tooling, hotline updates, hero overlays, dynamic contact CMS, dynamic partners strip, resilient media pipeline with GD fallback, multi-photo bulk uploader, dynamic site logo in settings, Givebutter U.S. donations, authentic 6 Impact Causes CMS, $\le 180\text{ KB}$ WebP optimization engine, dynamic 4-photo Famoyinka Library CMS, Get Involved overhaul, universal media picker `<x-admin.media-picker>`, and the Central Media Hub (`/admin/media`) with multi-criteria search, date filters, drag-and-drop WebP uploading, and cPanel public path resolution.
 - **Milestone 9 (Completed & Shipped):** Dynamic Media Collections, Authentic Photo Integration & cPanel Root Alignment across Feature 31: unified `GalleryAlbum` collections with in-dashboard "+ New Collection" modal, authentic photo curation and $\le 180\text{ KB}$ WebP optimization across 7 program albums, CMS hero/cause seeding, deletion of temporary `picture/` directory, universal root `index.php` and `.htaccess` deployment config, and fresh MariaDB dump export (`dzuels_database.sql`).
-- **Milestone 10: Gemini AI Content Assistant & Multimodal Admin Suite (Active Target):** Integrate Google Gemini into the admin dashboard to assist staff in generating and refining text across all CMS page sections, site settings, programmes, events, team bios, and media collections. Provide context-aware suggestions, prompt tweaks, and multimodal photo inspection for accurate alt text and captions, with zero heavy package dependencies, British English defaults, and Core FTP tracking.
+- **Milestone 10 (Completed & Shipped):** Google Gemini AI Content Assistant & Multimodal Admin Suite across Feature 32: native `GeminiService` calling Google GenAI API, context-aware suggestions with British English defaults, interactive "Test Connection" in Site Settings, reusable `<x-admin.ai-button>` with Alpine floating popover, multimodal vision alt text/caption generation, server compression (`mod_deflate`), immutable asset caching, and full Schema.org structured data suite.
+- **Milestone 11: Events Architecture, Tech Day Flagship Showcase & Media Hub Overhaul (Active Target):** Overhaul the Central Media Hub (`/admin/media`) and modal picker (`<x-admin.media-picker>`) with multi-criteria sorting (by Year, Event/Collection, Date, Name) and quick year filter chips (`2024`, `2025`, `2026`); separate Tech Day from `/programmes` so Programmes focuses purely on ongoing education support while Tech Day is positioned exclusively under `/events` as Dzuels' premier annual flagship event; purge legacy techday imagery; ingest, optimize ($\le 180\text{ KB}$ WebP), and catalog authentic photo archives from `final/` (techday2024, techday2025, techday2026) and `gallery/`; build a multi-year Tech Day event showcase with edition switching; update page heroes and causes with authentic photos; and export fresh `dzuels_database.sql`.
 
 ## Users
 
@@ -36,35 +37,35 @@ The web application was rebuilt from the ground up to establish an authentic, hi
 
 ### Milestones 1–7 Features (Completed & Shipped)
 
-1. **Public layout & brand theme** - Header, utility bar, footer, brand typography, flash-free dark mode. *(Completed)*
-2. **Admin login & site settings** - Secure `/admin` sign-in with editable impact numbers and contact info. *(Completed)*
-3. **Home page** - Mission, vision, DRNICER values, causes, featured project, event teaser, partners. *(Completed)*
-4. **Team & partners** - Dynamic management of Trustees, Management, Advisors, and Partners. *(Completed)*
+1. **Public layout & brand theme** - Header, utility bar, footer, brand tokens, dark mode. *(Completed)*
+2. **Admin login & site settings** - Secure `/admin` sign-in with impact numbers and contact info. *(Completed)*
+3. **Home page** - Mission, vision, DRNICER values, causes, featured project, partners. *(Completed)*
+4. **Team & partners** - Management of Trustees, Management, Advisors, and Partners. *(Completed)*
 5. **About page** - 10-year story, approach, leadership profiles with LinkedIn, and partners. *(Completed)*
 6. **Programmes** - Programme catalog with dedicated detail pages. *(Completed)*
 7. **Events & Ijero Tech Day** - Dedicated ITD event landing page and schedule highlights. *(Completed)*
-8. **Gallery** - 5 collections, 125 pre-optimized WebP photos, masonry grid, and lightbox. *(Completed)*
-9. **Donate page** - Flutterwave online giving, GTBank transfer details, and trust FAQs. *(Completed)*
+8. **Gallery** - 5 collections, 125 pre-optimized WebP photos, masonry grid, lightbox. *(Completed)*
+9. **Donate page** - Flutterwave online giving, GTBank transfer details, trust FAQs. *(Completed)*
 10. **Volunteer & partner form** - Get Involved intake forms with spam protection. *(Completed)*
 11. **Contact page** - Contact form, hotline numbers, office address, and Google Map. *(Completed)*
 12. **News** - Staff article publishing engine. *(Backend completed; dormant in UI)*
 13. **Newsletter signup** - Footer subscriber capture with CSV export. *(Backend completed; dormant in UI)*
-14. **Site refinement & ITD 2026 overhaul** - Responsiveness pass (no horizontal scroll) and modern admin UI. *(Completed)*
-15. **SEO foundation** - Dynamic meta tags, Open Graph, Schema.org JSON-LD, sitemap, and robots.txt. *(Completed)*
-16. **Privacy policy & error pages** - CAC-compliant privacy terms and branded 404/500 error pages. *(Completed)*
-17. **Accessibility & launch readiness** - WCAG 2.2 AA contrast, visible focus, skip links, and `app:launch-check`. *(Completed)*
-18. **Brand assets & gallery optimization** - Full favicon suite (`favicon.ico`, apple-touch-icon, webmanifest); ITD 2026 overhaul; gallery lightbox. *(Completed)*
-19. **Page CMS & user access control** - Visual page content editor in `/admin/pages`; RBAC (`super_admin`, `editor`, `support`); password reset. *(Completed)*
-20. **MySQL export suite** - Automated Artisan export (`php artisan db:export-sql`) for 1-click phpMyAdmin import. *(Completed)*
-21. **Production MariaDB config & hotline update** - MariaDB production config, root `dzuels_database.sql`, hotline `+234 904 249 3883`. *(Completed)*
-22. **Automated image optimization & gallery management** - Native GD WebP optimizer, media picker component, gallery collections CRUD. *(Completed)*
-23. **Famoyinka Library programme & visual outreach** - Dedicated public programme page, dedicated album, curated action photos. *(Completed)*
-24. **Multi-phone settings & dynamic contact CMS** - Up to 5 contact hotlines, dynamic `/contact` page with timezone, dynamic partners strip. *(Completed)*
-25. **Resilient image pipeline & bulk uploader** - GD fallback to direct storage, multi-image bulk gallery upload, metadata editor. *(Completed)*
-26. **Site logo in settings & 6 Impact Causes CMS** - Customizable site logo, Givebutter U.S. giving button, 6 authentic causes on Home. *(Completed)*
-27. **Production release suite & launch verification** - Refreshed `dzuels_database.sql`, synchronized upload manifest, test & lint audit. *(Completed)*
-28. **180 KB WebP optimizer hardening, unclipped causes & Library CMS** - Strict $\le 180\text{ KB}$ WebP ceiling, original cleanup, unclipped causes graphic, 4-photo dynamic Library mosaic, Get Involved UI overhaul. *(Completed)*
-29. **Universal gallery media picker & cover photo optimizer** - `<x-admin.media-picker>` integrated across Gallery Album, Programme, News, and Team forms; centralized cover photo optimization ($\le 180\text{ KB}$ WebP); dual-input validators. *(Completed)*
+14. **Site refinement & ITD 2026 overhaul** - Responsiveness pass and modern admin UI. *(Completed)*
+15. **SEO foundation** - Dynamic meta tags, Open Graph, Schema.org JSON-LD, sitemap, robots.txt. *(Completed)*
+16. **Privacy policy & error pages** - CAC-compliant privacy terms and branded 404/500 pages. *(Completed)*
+17. **Accessibility & launch readiness** - WCAG 2.2 AA contrast, visible focus, skip links, launch check. *(Completed)*
+18. **Brand assets & gallery optimization** - Favicon suite, ITD 2026 overhaul, server lightbox. *(Completed)*
+19. **Page CMS & user access control** - Visual page content editor in `/admin/pages`, RBAC, password reset. *(Completed)*
+20. **MySQL export suite** - Automated Artisan export (`php artisan db:export-sql`) for phpMyAdmin. *(Completed)*
+21. **Production MariaDB config & hotline update** - MariaDB production config, SQL dump, hotline update. *(Completed)*
+22. **Automated image optimization & gallery management** - Native GD WebP optimizer, media picker, collections CRUD. *(Completed)*
+23. **Famoyinka Library programme & visual outreach** - Dedicated public programme page, album, action photos. *(Completed)*
+24. **Multi-phone settings & dynamic contact CMS** - Up to 5 contact hotlines, dynamic `/contact` page with timezone. *(Completed)*
+25. **Resilient image pipeline & bulk uploader** - GD fallback to direct storage, multi-image bulk gallery upload. *(Completed)*
+26. **Site logo in settings & 6 Impact Causes CMS** - Customizable site logo, Givebutter U.S. giving, 6 causes on Home. *(Completed)*
+27. **Production release suite & launch verification** - Refreshed `dzuels_database.sql`, synchronized upload manifest. *(Completed)*
+28. **180 KB WebP optimizer hardening, unclipped causes & Library CMS** - Strict $\le 180\text{ KB}$ WebP ceiling, Library mosaic. *(Completed)*
+29. **Universal gallery media picker & cover photo optimizer** - `<x-admin.media-picker>` integrated across forms, dual validators. *(Completed)*
 
 ### Milestone 8 Features (Completed & Shipped)
 
@@ -74,9 +75,15 @@ The web application was rebuilt from the ground up to establish an authentic, hi
 
 31. **Dynamic media collections/categories, authentic photo curation from picture archive, database SQL export & cPanel root architecture alignment** - Unify Media Categories with `GalleryAlbum` so categories in the Central Media Hub (`/admin/media`) and `<x-admin.media-picker>` are dynamic, with a "+ New Collection" creation modal and optional public gallery toggle; curate, optimize ($\le 180\text{ KB}$ WebP), and seed authentic photos from `picture/` across Essay Competition, Girls Day, ITD, Reading/Library, Spelling Bee, WDADA, and General Community; update CMS heroes, causes, and page sections with real imagery and catalog them in `MediaItem`; delete the temporary `picture/` folder; add root deployment configuration (`index.php`, `.htaccess`) supporting direct execution in `/home/dzuefjel/dzuels_org` without breaking local development; and export a fresh `dzuels_database.sql` for 1-click phpMyAdmin import. *(Completed)*
 
-### Milestone 10 Features (Active Target)
+### Milestone 10 Features (Completed & Shipped)
 
-32. **Gemini AI content assistant, multimodal image analysis & universal admin input integration** - Create native `GeminiService` calling the Google GenAI REST API using Laravel's `Http` client (zero heavy packages); add `gemini_api_key` and model selector in Site Settings (`/admin/settings`) with an interactive "Test Connection" button, falling back to `.env`; implement secure endpoint `POST /admin/ai/generate` enforcing British English and injecting page, section, field label, and sibling context; build reusable `<x-admin.ai-button>` with an Alpine.js floating popover offering loading feedback, suggestion preview, prompt tweak input, and `Insert`/`Regenerate`/`Cancel` controls; support multimodal vision inspection for photos to generate accurate alt text, captions, and section copy; deploy across CMS Page Sections, Site Settings, Programmes, Events, Team, and Central Media Hub / Gallery; and track all modified files in `cpanel_changed_files.txt` for Core FTP deployment.
+32. **Gemini AI content assistant, multimodal image analysis & universal admin input integration** - Create native `GeminiService` calling the Google GenAI REST API using Laravel's `Http` client (zero heavy packages); add `gemini_api_key` and model selector in Site Settings (`/admin/settings`) with an interactive "Test Connection" button, falling back to `.env`; implement secure endpoint `POST /admin/ai/generate` enforcing British English and injecting page, section, field label, and sibling context; build reusable `<x-admin.ai-button>` with an Alpine.js floating popover offering loading feedback, suggestion preview, prompt tweak input, and `Insert`/`Regenerate`/`Cancel` controls; support multimodal vision inspection for photos to generate accurate alt text, captions, and section copy; deploy across CMS Page Sections, Site Settings, Programmes, Events, Team, and Central Media Hub / Gallery; and track all modified files in `cpanel_changed_files.txt` for Core FTP deployment. *(Completed)*
+
+### Milestone 11 Features (Active Target)
+
+33. **Media Hub sorting, year filtering & universal photo picker overhaul** - Add multi-criteria sorting (by Year, Event/Collection, Newest/Oldest, and A–Z) with quick year filter chips (`2024`, `2025`, `2026`) in the Central Media Hub (`/admin/media`) and modal picker (`<x-admin.media-picker>`); ingest, optimize ($\le 180\text{ KB}$ WebP), and catalog authentic photo archives from `gallery/` into structured collections (`reading`, `spelling-bee`, `general-community`).
+34. **Tech Day event architecture, multi-year showcase (2024, 2025, 2026) & programme separation** - Separate Tech Day from `/programmes` to highlight it exclusively as the foundation's premier annual flagship event under `/events`; purge legacy techday imagery from storage and database; ingest, optimize ($\le 180\text{ KB}$ WebP), and catalog authentic photos from `final/techday2024`, `final/techday2025`, and `final/techday2026`; build a multi-year Tech Day event showcase with edition switcher and authentic photo archives.
+35. **Media integration, production SQL database export & launch verification** - Wire new authentic photography into event cards, page heroes, and impact highlights; run full launch checks and verify automated test suite; export fresh root `dzuels_database.sql` for 1-click phpMyAdmin cPanel import; and log all modified files in `cpanel_changed_files.txt` for Core FTP deployment.
 
 ### Deferred Ideas (Non-Roadmap)
 
@@ -109,7 +116,7 @@ The web application was rebuilt from the ground up to establish an authentic, hi
 - `event_sponsors`: `id`, `event_id` (FK), `name`, `logo_path`, `tier`, `website_url`, `sort_order`, `timestamps`
 
 ### Setting
-- `id` (bigint, PK), `key` (string, unique) - `gemini_api_key`, `gemini_model`, `site_logo`, `givebutter_url`, `contact_phone_1` through `contact_phone_5`, `contact_working_hours`, `contact_timezone`, `contact_working_days_note`, impact numbers, banking, registration, `value` (text, nullable), `type` (text, integer, json, boolean), `timestamps`
+- `id` (bigint, PK), `key` (string, unique) - `gemini_api_key`, `gemini_model`, `site_logo`, `google_site_verification`, `givebutter_url`, `contact_phone_1` through `contact_phone_5`, `contact_working_hours`, `contact_timezone`, `contact_working_days_note`, impact numbers, banking, registration, `value` (text, nullable), `type` (text, integer, json, boolean), `timestamps`
 
 ### Programme
 - `id` (bigint, PK), `title` (string), `slug` (string, unique), `summary` (text), `body` (longText), `cover_image` (string, nullable), `partner_name` (string, nullable), `sort_order` (integer), `is_featured` (boolean), `timestamps`
@@ -167,4 +174,4 @@ Non-profit charity donations. The platform does not sell products or show advert
 
 ## Open questions
 
-None. The project plan and build plan are completely aligned on Milestone 10 (Feature 32).
+None. The project plan and build plan are completely aligned on Milestone 11 (Features 33, 34, and 35).

@@ -10,6 +10,49 @@
         ['name' => $event->title, 'url' => route('events.show', $event->slug)]
     ]">
 
+    <x-slot:schema>
+        @php
+            $eventSchema = [
+                '@context' => 'https://schema.org',
+                '@type' => 'Event',
+                'name' => $event->title,
+                'description' => $event->summary ?: strip_tags($event->description ?? ''),
+                'image' => $event->banner_image_url,
+                'startDate' => $event->event_date?->toIso8601String() ?? now()->toIso8601String(),
+                'endDate' => $event->end_date?->toIso8601String() ?? ($event->event_date ? $event->event_date->copy()->addHours(6)->toIso8601String() : null),
+                'eventAttendanceMode' => 'https://schema.org/OfflineEventAttendanceMode',
+                'eventStatus' => $event->is_past ? 'https://schema.org/EventMovedOnline' : 'https://schema.org/EventScheduled',
+                'location' => [
+                    '@type' => 'Place',
+                    'name' => $event->venue ?: 'AAoJ Memorial Learning Center, Ijero-Ekiti',
+                    'address' => [
+                        '@type' => 'PostalAddress',
+                        'streetAddress' => $event->venue ?: 'AAoJ Memorial Learning Center',
+                        'addressLocality' => 'Ijero-Ekiti',
+                        'addressRegion' => 'Ekiti State',
+                        'addressCountry' => 'NG',
+                    ],
+                ],
+                'organizer' => [
+                    '@type' => 'EducationalOrganization',
+                    'name' => 'Dzuels Educational Foundation',
+                    'url' => url('/'),
+                ],
+                'offers' => [
+                    '@type' => 'Offer',
+                    'price' => '0',
+                    'priceCurrency' => 'NGN',
+                    'availability' => $event->is_registration_open ? 'https://schema.org/InStock' : 'https://schema.org/SoldOut',
+                    'validFrom' => $event->created_at?->toIso8601String() ?? now()->toIso8601String(),
+                    'url' => route('events.show', $event->slug),
+                ],
+            ];
+        @endphp
+        <script type="application/ld+json">
+        {!! json_encode($eventSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
+        </script>
+    </x-slot:schema>
+
     {{-- Breadcrumb Navigation --}}
     <div class="bg-[var(--surface)] border-b border-[var(--border)] transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">

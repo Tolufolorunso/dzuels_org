@@ -124,7 +124,8 @@ class ImageOptimizerService
         int $maxWidth = self::DEFAULT_MAX_DIMENSION,
         int $maxHeight = self::DEFAULT_MAX_DIMENSION,
         int $quality = self::DEFAULT_INITIAL_QUALITY,
-        int $maxBytes = self::MAX_BYTES
+        int $maxBytes = self::MAX_BYTES,
+        bool $deleteSource = true
     ): string {
         // Safeguard against memory exhaustion on high-resolution camera photo uploads
         @ini_set('memory_limit', '512M');
@@ -154,7 +155,7 @@ class ImageOptimizerService
         if ($activeEngine === 'none') {
             Log::info('Neither GD (with WebP) nor Imagick is available. Storing image directly without WebP conversion.');
 
-            return $this->storeDirectFallback($file, $destinationDir, $destinationRelativeDir, $origExt);
+            return $this->storeDirectFallback($file, $destinationDir, $destinationRelativeDir, $origExt, $deleteSource);
         }
 
         // If Imagick is the primary available engine
@@ -169,12 +170,13 @@ class ImageOptimizerService
                     $maxWidth,
                     $maxHeight,
                     $quality,
-                    $maxBytes
+                    $maxBytes,
+                    $deleteSource
                 );
             } catch (Throwable $e) {
                 Log::warning('Imagick optimization encountered an error, falling back to direct storage: '.$e->getMessage().' in '.$e->getFile().':'.$e->getLine());
 
-                return $this->storeDirectFallback($file, $destinationDir, $destinationRelativeDir, $origExt);
+                return $this->storeDirectFallback($file, $destinationDir, $destinationRelativeDir, $origExt, $deleteSource);
             }
         }
 
@@ -194,7 +196,8 @@ class ImageOptimizerService
                     $maxWidth,
                     $maxHeight,
                     $quality,
-                    $maxBytes
+                    $maxBytes,
+                    $deleteSource
                 );
             }
 
@@ -288,7 +291,8 @@ class ImageOptimizerService
                     $maxWidth,
                     $maxHeight,
                     $quality,
-                    $maxBytes
+                    $maxBytes,
+                    $deleteSource
                 );
             }
 
@@ -340,7 +344,7 @@ class ImageOptimizerService
             }
 
             // Delete original uncompressed source file
-            $this->cleanupSourceFile($file, $sourcePath, $fullDestinationPath);
+            $this->cleanupSourceFile($file, $sourcePath, $fullDestinationPath, $deleteSource);
 
             return trim(str_replace('\\', '/', $destinationRelativeDir), '/').'/'.$filename;
         } catch (Throwable $e) {
@@ -355,7 +359,8 @@ class ImageOptimizerService
                 $maxWidth,
                 $maxHeight,
                 $quality,
-                $maxBytes
+                $maxBytes,
+                $deleteSource
             );
         } finally {
             if ($srcImage && (\is_resource($srcImage) || (is_object($srcImage) && $srcImage instanceof \GdImage))) {
@@ -379,7 +384,8 @@ class ImageOptimizerService
         int $maxWidth,
         int $maxHeight,
         int $quality,
-        int $maxBytes
+        int $maxBytes,
+        bool $deleteSource = true
     ): string {
         if ($this->isImagickAvailable()) {
             try {
@@ -392,14 +398,15 @@ class ImageOptimizerService
                     $maxWidth,
                     $maxHeight,
                     $quality,
-                    $maxBytes
+                    $maxBytes,
+                    $deleteSource
                 );
             } catch (Throwable $ie) {
                 Log::warning('Imagick secondary fallback also failed: '.$ie->getMessage());
             }
         }
 
-        return $this->storeDirectFallback($file, $destinationDir, $destinationRelativeDir, $origExt);
+        return $this->storeDirectFallback($file, $destinationDir, $destinationRelativeDir, $origExt, $deleteSource);
     }
 
     /**
@@ -414,7 +421,8 @@ class ImageOptimizerService
         int $maxWidth,
         int $maxHeight,
         int $quality,
-        int $maxBytes
+        int $maxBytes,
+        bool $deleteSource = true
     ): string {
         $imagick = new \Imagick($sourcePath);
 
@@ -483,11 +491,11 @@ class ImageOptimizerService
         $imagick->destroy();
 
         if (! file_exists($fullDestinationPath) || filesize($fullDestinationPath) === 0) {
-            return $this->storeDirectFallback($file, $destinationDir, $destinationRelativeDir, $origExt);
+            return $this->storeDirectFallback($file, $destinationDir, $destinationRelativeDir, $origExt, $deleteSource);
         }
 
         // Delete original uncompressed source file
-        $this->cleanupSourceFile($file, $sourcePath, $fullDestinationPath);
+        $this->cleanupSourceFile($file, $sourcePath, $fullDestinationPath, $deleteSource);
 
         return trim(str_replace('\\', '/', $destinationRelativeDir), '/').'/'.$filename;
     }
@@ -665,8 +673,12 @@ class ImageOptimizerService
     /**
      * Safely delete the original source file after saving the optimized WebP.
      */
-    protected function cleanupSourceFile(UploadedFile|string $file, string $sourcePath, string $destinationPath): void
+    protected function cleanupSourceFile(UploadedFile|string $file, string $sourcePath, string $destinationPath, bool $deleteSource = true): void
     {
+        if (! $deleteSource) {
+            return;
+        }
+
         if ($file instanceof UploadedFile) {
             $realPath = $file->getRealPath();
             if ($realPath && file_exists($realPath)) {
@@ -689,7 +701,8 @@ class ImageOptimizerService
         UploadedFile|string $file,
         string $destinationDir,
         string $destinationRelativeDir,
-        string $extension
+        string $extension,
+        bool $deleteSource = true
     ): string {
         $ext = strtolower($extension);
         if (! in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg'])) {
@@ -713,7 +726,7 @@ class ImageOptimizerService
             $file->move($destinationDir, $filename);
         } elseif (is_string($file)) {
             @copy($file, $fullDestinationPath);
-            if (file_exists($file) && realpath($file) !== realpath($fullDestinationPath)) {
+            if ($deleteSource && file_exists($file) && realpath($file) !== realpath($fullDestinationPath)) {
                 @unlink($file);
             }
         }

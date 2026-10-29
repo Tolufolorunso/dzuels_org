@@ -24,12 +24,14 @@ class MediaLibraryController extends Controller
         $search = $request->query('search');
         $dateFilter = $request->query('date_filter', 'all');
         $category = $request->query('category', 'all');
+        $yearFilter = $request->query('year', 'all');
         $sort = $request->query('sort', 'newest');
 
         $query = MediaItem::query()
             ->search($search)
             ->byDateFilter($dateFilter)
             ->bySourceType($category)
+            ->byYear($yearFilter)
             ->ordered($sort);
 
         $mediaItems = $query->paginate(24)->withQueryString();
@@ -50,15 +52,22 @@ class MediaLibraryController extends Controller
         // Retrieve dynamic collections from GalleryAlbum
         $collections = GalleryAlbum::ordered()->get();
 
+        // Retrieve distinct years present in the media library with defaults
+        $dbYears = MediaItem::whereNotNull('year')->distinct()->orderBy('year', 'desc')->pluck('year')->all();
+        $availableYears = array_values(array_unique(array_merge([2026, 2025, 2024], $dbYears)));
+        rsort($availableYears);
+
         return view('admin.media.index', [
             'mediaItems' => $mediaItems,
             'collections' => $collections,
+            'availableYears' => $availableYears,
             'totalCount' => $totalCount,
             'totalSizeFormatted' => $totalSizeFormatted,
             'webpRate' => $webpRate,
             'currentSearch' => $search,
             'currentDateFilter' => $dateFilter,
             'currentCategory' => $category,
+            'currentYear' => $yearFilter,
             'currentSort' => $sort,
             'effectiveMaxUploadSize' => ini_get('upload_max_filesize') ?: '16M',
         ]);
@@ -130,6 +139,7 @@ class MediaLibraryController extends Controller
             'gallery_album_id' => ['nullable', 'integer', 'exists:gallery_albums,id'],
             'collection_id' => ['nullable', 'integer', 'exists:gallery_albums,id'],
             'source_type' => ['nullable', 'string', 'max:50'],
+            'year' => ['nullable', 'integer', 'min:2000', 'max:2100'],
         ], [
             'image.image' => 'The uploaded file must be an image (JPEG, PNG, WebP, or GIF).',
             'image.mimes' => 'The image must be a file of type: jpeg, png, jpg, webp, gif.',
@@ -158,6 +168,7 @@ class MediaLibraryController extends Controller
 
         $albumId = $request->input('gallery_album_id') ?: $request->input('collection_id');
         $sourceType = $albumId ? 'gallery' : ($request->input('source_type') ?: 'general');
+        $inputYear = $request->filled('year') ? (int) $request->input('year') : null;
 
         $createdItems = [];
 
@@ -185,6 +196,12 @@ class MediaLibraryController extends Controller
                 default => ($dimensions['mime'] ?? (File::exists($fullPath) ? File::mimeType($fullPath) : 'image/webp')),
             };
 
+            // Detect year from filename if not explicitly provided
+            $itemYear = $inputYear;
+            if (! $itemYear && preg_match('/\b(202[0-9]|203[0-9])\b/', $origName, $yearMatches)) {
+                $itemYear = (int) $yearMatches[1];
+            }
+
             $item = MediaItem::create([
                 'filename' => basename($optimizedPath),
                 'file_path' => $optimizedPath,
@@ -196,6 +213,7 @@ class MediaLibraryController extends Controller
                 'caption' => null,
                 'alt_text' => $humanTitle,
                 'source_type' => $sourceType,
+                'year' => $itemYear,
                 'gallery_album_id' => $albumId,
                 'gallery_photo_id' => null,
             ]);
@@ -212,6 +230,7 @@ class MediaLibraryController extends Controller
                 'dimensions' => $item->dimensions,
                 'date_formatted' => $item->formatted_date,
                 'source_type' => $item->source_type,
+                'year' => $item->year,
                 'gallery_album_id' => $item->gallery_album_id,
             ];
         }
@@ -229,7 +248,7 @@ class MediaLibraryController extends Controller
     }
 
     /**
-     * Update metadata (title, caption, alt_text, gallery_album_id) for a media item.
+     * Update metadata (title, caption, alt_text, gallery_album_id, year) for a media item.
      */
     public function update(Request $request, MediaItem $mediaItem): JsonResponse|RedirectResponse
     {
@@ -238,6 +257,7 @@ class MediaLibraryController extends Controller
             'caption' => ['nullable', 'string', 'max:1000'],
             'alt_text' => ['nullable', 'string', 'max:500'],
             'gallery_album_id' => ['nullable', 'integer', 'exists:gallery_albums,id'],
+            'year' => ['nullable', 'integer', 'min:2000', 'max:2100'],
         ]);
 
         if (array_key_exists('gallery_album_id', $validated)) {
@@ -317,13 +337,16 @@ class MediaLibraryController extends Controller
      */
     public function pickerItems(Request $request): JsonResponse
     {
+        $yearFilter = $request->input('year', 'all');
+
         $query = MediaItem::query()
             ->search($request->input('search'))
             ->byDateFilter($request->input('date_filter'))
             ->bySourceType($request->input('category'))
+            ->byYear($yearFilter)
             ->ordered($request->input('sort', 'newest'));
 
-        $items = $query->limit(60)->get()->map(function (MediaItem $item) {
+        $items = $query->limit(80)->get()->map(function (MediaItem $item) {
             return [
                 'id' => $item->id,
                 'filename' => $item->filename,
@@ -336,15 +359,21 @@ class MediaLibraryController extends Controller
                 'dimensions' => $item->dimensions,
                 'date_formatted' => $item->formatted_date,
                 'source_type' => $item->source_type,
+                'year' => $item->year,
                 'gallery_album_id' => $item->gallery_album_id,
             ];
         });
 
         $collections = GalleryAlbum::ordered()->get(['id', 'title', 'slug', 'is_public']);
 
+        $dbYears = MediaItem::whereNotNull('year')->distinct()->orderBy('year', 'desc')->pluck('year')->all();
+        $availableYears = array_values(array_unique(array_merge([2026, 2025, 2024], $dbYears)));
+        rsort($availableYears);
+
         return response()->json([
             'items' => $items,
             'collections' => $collections,
+            'years' => $availableYears,
         ]);
     }
 
