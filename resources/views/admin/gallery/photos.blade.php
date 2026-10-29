@@ -236,6 +236,17 @@
                                     </div>
                                 @endif
                                 
+                                {{-- Visibility badge --}}
+                                @if ($photo->is_public)
+                                    <div class="absolute bottom-1 right-2 bg-emerald-600/90 backdrop-blur-xs text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-xs">
+                                        Public
+                                    </div>
+                                @else
+                                    <div class="absolute bottom-1 right-2 bg-stone-800/90 backdrop-blur-xs text-stone-300 text-[9px] font-bold px-1.5 py-0.5 rounded shadow-xs">
+                                        Archive
+                                    </div>
+                                @endif
+
                                 <div class="absolute bottom-1 left-2 text-white/90 text-[10px] font-mono drop-shadow">
                                     #{{ $loop->iteration }}
                                 </div>
@@ -258,6 +269,7 @@
                                                 'caption' => $photo->caption,
                                                 'alt_text' => $photo->alt_text,
                                                 'year' => $photo->year,
+                                                'is_public' => (bool) $photo->is_public,
                                                 'sort_order' => $photo->sort_order,
                                                 'image_url' => $photo->image_url,
                                                 'update_url' => route('admin.gallery.photos.update', [$album, $photo]),
@@ -362,6 +374,16 @@
                                 />
                             </div>
                             <input type="text" id="gallery_edit_photo_alt" name="alt_text" x-model="editingPhoto.alt_text" class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-sm focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
+                        </div>
+
+                        {{-- Public Gallery Visibility Toggle --}}
+                        <div class="p-3 bg-stone-50 rounded-xl border border-stone-200 flex items-center justify-between">
+                            <div>
+                                <label for="gallery_edit_photo_is_public" class="block text-xs font-bold text-stone-800 cursor-pointer">Show in Public Gallery</label>
+                                <p class="text-[11px] text-stone-500">Uncheck to keep as an internal archive photo.</p>
+                            </div>
+                            <input type="hidden" name="is_public" value="0">
+                            <input type="checkbox" id="gallery_edit_photo_is_public" name="is_public" value="1" x-model="editingPhoto.is_public" class="w-4 h-4 rounded border-stone-300 text-maroon focus:ring-maroon cursor-pointer">
                         </div>
 
                         <div class="flex items-center justify-end gap-3 pt-3 border-t border-stone-100">

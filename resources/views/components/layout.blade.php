@@ -14,7 +14,7 @@
 @php
     $pageTitle = !empty($title) ? trim((string)$title) : 'Dzuels Educational Foundation | Quality Education & Skills Acquisition';
     $pageDescription = !empty($description) ? trim((string)$description) : 'Dzuels Educational Foundation is a Nigerian non-profit organisation addressing poverty through quality education, youth literacy interventions, and digital skills acquisition in Ekiti State and beyond.';
-    $pageKeywords = !empty($keywords) ? trim((string)$keywords) : 'Dzuels Educational Foundation, Nigerian charity, education support, youth literacy, digital skills, Ijero-Ekiti, Ekiti State, Innovation and Tech Day, ITD 2026, tech empowerment, children library, spelling bee, reading competition';
+    $pageKeywords = !empty($keywords) ? trim((string)$keywords) : 'Dzuels Educational Foundation, Nigerian charity, education support, youth literacy, digital skills, Ijero-Ekiti, Ekiti State, Ijero Tech Day, ITD 2026, tech empowerment, children library, spelling bee, reading competition';
     $canonicalUrl = $canonical ?: url()->current();
     $socialTitle = $ogTitle ?: $pageTitle;
     $socialDescription = $ogDescription ?: $pageDescription;

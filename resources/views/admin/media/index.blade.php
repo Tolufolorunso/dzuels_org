@@ -4,6 +4,7 @@
         dateFilter: '{{ $currentDateFilter ?? 'all' }}',
         category: '{{ $currentCategory ?? 'all' }}',
         year: '{{ $currentYear ?? 'all' }}',
+        visibility: '{{ $currentVisibility ?? 'all' }}',
         sort: '{{ $currentSort ?? 'newest' }}',
         customDate: '{{ preg_match('/^\d{4}-\d{2}-\d{2}$/', $currentDateFilter ?? '') ? $currentDateFilter : '' }}',
         selectedItems: [],
@@ -178,6 +179,33 @@
             }
         },
 
+        async bulkSetVisibility(isPublic) {
+            if (this.selectedItems.length === 0) return;
+            const csrfToken = document.querySelector('meta[name=csrf-token]')?.content || '';
+            try {
+                const response = await fetch('{{ route('admin.media.bulk-visibility') }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        ids: this.selectedItems,
+                        is_public: isPublic
+                    })
+                });
+                const data = await response.json();
+                if (response.ok && data.success) {
+                    window.location.reload();
+                } else {
+                    alert(data?.message || 'Failed to update visibility.');
+                }
+            } catch (e) {
+                alert('Network error while updating visibility.');
+            }
+        },
+
         async saveEdit() {
             if (!this.editingItem) return;
             try {
@@ -194,6 +222,7 @@
                         caption: this.editingItem.caption,
                         alt_text: this.editingItem.alt_text,
                         year: this.editingItem.year ? parseInt(this.editingItem.year) : null,
+                        is_public: Boolean(this.editingItem.is_public),
                         gallery_album_id: this.editingItem.gallery_album_id || null
                     })
                 });
@@ -268,46 +297,47 @@
 
             <div class="bg-white rounded-2xl p-5 border border-stone-200/80 shadow-2xs">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold text-stone-400 uppercase tracking-wider">Storage Footprint</span>
-                    <span class="p-2 rounded-xl bg-blue-50 text-blue-600">
+                    <span class="text-xs font-semibold text-stone-400 uppercase tracking-wider">Public in Gallery</span>
+                    <span class="p-2 rounded-xl bg-emerald-50 text-emerald-600">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                    </span>
+                </div>
+                <div class="mt-2 flex items-baseline gap-2">
+                    <span class="text-2xl font-bold text-emerald-600">{{ number_format($publicCount ?? 0) }}</span>
+                    <span class="text-xs text-stone-500">visible on website</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-5 border border-stone-200/80 shadow-2xs">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold text-stone-400 uppercase tracking-wider">Archive Library</span>
+                    <span class="p-2 rounded-xl bg-stone-100 text-stone-600">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
                         </svg>
                     </span>
                 </div>
                 <div class="mt-2 flex items-baseline gap-2">
-                    <span class="text-2xl font-bold text-stone-900">{{ $totalSizeFormatted }}</span>
-                    <span class="text-xs text-stone-500">optimized disk space</span>
+                    <span class="text-2xl font-bold text-stone-700">{{ number_format($archiveCount ?? 0) }}</span>
+                    <span class="text-xs text-stone-500">hidden from public</span>
                 </div>
             </div>
 
             <div class="bg-white rounded-2xl p-5 border border-stone-200/80 shadow-2xs">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold text-stone-400 uppercase tracking-wider">WebP Efficiency</span>
-                    <span class="p-2 rounded-xl bg-emerald-50 text-emerald-600">
+                    <span class="text-xs font-semibold text-stone-400 uppercase tracking-wider">WebP & Storage</span>
+                    <span class="p-2 rounded-xl bg-purple-50 text-purple-600">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
                     </span>
                 </div>
                 <div class="mt-2 flex items-baseline gap-2">
-                    <span class="text-2xl font-bold text-emerald-600">{{ $webpRate }}%</span>
-                    <span class="text-xs text-stone-500">next-gen WebP standard</span>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-2xl p-5 border border-stone-200/80 shadow-2xs">
-                <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold text-stone-400 uppercase tracking-wider">Upload Standard</span>
-                    <span class="p-2 rounded-xl bg-purple-50 text-purple-600">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </span>
-                </div>
-                <div class="mt-2 flex items-baseline gap-2">
-                    <span class="text-2xl font-bold text-stone-900">&le; 180 KB</span>
-                    <span class="text-xs text-stone-500">auto-compression cap</span>
+                    <span class="text-2xl font-bold text-stone-900">{{ $totalSizeFormatted }}</span>
+                    <span class="text-xs text-emerald-600 font-semibold">{{ $webpRate }}% WebP</span>
                 </div>
             </div>
         </div>
@@ -380,7 +410,7 @@
                     @endforeach
                 @endif
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3.5">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-3.5">
                 
                 {{-- Search by Photo Name / Filename / Caption --}}
                 <div class="lg:col-span-2 relative">
@@ -398,6 +428,19 @@
                             </svg>
                         </div>
                     </div>
+                </div>
+
+                {{-- Visibility Filter (Public vs Archive) --}}
+                <div>
+                    <label for="visibility-filter" class="block text-[11px] font-bold uppercase tracking-wider text-stone-400 mb-1.5">Visibility</label>
+                    <select id="visibility-filter" 
+                            name="visibility" 
+                            x-model="visibility"
+                            class="w-full px-3 py-2.5 rounded-xl border border-stone-200 text-xs font-medium text-stone-800 bg-white focus:outline-none focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
+                        <option value="all">All Visibility</option>
+                        <option value="public">👁️ Public Gallery</option>
+                        <option value="archive">📁 Archive Only</option>
+                    </select>
                 </div>
 
                 {{-- Date Uploaded Filter (Quick Presets + Exact Date) --}}
@@ -466,9 +509,14 @@
                             Year: {{ $currentYear }}
                         </span>
                     @endif
+                    @if(($currentVisibility ?? 'all') !== 'all')
+                        <span class="ml-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-md {{ $currentVisibility === 'public' ? 'bg-emerald-50 text-emerald-700' : 'bg-stone-100 text-stone-700' }} font-semibold">
+                            Visibility: {{ ucfirst($currentVisibility) }}
+                        </span>
+                    @endif
                 </div>
                 <div class="flex items-center gap-2">
-                    @if ($currentSearch || ($currentDateFilter && $currentDateFilter !== 'all') || ($currentCategory && $currentCategory !== 'all') || (($currentYear ?? 'all') !== 'all') || ($currentSort && $currentSort !== 'newest'))
+                    @if ($currentSearch || ($currentDateFilter && $currentDateFilter !== 'all') || ($currentCategory && $currentCategory !== 'all') || (($currentYear ?? 'all') !== 'all') || (($currentVisibility ?? 'all') !== 'all') || ($currentSort && $currentSort !== 'newest'))
                         <a href="{{ route('admin.media.index') }}" class="px-3.5 py-2 rounded-xl text-xs font-semibold text-stone-500 hover:text-stone-800 hover:bg-stone-100 transition-colors">
                             Reset Filters
                         </a>
@@ -481,21 +529,42 @@
         </form>
 
         {{-- Bulk Selection & Actions Bar --}}
-        <div x-show="selectedItems.length > 0" x-cloak class="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-center justify-between shadow-2xs">
+        <div x-show="selectedItems.length > 0" x-cloak class="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 shadow-2xs">
             <div class="flex items-center gap-3">
                 <span class="w-6 h-6 rounded-full bg-amber-600 text-white flex items-center justify-center text-xs font-bold" x-text="selectedItems.length"></span>
                 <span class="text-xs font-semibold text-amber-900">items selected</span>
             </div>
             
-            <form method="POST" action="{{ route('admin.media.bulk-destroy') }}" onsubmit="return confirm('Permanently delete the selected photos from library and disk?');">
-                @csrf
-                <template x-for="id in selectedItems" :key="id">
-                    <input type="hidden" name="ids[]" :value="id">
-                </template>
-                <button type="submit" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-rose-600 text-white hover:bg-rose-700 transition-colors cursor-pointer">
-                    Delete Selected
+            <div class="flex flex-wrap items-center gap-2">
+                <button type="button" 
+                        @click="bulkSetVisibility(true)" 
+                        class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 text-white hover:bg-emerald-700 transition-colors cursor-pointer flex items-center gap-1.5 shadow-2xs">
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span>Make Public in Gallery</span>
                 </button>
-            </form>
+
+                <button type="button" 
+                        @click="bulkSetVisibility(false)" 
+                        class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-stone-700 text-white hover:bg-stone-800 transition-colors cursor-pointer flex items-center gap-1.5 shadow-2xs">
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
+                    </svg>
+                    <span>Move to Archive (Hide)</span>
+                </button>
+
+                <form method="POST" action="{{ route('admin.media.bulk-destroy') }}" onsubmit="return confirm('Permanently delete the selected photos from library and disk?');" class="inline">
+                    @csrf
+                    <template x-for="id in selectedItems" :key="id">
+                        <input type="hidden" name="ids[]" :value="id">
+                    </template>
+                    <button type="submit" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-rose-600 text-white hover:bg-rose-700 transition-colors cursor-pointer">
+                        Delete Selected
+                    </button>
+                </form>
+            </div>
         </div>
 
         {{-- Media Grid --}}
@@ -519,15 +588,39 @@
                             </div>
 
                             {{-- Top Right Badges --}}
-                            <div class="absolute top-3 right-3 flex items-center gap-1.5">
-                                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-black/60 text-white backdrop-blur-xs">
-                                    {{ $item->formatted_size }}
-                                </span>
-                                @if ($item->mime_type === 'image/webp')
-                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-600 text-white">
-                                        WebP
+                            <div class="absolute top-3 right-3 flex flex-col items-end gap-1.5">
+                                <div class="flex items-center gap-1">
+                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-black/60 text-white backdrop-blur-xs">
+                                        {{ $item->formatted_size }}
                                     </span>
-                                @endif
+                                    @if ($item->mime_type === 'image/webp')
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-600 text-white">
+                                            WebP
+                                        </span>
+                                    @endif
+                                </div>
+                                <div class="flex flex-col items-end gap-1">
+                                    @if ($item->is_public)
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-600/90 text-white backdrop-blur-xs shadow-2xs flex items-center gap-1">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-200 animate-pulse"></span>
+                                            Public Gallery
+                                        </span>
+                                    @else
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-stone-800/80 text-stone-300 backdrop-blur-xs shadow-2xs flex items-center gap-1">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-stone-400"></span>
+                                            Archive Only
+                                        </span>
+                                    @endif
+
+                                    @php
+                                        $isUsedOnSite = isset($activeSitePaths[$item->file_path]) || isset($activeSitePaths[basename($item->file_path)]);
+                                    @endphp
+                                    @if ($isUsedOnSite)
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-600/90 text-white backdrop-blur-xs shadow-2xs">
+                                            🌐 Used on Site
+                                        </span>
+                                    @endif
+                                </div>
                             </div>
 
                             {{-- Category & Year Indicators --}}
@@ -567,6 +660,25 @@
                                     </svg>
                                     <span x-text="copiedId === {{ $item->id }} ? 'Copied!' : 'Copy URL'"></span>
                                 </button>
+
+                                {{-- Toggle Gallery Visibility --}}
+                                <form method="POST" action="{{ route('admin.media.toggle-visibility', $item) }}" class="inline">
+                                    @csrf
+                                    <button type="submit" 
+                                            class="p-1.5 rounded-xl transition-colors cursor-pointer {{ $item->is_public ? 'text-emerald-700 bg-emerald-50 hover:bg-emerald-100' : 'text-stone-500 bg-stone-100 hover:bg-stone-200' }}" 
+                                            title="{{ $item->is_public ? 'Currently visible in Public Gallery. Click to hide (move to archive).' : 'Currently Archive. Click to display in Public Gallery.' }}">
+                                        @if ($item->is_public)
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                            </svg>
+                                        @else
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
+                                            </svg>
+                                        @endif
+                                    </button>
+                                </form>
 
                                 {{-- Edit Metadata --}}
                                 <button type="button" 
@@ -741,6 +853,18 @@
                                    class="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
                             <p class="text-[11px] text-stone-400 mt-1">Year of the event (e.g. 2024, 2025).</p>
                         </div>
+                    </div>
+
+                    {{-- Public Gallery Visibility Toggle --}}
+                    <div class="p-3.5 bg-stone-50 rounded-2xl border border-stone-200/80 flex items-center justify-between">
+                        <div>
+                            <label for="admin_media_edit_is_public" class="block text-xs font-bold text-stone-900 cursor-pointer">Display in Public Gallery</label>
+                            <p class="text-[11px] text-stone-500">When enabled, this photo is displayed publicly on /gallery and album pages.</p>
+                        </div>
+                        <input type="checkbox" 
+                               id="admin_media_edit_is_public" 
+                               x-model="editingItem.is_public" 
+                               class="w-4 h-4 rounded border-stone-300 text-maroon focus:ring-maroon cursor-pointer">
                     </div>
 
                     <div>

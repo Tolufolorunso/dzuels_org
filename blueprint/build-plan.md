@@ -68,6 +68,12 @@
 - [x] 34. **Tech Day event architecture, multi-year showcase (2024, 2025, 2026) & programme separation** - separate Tech Day from `/programmes` to highlight it exclusively as the foundation's premier annual flagship event under `/events`; purge legacy techday imagery from storage and database; ingest, optimize (<= 180 KB WebP), and catalog authentic photos from `final/techday2024`, `final/techday2025`, and `final/techday2026`; build a multi-year Tech Day event showcase with edition switcher and authentic photo archives.
 - [x] 35. **Media integration, production SQL database export & launch verification** - wire new authentic photography into event cards, page heroes, and impact highlights; run full launch checks and verify automated test suite; export fresh root `dzuels_database.sql` for 1-click phpMyAdmin cPanel import; and log all modified files in `cpanel_changed_files.txt` for Core FTP deployment.
 
+## Milestone 12: Production UI & Experience Polish, Media Visibility Control & Brand Corrections
+
+- [x] 36. **Ijero Tech Day brand correction, Media visibility controls & universal picker overhaul** - correct all naming from "Innovation and Tech Day" to "Ijero Tech Day" across templates, seeders, and routes; add public gallery visibility toggles and active "Used on Website" / "Displayed in Gallery" indicators in the Media Hub; and ensure the universal media picker loads and displays all library photos across all years and collections.
+- [ ] 37. **Public Gallery anti-flash performance & Tech Day event UI overhaul with dynamic date status & SEO** - eliminate image loading flashes on `/gallery` with `x-cloak`, fixed-aspect containers, and curated public photo display; dynamically calculate event status ("Upcoming Flagship" vs "Past Festival Highlights") from `event_date`; and elevate the Tech Day event show page with festival typography, edition switcher polish, and full SEO metadata.
+- [ ] 38. **Public page UI redesign for `/donate` (Flutterwave removal) and `/get-involved` (balanced, centered layout)** - remove Flutterwave from the public donate page while elevating GTBank transfer with 1-click copy and Givebutter U.S. giving; and redesign `/get-involved` into a balanced, centered layout with distinct pathway cards for volunteers, partners, and sponsors.
+
 ## Deferred Ideas (Not Scheduled as Features)
 
 *(Preserved for future reference, completely removed from the active feature roadmap)*

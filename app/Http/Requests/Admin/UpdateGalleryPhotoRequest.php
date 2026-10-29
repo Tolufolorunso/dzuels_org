@@ -26,6 +26,7 @@ class UpdateGalleryPhotoRequest extends FormRequest
             'caption' => ['nullable', 'string', 'max:255'],
             'alt_text' => ['nullable', 'string', 'max:255'],
             'year' => ['nullable', 'string', 'max:10'],
+            'is_public' => ['nullable', 'boolean'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
         ];
     }

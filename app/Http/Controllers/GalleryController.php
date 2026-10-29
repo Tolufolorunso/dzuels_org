@@ -17,7 +17,9 @@ class GalleryController extends Controller
             ->public()
             ->ordered()
             ->with(['photos' => function ($query) {
-                $query->orderBy('sort_order', 'asc')->orderBy('id', 'asc');
+                $query->where('is_public', true)
+                    ->orderBy('sort_order', 'asc')
+                    ->orderBy('id', 'asc');
             }])
             ->get();
 
@@ -35,7 +37,9 @@ class GalleryController extends Controller
             ->public()
             ->where('slug', $slug)
             ->with(['photos' => function ($query) {
-                $query->orderBy('sort_order', 'asc')->orderBy('id', 'asc');
+                $query->where('is_public', true)
+                    ->orderBy('sort_order', 'asc')
+                    ->orderBy('id', 'asc');
             }])
             ->firstOrFail();
 
@@ -43,7 +47,9 @@ class GalleryController extends Controller
             ->public()
             ->ordered()
             ->with(['photos' => function ($query) {
-                $query->orderBy('sort_order', 'asc')->orderBy('id', 'asc');
+                $query->where('is_public', true)
+                    ->orderBy('sort_order', 'asc')
+                    ->orderBy('id', 'asc');
             }])
             ->get();
 

@@ -50,7 +50,7 @@
                         <a href="{{ url('/programmes/ijero-digital-literacy') }}" class="hover:text-[var(--accent-cream)] transition-colors">Ijero Digital Literacy</a>
                     </li>
                     <li>
-                        <a href="{{ url('/events') }}" class="hover:text-[var(--accent-cream)] transition-colors">Innovation & Tech Day</a>
+                        <a href="{{ url('/events') }}" class="hover:text-[var(--accent-cream)] transition-colors">Ijero Tech Day</a>
                     </li>
                     <li>
                         <a href="{{ url('/gallery') }}" class="hover:text-[var(--accent-cream)] transition-colors">Reading Competitions</a>

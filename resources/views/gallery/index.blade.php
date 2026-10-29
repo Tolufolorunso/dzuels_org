@@ -167,13 +167,13 @@
                         <div class="relative rounded-3xl overflow-hidden border border-[var(--border)] shadow-xl bg-[var(--surface)] group">
                             <div class="aspect-4/3 w-full overflow-hidden bg-stone-100">
                                 <img src="{{ asset($featureCardPhoto) }}" 
-                                     alt="Students gathered during Innovation and Tech Day" 
+                                     alt="Students gathered during Ijero Tech Day" 
                                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                             </div>
                             <div class="absolute bottom-4 left-4 right-4 p-4 rounded-2xl bg-black/60 backdrop-blur-md text-white border border-white/10 flex items-center justify-between">
                                 <div>
                                     <span class="text-[10px] uppercase font-bold tracking-wider text-[var(--accent-cream)] block">Featured Highlight</span>
-                                    <p class="text-sm font-bold truncate">Innovation and Tech Day 2025</p>
+                                    <p class="text-sm font-bold truncate">Ijero Tech Day 2025</p>
                                 </div>
                                 <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-mint text-stone-900 shrink-0">
                                     Active Impact

@@ -80,7 +80,7 @@
                            id="kicker" 
                            name="kicker" 
                            value="{{ old('kicker') }}" 
-                           placeholder="e.g. Innovation and Tech Day, Literacy Outreach" 
+                           placeholder="e.g. Ijero Tech Day, Literacy Outreach" 
                            class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon/20 focus:border-maroon transition-colors @error('kicker') border-rose-500 @enderror">
                     @error('kicker')
                         <p class="text-xs text-rose-500 mt-1.5">{{ $message }}</p>

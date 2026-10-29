@@ -29,6 +29,7 @@ class MediaItem extends Model
         'alt_text',
         'source_type',
         'year',
+        'is_public',
         'gallery_album_id',
         'gallery_photo_id',
     ];
@@ -45,6 +46,7 @@ class MediaItem extends Model
             'width' => 'integer',
             'height' => 'integer',
             'year' => 'integer',
+            'is_public' => 'boolean',
             'gallery_album_id' => 'integer',
         ];
     }
@@ -198,6 +200,42 @@ class MediaItem extends Model
         }
 
         return $query->where('year', (int) $year);
+    }
+
+    /**
+     * Scope to only include items marked as publicly visible in gallery.
+     */
+    public function scopePublic(Builder $query): Builder
+    {
+        return $query->where('is_public', true);
+    }
+
+    /**
+     * Scope to only include archive items (hidden from public gallery).
+     */
+    public function scopeArchive(Builder $query): Builder
+    {
+        return $query->where('is_public', false);
+    }
+
+    /**
+     * Scope to filter by public gallery visibility.
+     */
+    public function scopeByVisibility(Builder $query, ?string $visibility): Builder
+    {
+        if (blank($visibility) || $visibility === 'all') {
+            return $query;
+        }
+
+        if ($visibility === 'public') {
+            return $query->where('is_public', true);
+        }
+
+        if ($visibility === 'archive') {
+            return $query->where('is_public', false);
+        }
+
+        return $query;
     }
 
     /**

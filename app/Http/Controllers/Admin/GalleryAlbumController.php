@@ -9,6 +9,7 @@ use App\Http\Requests\Admin\UpdateGalleryAlbumRequest;
 use App\Http\Requests\Admin\UpdateGalleryPhotoRequest;
 use App\Models\GalleryAlbum;
 use App\Models\GalleryPhoto;
+use App\Models\MediaItem;
 use App\Services\ImageOptimizerService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
@@ -299,6 +300,10 @@ class GalleryAlbumController extends Controller
         }
 
         $photo->update($validated);
+
+        if (array_key_exists('is_public', $validated)) {
+            MediaItem::where('gallery_photo_id', $photo->id)->update(['is_public' => (bool) $photo->is_public]);
+        }
 
         return redirect()->route('admin.gallery.photos', $album)
             ->with('success', 'Photo metadata updated successfully.');

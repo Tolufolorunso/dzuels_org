@@ -54,7 +54,7 @@ class GallerySeeder extends Seeder
                 'year' => '2026',
             ],
             [
-                'title' => 'Innovation and Tech Day (ITD)',
+                'title' => 'Ijero Tech Day (ITD)',
                 'slug' => 'itd',
                 'kicker' => 'Flagship Yearly Festival',
                 'description' => 'Flagship yearly celebration uniting innovators, students, tech enthusiasts, educators, and community leaders for digital empowerment in Ijero-Ekiti.',

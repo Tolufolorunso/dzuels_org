@@ -21,7 +21,7 @@
             'Digital Skills Acquisition',
             'Teacher Technology Training',
             'Ijero-Ekiti Community Development',
-            'Innovation & Tech Day',
+            'Ijero Tech Day',
             'Children Library Services',
         ],
         'email' => \App\Models\Setting::get('contact_email', 'info@dzuelsfoundation.org'),

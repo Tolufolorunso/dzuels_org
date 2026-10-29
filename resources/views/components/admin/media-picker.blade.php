@@ -22,24 +22,36 @@
     yearFilter: 'all',
     sort: 'newest',
     loading: false,
+    loadingMore: false,
     uploading: false,
     search: '',
     dateFilter: 'all',
     category: 'all',
+    page: 1,
+    perPage: 60,
+    totalCount: 0,
+    lastPage: 1,
+    hasMore: false,
     errorMessage: '',
 
     init() {
         this.$watch('modalOpen', value => {
             if (value && this.items.length === 0) {
-                this.loadItems();
+                this.loadItems(true);
             }
         });
     },
 
-    loadItems() {
-        this.loading = true;
-        this.errorMessage = '';
-        let url = '{{ route('admin.media.picker-items') }}?';
+    loadItems(reset = true) {
+        if (reset) {
+            this.page = 1;
+            this.loading = true;
+            this.errorMessage = '';
+        } else {
+            this.loadingMore = true;
+        }
+
+        let url = '{{ route('admin.media.picker-items') }}?page=' + this.page + '&per_page=' + this.perPage + '&';
         if (this.search) url += 'search=' + encodeURIComponent(this.search) + '&';
         if (this.dateFilter && this.dateFilter !== 'all') url += 'date_filter=' + encodeURIComponent(this.dateFilter) + '&';
         if (this.category && this.category !== 'all') url += 'category=' + encodeURIComponent(this.category) + '&';
@@ -49,7 +61,15 @@
         fetch(url, { credentials: 'same-origin', headers: { 'Accept': 'application/json' } })
             .then(res => res.json())
             .then(data => {
-                this.items = data.items || [];
+                const newItems = data.items || [];
+                if (reset) {
+                    this.items = newItems;
+                } else {
+                    this.items = [...this.items, ...newItems];
+                }
+                this.totalCount = data.total || 0;
+                this.lastPage = data.last_page || 1;
+                this.hasMore = Boolean(data.has_more);
                 if (data.collections) {
                     this.collections = data.collections;
                 }
@@ -57,11 +77,20 @@
                     this.years = data.years;
                 }
                 this.loading = false;
+                this.loadingMore = false;
             })
             .catch(err => {
                 this.errorMessage = 'Failed to load media library items. Please try again.';
                 this.loading = false;
+                this.loadingMore = false;
             });
+    },
+
+    loadMore() {
+        if (this.hasMore && !this.loadingMore && !this.loading) {
+            this.page++;
+            this.loadItems(false);
+        }
     },
 
     selectItem(item) {
@@ -257,14 +286,14 @@
                         <span>Year:</span>
                     </span>
                     <button type="button" 
-                            @click="yearFilter = 'all'; loadItems()" 
+                            @click="yearFilter = 'all'; loadItems(true)" 
                             :class="yearFilter === 'all' ? 'bg-maroon text-white shadow-2xs' : 'bg-stone-100 text-stone-600 hover:bg-stone-200 hover:text-stone-900'"
                             class="px-2.5 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer">
                         All Years
                     </button>
                     <template x-for="yr in years" :key="yr">
                         <button type="button" 
-                                @click="yearFilter = yr; loadItems()" 
+                                @click="yearFilter = yr; loadItems(true)" 
                                 :class="yearFilter == yr ? 'bg-maroon text-white shadow-2xs' : 'bg-stone-100 text-stone-600 hover:bg-stone-200 hover:text-stone-900'"
                                 class="px-2.5 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer"
                                 x-text="yr">
@@ -277,13 +306,13 @@
                     <div>
                         <input type="text" 
                                x-model="search" 
-                               @input.debounce.300ms="loadItems()" 
+                               @input.debounce.300ms="loadItems(true)" 
                                placeholder="Search photos..." 
                                class="w-full px-3 py-2 rounded-xl border border-stone-300 text-xs focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
                     </div>
                     <div>
                         <select x-model="category" 
-                                @change="loadItems()" 
+                                @change="loadItems(true)" 
                                 class="w-full px-3 py-2 rounded-xl border border-stone-300 text-xs focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
                             <option value="all">All Categories</option>
                             <optgroup label="System Categories">
@@ -302,7 +331,7 @@
                     </div>
                     <div>
                         <select x-model="dateFilter" 
-                                @change="loadItems()" 
+                                @change="loadItems(true)" 
                                 class="w-full px-3 py-2 rounded-xl border border-stone-300 text-xs focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
                             <option value="all">All Dates Uploaded</option>
                             <option value="today">Uploaded Today</option>
@@ -313,7 +342,7 @@
                     </div>
                     <div>
                         <select x-model="sort" 
-                                @change="loadItems()" 
+                                @change="loadItems(true)" 
                                 class="w-full px-3 py-2 rounded-xl border border-stone-300 text-xs focus:ring-2 focus:ring-maroon/20 focus:border-maroon">
                             <option value="newest">Newest First</option>
                             <option value="oldest">Oldest First</option>
@@ -324,6 +353,17 @@
                             <option value="size_desc">Largest Size</option>
                         </select>
                     </div>
+                </div>
+
+                {{-- Status & Total Count Bar --}}
+                <div class="flex items-center justify-between text-xs text-stone-500 px-1">
+                    <span>
+                        Showing <strong class="text-stone-900" x-text="items.length"></strong> of <strong class="text-stone-900" x-text="totalCount"></strong> photos
+                        <span x-show="yearFilter !== 'all'" x-text="' (' + yearFilter + ')'" class="font-semibold text-maroon"></span>
+                    </span>
+                    <span x-show="hasMore" class="text-[11px] text-stone-400">
+                        Scroll down or click Load More to browse all library photos
+                    </span>
                 </div>
 
                 {{-- Loading Spinner --}}
@@ -355,8 +395,33 @@
                             <div class="absolute top-1.5 left-1.5 flex items-center gap-1" x-show="item.year">
                                 <span class="px-1.5 py-0.5 rounded bg-maroon/90 backdrop-blur-xs text-white text-[9px] font-bold" x-text="item.year"></span>
                             </div>
+
+                            {{-- Usage badges --}}
+                            <div class="absolute bottom-1.5 left-1.5 flex flex-wrap items-center gap-1 z-10">
+                                <template x-if="item.is_displayed_in_gallery">
+                                    <span class="px-1.5 py-0.5 rounded bg-emerald-600/90 text-white text-[8px] font-bold shadow-2xs">Public</span>
+                                </template>
+                                <template x-if="item.is_used_on_site">
+                                    <span class="px-1.5 py-0.5 rounded bg-indigo-600/90 text-white text-[8px] font-bold shadow-2xs">On Site</span>
+                                </template>
+                            </div>
                         </div>
                     </template>
+                </div>
+
+                {{-- Progressive Load More Button --}}
+                <div x-show="hasMore && !loading" class="pt-4 pb-2 text-center">
+                    <button type="button" 
+                            @click="loadMore()" 
+                            :disabled="loadingMore"
+                            class="px-5 py-2.5 rounded-xl text-xs font-bold bg-stone-900 hover:bg-stone-800 text-white transition-all shadow-xs cursor-pointer inline-flex items-center gap-2">
+                        <span x-show="!loadingMore">Load More Photos</span>
+                        <span x-show="loadingMore" class="flex items-center gap-2">
+                            <div class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                            Loading additional photos...
+                        </span>
+                    </button>
+                    <p class="text-[11px] text-stone-400 mt-1.5" x-text="'Loaded ' + items.length + ' of ' + totalCount + ' photos'"></p>
                 </div>
 
                 <div x-show="!loading && items.length === 0" class="py-12 text-center text-stone-400 text-xs">

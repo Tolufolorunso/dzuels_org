@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\GalleryAlbum;
+use App\Models\GalleryPhoto;
 use App\Models\MediaItem;
 use App\Services\ImageOptimizerService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -25,6 +28,7 @@ class MediaLibraryController extends Controller
         $dateFilter = $request->query('date_filter', 'all');
         $category = $request->query('category', 'all');
         $yearFilter = $request->query('year', 'all');
+        $visibility = $request->query('visibility', 'all');
         $sort = $request->query('sort', 'newest');
 
         $query = MediaItem::query()
@@ -32,6 +36,7 @@ class MediaLibraryController extends Controller
             ->byDateFilter($dateFilter)
             ->bySourceType($category)
             ->byYear($yearFilter)
+            ->byVisibility($visibility)
             ->ordered($sort);
 
         $mediaItems = $query->paginate(24)->withQueryString();
@@ -41,6 +46,11 @@ class MediaLibraryController extends Controller
         $totalBytes = MediaItem::sum('file_size');
         $webpCount = MediaItem::where('mime_type', 'image/webp')->count();
         $webpRate = $totalCount > 0 ? (int) round(($webpCount / $totalCount) * 100) : 100;
+        $publicCount = MediaItem::where('is_public', true)->count();
+        $archiveCount = MediaItem::where('is_public', false)->count();
+
+        // Retrieve active website paths for usage badges
+        $activeSitePaths = static::getActiveSitePaths();
 
         $totalSizeFormatted = '0 KB';
         if ($totalBytes >= 1048576) {
@@ -64,10 +74,14 @@ class MediaLibraryController extends Controller
             'totalCount' => $totalCount,
             'totalSizeFormatted' => $totalSizeFormatted,
             'webpRate' => $webpRate,
+            'publicCount' => $publicCount,
+            'archiveCount' => $archiveCount,
+            'activeSitePaths' => $activeSitePaths,
             'currentSearch' => $search,
             'currentDateFilter' => $dateFilter,
             'currentCategory' => $category,
             'currentYear' => $yearFilter,
+            'currentVisibility' => $visibility,
             'currentSort' => $sort,
             'effectiveMaxUploadSize' => ini_get('upload_max_filesize') ?: '16M',
         ]);
@@ -248,7 +262,122 @@ class MediaLibraryController extends Controller
     }
 
     /**
-     * Update metadata (title, caption, alt_text, gallery_album_id, year) for a media item.
+     * Retrieve a cached lookup set of all asset paths actively referenced across the site.
+     *
+     * @return array<string, bool>
+     */
+    public static function getActiveSitePaths(): array
+    {
+        if (app()->environment('testing')) {
+            return static::queryActiveSitePaths();
+        }
+
+        return Cache::remember('active_site_media_paths', 60, function () {
+            return static::queryActiveSitePaths();
+        });
+    }
+
+    /**
+     * Query all referenced image paths across all site content tables.
+     *
+     * @return array<string, bool>
+     */
+    protected static function queryActiveSitePaths(): array
+    {
+        $paths = [];
+        $paths = array_merge($paths, DB::table('page_sections')->whereNotNull('image_path')->pluck('image_path')->all());
+        $paths = array_merge($paths, DB::table('programmes')->whereNotNull('cover_image')->pluck('cover_image')->all());
+        $paths = array_merge($paths, DB::table('events')->whereNotNull('banner_image')->pluck('banner_image')->all());
+        $paths = array_merge($paths, DB::table('event_sponsors')->whereNotNull('logo_path')->pluck('logo_path')->all());
+        $paths = array_merge($paths, DB::table('team_members')->whereNotNull('photo')->pluck('photo')->all());
+        $paths = array_merge($paths, DB::table('partners')->whereNotNull('logo')->pluck('logo')->all());
+        $paths = array_merge($paths, DB::table('gallery_albums')->whereNotNull('cover_image')->pluck('cover_image')->all());
+        $paths = array_merge($paths, DB::table('settings')->whereIn('key', ['site_logo'])->whereNotNull('value')->pluck('value')->all());
+
+        $lookup = [];
+        foreach ($paths as $p) {
+            if (empty($p)) {
+                continue;
+            }
+            $clean = ltrim(parse_url($p, PHP_URL_PATH) ?? $p, '/');
+            $lookup[$clean] = true;
+            $lookup[basename($clean)] = true;
+        }
+
+        return $lookup;
+    }
+
+    /**
+     * Toggle or update the public gallery visibility of a media item.
+     */
+    public function toggleVisibility(Request $request, MediaItem $mediaItem): JsonResponse|RedirectResponse
+    {
+        $newStatus = $request->has('is_public')
+            ? $request->boolean('is_public')
+            : ! $mediaItem->is_public;
+
+        $mediaItem->update(['is_public' => $newStatus]);
+
+        if ($mediaItem->gallery_photo_id) {
+            GalleryPhoto::where('id', $mediaItem->gallery_photo_id)->update(['is_public' => $newStatus]);
+        }
+
+        $label = $newStatus ? 'marked as Public in Gallery' : 'moved to Archive';
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'is_public' => $newStatus,
+                'message' => "Photo successfully {$label}.",
+                'item' => $mediaItem,
+            ]);
+        }
+
+        return back()->with('success', "Photo successfully {$label}.");
+    }
+
+    /**
+     * Batch toggle visibility for multiple media items.
+     */
+    public function bulkVisibility(Request $request): JsonResponse|RedirectResponse
+    {
+        $validated = $request->validate([
+            'ids' => ['required', 'array'],
+            'ids.*' => ['integer', 'exists:media_items,id'],
+            'is_public' => ['required', 'boolean'],
+        ]);
+
+        $ids = $validated['ids'];
+        $isPublic = (bool) $validated['is_public'];
+
+        MediaItem::whereIn('id', $ids)->update(['is_public' => $isPublic]);
+
+        $linkedPhotoIds = MediaItem::whereIn('id', $ids)
+            ->whereNotNull('gallery_photo_id')
+            ->pluck('gallery_photo_id')
+            ->all();
+
+        if (! empty($linkedPhotoIds)) {
+            GalleryPhoto::whereIn('id', $linkedPhotoIds)->update(['is_public' => $isPublic]);
+        }
+
+        $count = count($ids);
+        $label = $isPublic ? 'Public in Gallery' : 'Archive (Hidden from Public Gallery)';
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'count' => $count,
+                'is_public' => $isPublic,
+                'message' => "Successfully marked {$count} items as {$label}.",
+            ]);
+        }
+
+        return back()->with('success', "Successfully marked {$count} items as {$label}.");
+    }
+
+    /**
+     * Update metadata (title, caption, alt_text, gallery_album_id, year, is_public) for a media item.
      */
     public function update(Request $request, MediaItem $mediaItem): JsonResponse|RedirectResponse
     {
@@ -258,6 +387,7 @@ class MediaLibraryController extends Controller
             'alt_text' => ['nullable', 'string', 'max:500'],
             'gallery_album_id' => ['nullable', 'integer', 'exists:gallery_albums,id'],
             'year' => ['nullable', 'integer', 'min:2000', 'max:2100'],
+            'is_public' => ['nullable', 'boolean'],
         ]);
 
         if (array_key_exists('gallery_album_id', $validated)) {
@@ -265,6 +395,10 @@ class MediaLibraryController extends Controller
         }
 
         $mediaItem->update($validated);
+
+        if (array_key_exists('is_public', $validated) && $mediaItem->gallery_photo_id) {
+            GalleryPhoto::where('id', $mediaItem->gallery_photo_id)->update(['is_public' => (bool) $validated['is_public']]);
+        }
 
         if ($request->wantsJson()) {
             return response()->json([
@@ -338,15 +472,28 @@ class MediaLibraryController extends Controller
     public function pickerItems(Request $request): JsonResponse
     {
         $yearFilter = $request->input('year', 'all');
+        $visibility = $request->input('visibility', 'all');
+        $perPage = (int) $request->input('per_page', 60);
+        if ($perPage < 1 || $perPage > 250) {
+            $perPage = 60;
+        }
 
         $query = MediaItem::query()
             ->search($request->input('search'))
             ->byDateFilter($request->input('date_filter'))
             ->bySourceType($request->input('category'))
             ->byYear($yearFilter)
+            ->byVisibility($visibility)
             ->ordered($request->input('sort', 'newest'));
 
-        $items = $query->limit(80)->get()->map(function (MediaItem $item) {
+        $activeSitePaths = static::getActiveSitePaths();
+
+        $paginator = $query->paginate($perPage);
+
+        $items = collect($paginator->items())->map(function (MediaItem $item) use ($activeSitePaths) {
+            $isUsedOnSite = isset($activeSitePaths[$item->file_path]) || isset($activeSitePaths[basename($item->file_path)]);
+            $isDisplayedInGallery = (bool) $item->is_public && ($item->source_type === 'gallery' || ! empty($item->gallery_album_id) || ! empty($item->gallery_photo_id));
+
             return [
                 'id' => $item->id,
                 'filename' => $item->filename,
@@ -360,6 +507,9 @@ class MediaLibraryController extends Controller
                 'date_formatted' => $item->formatted_date,
                 'source_type' => $item->source_type,
                 'year' => $item->year,
+                'is_public' => (bool) $item->is_public,
+                'is_used_on_site' => $isUsedOnSite,
+                'is_displayed_in_gallery' => $isDisplayedInGallery,
                 'gallery_album_id' => $item->gallery_album_id,
             ];
         });
@@ -372,6 +522,10 @@ class MediaLibraryController extends Controller
 
         return response()->json([
             'items' => $items,
+            'total' => $paginator->total(),
+            'current_page' => $paginator->currentPage(),
+            'last_page' => $paginator->lastPage(),
+            'has_more' => $paginator->hasMorePages(),
             'collections' => $collections,
             'years' => $availableYears,
         ]);

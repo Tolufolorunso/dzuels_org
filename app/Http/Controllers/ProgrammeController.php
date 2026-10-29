@@ -38,7 +38,7 @@ class ProgrammeController extends Controller
 
     /**
      * Display the specified programme by its unique slug.
-     * Innovation and Tech Day redirects (301) to the flagship Tech Day event page.
+     * Ijero Tech Day redirects (301) to the flagship Tech Day event page.
      */
     public function show(string $slug): View|RedirectResponse
     {

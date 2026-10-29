@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,6 +22,7 @@ class GalleryPhoto extends Model
         'caption',
         'alt_text',
         'year',
+        'is_public',
         'sort_order',
     ];
 
@@ -32,8 +34,25 @@ class GalleryPhoto extends Model
     protected function casts(): array
     {
         return [
+            'is_public' => 'boolean',
             'sort_order' => 'integer',
         ];
+    }
+
+    /**
+     * Scope to only include photos marked as publicly visible.
+     */
+    public function scopePublic(Builder $query): Builder
+    {
+        return $query->where('is_public', true);
+    }
+
+    /**
+     * Scope to only include archive photos (hidden from public gallery).
+     */
+    public function scopeArchive(Builder $query): Builder
+    {
+        return $query->where('is_public', false);
     }
 
     /**
