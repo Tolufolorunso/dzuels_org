@@ -158,10 +158,15 @@
                     </div>
 
                     {{-- Right Feature Card --}}
+                    @php
+                        $featureCardPhoto = \App\Models\MediaItem::where('year', 2025)->first()?->file_path 
+                            ?? \App\Models\MediaItem::first()?->file_path 
+                            ?? 'front/images/dzuelsCollage.webp';
+                    @endphp
                     <div class="lg:col-span-5">
                         <div class="relative rounded-3xl overflow-hidden border border-[var(--border)] shadow-xl bg-[var(--surface)] group">
                             <div class="aspect-4/3 w-full overflow-hidden bg-stone-100">
-                                <img src="{{ asset('front/images/gallery/optimized/itd-2025-05.webp') }}" 
+                                <img src="{{ asset($featureCardPhoto) }}" 
                                      alt="Students gathered during Innovation and Tech Day" 
                                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                             </div>

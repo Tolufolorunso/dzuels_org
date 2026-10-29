@@ -2,7 +2,7 @@
     :title="$event->seo_title ?? ($event->title . ' | Dzuels Educational Foundation')"
     :description="$event->seo_description ?? $event->summary"
     :canonical="route('events.show', $event->slug)"
-    :og-image="$event->featured_image_url ?? asset('front/images/techday.webp')"
+    :og-image="$event->featured_image_url ?? $event->banner_image_url ?? asset('front/images/dzuelsCollage.webp')"
     og-type="article"
     :breadcrumbs="[
         ['name' => 'Home', 'url' => url('/')],
@@ -132,6 +132,47 @@
                     <span class="font-medium text-[var(--text)]">Free Community Admission</span>
                 </div>
             </div>
+
+            {{-- Multi-Year Tech Day Edition Switcher --}}
+            @if (!empty($isTechDay) && isset($techDayEditions) && $techDayEditions->isNotEmpty())
+                <div class="mt-4 p-4 sm:p-5 rounded-2xl bg-[var(--surface-alt)] border border-[var(--border)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">🚀</span>
+                        <div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-crimson dark:text-mint block">
+                                Tech Day Annual Editions
+                            </span>
+                            <span class="text-xs sm:text-sm font-bold text-[var(--heading)]">
+                                Switch Festival Edition:
+                            </span>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        @foreach ($techDayEditions as $edition)
+                            @php
+                                $isActive = $edition->id === $event->id;
+                                $editionYear = $edition->event_date?->year;
+                                $isUpcoming = $editionYear >= 2026;
+                            @endphp
+                            <a href="{{ route('events.show', $edition->slug) }}" 
+                               class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 flex items-center gap-1.5 {{ $isActive 
+                                   ? 'bg-maroon text-white shadow-md ring-2 ring-maroon/30 scale-102' 
+                                   : 'bg-[var(--surface)] text-[var(--text)] border border-[var(--border)] hover:border-maroon/50 hover:bg-maroon/5' }}">
+                                <span>{{ $editionYear }}</span>
+                                <span class="text-[10px] opacity-80 font-normal">
+                                    @if ($isUpcoming)
+                                        (Upcoming Flagship)
+                                    @elseif ($editionYear === 2024)
+                                        (Inaugural)
+                                    @else
+                                        (2nd Edition)
+                                    @endif
+                                </span>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
         </div>
     </section>
 
@@ -205,37 +246,83 @@
                         </div>
                     @endif
 
-                    {{-- Event Highlights & Gallery Preview --}}
+                    {{-- Event Highlights & Authentic Photo Masonry Gallery --}}
+                    @php
+                        $hasEditionPhotos = isset($editionPhotos) && $editionPhotos->isNotEmpty();
+                        $targetAlbumSlug = !empty($eventYear) ? "itd-{$eventYear}" : null;
+                    @endphp
                     <div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-8 sm:p-10 shadow-sm space-y-6">
-                        <div class="flex items-center justify-between pb-4 border-b border-[var(--border)]">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[var(--border)] gap-2">
                             <div>
                                 <span class="text-xs font-bold uppercase tracking-wider text-crimson dark:text-[var(--accent-cream)] block">
-                                    Moments of Impact
+                                    Visual Archives
                                 </span>
                                 <h2 class="text-2xl font-bold text-[var(--heading)] mt-0.5">
-                                    Event Highlights & Gallery
+                                    {{ !empty($isTechDay) ? "ITD {$eventYear} Authentic Photography" : 'Event Highlights & Gallery' }}
                                 </h2>
                             </div>
-                            <a href="{{ url('/gallery') }}" class="text-xs font-bold text-maroon hover:underline">
-                                Full Gallery &rarr;
-                            </a>
+                            @if ($targetAlbumSlug)
+                                <a href="{{ route('gallery.album', $targetAlbumSlug) }}" class="text-xs font-bold text-maroon hover:underline flex items-center gap-1">
+                                    <span>Browse Full {{ $eventYear }} Album</span>
+                                    <span>&rarr;</span>
+                                </a>
+                            @else
+                                <a href="{{ url('/gallery') }}" class="text-xs font-bold text-maroon hover:underline">
+                                    Full Gallery &rarr;
+                                </a>
+                            @endif
                         </div>
 
                         <p class="text-sm text-[var(--text)] leading-relaxed">
-                            Experience the energy, innovation, and smiles from our past technology gatherings in Ijero-Ekiti:
+                            @if (!empty($isTechDay))
+                                Authentic curated photography from Ijero Tech Day {{ $eventYear }} capturing student projects, tech booths, and milestones:
+                            @else
+                                Experience the energy, innovation, and smiles from our gatherings in Ijero-Ekiti:
+                            @endif
                         </p>
 
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                            <div class="rounded-2xl overflow-hidden aspect-4/3 bg-stone-100 dark:bg-stone-800">
-                                <img src="{{ asset('front/images/techday.webp') }}" alt="Tech Day students and attendees" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                        @if ($hasEditionPhotos)
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3.5">
+                                @foreach ($editionPhotos->take(9) as $photoItem)
+                                    @php
+                                        $photoPath = $photoItem instanceof \App\Models\GalleryPhoto ? $photoItem->image_path : $photoItem->file_path;
+                                        $photoTitle = $photoItem->title ?: "ITD {$eventYear} Photo";
+                                        $photoAlt = $photoItem->alt_text ?: $photoTitle;
+                                    @endphp
+                                    <div class="rounded-2xl overflow-hidden aspect-4/3 bg-stone-100 dark:bg-stone-800 border border-[var(--border)] group relative shadow-xs hover:shadow-md transition-all">
+                                        <img src="{{ asset($photoPath) }}" 
+                                             alt="{{ $photoAlt }}" 
+                                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                             loading="lazy">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-2.5">
+                                            <span class="text-[11px] font-medium text-white line-clamp-1">
+                                                {{ $photoTitle }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
-                            <div class="rounded-2xl overflow-hidden aspect-4/3 bg-stone-100 dark:bg-stone-800">
-                                <img src="{{ asset('front/images/dzuelsCollage.webp') }}" alt="Digital lab training in Ijero" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                            @if ($editionPhotos->count() > 9 && $targetAlbumSlug)
+                                <div class="pt-2 text-center">
+                                    <a href="{{ route('gallery.album', $targetAlbumSlug) }}" 
+                                       class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold bg-[var(--surface-alt)] hover:bg-maroon hover:text-white border border-[var(--border)] text-[var(--text-strong)] transition-all">
+                                        <span>View all {{ $editionPhotos->count() }} curated photos for ITD {{ $eventYear }}</span>
+                                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            @endif
+                        @else
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                <div class="rounded-2xl overflow-hidden aspect-4/3 bg-stone-100 dark:bg-stone-800">
+                                    <img src="{{ asset('front/images/dzuelsCollage.webp') }}" alt="Digital lab training in Ijero" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                                </div>
+                                <div class="rounded-2xl overflow-hidden aspect-4/3 bg-stone-100 dark:bg-stone-800">
+                                    <img src="{{ asset('front/images/about_1.webp') }}" alt="Community beneficiaries" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                                </div>
                             </div>
-                            <div class="rounded-2xl overflow-hidden aspect-4/3 bg-stone-100 dark:bg-stone-800">
-                                <img src="{{ asset('front/images/about_1.webp') }}" alt="Community beneficiaries" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
-                            </div>
-                        </div>
+                        @endif
                     </div>
 
                     {{-- Social Share Strip --}}

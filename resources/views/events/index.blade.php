@@ -157,6 +157,42 @@
         </section>
     @endif
 
+    {{-- 2.5 Multi-Year Tech Day Editions Showcase --}}
+    @if (!empty($techDayEditions) && $techDayEditions->isNotEmpty())
+        <section class="py-8 bg-[var(--surface-alt)] border-b border-[var(--border)] transition-colors">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">🚀</span>
+                        <div>
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-crimson dark:text-mint block">
+                                Premier Annual Gathering
+                            </span>
+                            <h3 class="text-base sm:text-lg font-extrabold text-[var(--heading)]">
+                                Ijero Tech Day (ITD) Multi-Year Editions
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2.5">
+                        @foreach ($techDayEditions as $edition)
+                            @php
+                                $editionYear = $edition->event_date?->year;
+                                $isUpcoming = $editionYear >= 2026;
+                            @endphp
+                            <a href="{{ route('events.show', $edition->slug) }}" 
+                               class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[var(--surface)] text-[var(--heading)] hover:text-white hover:bg-maroon border border-[var(--border)] shadow-xs transition-all duration-200 hover:-translate-y-0.5">
+                                <span>{{ $editionYear }}</span>
+                                <span class="text-[10px] px-2 py-0.5 rounded-full {{ $isUpcoming ? 'bg-mint/20 text-mint' : 'bg-stone-200 dark:bg-stone-800 text-stone-600 dark:text-stone-300' }}">
+                                    {{ $isUpcoming ? 'Flagship (Upcoming)' : ($editionYear === 2024 ? 'Inaugural' : '2nd Edition') }}
+                                </span>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endif
+
     {{-- 3. All Upcoming Events Grid --}}
     <section class="py-20 lg:py-24 bg-[var(--surface)] transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -280,31 +316,62 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     @foreach ($pastEvents as $past)
-                        <div class="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6 sm:p-8 flex flex-col justify-between space-y-4 hover:border-maroon/50 transition-all">
-                            <div class="space-y-3">
-                                <div class="flex items-center justify-between text-xs text-[var(--text-muted)]">
-                                    <span class="font-bold text-stone-500">Concluded on {{ $past->formatted_date }}</span>
-                                    <span class="px-2 py-0.5 rounded-full bg-stone-100 dark:bg-stone-800 text-[10px] font-semibold text-stone-600 dark:text-stone-300">
-                                        Past Event
-                                    </span>
+                        <div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group hover:-translate-y-1">
+                            @if ($past->banner_image_url)
+                                <div class="relative h-48 overflow-hidden bg-stone-900">
+                                    <img src="{{ $past->banner_image_url }}" 
+                                         alt="{{ $past->title }}" 
+                                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                         loading="lazy">
+                                    <div class="absolute top-4 left-4 flex flex-col items-center bg-white/95 dark:bg-stone-900/95 backdrop-blur-md rounded-xl px-2.5 py-1 text-center shadow-md">
+                                        <span class="text-[10px] font-bold uppercase text-crimson dark:text-[var(--accent-cream)]">
+                                            {{ $past->event_date ? $past->event_date->format('M') : '' }}
+                                        </span>
+                                        <span class="text-base font-black text-stone-900 dark:text-white leading-none">
+                                            {{ $past->event_date ? $past->event_date->format('d, Y') : '' }}
+                                        </span>
+                                    </div>
+                                    <div class="absolute top-4 right-4">
+                                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-black/60 backdrop-blur-xs text-white">
+                                            Concluded
+                                        </span>
+                                    </div>
+                                </div>
+                            @endif
+
+                            <div class="p-6 sm:p-8 flex flex-col flex-grow justify-between space-y-4">
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between text-xs text-[var(--text-muted)]">
+                                        <span class="font-bold text-stone-500">Concluded on {{ $past->formatted_date }}</span>
+                                        <span class="px-2 py-0.5 rounded-full bg-stone-100 dark:bg-stone-800 text-[10px] font-semibold text-stone-600 dark:text-stone-300">
+                                            Archive Available
+                                        </span>
+                                    </div>
+
+                                    <h3 class="text-xl font-bold text-[var(--heading)] group-hover:text-maroon transition-colors">
+                                        <a href="{{ route('events.show', $past->slug) }}">
+                                            {{ $past->title }}
+                                        </a>
+                                    </h3>
+
+                                    @if ($past->theme)
+                                        <p class="text-xs italic font-semibold text-maroon dark:text-[var(--accent-cream)]">
+                                            "{{ $past->theme }}"
+                                        </p>
+                                    @endif
+
+                                    <p class="text-sm text-[var(--text)] leading-relaxed line-clamp-3">
+                                        {{ $past->summary }}
+                                    </p>
                                 </div>
 
-                                <h3 class="text-xl font-bold text-[var(--heading)]">
-                                    <a href="{{ route('events.show', $past->slug) }}" class="hover:text-maroon transition-colors">
-                                        {{ $past->title }}
+                                <div class="pt-4 border-t border-[var(--border)] flex items-center justify-between">
+                                    <span class="text-xs text-[var(--text-muted)] line-clamp-1">📍 {{ $past->venue }}</span>
+                                    <a href="{{ route('events.show', $past->slug) }}" class="inline-flex items-center gap-1 text-xs font-bold text-maroon hover:underline shrink-0">
+                                        <span>View Edition & Photos</span>
+                                        <span>&rarr;</span>
                                     </a>
-                                </h3>
-
-                                <p class="text-sm text-[var(--text)] leading-relaxed">
-                                    {{ $past->summary }}
-                                </p>
-                            </div>
-
-                            <div class="pt-4 border-t border-[var(--border)] flex items-center justify-between">
-                                <span class="text-xs text-[var(--text-muted)]">📍 {{ $past->venue }}</span>
-                                <a href="{{ route('events.show', $past->slug) }}" class="text-xs font-bold text-maroon hover:underline">
-                                    Event Archive &rarr;
-                                </a>
+                                </div>
                             </div>
                         </div>
                     @endforeach

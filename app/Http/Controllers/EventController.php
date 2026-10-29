@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\GalleryAlbum;
+use App\Models\MediaItem;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -29,7 +31,16 @@ class EventController extends Controller
         // Flagship or next major event
         $featuredEvent = $upcomingEvents->first() ?? $pastEvents->first();
 
-        return view('events.index', compact('upcomingEvents', 'pastEvents', 'featuredEvent'));
+        // All Tech Day annual editions for multi-year navigation
+        $techDayEditions = Event::active()
+            ->where(function ($q) {
+                $q->where('slug', 'like', '%tech-day%')
+                    ->orWhere('slug', 'like', '%itd%');
+            })
+            ->orderBy('event_date', 'desc')
+            ->get();
+
+        return view('events.index', compact('upcomingEvents', 'pastEvents', 'featuredEvent', 'techDayEditions'));
     }
 
     /**
@@ -48,7 +59,40 @@ class EventController extends Controller
             ->take(3)
             ->get();
 
-        return view('events.show', compact('event', 'otherEvents'));
+        $isTechDay = str_contains($event->slug, 'tech-day') || str_contains($event->slug, 'itd');
+        $eventYear = $event->event_date?->year ?: 2026;
+
+        $techDayEditions = $isTechDay
+            ? Event::active()
+                ->where(function ($q) {
+                    $q->where('slug', 'like', '%tech-day%')
+                        ->orWhere('slug', 'like', '%itd%');
+                })
+                ->orderBy('event_date', 'desc')
+                ->get()
+            : collect();
+
+        // Fetch authentic curated photos for this edition
+        $editionPhotos = collect();
+        if ($isTechDay) {
+            $albumSlug = "itd-{$eventYear}";
+            $album = GalleryAlbum::where('slug', $albumSlug)
+                ->with(['photos' => function ($q) {
+                    $q->orderBy('sort_order', 'asc');
+                }])
+                ->first();
+
+            if ($album && $album->photos->isNotEmpty()) {
+                $editionPhotos = $album->photos;
+            } else {
+                $editionPhotos = MediaItem::where('year', $eventYear)
+                    ->where('source_type', 'gallery')
+                    ->orderBy('created_at', 'asc')
+                    ->get();
+            }
+        }
+
+        return view('events.show', compact('event', 'otherEvents', 'isTechDay', 'techDayEditions', 'editionPhotos', 'eventYear'));
     }
 
     /**
@@ -70,6 +114,7 @@ class EventController extends Controller
             'email' => ['required', 'email', 'max:255'],
             'phone' => ['required', 'string', 'max:50'],
             'attendee_type' => ['nullable', 'string', 'max:50'],
+            'organization' => ['nullable', 'string', 'max:255'],
             'notes' => ['nullable', 'string', 'max:1000'],
         ]);
 

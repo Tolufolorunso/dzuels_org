@@ -6,18 +6,23 @@ use App\Models\GalleryAlbum;
 use App\Models\PageSection;
 use App\Models\Programme;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class ProgrammeController extends Controller
 {
     /**
-     * Display a listing of active foundation programmes.
+     * Display a listing of active continuous foundation programmes.
+     * Tech Day is separated as the foundation's annual flagship event under /events.
      */
     public function index(): View
     {
         $sections = PageSection::getPageSections('programmes');
 
         try {
-            $programmes = Programme::active()->ordered()->get();
+            $programmes = Programme::active()
+                ->whereNotIn('slug', ['innovation-and-tech-day', 'itd'])
+                ->ordered()
+                ->get();
             $featured = $programmes->where('is_featured', true)->first();
         } catch (\Throwable) {
             $programmes = collect();
@@ -33,14 +38,20 @@ class ProgrammeController extends Controller
 
     /**
      * Display the specified programme by its unique slug.
+     * Innovation and Tech Day redirects (301) to the flagship Tech Day event page.
      */
-    public function show(string $slug): View
+    public function show(string $slug): View|RedirectResponse
     {
+        if (in_array($slug, ['innovation-and-tech-day', 'itd'], true)) {
+            return redirect()->route('events.show', 'ijero-tech-day-2026', 301);
+        }
+
         $programme = Programme::where('slug', $slug)
             ->where('is_active', true)
             ->firstOrFail();
 
         $relatedProgrammes = Programme::active()
+            ->whereNotIn('slug', ['innovation-and-tech-day', 'itd'])
             ->where('id', '!=', $programme->id)
             ->ordered()
             ->take(3)

@@ -112,7 +112,8 @@ class ProgrammePublicTest extends TestCase
         $response = $this->get('/programmes');
         $response->assertOk();
         $response->assertSee('front/images/gallery/optimized/spelling-01.webp');
-        $response->assertSee('front/images/gallery/optimized/itd-2025-05.webp');
+        $response->assertSee('Annual Flagship Festival');
+        $response->assertSee(route('events.show', 'ijero-tech-day-2026'));
 
         $detailResponse = $this->get('/programmes/spelling-bee-contests');
         $detailResponse->assertOk();

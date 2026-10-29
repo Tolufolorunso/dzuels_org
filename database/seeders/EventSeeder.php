@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Event;
 use App\Models\EventSponsor;
+use App\Models\MediaItem;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 
@@ -16,6 +17,13 @@ class EventSeeder extends Seeder
     {
         $flagshipDate = Carbon::create(2026, 10, 3, 8, 0, 0);
 
+        // Fetch first authentic photo paths if available
+        $photo2024 = MediaItem::where('year', 2024)->where('source_type', 'gallery')->first()?->file_path
+            ?? 'uploads/media/techday/2024/1793278498_UanlkjhT6Q8M.webp';
+        $photo2025 = MediaItem::where('year', 2025)->where('source_type', 'gallery')->first()?->file_path
+            ?? 'uploads/media/techday/2025/1793278500_XUSj1fYPJy42.webp';
+
+        // 1. ITD 2026 (Flagship Upcoming)
         $itd2026 = Event::updateOrCreate(
             ['slug' => 'ijero-tech-day-2026'],
             [
@@ -105,6 +113,55 @@ class EventSeeder extends Seeder
             );
         }
 
+        // 2. ITD 2025 (2nd Annual Edition)
+        Event::updateOrCreate(
+            ['slug' => 'ijero-tech-day-2025'],
+            [
+                'title' => 'Ijero Tech Day 2025 (2nd Annual Edition)',
+                'summary' => 'The second annual flagship gathering celebrating student digital innovation, robotics demos, and creative problem solving across Ijero-Ekiti.',
+                'description' => "Ijero Tech Day 2025 brought together over 220 students, teachers, and technology mentors from across Ekiti State for an intensive full-day celebration of innovation and practical STEM skills. Following the success of the 2024 inaugural gathering, the 2025 edition featured expanded coding hackathons, beginner robotics exhibitions, visual design clinics, and keynote addresses by tech professionals.\n\nStudents demonstrated innovative community problem-solving projects, and participating schools received refurbished desktop computers, books, and scholarship recognition for outstanding student innovators.",
+                'event_date' => Carbon::create(2025, 10, 25, 9, 0, 0),
+                'end_date' => Carbon::create(2025, 10, 25, 16, 30, 0),
+                'venue' => 'AAoJ Memorial Learning Center & Ijero Civic Hall, Ijero-Ekiti',
+                'theme' => 'Empowering Rural Youth Through Innovation & Technology',
+                'objective' => 'Accelerating digital literacy, robotics awareness, and creative technology problem-solving among rural students.',
+                'banner_image' => $photo2025,
+                'schedule' => [
+                    [
+                        'time' => '09:00 AM - 10:00 AM',
+                        'title' => 'Opening Assembly & Keynote: Innovation in Rural Education',
+                        'speaker' => 'Foundation Leadership & Guests',
+                    ],
+                    [
+                        'time' => '10:00 AM - 01:00 PM',
+                        'title' => 'Interactive Coding, Robotics & Digital Media Workshops',
+                        'speaker' => 'Tech Mentors & Facilitators',
+                    ],
+                    [
+                        'time' => '01:00 PM - 02:00 PM',
+                        'title' => 'Lunch Break & Student Innovation Exhibition',
+                        'speaker' => 'Student Innovators',
+                    ],
+                    [
+                        'time' => '02:00 PM - 04:00 PM',
+                        'title' => 'Youth Hackathon Demos & Pitch Presentations',
+                        'speaker' => 'Student Teams & Judges',
+                    ],
+                    [
+                        'time' => '04:00 PM - 04:30 PM',
+                        'title' => 'Awards, School Equipment Presentation & Closing',
+                        'speaker' => 'Dignitaries',
+                    ],
+                ],
+                'is_registration_open' => false,
+                'is_active' => true,
+                'sort_order' => 2,
+                'seo_title' => 'Ijero Tech Day 2025 | Dzuels Educational Foundation',
+                'seo_description' => 'Highlights and student exhibitions from the 2nd annual Ijero Tech Day held on October 25, 2025 in Ijero-Ekiti.',
+            ]
+        );
+
+        // 3. ITD 2024 (Inaugural Edition)
         Event::updateOrCreate(
             ['slug' => 'ijero-tech-day-2024'],
             [
@@ -114,7 +171,9 @@ class EventSeeder extends Seeder
                 'event_date' => Carbon::create(2024, 11, 15, 9, 0, 0),
                 'end_date' => Carbon::create(2024, 11, 15, 15, 0, 0),
                 'venue' => 'Ijero-Ekiti Civic Centre, Ekiti State',
-                'banner_image' => 'front/images/techday.webp',
+                'theme' => 'Igniting Digital Potential in Ijero-Ekiti',
+                'objective' => 'Introducing foundational digital literacy, typing mastery, and computer hardware to rural secondary school students.',
+                'banner_image' => $photo2024,
                 'schedule' => [
                     [
                         'time' => '09:00 AM - 10:00 AM',
@@ -134,8 +193,8 @@ class EventSeeder extends Seeder
                 ],
                 'is_registration_open' => false,
                 'is_active' => true,
-                'sort_order' => 2,
-                'seo_title' => 'Ijero Tech Day 2024 | Dzuels Foundation',
+                'sort_order' => 3,
+                'seo_title' => 'Ijero Tech Day 2024 | Dzuels Educational Foundation',
                 'seo_description' => 'Highlights and outcomes from the inaugural Ijero Tech Day 2024 in Ekiti State.',
             ]
         );
