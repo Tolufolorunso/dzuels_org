@@ -5,10 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreProgrammeRequest;
 use App\Http\Requests\Admin\UpdateProgrammeRequest;
+use App\Models\GalleryAlbum;
+use App\Models\MediaItem;
 use App\Models\Programme;
 use App\Services\ImageOptimizerService;
+use App\Services\MediaMetadataExtractor;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class ProgrammeController extends Controller
@@ -32,7 +36,9 @@ class ProgrammeController extends Controller
      */
     public function create(): View
     {
-        return view('admin.programmes.create');
+        $albums = GalleryAlbum::active()->orderBy('title', 'asc')->get();
+
+        return view('admin.programmes.create', compact('albums'));
     }
 
     /**
@@ -67,6 +73,8 @@ class ProgrammeController extends Controller
             $validated['cover_image'] = null;
         }
 
+        $validated['gallery_photos'] = $this->processGalleryPhotos($request, $validated['title']);
+        $validated['gallery_album_id'] = $request->filled('gallery_album_id') ? (int) $request->input('gallery_album_id') : null;
         $validated['is_featured'] = $request->boolean('is_featured');
         $validated['is_active'] = $request->boolean('is_active', true);
         $validated['sort_order'] = (int) ($validated['sort_order'] ?? 0);
@@ -82,7 +90,9 @@ class ProgrammeController extends Controller
      */
     public function edit(Programme $programme): View
     {
-        return view('admin.programmes.edit', compact('programme'));
+        $albums = GalleryAlbum::active()->orderBy('title', 'asc')->get();
+
+        return view('admin.programmes.edit', compact('programme', 'albums'));
     }
 
     /**
@@ -126,6 +136,8 @@ class ProgrammeController extends Controller
             unset($validated['cover_image']);
         }
 
+        $validated['gallery_photos'] = $this->processGalleryPhotos($request, $validated['title'], $programme->gallery_photos);
+        $validated['gallery_album_id'] = $request->filled('gallery_album_id') ? (int) $request->input('gallery_album_id') : null;
         $validated['is_featured'] = $request->boolean('is_featured');
         $validated['is_active'] = $request->boolean('is_active', true);
         $validated['sort_order'] = (int) ($validated['sort_order'] ?? 0);
@@ -138,6 +150,80 @@ class ProgrammeController extends Controller
 
         return redirect()->route('admin.programmes.index')
             ->with('success', 'Programme updated successfully.');
+    }
+
+    /**
+     * Process existing and newly uploaded gallery photos.
+     *
+     * @param  array<mixed>|null  $currentPhotos
+     * @return array<int, array{path: string, caption: ?string, alt_text: ?string, media_item_id: ?int}>
+     */
+    protected function processGalleryPhotos(Request $request, string $title, ?array $currentPhotos = null): array
+    {
+        $photos = [];
+
+        if ($request->has('gallery_photos')) {
+            $input = $request->input('gallery_photos');
+            if (is_string($input)) {
+                $decoded = json_decode($input, true);
+                $photos = is_array($decoded) ? $decoded : [];
+            } elseif (is_array($input)) {
+                $photos = $input;
+            }
+        } elseif ($currentPhotos !== null) {
+            $photos = $currentPhotos;
+        }
+
+        if ($request->hasFile('new_gallery_photos')) {
+            $extractor = app(MediaMetadataExtractor::class);
+            foreach ($request->file('new_gallery_photos') as $file) {
+                if (! $file || ! $file->isValid()) {
+                    continue;
+                }
+
+                $rawPath = $file->getRealPath();
+                $originalMeta = $rawPath ? $extractor->extract($rawPath) : [];
+
+                $optimizedPath = $this->optimizer->optimize(
+                    $file,
+                    'uploads/programmes',
+                    1920,
+                    1920,
+                    82
+                );
+
+                $fullPath = public_path($optimizedPath);
+                $fileSize = file_exists($fullPath) ? filesize($fullPath) : 0;
+                $dimensions = @getimagesize($fullPath);
+                $origName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $humanTitle = Str::title(str_replace(['-', '_'], ' ', $origName));
+
+                $mediaItem = MediaItem::create([
+                    'filename' => basename($optimizedPath),
+                    'file_path' => $optimizedPath,
+                    'file_size' => $fileSize ?: ($originalMeta['file_size'] ?? 0),
+                    'mime_type' => 'image/webp',
+                    'width' => $dimensions[0] ?? ($originalMeta['width'] ?? null),
+                    'height' => $dimensions[1] ?? ($originalMeta['height'] ?? null),
+                    'taken_at' => $originalMeta['taken_at'] ?? null,
+                    'color_space' => $originalMeta['color_space'] ?? 'sRGB',
+                    'title' => $humanTitle,
+                    'alt_text' => $title,
+                    'source_type' => 'programme',
+                    'year' => $originalMeta['taken_at']?->year ?? date('Y'),
+                    'is_public' => true,
+                ]);
+
+                $photos[] = [
+                    'path' => $optimizedPath,
+                    'caption' => '',
+                    'alt_text' => $title,
+                    'media_item_id' => $mediaItem->id,
+                ];
+            }
+        }
+
+        return array_values($photos);
     }
 
     /**

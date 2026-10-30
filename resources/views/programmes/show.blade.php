@@ -113,12 +113,68 @@
                     </div>
 
                     {{-- Dedicated Gallery Showcase & Action Archive --}}
-                    @if ($programme->slug === 'famoyinka-memorial-library' || ($galleryAlbum && $galleryAlbum->photos->isNotEmpty()))
-                        @php
-                            $targetAlbumSlug = $galleryAlbum ? $galleryAlbum->slug : 'famoyinka-library';
-                            $galleryUrl = url('/gallery?album=' . $targetAlbumSlug);
-                        @endphp
-                        <div class="p-8 sm:p-10 rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-xs space-y-6">
+                    @php
+                        $hasProgPhotos = isset($programmePhotos) && $programmePhotos->isNotEmpty();
+                        $showGallerySection = $hasProgPhotos || $programme->slug === 'famoyinka-memorial-library' || ($galleryAlbum && $galleryAlbum->photos->isNotEmpty());
+                        $targetAlbumSlug = $galleryAlbum ? $galleryAlbum->slug : ($programme->slug === 'famoyinka-memorial-library' ? 'famoyinka-library' : null);
+                        $galleryUrl = $targetAlbumSlug ? url('/gallery?album=' . $targetAlbumSlug) : url('/gallery');
+
+                        $photosData = [];
+                        if ($hasProgPhotos) {
+                            foreach ($programmePhotos as $p) {
+                                $pPath = $p instanceof \App\Models\GalleryPhoto ? $p->image_path : ($p->file_path ?? $p->image_path);
+                                $pCaption = $p->caption ?? $p->title ?? $programme->title;
+                                $pAlt = $p->alt_text ?? $pCaption;
+                                $photosData[] = [
+                                    'url' => asset($pPath),
+                                    'caption' => $pCaption,
+                                    'alt' => $pAlt,
+                                ];
+                            }
+                        } elseif ($galleryAlbum && $galleryAlbum->photos->isNotEmpty()) {
+                            foreach ($galleryAlbum->photos as $p) {
+                                $photosData[] = [
+                                    'url' => $p->image_url,
+                                    'caption' => $p->caption ?? $programme->title,
+                                    'alt' => $p->alt_text ?: ($p->caption ?? $programme->title),
+                                ];
+                            }
+                        } else {
+                            $photosData = [
+                                ['url' => asset('front/images/gallery/optimized/famoyinka-01.webp'), 'caption' => 'Student selecting books', 'alt' => 'Student selecting books'],
+                                ['url' => asset('front/images/gallery/optimized/famoyinka-02.webp'), 'caption' => 'Outdoor leadership games', 'alt' => 'Outdoor leadership games'],
+                                ['url' => asset('front/images/gallery/optimized/famoyinka-03.webp'), 'caption' => 'Creative arts workshop', 'alt' => 'Creative arts workshop'],
+                                ['url' => asset('front/images/gallery/optimized/famoyinka-04.webp'), 'caption' => 'Ikogosi excursion', 'alt' => 'Ikogosi excursion'],
+                            ];
+                        }
+                    @endphp
+                    @if ($showGallerySection)
+                        <div x-data="{
+                                lightboxOpen: false,
+                                activePhotoIndex: 0,
+                                photos: {{ json_encode($photosData) }},
+                                openLightbox(index) {
+                                    this.activePhotoIndex = index;
+                                    this.lightboxOpen = true;
+                                },
+                                closeLightbox() {
+                                    this.lightboxOpen = false;
+                                },
+                                nextPhoto() {
+                                    if (this.photos.length > 0) {
+                                        this.activePhotoIndex = (this.activePhotoIndex + 1) % this.photos.length;
+                                    }
+                                },
+                                prevPhoto() {
+                                    if (this.photos.length > 0) {
+                                        this.activePhotoIndex = (this.activePhotoIndex - 1 + this.photos.length) % this.photos.length;
+                                    }
+                                },
+                                get currentPhoto() {
+                                    return this.photos[this.activePhotoIndex] || null;
+                                }
+                             }"
+                             class="p-8 sm:p-10 rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-xs space-y-6 relative">
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--border)]">
                                 <div>
                                     <span class="text-xs font-bold uppercase tracking-wider text-crimson dark:text-mint block">Visual Archive & Outreach</span>
@@ -128,7 +184,7 @@
                                 </div>
                                 <a href="{{ $galleryUrl }}" 
                                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-maroon text-white hover:bg-crimson transition-all shadow-sm w-fit">
-                                    <span>Explore Photo Gallery</span>
+                                    <span>Explore Full Gallery</span>
                                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                     </svg>
@@ -136,34 +192,105 @@
                             </div>
 
                             <p class="text-sm sm:text-base text-[var(--text)] leading-relaxed">
-                                Experience authentic moments from the Famoyinka Memorial Children's Library: free book lending, interactive weekend study circles, creative arts and crafts workshops, transformational leadership games, and educational excursions.
+                                @if ($programme->slug === 'famoyinka-memorial-library')
+                                    Experience authentic moments from the Famoyinka Memorial Children's Library: free book lending, interactive weekend study circles, creative arts and crafts workshops, transformational leadership games, and educational excursions.
+                                @else
+                                    Authentic photography showcasing community beneficiaries, educational initiatives, and outreach impact in Ijero-Ekiti:
+                                @endif
                             </p>
 
-                            {{-- Photo Previews --}}
+                            {{-- Photo Previews with Lightbox Triggers --}}
                             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 pt-2">
-                                @if ($galleryAlbum && $galleryAlbum->photos->isNotEmpty())
-                                    @foreach ($galleryAlbum->photos->take(4) as $previewPhoto)
-                                        <a href="{{ $galleryUrl }}" class="group relative aspect-4/3 rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--surface-alt)] shadow-xs block">
-                                            <img src="{{ $previewPhoto->image_url }}" alt="{{ $previewPhoto->alt_text ?: $previewPhoto->caption }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                            <div class="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-2.5">
-                                                <span class="text-[11px] font-semibold text-white truncate">{{ $previewPhoto->caption }}</span>
-                                            </div>
-                                        </a>
-                                    @endforeach
-                                @else
-                                    <a href="{{ $galleryUrl }}" class="group relative aspect-4/3 rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--surface-alt)] shadow-xs block">
-                                        <img src="{{ asset('front/images/gallery/optimized/famoyinka-01.webp') }}" alt="Student selecting books" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                    </a>
-                                    <a href="{{ $galleryUrl }}" class="group relative aspect-4/3 rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--surface-alt)] shadow-xs block">
-                                        <img src="{{ asset('front/images/gallery/optimized/famoyinka-02.webp') }}" alt="Outdoor leadership games" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                    </a>
-                                    <a href="{{ $galleryUrl }}" class="group relative aspect-4/3 rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--surface-alt)] shadow-xs block">
-                                        <img src="{{ asset('front/images/gallery/optimized/famoyinka-03.webp') }}" alt="Creative arts workshop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                    </a>
-                                    <a href="{{ $galleryUrl }}" class="group relative aspect-4/3 rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--surface-alt)] shadow-xs block">
-                                        <img src="{{ asset('front/images/gallery/optimized/famoyinka-04.webp') }}" alt="Ikogosi excursion" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                    </a>
-                                @endif
+                                <template x-for="(photo, index) in photos.slice(0, 8)" :key="photo.url + '-' + index">
+                                    <div @click="openLightbox(index)" 
+                                         class="group relative aspect-4/3 rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--surface-alt)] shadow-xs block cursor-pointer">
+                                        <img :src="photo.url" 
+                                             :alt="photo.alt || photo.caption" 
+                                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                        <div class="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-2.5">
+                                            <span class="text-[11px] font-semibold text-white truncate" x-text="photo.caption"></span>
+                                            <span class="p-1 rounded-full bg-white/20 text-white backdrop-blur-xs">
+                                                <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                                                </svg>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+
+                            {{-- Interactive Lightbox Modal --}}
+                            <div x-show="lightboxOpen" 
+                                 x-cloak
+                                 x-transition:enter="transition ease-out duration-200"
+                                 x-transition:enter-start="opacity-0"
+                                 x-transition:enter-end="opacity-100"
+                                 x-transition:leave="transition ease-in duration-150"
+                                 x-transition:leave-start="opacity-100"
+                                 x-transition:leave-end="opacity-0"
+                                 @keydown.escape.window="closeLightbox()"
+                                 @keydown.arrow-left.window="prevPhoto()"
+                                 @keydown.arrow-right.window="nextPhoto()"
+                                 class="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col justify-between p-4 sm:p-6 select-none"
+                                 aria-modal="true"
+                                 role="dialog">
+
+                                {{-- Top Controls Bar --}}
+                                <div class="flex items-center justify-between text-white z-10">
+                                    <div class="flex items-center gap-2">
+                                        <span class="px-3 py-1 rounded-full text-xs font-bold bg-white/10 backdrop-blur-xs text-[var(--accent-cream)] border border-white/10">
+                                            {{ $programme->title }}
+                                        </span>
+                                        <span class="text-xs text-stone-400 ml-2">
+                                            Photo <strong class="text-white" x-text="activePhotoIndex + 1"></strong> of <strong class="text-white" x-text="photos.length"></strong>
+                                        </span>
+                                    </div>
+
+                                    <button type="button" 
+                                            @click="closeLightbox()" 
+                                            class="p-2 rounded-full bg-white/10 hover:bg-white/20 text-stone-300 hover:text-white transition-colors cursor-pointer"
+                                            title="Close (Esc)">
+                                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                {{-- Center Photo Container with Navigation Arrows --}}
+                                <div class="relative flex-1 flex items-center justify-center my-4 overflow-hidden" 
+                                     @click.self="closeLightbox()">
+                                    
+                                    <button type="button" 
+                                            @click="prevPhoto()" 
+                                            class="absolute left-2 sm:left-6 z-20 p-3 rounded-full bg-black/50 hover:bg-black/80 text-white transition-all hover:scale-110 cursor-pointer border border-white/10"
+                                            title="Previous Photo (Left Arrow)">
+                                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                                        </svg>
+                                    </button>
+
+                                    <template x-if="currentPhoto">
+                                        <img :src="currentPhoto.url" 
+                                             :alt="currentPhoto.alt || currentPhoto.caption" 
+                                             class="max-h-[75vh] max-w-full object-contain rounded-lg shadow-2xl transition-all duration-300">
+                                    </template>
+
+                                    <button type="button" 
+                                            @click="nextPhoto()" 
+                                            class="absolute right-2 sm:right-6 z-20 p-3 rounded-full bg-black/50 hover:bg-black/80 text-white transition-all hover:scale-110 cursor-pointer border border-white/10"
+                                            title="Next Photo (Right Arrow)">
+                                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                {{-- Bottom Caption Bar --}}
+                                <div class="text-center text-white z-10 max-w-2xl mx-auto px-4">
+                                    <p class="text-sm font-medium text-stone-200 line-clamp-2" 
+                                       x-text="currentPhoto ? currentPhoto.caption : ''">
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     @endif

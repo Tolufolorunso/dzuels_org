@@ -680,9 +680,49 @@
     {{-- 7. Event Highlights & Authentic Photo Gallery (Homepage Layout Alignment) --}}
     @php
         $hasEditionPhotos = isset($editionPhotos) && $editionPhotos->isNotEmpty();
-        $targetAlbumSlug = !empty($eventYear) ? "itd-{$eventYear}" : null;
+        $targetAlbumSlug = $event->galleryAlbum?->slug ?? (!empty($eventYear) ? "itd-{$eventYear}" : null);
+
+        $photosData = [];
+        if ($hasEditionPhotos) {
+            foreach ($editionPhotos as $p) {
+                $pPath = $p instanceof \App\Models\GalleryPhoto ? $p->image_path : ($p->file_path ?? $p->image_path);
+                $pCaption = $p->caption ?? $p->title ?? $event->title;
+                $pAlt = $p->alt_text ?? $pCaption;
+                $photosData[] = [
+                    'url' => asset($pPath),
+                    'caption' => $pCaption,
+                    'alt' => $pAlt,
+                ];
+            }
+        }
     @endphp
-    <section id="photo-gallery" class="py-16 sm:py-24 bg-[var(--bg)] transition-colors">
+    <section id="photo-gallery" 
+             x-data="{
+                 lightboxOpen: false,
+                 activePhotoIndex: 0,
+                 photos: {{ json_encode($photosData) }},
+                 openLightbox(index) {
+                     this.activePhotoIndex = index;
+                     this.lightboxOpen = true;
+                 },
+                 closeLightbox() {
+                     this.lightboxOpen = false;
+                 },
+                 nextPhoto() {
+                     if (this.photos.length > 0) {
+                         this.activePhotoIndex = (this.activePhotoIndex + 1) % this.photos.length;
+                     }
+                 },
+                 prevPhoto() {
+                     if (this.photos.length > 0) {
+                         this.activePhotoIndex = (this.activePhotoIndex - 1 + this.photos.length) % this.photos.length;
+                     }
+                 },
+                 get currentPhoto() {
+                     return this.photos[this.activePhotoIndex] || null;
+                 }
+             }"
+             class="py-16 sm:py-24 bg-[var(--bg)] transition-colors relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[var(--border)] gap-2">
                 <div>
@@ -715,13 +755,14 @@
 
             @if ($hasEditionPhotos)
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
-                    @foreach ($editionPhotos->take(9) as $photoItem)
+                    @foreach ($editionPhotos->take(9) as $index => $photoItem)
                         @php
-                            $photoPath = $photoItem instanceof \App\Models\GalleryPhoto ? $photoItem->image_path : $photoItem->file_path;
-                            $photoTitle = $photoItem->title ?: "ITD {$eventYear} Photo";
+                            $photoPath = $photoItem instanceof \App\Models\GalleryPhoto ? $photoItem->image_path : ($photoItem->file_path ?? $photoItem->image_path);
+                            $photoTitle = $photoItem->title ?? ($photoItem->caption ?: "Event Photo");
                             $photoAlt = $photoItem->alt_text ?: $photoTitle;
                         @endphp
-                        <div class="rounded-2xl overflow-hidden aspect-4/3 bg-stone-100 dark:bg-stone-800 border border-[var(--border)] group relative shadow-xs hover:shadow-md transition-all">
+                        <div @click="openLightbox({{ $index }})" 
+                             class="rounded-2xl overflow-hidden aspect-4/3 bg-stone-100 dark:bg-stone-800 border border-[var(--border)] group relative shadow-xs hover:shadow-md transition-all cursor-pointer">
                             <img src="{{ asset($photoPath) }}" 
                                  alt="{{ $photoAlt }}" 
                                  class="w-full h-full object-cover group-hover:scale-105 transition-opacity duration-300 block opacity-0"
@@ -729,9 +770,14 @@
                                  onload="this.classList.remove('opacity-0')"
                                  onerror="this.classList.remove('opacity-0')"
                                  x-init="if ($el.complete) $el.classList.remove('opacity-0')">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-3">
                                 <span class="text-xs font-medium text-white line-clamp-1">
                                     {{ $photoTitle }}
+                                </span>
+                                <span class="p-1 rounded-full bg-white/20 text-white backdrop-blur-xs">
+                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                                    </svg>
                                 </span>
                             </div>
                         </div>
@@ -758,6 +804,80 @@
                     </div>
                 </div>
             @endif
+        </div>
+
+        {{-- Interactive Lightbox Modal --}}
+        <div x-show="lightboxOpen" 
+             x-cloak
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-150"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             @keydown.escape.window="closeLightbox()"
+             @keydown.arrow-left.window="prevPhoto()"
+             @keydown.arrow-right.window="nextPhoto()"
+             class="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col justify-between p-4 sm:p-6 select-none"
+             aria-modal="true"
+             role="dialog">
+
+            {{-- Top Controls Bar --}}
+            <div class="flex items-center justify-between text-white z-10">
+                <div class="flex items-center gap-2">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-white/10 backdrop-blur-xs text-[var(--accent-cream)] border border-white/10">
+                        {{ $event->title }}
+                    </span>
+                    <span class="text-xs text-stone-400 ml-2">
+                        Photo <strong class="text-white" x-text="activePhotoIndex + 1"></strong> of <strong class="text-white" x-text="photos.length"></strong>
+                    </span>
+                </div>
+
+                <button type="button" 
+                        @click="closeLightbox()" 
+                        class="p-2 rounded-full bg-white/10 hover:bg-white/20 text-stone-300 hover:text-white transition-colors cursor-pointer"
+                        title="Close (Esc)">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            {{-- Center Photo Container with Navigation Arrows --}}
+            <div class="relative flex-1 flex items-center justify-center my-4 overflow-hidden" 
+                 @click.self="closeLightbox()">
+                
+                <button type="button" 
+                        @click="prevPhoto()" 
+                        class="absolute left-2 sm:left-6 z-20 p-3 rounded-full bg-black/50 hover:bg-black/80 text-white transition-all hover:scale-110 cursor-pointer border border-white/10"
+                        title="Previous Photo (Left Arrow)">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+
+                <template x-if="currentPhoto">
+                    <img :src="currentPhoto.url" 
+                         :alt="currentPhoto.alt || currentPhoto.caption" 
+                         class="max-h-[75vh] max-w-full object-contain rounded-lg shadow-2xl transition-all duration-300">
+                </template>
+
+                <button type="button" 
+                        @click="nextPhoto()" 
+                        class="absolute right-2 sm:right-6 z-20 p-3 rounded-full bg-black/50 hover:bg-black/80 text-white transition-all hover:scale-110 cursor-pointer border border-white/10"
+                        title="Next Photo (Right Arrow)">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+
+            {{-- Bottom Caption Bar --}}
+            <div class="text-center text-white z-10 max-w-2xl mx-auto px-4">
+                <p class="text-sm font-medium text-stone-200 line-clamp-2" 
+                   x-text="currentPhoto ? currentPhoto.caption : ''">
+                </p>
+            </div>
         </div>
     </section>
 

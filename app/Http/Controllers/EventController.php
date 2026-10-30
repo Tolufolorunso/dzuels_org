@@ -73,8 +73,9 @@ class EventController extends Controller
             : collect();
 
         // Fetch authentic curated photos for this edition
-        $editionPhotos = collect();
-        if ($isTechDay) {
+        $editionPhotos = $event->getResolvedGalleryPhotos();
+
+        if ($editionPhotos->isEmpty() && $isTechDay) {
             $albumSlug = "itd-{$eventYear}";
             $album = GalleryAlbum::where('slug', $albumSlug)
                 ->with(['photos' => function ($q) {

@@ -154,6 +154,16 @@
                     @enderror
                 </div>
 
+                {{-- Multi-Photo Gallery Showcase --}}
+                <x-admin.multi-photo-manager 
+                    name="gallery_photos"
+                    :photos="[]"
+                    :album-id="null"
+                    :albums="$albums ?? []"
+                    title="Programme Photo Gallery & Visual Showcase"
+                    subtitle="Select photography from the Central Media Hub or upload photos to showcase on the public programme page."
+                />
+
                 {{-- Flags (Featured & Active) --}}
                 <div class="pt-4 border-t border-stone-200 grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 bg-stone-50/50 hover:bg-stone-50 cursor-pointer">

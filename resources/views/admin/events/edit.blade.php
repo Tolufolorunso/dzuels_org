@@ -231,6 +231,16 @@
                 </div>
             </div>
 
+            {{-- Multi-Photo Gallery Showcase --}}
+            <x-admin.multi-photo-manager 
+                name="gallery_photos"
+                :photos="$event->gallery_photos ?? []"
+                :album-id="$event->gallery_album_id"
+                :albums="$albums ?? []"
+                title="Event Photo Gallery & Visual Showcase"
+                subtitle="Select photography from the Central Media Hub or upload photos to showcase on the public event page."
+            />
+
             {{-- Schedule Timeline Builder --}}
             <div class="bg-white rounded-2xl border border-stone-200 p-6 sm:p-8 space-y-4 shadow-xs">
                 <div class="flex items-center justify-between pb-3 border-b border-stone-100">

@@ -222,6 +222,47 @@ class GalleryAlbumController extends Controller
     }
 
     /**
+     * Attach existing media items from the Central Media Hub to this album.
+     */
+    public function attachMedia(Request $request, GalleryAlbum $album): RedirectResponse
+    {
+        $validated = $request->validate([
+            'media_item_ids' => ['required', 'array', 'min:1'],
+            'media_item_ids.*' => ['integer', 'exists:media_items,id'],
+        ]);
+
+        $maxSortOrder = (int) $album->photos()->max('sort_order');
+        $attachedCount = 0;
+
+        $mediaItems = MediaItem::whereIn('id', $validated['media_item_ids'])->get();
+
+        foreach ($mediaItems as $item) {
+            $maxSortOrder++;
+
+            $photo = GalleryPhoto::create([
+                'gallery_album_id' => $album->id,
+                'image_path' => $item->file_path,
+                'caption' => $item->caption ?: $item->title,
+                'alt_text' => $item->alt_text ?: $album->title,
+                'year' => $item->year ?: ($item->taken_at?->year ?? null),
+                'sort_order' => $maxSortOrder,
+                'is_public' => true,
+            ]);
+
+            $item->update([
+                'gallery_album_id' => $album->id,
+                'gallery_photo_id' => $photo->id,
+                'is_public' => true,
+            ]);
+
+            $attachedCount++;
+        }
+
+        return redirect()->route('admin.gallery.photos', $album)
+            ->with('success', "{$attachedCount} ".Str::plural('photo', $attachedCount).' attached from Media Library successfully.');
+    }
+
+    /**
      * Upload photos to a gallery album.
      */
     public function uploadPhotos(StoreGalleryPhotoRequest $request, GalleryAlbum $album, MediaMetadataExtractor $extractor): RedirectResponse

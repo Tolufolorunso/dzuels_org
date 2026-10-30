@@ -26,6 +26,10 @@ class StoreProgrammeRequest extends FormRequest
                 ? ['nullable', 'image', 'mimes:jpeg,png,jpg,webp,svg', 'max:8192']
                 : ['nullable', 'string', 'max:255'],
             'partner_name' => ['nullable', 'string', 'max:255'],
+            'gallery_album_id' => ['nullable', 'integer', 'exists:gallery_albums,id'],
+            'gallery_photos' => ['nullable'],
+            'new_gallery_photos' => ['nullable', 'array'],
+            'new_gallery_photos.*' => ['image', 'mimes:jpeg,png,jpg,webp', 'max:10240'],
             'is_featured' => ['nullable', 'boolean'],
             'is_active' => ['nullable', 'boolean'],
             'sort_order' => ['nullable', 'integer', 'min:0'],

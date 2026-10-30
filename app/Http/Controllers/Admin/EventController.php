@@ -7,7 +7,10 @@ use App\Http\Requests\Admin\StoreEventRequest;
 use App\Http\Requests\Admin\UpdateEventRequest;
 use App\Models\Event;
 use App\Models\EventRegistration;
+use App\Models\GalleryAlbum;
+use App\Models\MediaItem;
 use App\Services\ImageOptimizerService;
+use App\Services\MediaMetadataExtractor;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -38,7 +41,9 @@ class EventController extends Controller
      */
     public function create(): View
     {
-        return view('admin.events.create');
+        $albums = GalleryAlbum::active()->orderBy('title', 'asc')->get();
+
+        return view('admin.events.create', compact('albums'));
     }
 
     /**
@@ -74,6 +79,8 @@ class EventController extends Controller
             $validated['banner_image'] = $request->input('banner_image_path');
         }
 
+        $validated['gallery_photos'] = $this->processGalleryPhotos($request, $validated['title']);
+        $validated['gallery_album_id'] = $request->filled('gallery_album_id') ? (int) $request->input('gallery_album_id') : null;
         $validated['schedule'] = $this->normalizeSchedule($request);
         $validated['is_registration_open'] = $request->boolean('is_registration_open', true);
         $validated['is_active'] = $request->boolean('is_active', true);
@@ -90,7 +97,9 @@ class EventController extends Controller
      */
     public function edit(Event $event): View
     {
-        return view('admin.events.edit', compact('event'));
+        $albums = GalleryAlbum::active()->orderBy('title', 'asc')->get();
+
+        return view('admin.events.edit', compact('event', 'albums'));
     }
 
     /**
@@ -118,6 +127,8 @@ class EventController extends Controller
             $validated['banner_image'] = $request->input('banner_image_path') ?: null;
         }
 
+        $validated['gallery_photos'] = $this->processGalleryPhotos($request, $validated['title'], $event->gallery_photos);
+        $validated['gallery_album_id'] = $request->filled('gallery_album_id') ? (int) $request->input('gallery_album_id') : null;
         $validated['schedule'] = $this->normalizeSchedule($request);
         $validated['is_registration_open'] = $request->boolean('is_registration_open');
         $validated['is_active'] = $request->boolean('is_active', true);
@@ -127,6 +138,80 @@ class EventController extends Controller
 
         return redirect()->route('admin.events.index')
             ->with('success', 'Event updated successfully.');
+    }
+
+    /**
+     * Process existing and newly uploaded gallery photos.
+     *
+     * @param  array<mixed>|null  $currentPhotos
+     * @return array<int, array{path: string, caption: ?string, alt_text: ?string, media_item_id: ?int}>
+     */
+    protected function processGalleryPhotos(Request $request, string $title, ?array $currentPhotos = null): array
+    {
+        $photos = [];
+
+        if ($request->has('gallery_photos')) {
+            $input = $request->input('gallery_photos');
+            if (is_string($input)) {
+                $decoded = json_decode($input, true);
+                $photos = is_array($decoded) ? $decoded : [];
+            } elseif (is_array($input)) {
+                $photos = $input;
+            }
+        } elseif ($currentPhotos !== null) {
+            $photos = $currentPhotos;
+        }
+
+        if ($request->hasFile('new_gallery_photos')) {
+            $extractor = app(MediaMetadataExtractor::class);
+            foreach ($request->file('new_gallery_photos') as $file) {
+                if (! $file || ! $file->isValid()) {
+                    continue;
+                }
+
+                $rawPath = $file->getRealPath();
+                $originalMeta = $rawPath ? $extractor->extract($rawPath) : [];
+
+                $optimizedPath = $this->optimizer->optimize(
+                    $file,
+                    'uploads/events',
+                    1920,
+                    1920,
+                    82
+                );
+
+                $fullPath = public_path($optimizedPath);
+                $fileSize = file_exists($fullPath) ? filesize($fullPath) : 0;
+                $dimensions = @getimagesize($fullPath);
+                $origName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $humanTitle = Str::title(str_replace(['-', '_'], ' ', $origName));
+
+                $mediaItem = MediaItem::create([
+                    'filename' => basename($optimizedPath),
+                    'file_path' => $optimizedPath,
+                    'file_size' => $fileSize ?: ($originalMeta['file_size'] ?? 0),
+                    'mime_type' => 'image/webp',
+                    'width' => $dimensions[0] ?? ($originalMeta['width'] ?? null),
+                    'height' => $dimensions[1] ?? ($originalMeta['height'] ?? null),
+                    'taken_at' => $originalMeta['taken_at'] ?? null,
+                    'color_space' => $originalMeta['color_space'] ?? 'sRGB',
+                    'title' => $humanTitle,
+                    'alt_text' => $title,
+                    'source_type' => 'event',
+                    'year' => $originalMeta['taken_at']?->year ?? date('Y'),
+                    'is_public' => true,
+                ]);
+
+                $photos[] = [
+                    'path' => $optimizedPath,
+                    'caption' => '',
+                    'alt_text' => $title,
+                    'media_item_id' => $mediaItem->id,
+                ];
+            }
+        }
+
+        return array_values($photos);
     }
 
     /**

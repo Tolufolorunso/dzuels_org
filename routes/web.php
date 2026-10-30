@@ -151,6 +151,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/gallery/reorder', [AdminGalleryAlbumController::class, 'reorderAlbums'])->name('gallery.reorder');
         Route::patch('/gallery/{album}/toggle', [AdminGalleryAlbumController::class, 'toggleActive'])->name('gallery.toggle');
         Route::get('/gallery/{album}/photos', [AdminGalleryAlbumController::class, 'photos'])->name('gallery.photos');
+        Route::post('/gallery/{album}/photos/attach-media', [AdminGalleryAlbumController::class, 'attachMedia'])->name('gallery.photos.attach-media');
         Route::post('/gallery/{album}/photos', [AdminGalleryAlbumController::class, 'uploadPhotos'])->name('gallery.photos.upload');
         Route::put('/gallery/{album}/photos/{photo}', [AdminGalleryAlbumController::class, 'updatePhoto'])->name('gallery.photos.update');
         Route::delete('/gallery/{album}/photos/bulk-destroy', [AdminGalleryAlbumController::class, 'bulkDestroyPhotos'])->name('gallery.photos.bulk-destroy');

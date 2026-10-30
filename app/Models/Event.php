@@ -5,7 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 class Event extends Model
 {
@@ -28,6 +30,8 @@ class Event extends Model
         'objective',
         'banner_image',
         'schedule',
+        'gallery_album_id',
+        'gallery_photos',
         'is_registration_open',
         'is_active',
         'sort_order',
@@ -46,6 +50,8 @@ class Event extends Model
             'event_date' => 'datetime',
             'end_date' => 'datetime',
             'schedule' => 'array',
+            'gallery_album_id' => 'integer',
+            'gallery_photos' => 'array',
             'is_registration_open' => 'boolean',
             'is_active' => 'boolean',
             'sort_order' => 'integer',
@@ -66,6 +72,55 @@ class Event extends Model
     public function sponsors(): HasMany
     {
         return $this->hasMany(EventSponsor::class)->ordered();
+    }
+
+    /**
+     * Get the gallery album linked to the event.
+     */
+    public function galleryAlbum(): BelongsTo
+    {
+        return $this->belongsTo(GalleryAlbum::class, 'gallery_album_id');
+    }
+
+    /**
+     * Get the consolidated list of gallery photos for this event.
+     * Returns a Collection of photo objects (each with image_path, caption, alt_text).
+     *
+     * @return Collection<int, object{image_path: string, caption: ?string, alt_text: string}>
+     */
+    public function getResolvedGalleryPhotos(): Collection
+    {
+        $photos = collect();
+
+        if (! empty($this->gallery_photos) && is_array($this->gallery_photos)) {
+            foreach ($this->gallery_photos as $item) {
+                if (is_string($item)) {
+                    $photos->push((object) [
+                        'image_path' => $item,
+                        'caption' => null,
+                        'alt_text' => $this->title,
+                    ]);
+                } elseif (is_array($item) && ! empty($item['path'])) {
+                    $photos->push((object) [
+                        'image_path' => $item['path'],
+                        'caption' => $item['caption'] ?? null,
+                        'alt_text' => $item['alt_text'] ?? $this->title,
+                    ]);
+                }
+            }
+        }
+
+        if ($photos->isEmpty() && $this->gallery_album_id && $this->galleryAlbum) {
+            foreach ($this->galleryAlbum->photos as $photo) {
+                $photos->push((object) [
+                    'image_path' => $photo->image_path,
+                    'caption' => $photo->caption,
+                    'alt_text' => $photo->alt_text ?: $this->title,
+                ]);
+            }
+        }
+
+        return $photos;
     }
 
     /**

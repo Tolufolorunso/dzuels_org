@@ -70,10 +70,23 @@ class ProgrammeController extends Controller
             }])
             ->first();
 
+        $programmePhotos = $programme->getResolvedGalleryPhotos();
+
+        if ($programmePhotos->isEmpty() && $galleryAlbum && $galleryAlbum->photos->isNotEmpty()) {
+            foreach ($galleryAlbum->photos as $p) {
+                $programmePhotos->push((object) [
+                    'image_path' => $p->image_path,
+                    'caption' => $p->caption,
+                    'alt_text' => $p->alt_text ?: $programme->title,
+                ]);
+            }
+        }
+
         return view('programmes.show', [
             'programme' => $programme,
             'relatedProgrammes' => $relatedProgrammes,
             'galleryAlbum' => $galleryAlbum,
+            'programmePhotos' => $programmePhotos,
         ]);
     }
 }
