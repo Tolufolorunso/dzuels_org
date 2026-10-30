@@ -54,18 +54,16 @@ class GivingChannelCorrectionAndTechDayEventCenteredUiTest extends TestCase
 
         $response->assertOk();
 
-        // Centered hero layout assertions
-        $response->assertSee('max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 relative z-10 text-center', false);
-        $response->assertSee('text-3xl sm:text-4xl lg:text-5xl font-black text-[var(--heading)] tracking-tight leading-tight max-w-4xl mx-auto', false);
-        $response->assertSee('flex flex-wrap items-center justify-center gap-3', false);
-        $response->assertSee('flex flex-wrap items-center justify-center gap-6 text-sm', false);
+        // Hero layout assertions (Homepage UI Alignment)
+        $response->assertSee('relative bg-maroon text-white', false);
+        $response->assertSeeText('Ijero Tech Day 2026');
 
-        // Festival Impact Metrics Bar centered
-        $response->assertSee('grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-[var(--border)] max-w-3xl mx-auto', false);
-        $response->assertSeeText('300+');
-        $response->assertSeeText('Student Delegates');
+        // Festival Impact Metrics Bar
+        $response->assertSee('relative z-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 sm:-mt-16 mb-8', false);
+        $response->assertSeeText('300');
+        $response->assertSeeText('Student Delegates across Ijero-Ekiti');
         $response->assertSeeText('22');
-        $response->assertSeeText('Cohort Graduates');
+        $response->assertSeeText('Certified Cohort Graduates');
 
         // Multi-Year Edition Switcher
         $response->assertSeeText('Switch Festival Edition:');
@@ -73,8 +71,8 @@ class GivingChannelCorrectionAndTechDayEventCenteredUiTest extends TestCase
         $response->assertSee(route('events.show', 'ijero-tech-day-2025'));
         $response->assertSee(route('events.show', 'ijero-tech-day-2024'));
 
-        // Main content centered container
-        $response->assertSee('max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12', false);
+        // Main content balanced 2-column container with offset cream border
+        $response->assertSee('border-3 border-[var(--accent-cream)] rounded-3xl', false);
 
         // Milestone Summary & Impact 3-column celebration card
         $response->assertSeeText('Festival Summary & Impact');
@@ -84,7 +82,6 @@ class GivingChannelCorrectionAndTechDayEventCenteredUiTest extends TestCase
         $response->assertSeeText('Staggered Arrival Times');
 
         // Quick Event Facts Strip
-        $response->assertSeeText('Event At a Glance');
         $response->assertSeeText('100% Free Sponsored');
 
         // Authentic Photography & Social Share
@@ -100,7 +97,7 @@ class GivingChannelCorrectionAndTechDayEventCenteredUiTest extends TestCase
         foreach (['ijero-tech-day-2024', 'ijero-tech-day-2025', 'ijero-tech-day-2026'] as $slug) {
             $response = $this->get("/events/{$slug}");
             $response->assertOk();
-            $response->assertSee('max-w-5xl mx-auto', false);
+            $response->assertSee('relative bg-maroon text-white', false);
             $response->assertSeeText('Switch Festival Edition:');
         }
     }
