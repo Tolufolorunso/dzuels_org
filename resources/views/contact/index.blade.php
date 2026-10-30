@@ -47,15 +47,15 @@
                 </nav>
 
                 <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--accent-cream)]/20 text-[var(--accent-cream)] border border-[var(--accent-cream)]/30 backdrop-blur-xs mb-6">
-                    <span>💬</span> {{ $heroSec?->subheadline ?: 'Get in Touch' }}
+                    <span>💬</span> {!! format_cms_text($heroSec?->subheadline ?: 'Get in Touch') !!}
                 </span>
 
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight max-w-4xl mx-auto leading-tight">
-                    {{ $heroSec?->headline ?: 'We Are Always Available to Connect With You' }}
+                    {!! format_cms_text($heroSec?->headline ?: 'We Are Always Available to Connect With You') !!}
                 </h1>
 
                 <p class="mt-6 text-lg sm:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
-                    {{ $heroSec?->body_text ?: 'Have a question regarding our youth literacy initiatives, school computer labs, or community partnerships? Send us a message or visit our headquarters in Ijero-Ekiti.' }}
+                    {!! format_cms_text($heroSec?->body_text ?: 'Have a question regarding our youth literacy initiatives, school computer labs, or community partnerships? Send us a message or visit our headquarters in Ijero-Ekiti.') !!}
                 </p>
             </div>
         </section>
@@ -73,10 +73,10 @@
                                 📍
                             </div>
                             <span class="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] block mb-1">
-                                {{ $officeSec?->subheadline ?: 'Headquarters' }}
+                                {!! format_cms_text($officeSec?->subheadline ?: 'Headquarters') !!}
                             </span>
                             <h3 class="text-base font-bold text-[var(--heading)] mb-2">
-                                {{ $officeSec?->headline ?: 'Visit Our Office' }}
+                                {!! format_cms_text($officeSec?->headline ?: 'Visit Our Office') !!}
                             </h3>
                             <p class="text-sm text-[var(--text-muted)] leading-relaxed">
                                 {{ $address }}
@@ -199,10 +199,10 @@
                     <div class="{{ $showMap ? 'lg:col-span-7' : 'lg:col-span-12 max-w-3xl mx-auto' }} bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-6 sm:p-10 shadow-sm transition-colors">
                         <div class="mb-8 border-b border-[var(--border)] pb-6">
                             <h2 class="text-2xl sm:text-3xl font-extrabold text-[var(--heading)] tracking-tight">
-                                {{ $formSec?->headline ?: 'Send Us a Message' }}
+                                {!! format_cms_text($formSec?->headline ?: 'Send Us a Message') !!}
                             </h2>
                             <p class="text-sm text-[var(--text-muted)] mt-1.5 leading-relaxed">
-                                {{ $formSec?->body_text ?: 'Fill out the form below and a representative from Dzuels Educational Foundation will get in touch with you promptly.' }}
+                                {!! format_cms_text($formSec?->body_text ?: 'Fill out the form below and a representative from Dzuels Educational Foundation will get in touch with you promptly.') !!}
                             </p>
                         </div>
 
@@ -355,7 +355,7 @@
                         <div class="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-6 sm:p-8 shadow-sm transition-colors overflow-hidden">
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-xl font-bold text-[var(--heading)]">
-                                    {{ $mapSec?->headline ?: 'Headquarters Location' }}
+                                    {!! format_cms_text($mapSec?->headline ?: 'Headquarters Location') !!}
                                 </h3>
                                 <span class="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-mint border border-emerald-200 dark:border-emerald-800">
                                     <span>📍</span> Ijero-Ekiti
@@ -363,7 +363,7 @@
                             </div>
 
                             <p class="text-sm text-[var(--text-muted)] mb-5 leading-relaxed">
-                                {{ $mapSec?->body_text ?: 'Our central educational center and community operations are based in Ijero-Ekiti, Ekiti State, Nigeria.' }}
+                                {!! format_cms_text($mapSec?->body_text ?: 'Our central educational center and community operations are based in Ijero-Ekiti, Ekiti State, Nigeria.') !!}
                             </p>
 
                             {{-- Responsive Google Map Embed --}}
@@ -379,7 +379,7 @@
                             </div>
 
                             <div class="mt-5 p-4 rounded-2xl bg-[var(--bg)] border border-[var(--border)] text-xs text-[var(--text-muted)] leading-relaxed">
-                                <strong>Visiting Hours:</strong> {{ $mapSec?->subheadline ?: 'Physical visits by appointment are warmly welcomed. Please call in advance so our field coordinators can assist with your schedule.' }}
+                                <strong>Visiting Hours:</strong> {!! format_cms_text($mapSec?->subheadline ?: 'Physical visits by appointment are warmly welcomed. Please call in advance so our field coordinators can assist with your schedule.') !!}
                             </div>
                         </div>
 

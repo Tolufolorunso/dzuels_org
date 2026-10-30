@@ -34,7 +34,7 @@ class AboutPageTest extends TestCase
         $response->assertSeeText('Our Integrated Intervention Approach');
         $response->assertSeeText('Tuition & School Fees Support');
         $response->assertSeeText('Educational Materials & Uniforms');
-        $response->assertSeeText('Equipping Non-Profit Schools & Labs');
+        $response->assertSeeText('Equipping Digital Labs & Libraries');
         $response->assertSeeText('Mentorship & Leadership Training');
         $response->assertSeeText('Family Nutrition & Widow Welfare');
         $response->assertSeeText('Health Services & Social Awareness');

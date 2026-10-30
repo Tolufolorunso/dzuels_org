@@ -49,15 +49,15 @@
 
             <div class="max-w-3xl space-y-4">
                 <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--accent-cream)]/20 text-[var(--accent-cream)] border border-[var(--accent-cream)]/30 backdrop-blur-xs">
-                    {{ $heroSec?->subheadline ?: 'About Dzuels Educational Foundation' }}
+                    {!! format_cms_text($heroSec?->subheadline ?: 'About Dzuels Educational Foundation') !!}
                 </span>
                 
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
-                    {{ $heroSec?->headline ?: 'Transforming Lives Page by Page' }}
+                    {!! format_cms_text($heroSec?->headline ?: 'Transforming Lives Page by Page') !!}
                 </h1>
 
                 <p class="text-lg sm:text-xl text-white/90 leading-relaxed max-w-2xl pt-2">
-                    {{ $heroSec?->body_text ?: 'A decade of dedicated service alleviating poverty through quality education, youth literacy interventions, and digital empowerment in Nigeria.' }}
+                    {!! format_cms_text($heroSec?->body_text ?: 'A decade of dedicated service alleviating poverty through quality education, youth literacy interventions, and digital empowerment in Nigeria.') !!}
                 </p>
             </div>
         </div>
@@ -66,6 +66,18 @@
 
     {{-- 2. Our Story & 10-Year Journey --}}
     @if ($storySec?->is_active ?? true)
+    @php
+        $defaultMilestones = [
+            ['value' => '10+', 'label' => 'Years of Service'],
+            ['value' => '750+', 'label' => 'Students Trained'],
+            ['value' => '30+', 'label' => 'Teachers Trained'],
+        ];
+        $storyMilestones = $storySec?->meta_data['milestones'] ?? $defaultMilestones;
+        $storyBadge = $storySec?->meta_data['badge'] ?? [
+            'kicker' => 'Milestone',
+            'title' => '10+ Years of Direct Community Impact',
+        ];
+    @endphp
     <section class="py-20 bg-[var(--bg)] transition-colors overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
@@ -73,16 +85,16 @@
                 <div class="lg:col-span-7 space-y-6">
                     <div class="space-y-2">
                         <span class="text-xs font-bold uppercase tracking-widest text-crimson dark:text-mint">
-                            {{ $storySec?->subheadline ?: 'Our Heritage & Purpose' }}
+                            {!! format_cms_text($storySec?->subheadline ?: 'Our Heritage & Purpose') !!}
                         </span>
                         <h2 class="text-3xl sm:text-4xl font-extrabold text-[var(--heading)] tracking-tight">
-                            {{ $storySec?->headline ?: 'A Decade of Dedicated Service (Since 2015)' }}
+                            {!! format_cms_text($storySec?->headline ?: 'A Decade of Dedicated Service (Since 2015)') !!}
                         </h2>
                     </div>
 
                     @if ($storySec?->body_text)
                         <div class="text-base sm:text-lg text-[var(--text)] leading-relaxed space-y-4">
-                            {!! nl2br(e($storySec->body_text)) !!}
+                            {!! format_cms_text($storySec->body_text) !!}
                         </div>
                     @else
                         <p class="text-base sm:text-lg text-[var(--text)] leading-relaxed">
@@ -102,20 +114,14 @@
                         </p>
                     @endif
 
-                    {{-- Quick Milestone Highlights --}}
+                    {{-- Quick Milestone Highlights (Dynamic from meta_data['milestones']) --}}
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4 border-t border-[var(--border)]">
-                        <div class="p-4 rounded-2xl bg-[var(--surface)] border border-[var(--border)] shadow-xs">
-                            <span class="block text-2xl sm:text-3xl font-black text-crimson dark:text-mint">10+</span>
-                            <span class="text-xs sm:text-sm font-medium text-[var(--text-muted)]">Years of Service</span>
-                        </div>
-                        <div class="p-4 rounded-2xl bg-[var(--surface)] border border-[var(--border)] shadow-xs">
-                            <span class="block text-2xl sm:text-3xl font-black text-crimson dark:text-mint">750+</span>
-                            <span class="text-xs sm:text-sm font-medium text-[var(--text-muted)]">Students Trained</span>
-                        </div>
-                        <div class="p-4 rounded-2xl bg-[var(--surface)] border border-[var(--border)] shadow-xs col-span-2 sm:col-span-1">
-                            <span class="block text-2xl sm:text-3xl font-black text-crimson dark:text-mint">30+</span>
-                            <span class="text-xs sm:text-sm font-medium text-[var(--text-muted)]">Teachers Trained</span>
-                        </div>
+                        @foreach ($storyMilestones as $idx => $m)
+                            <div class="p-4 rounded-2xl bg-[var(--surface)] border border-[var(--border)] shadow-xs {{ $loop->last && count($storyMilestones) === 3 ? 'col-span-2 sm:col-span-1' : '' }}">
+                                <span class="block text-2xl sm:text-3xl font-black text-crimson dark:text-mint">{!! format_cms_text($m['value'] ?? '') !!}</span>
+                                <span class="text-xs sm:text-sm font-medium text-[var(--text-muted)]">{!! format_cms_text($m['label'] ?? '') !!}</span>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
 
@@ -133,7 +139,7 @@
                                  loading="lazy">
                         </div>
 
-                        {{-- Floating 10-Year Impact Card --}}
+                        {{-- Floating 10-Year Impact Card (Dynamic from meta_data['badge']) --}}
                         <div class="absolute -bottom-6 left-2 sm:-left-6 bg-[var(--surface)] border border-[var(--border)] p-4 sm:p-5 rounded-2xl shadow-xl flex items-center gap-4 max-w-[calc(100%-1rem)] sm:max-w-xs transition-colors">
                             <div class="w-12 h-12 rounded-xl bg-maroon text-cream flex items-center justify-center font-bold shrink-0 shadow-md">
                                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -141,8 +147,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="text-xs font-bold uppercase tracking-wider text-crimson dark:text-mint">Milestone</p>
-                                <p class="text-sm font-bold text-[var(--heading)]">10+ Years of Direct Community Impact</p>
+                                <p class="text-xs font-bold uppercase tracking-wider text-crimson dark:text-mint">{!! format_cms_text($storyBadge['kicker'] ?? 'Milestone') !!}</p>
+                                <p class="text-sm font-bold text-[var(--heading)]">{!! format_cms_text($storyBadge['title'] ?? '10+ Years of Direct Community Impact') !!}</p>
                             </div>
                         </div>
                     </div>
@@ -154,98 +160,94 @@
 
     {{-- 3. Our Holistic Child Approach (6 Integrated Pillars) --}}
     @if ($approachSec?->is_active ?? true)
+    @php
+        $defaultApproachPillars = [
+            [
+                'title' => 'Tuition & School Fees Support',
+                'description' => 'Paying school fees and registration costs directly for indigent students in public and non-profit schools to prevent dropout and keep vulnerable children in class.',
+                'icon' => 'academic-cap',
+            ],
+            [
+                'title' => 'Educational Materials & Uniforms',
+                'description' => 'Providing textbooks, exercise books, writing materials, school bags, and uniforms so that students can attend school with confidence, dignity, and pride.',
+                'icon' => 'book-open',
+            ],
+            [
+                'title' => 'Equipping Digital Labs & Libraries',
+                'description' => 'Setting up digital ICT facilities, supplying desktop computers, and upgrading library resources in community facilities to bridge the digital divide.',
+                'icon' => 'computer-desktop',
+            ],
+            [
+                'title' => 'Mentorship & Leadership Training',
+                'description' => 'Instilling the DRNICER values (Discipline, Responsibility, No-Excuse, Integrity, Compassion, Excellence, Respect) through structured mentorship and leadership camps.',
+                'icon' => 'user-group',
+            ],
+            [
+                'title' => 'Family Nutrition & Widow Welfare',
+                'description' => 'Supporting struggling households and vulnerable widows with food relief packages, micro-support, and welfare assistance so children are nourished and ready to learn.',
+                'icon' => 'heart',
+            ],
+            [
+                'title' => 'Health Services & Social Awareness',
+                'description' => 'Conducting health screenings, promoting hygiene, and raising awareness regarding social vices, substance abuse, and cyber-safety to protect youth development.',
+                'icon' => 'shield-check',
+            ],
+        ];
+        $approachPillars = $approachSec?->meta_data['pillars'] ?? $defaultApproachPillars;
+    @endphp
     <section class="py-20 bg-[var(--surface-alt)] border-y border-[var(--border)] transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-maroon/10 text-maroon dark:bg-mint/10 dark:text-mint">
-                    {{ $approachSec?->subheadline ?: 'Total Well-Being of the Child' }}
+                    {!! format_cms_text($approachSec?->subheadline ?: 'Total Well-Being of the Child') !!}
                 </span>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-[var(--heading)] tracking-tight">
-                    {{ $approachSec?->headline ?: 'Our Integrated Intervention Approach' }}
+                    {!! format_cms_text($approachSec?->headline ?: 'Our Integrated Intervention Approach') !!}
                 </h2>
                 <p class="text-base sm:text-lg text-[var(--text-muted)] leading-relaxed">
-                    {{ $approachSec?->body_text ?: 'We believe sustainable education requires a whole-child model: combining academic sponsorship, classroom infrastructure, moral mentorship, and household nutritional stability.' }}
+                    {!! format_cms_text($approachSec?->body_text ?: 'We believe sustainable education requires a whole-child model: combining academic sponsorship, classroom infrastructure, moral mentorship, and household nutritional stability.') !!}
                 </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {{-- Pillar 1: Tuition Support --}}
-                <div class="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-8 shadow-xs hover:shadow-lg transition-all duration-300 hover:-translate-y-1 group">
-                    <div class="w-14 h-14 rounded-2xl bg-maroon/10 text-maroon dark:bg-mint/10 dark:text-mint flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                        </svg>
+                @foreach ($approachPillars as $pillar)
+                    <div class="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-8 shadow-xs hover:shadow-lg transition-all duration-300 hover:-translate-y-1 group">
+                        <div class="w-14 h-14 rounded-2xl bg-maroon/10 text-maroon dark:bg-mint/10 dark:text-mint flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            @php $icon = $pillar['icon'] ?? 'star'; @endphp
+                            @if ($icon === 'academic-cap')
+                                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                </svg>
+                            @elseif ($icon === 'book-open')
+                                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                            @elseif ($icon === 'computer-desktop')
+                                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                            @elseif ($icon === 'user-group')
+                                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                            @elseif ($icon === 'heart')
+                                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
+                            @elseif ($icon === 'shield-check')
+                                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                            @else
+                                <span class="text-2xl font-bold">{{ $icon }}</span>
+                            @endif
+                        </div>
+                        <h3 class="text-xl font-bold text-[var(--heading)] mb-3">{!! format_cms_text($pillar['title'] ?? '') !!}</h3>
+                        <p class="text-sm text-[var(--text)] leading-relaxed">
+                            {!! format_cms_text($pillar['description'] ?? '') !!}
+                        </p>
                     </div>
-                    <h3 class="text-xl font-bold text-[var(--heading)] mb-3">Tuition & School Fees Support</h3>
-                    <p class="text-sm text-[var(--text)] leading-relaxed">
-                        Paying school fees and registration costs directly for indigent students in public and non-profit schools to prevent dropout and keep vulnerable children in class.
-                    </p>
-                </div>
-
-                {{-- Pillar 2: Educational Materials --}}
-                <div class="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-8 shadow-xs hover:shadow-lg transition-all duration-300 hover:-translate-y-1 group">
-                    <div class="w-14 h-14 rounded-2xl bg-maroon/10 text-maroon dark:bg-mint/10 dark:text-mint flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-[var(--heading)] mb-3">Educational Materials & Uniforms</h3>
-                    <p class="text-sm text-[var(--text)] leading-relaxed">
-                        Providing textbooks, exercise books, writing materials, school bags, and uniforms so that students can attend school with confidence, dignity, and pride.
-                    </p>
-                </div>
-
-                {{-- Pillar 3: Equipping Non-Profit Schools --}}
-                <div class="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-8 shadow-xs hover:shadow-lg transition-all duration-300 hover:-translate-y-1 group">
-                    <div class="w-14 h-14 rounded-2xl bg-maroon/10 text-maroon dark:bg-mint/10 dark:text-mint flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-[var(--heading)] mb-3">Equipping Non-Profit Schools & Labs</h3>
-                    <p class="text-sm text-[var(--text)] leading-relaxed">
-                        Setting up digital ICT facilities, supplying desktop computers, and upgrading library resources in community schools to bridge the digital divide.
-                    </p>
-                </div>
-
-                {{-- Pillar 4: Mentorship & Leadership --}}
-                <div class="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-8 shadow-xs hover:shadow-lg transition-all duration-300 hover:-translate-y-1 group">
-                    <div class="w-14 h-14 rounded-2xl bg-maroon/10 text-maroon dark:bg-mint/10 dark:text-mint flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-[var(--heading)] mb-3">Mentorship & Leadership Training</h3>
-                    <p class="text-sm text-[var(--text)] leading-relaxed">
-                        Instilling the DRNICER values (Discipline, Responsibility, No-Excuse, Integrity, Compassion, Excellence, Respect) through structured mentorship and leadership camps.
-                    </p>
-                </div>
-
-                {{-- Pillar 5: Family Nutrition & Widow Support --}}
-                <div class="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-8 shadow-xs hover:shadow-lg transition-all duration-300 hover:-translate-y-1 group">
-                    <div class="w-14 h-14 rounded-2xl bg-maroon/10 text-maroon dark:bg-mint/10 dark:text-mint flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-[var(--heading)] mb-3">Family Nutrition & Widow Welfare</h3>
-                    <p class="text-sm text-[var(--text)] leading-relaxed">
-                        Supporting struggling households and vulnerable widows with food relief packages, micro-support, and welfare assistance so children are nourished and ready to learn.
-                    </p>
-                </div>
-
-                {{-- Pillar 6: Health & Social Awareness --}}
-                <div class="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-8 shadow-xs hover:shadow-lg transition-all duration-300 hover:-translate-y-1 group">
-                    <div class="w-14 h-14 rounded-2xl bg-maroon/10 text-maroon dark:bg-mint/10 dark:text-mint flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-[var(--heading)] mb-3">Health Services & Social Awareness</h3>
-                    <p class="text-sm text-[var(--text)] leading-relaxed">
-                        Conducting health screenings, promoting hygiene, and raising awareness regarding social vices, substance abuse, and cyber-safety to protect youth development.
-                    </p>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -253,45 +255,49 @@
 
     {{-- 3b. Permanent Community Sanctuary Showcase: Famoyinka Memorial Children's Library --}}
     @if ($librarySec?->is_active ?? true)
+    @php
+        $defaultLibraryBullets = [
+            'Free fiction, science & culture book loans',
+            'Weekend study circles & digital lab access',
+            'Creative arts, crafts & watercolor workshops',
+            'Leadership games & Ikogosi nature trips',
+        ];
+        $libraryBullets = $librarySec?->meta_data['bullets'] ?? $defaultLibraryBullets;
+        $libraryBadge = $librarySec?->meta_data['badge'] ?? [
+            'location' => 'Ijero-Ekiti, Nigeria',
+            'title' => 'A Living Sanctuary for Young Readers',
+        ];
+        $libraryImage = $librarySec?->getImageUrl() ?: asset('front/images/gallery/optimized/famoyinka-01.webp');
+    @endphp
     <section class="py-16 sm:py-20 bg-[var(--surface)] transition-colors border-b border-[var(--border)] overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-[var(--surface-alt)] border border-[var(--border)] rounded-3xl p-8 sm:p-12 lg:p-14 shadow-lg grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
                 <div class="lg:col-span-7 space-y-6">
                     <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-maroon/10 text-maroon dark:bg-mint/15 dark:text-mint border border-maroon/20 dark:border-mint/30">
-                        <span>🏛️ {{ $librarySec?->subheadline ?: 'Permanent Community Hub' }}</span>
+                        <span>🏛️ {!! format_cms_text($librarySec?->subheadline ?: 'Permanent Community Hub') !!}</span>
                     </div>
                     
                     <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[var(--heading)] tracking-tight">
-                        {{ $librarySec?->headline ?: "Famoyinka Memorial Children's Library" }}
+                        {!! format_cms_text($librarySec?->headline ?: "Famoyinka Memorial Children's Library") !!}
                     </h2>
 
                     <p class="text-base sm:text-lg text-[var(--text)] leading-relaxed">
-                        {{ $librarySec?->body_text ?: "Established as a permanent physical sanctuary in Ijero-Ekiti, the Famoyinka Memorial Children's Library brings our 10-year holistic child development vision to life every day. It provides children and families with open access to rich literature, quiet study workstations, and weekend mentorship circles." }}
+                        {!! format_cms_text($librarySec?->body_text ?: "Established as a permanent physical sanctuary in Ijero-Ekiti, the Famoyinka Memorial Children's Library brings our 10-year holistic child development vision to life every day. It provides children and families with open access to rich literature, quiet study workstations, and weekend mentorship circles.") !!}
                     </p>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                        <div class="flex items-start gap-3">
-                            <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">✓</span>
-                            <span class="text-sm font-medium text-[var(--text)]">Free fiction, science & culture book loans</span>
-                        </div>
-                        <div class="flex items-start gap-3">
-                            <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">✓</span>
-                            <span class="text-sm font-medium text-[var(--text)]">Weekend study circles & digital lab access</span>
-                        </div>
-                        <div class="flex items-start gap-3">
-                            <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">✓</span>
-                            <span class="text-sm font-medium text-[var(--text)]">Creative arts, crafts & watercolor workshops</span>
-                        </div>
-                        <div class="flex items-start gap-3">
-                            <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">✓</span>
-                            <span class="text-sm font-medium text-[var(--text)]">Leadership games & Ikogosi nature trips</span>
-                        </div>
+                        @foreach ($libraryBullets as $bullet)
+                            <div class="flex items-start gap-3">
+                                <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">✓</span>
+                                <span class="text-sm font-medium text-[var(--text)]">{!! format_cms_text($bullet) !!}</span>
+                            </div>
+                        @endforeach
                     </div>
 
                     <div class="flex flex-wrap items-center gap-4 pt-4">
-                        <a href="{{ url('/programmes/famoyinka-memorial-library') }}" 
+                        <a href="{{ url($librarySec?->button_url ?: '/programmes/famoyinka-memorial-library') }}" 
                            class="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold bg-maroon text-white hover:bg-crimson transition-all shadow-md">
-                            <span>Explore Library Programme</span>
+                            <span>{!! format_cms_text($librarySec?->button_text ?: 'Explore Library Programme') !!}</span>
                             <span>&rarr;</span>
                         </a>
                         <a href="{{ url('/gallery?album=famoyinka-library') }}" 
@@ -303,13 +309,13 @@
 
                 <div class="lg:col-span-5">
                     <div class="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-[var(--border)] shadow-xl aspect-4/3 sm:aspect-16/10 lg:aspect-4/3 group">
-                        <img src="{{ asset('front/images/gallery/optimized/famoyinka-01.webp') }}" 
+                        <img src="{{ $libraryImage }}" 
                              alt="Children reading at Famoyinka Memorial Children's Library" 
                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
                              loading="lazy">
                         <div class="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6">
-                            <span class="text-xs font-bold uppercase tracking-wider text-[var(--accent-cream)]">Ijero-Ekiti, Nigeria</span>
-                            <p class="text-white font-bold text-lg mt-0.5">A Living Sanctuary for Young Readers</p>
+                            <span class="text-xs font-bold uppercase tracking-wider text-[var(--accent-cream)]">{!! format_cms_text($libraryBadge['location'] ?? 'Ijero-Ekiti, Nigeria') !!}</span>
+                            <p class="text-white font-bold text-lg mt-0.5">{!! format_cms_text($libraryBadge['title'] ?? 'A Living Sanctuary for Young Readers') !!}</p>
                         </div>
                     </div>
                 </div>
@@ -324,13 +330,13 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-maroon/10 text-maroon dark:bg-mint/10 dark:text-mint">
-                    {{ $trusteesSec?->subheadline ?: 'Stewardship & Governance' }}
+                    {!! format_cms_text($trusteesSec?->subheadline ?: 'Stewardship & Governance') !!}
                 </span>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-[var(--heading)] tracking-tight">
-                    {{ $trusteesSec?->headline ?: 'Board of Trustees' }}
+                    {!! format_cms_text($trusteesSec?->headline ?: 'Board of Trustees') !!}
                 </h2>
                 <p class="text-base sm:text-lg text-[var(--text-muted)] leading-relaxed">
-                    {{ $trusteesSec?->body_text ?: 'Our governing trustees provide strategic guidance, fiduciary integrity, and long-term vision to uphold our educational mission.' }}
+                    {!! format_cms_text($trusteesSec?->body_text ?: 'Our governing trustees provide strategic guidance, fiduciary integrity, and long-term vision to uphold our educational mission.') !!}
                 </p>
             </div>
 
@@ -399,13 +405,13 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-maroon/10 text-maroon dark:bg-mint/10 dark:text-mint">
-                    {{ $managementSec?->subheadline ?: 'Operational Leadership' }}
+                    {!! format_cms_text($managementSec?->subheadline ?: 'Operational Leadership') !!}
                 </span>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-[var(--heading)] tracking-tight">
-                    {{ $managementSec?->headline ?: 'Management Team' }}
+                    {!! format_cms_text($managementSec?->headline ?: 'Management Team') !!}
                 </h2>
                 <p class="text-base sm:text-lg text-[var(--text-muted)] leading-relaxed">
-                    {{ $managementSec?->body_text ?: 'Driving day-to-day operations, international partnerships, and grassroots program delivery in Nigeria and abroad.' }}
+                    {!! format_cms_text($managementSec?->body_text ?: 'Driving day-to-day operations, international partnerships, and grassroots program delivery in Nigeria and abroad.') !!}
                 </p>
             </div>
 
@@ -478,13 +484,13 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-maroon/10 text-maroon dark:bg-mint/10 dark:text-mint">
-                    {{ $advisorsSec?->subheadline ?: 'Domain Expertise' }}
+                    {!! format_cms_text($advisorsSec?->subheadline ?: 'Domain Expertise') !!}
                 </span>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-[var(--heading)] tracking-tight">
-                    {{ $advisorsSec?->headline ?: 'Advisory Board' }}
+                    {!! format_cms_text($advisorsSec?->headline ?: 'Advisory Board') !!}
                 </h2>
                 <p class="text-base sm:text-lg text-[var(--text-muted)] leading-relaxed">
-                    {{ $advisorsSec?->body_text ?: 'Industry leaders, educators, medical practitioners, and technology innovators guiding our programmatic growth.' }}
+                    {!! format_cms_text($advisorsSec?->body_text ?: 'Industry leaders, educators, medical practitioners, and technology innovators guiding our programmatic growth.') !!}
                 </p>
             </div>
 
@@ -594,21 +600,21 @@
 
         <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
             <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--accent-cream)]/20 text-[var(--accent-cream)] border border-[var(--accent-cream)]/30 backdrop-blur-xs">
-                {{ $ctaSec?->subheadline ?: 'Make a Difference Today' }}
+                {!! format_cms_text($ctaSec?->subheadline ?: 'Make a Difference Today') !!}
             </span>
 
             <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
-                {{ $ctaSec?->headline ?: 'Join Hands with Us to Transform More Lives' }}
+                {!! format_cms_text($ctaSec?->headline ?: 'Join Hands with Us to Transform More Lives') !!}
             </h2>
 
             <p class="text-base sm:text-lg text-white/90 max-w-2xl mx-auto leading-relaxed">
-                {{ $ctaSec?->body_text ?: 'Whether through volunteer teaching, mentoring, sponsoring an indigent pupil\'s fees, or corporate partnership, your contribution builds a brighter tomorrow.' }}
+                {!! format_cms_text($ctaSec?->body_text ?: 'Whether through volunteer teaching, mentoring, sponsoring an indigent pupil\'s fees, or corporate partnership, your contribution builds a brighter tomorrow.') !!}
             </p>
 
             <div class="flex flex-wrap items-center justify-center gap-4 pt-4">
                 <a href="{{ url($ctaSec?->button_url ?: '/get-involved') }}" 
                    class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-bold bg-white text-maroon hover:bg-[var(--accent-cream)] transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer">
-                    {{ $ctaSec?->button_text ?: 'Become a Volunteer' }}
+                    {!! format_cms_text($ctaSec?->button_text ?: 'Become a Volunteer') !!}
                 </a>
                 <a href="{{ url('/donate') }}" 
                    class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-semibold border-2 border-white/80 text-white hover:bg-white/10 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer">

@@ -160,6 +160,9 @@
                                        value="{{ old('headline', $section->headline) }}" 
                                        class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-stone-900 text-sm focus:border-maroon focus:ring-1 focus:ring-maroon focus:outline-none" 
                                        placeholder="Enter main headline...">
+                                <div class="mt-2">
+                                    <x-admin.inline-styler target="#{{ $section->section_key }}_headline" compact />
+                                </div>
                             </div>
 
                             <!-- Subheadline -->
@@ -184,6 +187,9 @@
                                        value="{{ old('subheadline', $section->subheadline) }}" 
                                        class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-stone-900 text-sm focus:border-maroon focus:ring-1 focus:ring-maroon focus:outline-none" 
                                        placeholder="Enter subheadline or category...">
+                                <div class="mt-2">
+                                    <x-admin.inline-styler target="#{{ $section->section_key }}_subheadline" compact />
+                                </div>
                             </div>
                         </div>
 
@@ -209,6 +215,9 @@
                                       class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-stone-900 text-sm focus:border-maroon focus:ring-1 focus:ring-maroon focus:outline-none leading-relaxed" 
                                       placeholder="Enter main descriptive copy...">{{ old('body_text', $section->body_text) }}</textarea>
                             <p class="text-[11px] text-stone-400 mt-1">Paragraph line breaks are preserved when rendered on the public page.</p>
+                            <div class="mt-2">
+                                <x-admin.inline-styler target="#{{ $section->section_key }}_body_text" />
+                            </div>
                         </div>
 
                         <!-- Button Text & URL -->
@@ -248,7 +257,7 @@
                             </div>
                         </div>
 
-                        @if ($section->section_key !== 'famoyinka_library')
+                        @if (! ($page === 'home' && $section->section_key === 'famoyinka_library'))
                             <!-- Image Upload & Gallery Picker -->
                             <div class="pt-2 border-t border-stone-100">
                                 <x-admin.media-picker 
@@ -411,6 +420,216 @@
                                                 </div>
                                             </div>
                                         @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
+                        @if ($page === 'about' && $section->section_key === 'story')
+                            @php
+                                $defaultStoryMilestones = [
+                                    ['value' => '10+', 'label' => 'Years of Service'],
+                                    ['value' => '750+', 'label' => 'Students Trained'],
+                                    ['value' => '30+', 'label' => 'Teachers Trained'],
+                                ];
+                                $storyMilestones = old('meta_data.milestones', $section->meta_data['milestones'] ?? $defaultStoryMilestones);
+                                $storyBadge = old('meta_data.badge', $section->meta_data['badge'] ?? [
+                                    'kicker' => 'Milestone',
+                                    'title' => '10+ Years of Direct Community Impact',
+                                ]);
+                            @endphp
+
+                            <div class="pt-6 border-t border-stone-200/80 space-y-6">
+                                <div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-5">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <span class="text-xl">🏆</span>
+                                        <h4 class="text-sm font-bold text-stone-900">10-Year Journey Milestones & Floating Badge</h4>
+                                    </div>
+                                    <p class="text-xs text-stone-600">Customize the 3 milestone counter statistics and the floating badge card displayed alongside the story photo.</p>
+                                </div>
+
+                                {{-- 3 Milestone Highlights --}}
+                                <div class="space-y-3">
+                                    <h5 class="text-xs font-bold uppercase tracking-wider text-stone-700">3 Milestone Highlight Stats</h5>
+                                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                        @for ($mIdx = 0; $mIdx < 3; $mIdx++)
+                                            @php $m = $storyMilestones[$mIdx] ?? ($defaultStoryMilestones[$mIdx] ?? ['value' => '', 'label' => '']); @endphp
+                                            <div class="p-4 rounded-xl bg-stone-50 border border-stone-200/80 space-y-2">
+                                                <span class="text-[10px] font-bold uppercase tracking-wider text-stone-500">Stat #{{ $mIdx + 1 }}</span>
+                                                <div>
+                                                    <label class="block text-[10px] font-bold text-stone-600 uppercase mb-1">Value (e.g. 10+, 750+)</label>
+                                                    <input type="text" 
+                                                           name="meta_data[milestones][{{ $mIdx }}][value]" 
+                                                           value="{{ $m['value'] ?? '' }}" 
+                                                           class="w-full px-3 py-1.5 rounded-lg border border-stone-300 text-xs font-black text-crimson focus:border-maroon focus:outline-none" 
+                                                           placeholder="10+">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-[10px] font-bold text-stone-600 uppercase mb-1">Label</label>
+                                                    <input type="text" 
+                                                           name="meta_data[milestones][{{ $mIdx }}][label]" 
+                                                           value="{{ $m['label'] ?? '' }}" 
+                                                           class="w-full px-3 py-1.5 rounded-lg border border-stone-300 text-xs text-stone-800 focus:border-maroon focus:outline-none" 
+                                                           placeholder="Years of Service">
+                                                </div>
+                                            </div>
+                                        @endfor
+                                    </div>
+                                </div>
+
+                                {{-- Floating Badge --}}
+                                <div class="p-4 rounded-xl bg-stone-50 border border-stone-200/80 space-y-3">
+                                    <h5 class="text-xs font-bold uppercase tracking-wider text-stone-700">Floating Photo Badge Card</h5>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-[10px] font-bold text-stone-600 uppercase mb-1">Badge Kicker / Category</label>
+                                            <input type="text" 
+                                                   name="meta_data[badge][kicker]" 
+                                                   value="{{ $storyBadge['kicker'] ?? 'Milestone' }}" 
+                                                   class="w-full px-3 py-1.5 rounded-lg border border-stone-300 text-xs font-semibold text-stone-900 focus:border-maroon focus:outline-none" 
+                                                   placeholder="Milestone">
+                                        </div>
+                                        <div>
+                                            <label class="block text-[10px] font-bold text-stone-600 uppercase mb-1">Badge Title / Impact Text</label>
+                                            <input type="text" 
+                                                   name="meta_data[badge][title]" 
+                                                   value="{{ $storyBadge['title'] ?? '10+ Years of Direct Community Impact' }}" 
+                                                   class="w-full px-3 py-1.5 rounded-lg border border-stone-300 text-xs font-semibold text-stone-900 focus:border-maroon focus:outline-none" 
+                                                   placeholder="10+ Years of Direct Community Impact">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
+                        @if ($page === 'about' && $section->section_key === 'approach')
+                            @php
+                                $defaultAboutPillars = [
+                                    ['title' => 'Tuition & School Fees Support', 'description' => 'Paying school fees and registration costs directly for indigent students in public and non-profit schools to prevent dropout and keep vulnerable children in class.', 'icon' => 'academic-cap'],
+                                    ['title' => 'Educational Materials & Uniforms', 'description' => 'Providing textbooks, exercise books, writing materials, school bags, and uniforms so that students can attend school with confidence, dignity, and pride.', 'icon' => 'book-open'],
+                                    ['title' => 'Equipping Digital Labs & Libraries', 'description' => 'Setting up digital ICT facilities, supplying desktop computers, and upgrading library resources in community facilities to bridge the digital divide.', 'icon' => 'computer-desktop'],
+                                    ['title' => 'Mentorship & Leadership Training', 'description' => 'Instilling the DRNICER values (Discipline, Responsibility, No-Excuse, Integrity, Compassion, Excellence, Respect) through structured mentorship and leadership camps.', 'icon' => 'user-group'],
+                                    ['title' => 'Family Nutrition & Widow Welfare', 'description' => 'Supporting struggling households and vulnerable widows with food relief packages, micro-support, and welfare assistance so children are nourished and ready to learn.', 'icon' => 'heart'],
+                                    ['title' => 'Health Services & Social Awareness', 'description' => 'Conducting health screenings, promoting hygiene, and raising awareness regarding social vices, substance abuse, and cyber-safety to protect youth development.', 'icon' => 'shield-check'],
+                                ];
+                                $aboutPillars = old('meta_data.pillars', $section->meta_data['pillars'] ?? $defaultAboutPillars);
+                            @endphp
+
+                            <div class="pt-6 border-t border-stone-200/80 space-y-6">
+                                <div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-5">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <span class="text-xl">🏛️</span>
+                                        <h4 class="text-sm font-bold text-stone-900">The 6 Integrated Approach Pillars</h4>
+                                    </div>
+                                    <p class="text-xs text-stone-600">Configure each of the 6 core intervention pillars defining our whole-child development model on the About page.</p>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    @foreach ($aboutPillars as $pIdx => $p)
+                                        <div class="p-4 rounded-2xl bg-stone-50 border border-stone-200/80 space-y-3">
+                                            <div class="flex items-center justify-between pb-2 border-b border-stone-200/60">
+                                                <span class="text-xs font-bold text-stone-700">Pillar #{{ $pIdx + 1 }}</span>
+                                                <div class="flex items-center gap-2">
+                                                    <label class="text-[10px] font-bold text-stone-500 uppercase">Icon:</label>
+                                                    <select name="meta_data[pillars][{{ $pIdx }}][icon]" class="px-2 py-1 text-xs rounded-lg border border-stone-300 bg-white font-medium focus:border-maroon focus:outline-none">
+                                                        <option value="academic-cap" {{ ($p['icon'] ?? '') === 'academic-cap' ? 'selected' : '' }}>🎓 Academic Cap</option>
+                                                        <option value="book-open" {{ ($p['icon'] ?? '') === 'book-open' ? 'selected' : '' }}>📖 Book Open</option>
+                                                        <option value="computer-desktop" {{ ($p['icon'] ?? '') === 'computer-desktop' ? 'selected' : '' }}>💻 Computer Lab</option>
+                                                        <option value="user-group" {{ ($p['icon'] ?? '') === 'user-group' ? 'selected' : '' }}>👥 Leadership / Group</option>
+                                                        <option value="heart" {{ ($p['icon'] ?? '') === 'heart' ? 'selected' : '' }}>❤️ Heart / Family</option>
+                                                        <option value="shield-check" {{ ($p['icon'] ?? '') === 'shield-check' ? 'selected' : '' }}>🛡️ Shield / Health</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <label class="block text-[10px] font-bold text-stone-600 uppercase tracking-wider mb-1">
+                                                    Pillar Title
+                                                </label>
+                                                <input type="text" 
+                                                       name="meta_data[pillars][{{ $pIdx }}][title]" 
+                                                       value="{{ $p['title'] ?? '' }}" 
+                                                       required
+                                                       class="w-full px-3 py-1.5 rounded-lg border border-stone-300 text-xs font-semibold text-stone-900 focus:border-maroon focus:outline-none" 
+                                                       placeholder="e.g. Tuition & School Fees Support">
+                                            </div>
+
+                                            <div>
+                                                <label class="block text-[10px] font-bold text-stone-600 uppercase tracking-wider mb-1">
+                                                    Pillar Description
+                                                </label>
+                                                <textarea name="meta_data[pillars][{{ $pIdx }}][description]" 
+                                                          rows="2" 
+                                                          class="w-full px-3 py-1.5 rounded-lg border border-stone-300 text-xs text-stone-800 leading-relaxed focus:border-maroon focus:outline-none" 
+                                                          placeholder="Descriptive summary of this pillar...">{{ $p['description'] ?? '' }}</textarea>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
+                        @if ($page === 'about' && $section->section_key === 'famoyinka_library')
+                            @php
+                                $defaultLibBullets = [
+                                    'Free fiction, science & culture book loans',
+                                    'Weekend study circles & digital lab access',
+                                    'Creative arts, crafts & watercolor workshops',
+                                    'Leadership games & Ikogosi nature trips',
+                                ];
+                                $libBullets = old('meta_data.bullets', $section->meta_data['bullets'] ?? $defaultLibBullets);
+                                $libBadge = old('meta_data.badge', $section->meta_data['badge'] ?? [
+                                    'location' => 'Ijero-Ekiti, Nigeria',
+                                    'title' => 'A Living Sanctuary for Young Readers',
+                                ]);
+                            @endphp
+
+                            <div class="pt-6 border-t border-stone-200/80 space-y-6">
+                                <div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-5">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <span class="text-xl">📖</span>
+                                        <h4 class="text-sm font-bold text-stone-900">Famoyinka Memorial Children's Library – Features & Badge</h4>
+                                    </div>
+                                    <p class="text-xs text-stone-600">Customize the 4 core feature checklist items and the photo overlay badge shown in the permanent sanctuary showcase.</p>
+                                </div>
+
+                                {{-- 4 Feature Bullets --}}
+                                <div class="space-y-3">
+                                    <h5 class="text-xs font-bold uppercase tracking-wider text-stone-700">4 Sanctuary Features / Activities</h5>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        @for ($bIdx = 0; $bIdx < 4; $bIdx++)
+                                            <div class="p-3 rounded-xl bg-stone-50 border border-stone-200/80">
+                                                <label class="block text-[10px] font-bold text-stone-600 uppercase mb-1">Feature Bullet #{{ $bIdx + 1 }}</label>
+                                                <input type="text" 
+                                                       name="meta_data[bullets][{{ $bIdx }}]" 
+                                                       value="{{ $libBullets[$bIdx] ?? ($defaultLibBullets[$bIdx] ?? '') }}" 
+                                                       class="w-full px-3 py-1.5 rounded-lg border border-stone-300 text-xs text-stone-900 focus:border-maroon focus:outline-none" 
+                                                       placeholder="e.g. Free fiction, science & culture book loans">
+                                            </div>
+                                        @endfor
+                                    </div>
+                                </div>
+
+                                {{-- Photo Overlay Badge --}}
+                                <div class="p-4 rounded-xl bg-stone-50 border border-stone-200/80 space-y-3">
+                                    <h5 class="text-xs font-bold uppercase tracking-wider text-stone-700">Photo Overlay Badge</h5>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-[10px] font-bold text-stone-600 uppercase mb-1">Location Badge Kicker</label>
+                                            <input type="text" 
+                                                   name="meta_data[badge][location]" 
+                                                   value="{{ $libBadge['location'] ?? 'Ijero-Ekiti, Nigeria' }}" 
+                                                   class="w-full px-3 py-1.5 rounded-lg border border-stone-300 text-xs font-semibold text-stone-900 focus:border-maroon focus:outline-none" 
+                                                   placeholder="Ijero-Ekiti, Nigeria">
+                                        </div>
+                                        <div>
+                                            <label class="block text-[10px] font-bold text-stone-600 uppercase mb-1">Badge Title</label>
+                                            <input type="text" 
+                                                   name="meta_data[badge][title]" 
+                                                   value="{{ $libBadge['title'] ?? 'A Living Sanctuary for Young Readers' }}" 
+                                                   class="w-full px-3 py-1.5 rounded-lg border border-stone-300 text-xs font-semibold text-stone-900 focus:border-maroon focus:outline-none" 
+                                                   placeholder="A Living Sanctuary for Young Readers">
+                                        </div>
                                     </div>
                                 </div>
                             </div>

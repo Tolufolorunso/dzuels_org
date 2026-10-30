@@ -198,10 +198,21 @@ class PageSectionSeeder extends Seeder
                 'section_key' => 'story',
                 'headline' => 'A Decade of Dedicated Service (Since 2015)',
                 'subheadline' => 'Our Heritage & Purpose',
-                'body_text' => "Dzuels Educational Foundation is a registered non-profit charity founded on 22nd June 2015. Established with an unwavering commitment to child welfare, we exist to provide comprehensive educational support, life skills, and digital literacy for indigent Nigerian children and youth.\n\nOver the last ten years, our programs have operated directly within public and community schools in Ekiti State and beyond. We believe every child deserves the tools, dignity, and encouragement to pursue knowledge without the burden of unpaid tuition fees or missing textbooks.\n\nA cornerstone of this commitment is the Famoyinka Memorial Children's Library in Ijero-Ekiti—a permanent reading sanctuary providing free book loans, weekend study circles, creative arts, and transformational leadership activities for local youth.\n\nRecognizing that learning does not happen in isolation, our work also reaches vulnerable households: providing nutritional assistance to indigent families through widows, creating deep awareness of social vices, and fostering transformational leadership in every classroom we touch.",
+                'body_text' => "Dzuels Educational Foundation is a registered non-profit charity founded on 22nd June 2015. Established with an unwavering commitment to child welfare, we exist to provide comprehensive educational support, life skills, and digital literacy for indigent Nigerian children and youth.\n\nOver the last ten years, our programs have operated through our well-equipped computer lab and library facility in Ijero-Ekiti, alongside direct educational interventions across communities in Ekiti State. We believe every child deserves the tools, dignity, and encouragement to pursue knowledge without the burden of unpaid tuition fees or missing textbooks.\n\nA cornerstone of this commitment is the Famoyinka Memorial Children's Library in Ijero-Ekiti—a permanent reading sanctuary providing free book loans, weekend study circles, creative arts, and transformational leadership activities for local youth.\n\nRecognizing that learning does not happen in isolation, our work also reaches vulnerable households: providing nutritional assistance to indigent families through widows, creating deep awareness of social vices, and fostering transformational leadership in every classroom we touch.",
                 'image_path' => 'front/images/about_1.webp',
                 'button_text' => null,
                 'button_url' => null,
+                'meta_data' => [
+                    'milestones' => [
+                        ['value' => '10+', 'label' => 'Years of Service'],
+                        ['value' => '750+', 'label' => 'Students Trained'],
+                        ['value' => '30+', 'label' => 'Teachers Trained'],
+                    ],
+                    'badge' => [
+                        'kicker' => 'Milestone',
+                        'title' => '10+ Years of Direct Community Impact',
+                    ],
+                ],
                 'sort_order' => 20,
                 'is_active' => true,
             ],
@@ -214,6 +225,40 @@ class PageSectionSeeder extends Seeder
                 'image_path' => null,
                 'button_text' => null,
                 'button_url' => null,
+                'meta_data' => [
+                    'pillars' => [
+                        [
+                            'title' => 'Tuition & School Fees Support',
+                            'description' => 'Paying school fees and registration costs directly for indigent students in public and non-profit schools to prevent dropout and keep vulnerable children in class.',
+                            'icon' => 'academic-cap',
+                        ],
+                        [
+                            'title' => 'Educational Materials & Uniforms',
+                            'description' => 'Providing textbooks, exercise books, writing materials, school bags, and uniforms so that students can attend school with confidence, dignity, and pride.',
+                            'icon' => 'book-open',
+                        ],
+                        [
+                            'title' => 'Equipping Digital Labs & Libraries',
+                            'description' => 'Setting up digital ICT facilities, supplying desktop computers, and upgrading library resources in community facilities to bridge the digital divide.',
+                            'icon' => 'computer-desktop',
+                        ],
+                        [
+                            'title' => 'Mentorship & Leadership Training',
+                            'description' => 'Instilling the DRNICER values (Discipline, Responsibility, No-Excuse, Integrity, Compassion, Excellence, Respect) through structured mentorship and leadership camps.',
+                            'icon' => 'user-group',
+                        ],
+                        [
+                            'title' => 'Family Nutrition & Widow Welfare',
+                            'description' => 'Supporting struggling households and vulnerable widows with food relief packages, micro-support, and welfare assistance so children are nourished and ready to learn.',
+                            'icon' => 'heart',
+                        ],
+                        [
+                            'title' => 'Health Services & Social Awareness',
+                            'description' => 'Conducting health screenings, promoting hygiene, and raising awareness regarding social vices, substance abuse, and cyber-safety to protect youth development.',
+                            'icon' => 'shield-check',
+                        ],
+                    ],
+                ],
                 'sort_order' => 30,
                 'is_active' => true,
             ],
@@ -226,6 +271,18 @@ class PageSectionSeeder extends Seeder
                 'image_path' => 'front/images/gallery/optimized/famoyinka-01.webp',
                 'button_text' => 'Explore Library Programme',
                 'button_url' => '/programmes/famoyinka-memorial-library',
+                'meta_data' => [
+                    'bullets' => [
+                        'Free fiction, science & culture book loans',
+                        'Weekend study circles & digital lab access',
+                        'Creative arts, crafts & watercolor workshops',
+                        'Leadership games & Ikogosi nature trips',
+                    ],
+                    'badge' => [
+                        'location' => 'Ijero-Ekiti, Nigeria',
+                        'title' => 'A Living Sanctuary for Young Readers',
+                    ],
+                ],
                 'sort_order' => 40,
                 'is_active' => true,
             ],

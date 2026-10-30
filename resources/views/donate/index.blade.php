@@ -57,15 +57,15 @@
 
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
                 <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-mint border border-emerald-200 dark:border-emerald-800 mb-6">
-                    <span>💚</span> {{ $heroSec?->subheadline ?: 'Every Gift Creates Lasting Impact' }}
+                    <span>💚</span> {!! format_cms_text($heroSec?->subheadline ?: 'Every Gift Creates Lasting Impact') !!}
                 </span>
 
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-[var(--heading)] tracking-tight max-w-4xl mx-auto leading-tight">
-                    {{ $heroSec?->headline ?: 'Your Generosity Powers Real Transformation' }}
+                    {!! format_cms_text($heroSec?->headline ?: 'Your Generosity Powers Real Transformation') !!}
                 </h1>
 
                 <p class="mt-6 text-lg sm:text-xl text-[var(--text-muted)] max-w-2xl mx-auto leading-relaxed">
-                    {{ $heroSec?->body_text ?: "Help us bridge Nigeria's digital divide. 100% of public contributions directly equip community computer labs, sponsor youth literacy tournaments, and provide educational materials in Ijero-Ekiti and rural public schools." }}
+                    {!! format_cms_text($heroSec?->body_text ?: "Help us bridge Nigeria's digital divide. 100% of public contributions directly equip community computer labs, sponsor youth literacy tournaments, and provide educational materials in Ijero-Ekiti and rural public schools.") !!}
                 </p>
 
                 {{-- Trust Badges Strip --}}
@@ -93,13 +93,13 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto mb-12">
                     <span class="text-xs font-bold uppercase tracking-wider text-maroon dark:text-[var(--accent-cream)] block mb-2">
-                        {{ $channelsSec?->subheadline ?: 'Transparent Giving Pathways' }}
+                        {!! format_cms_text($channelsSec?->subheadline ?: 'Transparent Giving Pathways') !!}
                     </span>
                     <h2 class="text-3xl sm:text-4xl font-extrabold text-[var(--heading)] tracking-tight">
-                        {{ $channelsSec?->headline ?: 'Choose Your Preferred Giving Channel' }}
+                        {!! format_cms_text($channelsSec?->headline ?: 'Choose Your Preferred Giving Channel') !!}
                     </h2>
                     <p class="text-sm sm:text-base text-[var(--text-muted)] mt-2">
-                        {{ $channelsSec?->body_text ?: 'Whether transferring from your local banking app, giving online via Givebutter from the United States, or donating educational hardware, every gift empowers learners.' }}
+                        {!! format_cms_text($channelsSec?->body_text ?: 'Whether transferring from your local banking app, giving online via Givebutter from the United States, or donating educational hardware, every gift empowers learners.') !!}
                     </p>
                 </div>
 
@@ -400,13 +400,13 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto mb-12">
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-maroon/10 dark:bg-maroon/30 text-maroon dark:text-[var(--accent-cream)] border border-maroon/20 mb-3">
-                        {{ $giftSec?->subheadline ?: 'Financial Accountability' }}
+                        {!! format_cms_text($giftSec?->subheadline ?: 'Financial Accountability') !!}
                     </span>
                     <h2 class="text-3xl sm:text-4xl font-extrabold text-[var(--heading)] tracking-tight">
-                        {{ $giftSec?->headline ?: 'Where Your Contribution Goes' }}
+                        {!! format_cms_text($giftSec?->headline ?: 'Where Your Contribution Goes') !!}
                     </h2>
                     <p class="text-sm sm:text-base text-[var(--text-muted)] mt-2">
-                        {{ $giftSec?->body_text ?: 'We maintain zero-waste budgeting. Here is how donations are allocated across our community programmes and educational initiatives.' }}
+                        {!! format_cms_text($giftSec?->body_text ?: 'We maintain zero-waste budgeting. Here is how donations are allocated across our community programmes and educational initiatives.') !!}
                     </p>
                 </div>
 
@@ -439,13 +439,13 @@
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
                     <span class="text-xs font-bold uppercase tracking-wider text-maroon dark:text-[var(--accent-cream)] block mb-2">
-                        {{ $faqSec?->subheadline ?: 'Questions & Clarifications' }}
+                        {!! format_cms_text($faqSec?->subheadline ?: 'Questions & Clarifications') !!}
                     </span>
                     <h2 class="text-3xl sm:text-4xl font-extrabold text-[var(--heading)] tracking-tight">
-                        {{ $faqSec?->headline ?: 'Frequently Asked Questions' }}
+                        {!! format_cms_text($faqSec?->headline ?: 'Frequently Asked Questions') !!}
                     </h2>
                     <p class="text-sm sm:text-base text-[var(--text-muted)] mt-2">
-                        {{ $faqSec?->body_text ?: 'Everything you need to know about giving to Dzuels Educational Foundation.' }}
+                        {!! format_cms_text($faqSec?->body_text ?: 'Everything you need to know about giving to Dzuels Educational Foundation.') !!}
                     </p>
                 </div>
 

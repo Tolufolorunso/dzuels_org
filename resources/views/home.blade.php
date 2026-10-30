@@ -24,21 +24,21 @@
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-3xl space-y-6">
                 <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--accent-cream)]/20 text-[var(--accent-cream)] border border-[var(--accent-cream)]/30 backdrop-blur-xs">
-                    {{ $heroSec?->subheadline ?: 'Dzuels Educational Foundation' }}
+                    {!! format_cms_text($heroSec?->subheadline ?: 'Dzuels Educational Foundation') !!}
                 </span>
                 
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
-                    {{ $heroSec?->headline ?: 'Addressing poverty through quality education and skills acquisition' }}
+                    {!! format_cms_text($heroSec?->headline ?: 'Addressing poverty through quality education and skills acquisition') !!}
                 </h1>
 
                 <p class="text-lg sm:text-xl text-white/90 leading-relaxed max-w-2xl">
-                    {{ $heroSec?->body_text ?: 'Empowering indigent Nigerian children, youth, and educators with free digital literacy, school support, leadership mentoring, and community welfare.' }}
+                    {!! format_cms_text($heroSec?->body_text ?: 'Empowering indigent Nigerian children, youth, and educators with free digital literacy, school support, leadership mentoring, and community welfare.') !!}
                 </p>
 
                 <div class="flex flex-wrap items-center gap-4 pt-4">
                     <a href="{{ $heroSec?->button_url ?: url('/donate') }}" 
                        class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-bold bg-white text-maroon hover:bg-[var(--accent-cream)] transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer">
-                        {{ $heroSec?->button_text ?: 'Donate Now' }}
+                        {!! format_cms_text($heroSec?->button_text ?: 'Donate Now') !!}
                     </a>
                     <a href="{{ url('/get-involved') }}" 
                        class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-semibold border-2 border-white/80 text-white hover:bg-white/10 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer">
@@ -127,16 +127,16 @@
                 <div class="space-y-6">
                     <div>
                         <span class="text-xs font-bold uppercase tracking-widest text-crimson dark:text-[var(--accent-cream)]">
-                            {{ $whoSec?->subheadline ?: 'Who We Are' }}
+                            {!! format_cms_text($whoSec?->subheadline ?: 'Who We Are') !!}
                         </span>
                         <h2 class="text-3xl sm:text-4xl font-extrabold text-[var(--heading)] tracking-tight mt-2">
-                            {{ $whoSec?->headline ?: 'Transforming lives page by page' }}
+                            {!! format_cms_text($whoSec?->headline ?: 'Transforming lives page by page') !!}
                         </h2>
                     </div>
 
                     @if ($whoSec?->body_text)
                         <div class="text-base sm:text-lg text-[var(--text)] leading-relaxed space-y-4">
-                            {!! nl2br(e($whoSec->body_text)) !!}
+                            {!! format_cms_text($whoSec->body_text) !!}
                         </div>
                     @else
                         <p class="text-base sm:text-lg text-[var(--text)] leading-relaxed">
@@ -151,7 +151,7 @@
                     <div class="pt-2">
                         <a href="{{ $whoSec?->button_url ?: url('/about') }}" 
                            class="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold border-2 border-maroon text-maroon hover:bg-maroon hover:text-white dark:border-[var(--accent-cream)] dark:text-[var(--accent-cream)] dark:hover:bg-[var(--accent-cream)] dark:hover:text-maroon transition-all duration-200">
-                            {{ $whoSec?->button_text ?: 'Read Our Full Story' }} <span aria-hidden="true">&rarr;</span>
+                            {!! format_cms_text($whoSec?->button_text ?: 'Read Our Full Story') !!} <span aria-hidden="true">&rarr;</span>
                         </a>
                     </div>
                 </div>
@@ -295,13 +295,13 @@
             {{-- Section Heading --}}
             <div class="text-center max-w-3xl mx-auto mb-12 lg:mb-16 space-y-4">
                 <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-maroon/10 dark:bg-maroon/20 text-maroon dark:text-[var(--accent-cream)] border border-maroon/15 dark:border-maroon/30">
-                    <span>🌟</span> {{ $causeSec?->subheadline ?: 'Our 6 Impact Causes' }}
+                    <span>🌟</span> {!! format_cms_text($causeSec?->subheadline ?: 'Our 6 Impact Causes') !!}
                 </span>
                 <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[var(--heading)] tracking-tight">
-                    {{ $causeSec?->headline ?: 'Programs that Bridge the Opportunity Divide' }}
+                    {!! format_cms_text($causeSec?->headline ?: 'Programs that Bridge the Opportunity Divide') !!}
                 </h2>
                 <p class="text-[var(--text-muted)] text-base sm:text-lg leading-relaxed">
-                    {{ $causeSec?->body_text ?: 'From digital hubs in Ijero-Ekiti to annual literacy contest, and much more in between, our causes are designed to uplift communities from the ground up.' }}
+                    {!! format_cms_text($causeSec?->body_text ?: 'From digital hubs in Ijero-Ekiti to annual literacy contest, and much more in between, our causes are designed to uplift communities from the ground up.') !!}
                 </p>
 
                 {{-- Foundational Tagline Banner (from cause.jpg) --}}
@@ -309,7 +309,7 @@
                     <div class="pt-2">
                         <div class="inline-block px-5 py-2.5 rounded-2xl bg-[var(--surface-alt)] border border-[var(--border)] shadow-xs">
                             <span class="text-xs sm:text-sm font-extrabold text-maroon dark:text-[var(--accent-cream)] tracking-wider uppercase font-sans">
-                                ✦ {{ $taglineBanner }} ✦
+                                ✦ {!! format_cms_text($taglineBanner) !!} ✦
                             </span>
                         </div>
                     </div>
@@ -360,11 +360,11 @@
                                     </div>
 
                                     <h4 class="text-base font-bold text-[var(--heading)] group-hover:text-maroon dark:group-hover:text-[var(--accent-cream)] transition-colors mb-1.5 leading-snug">
-                                        {{ $pillar['title'] ?? '' }}
+                                        {!! format_cms_text($pillar['title'] ?? '') !!}
                                     </h4>
 
                                     <p class="text-xs text-[var(--text-muted)] leading-relaxed">
-                                        {{ $pillar['description'] ?? '' }}
+                                        {!! format_cms_text($pillar['description'] ?? '') !!}
                                     </p>
                                 </div>
                             </div>
@@ -404,13 +404,13 @@
                 <div class="lg:col-span-7 space-y-8">
                     <div>
                         <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-maroon/10 text-maroon dark:bg-mint/15 dark:text-mint border border-maroon/20 dark:border-mint/30">
-                            <span>📚 {{ $librarySec?->subheadline ?: 'Permanent Literacy Sanctuary' }}</span>
+                            <span>📚 {!! format_cms_text($librarySec?->subheadline ?: 'Permanent Literacy Sanctuary') !!}</span>
                         </div>
                         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[var(--heading)] tracking-tight leading-tight mt-3">
-                            {{ $librarySec?->headline ?: "Famoyinka Memorial Children's Library" }}
+                            {!! format_cms_text($librarySec?->headline ?: "Famoyinka Memorial Children's Library") !!}
                         </h2>
                         <p class="text-base sm:text-lg text-[var(--text)] leading-relaxed mt-4">
-                            {{ $librarySec?->body_text ?: 'A vibrant community sanctuary in Ijero-Ekiti founded to nurture inquisitive minds, ignite a lifelong love for reading, and inspire creative expression in every child.' }}
+                            {!! format_cms_text($librarySec?->body_text ?: 'A vibrant community sanctuary in Ijero-Ekiti founded to nurture inquisitive minds, ignite a lifelong love for reading, and inspire creative expression in every child.') !!}
                         </p>
                     </div>
 
@@ -465,7 +465,7 @@
                     <div class="flex flex-wrap items-center gap-4 pt-2">
                         <a href="{{ url('/programmes/famoyinka-memorial-library') }}" 
                            class="inline-flex items-center justify-center px-7 py-3.5 rounded-full text-sm font-bold bg-maroon text-white hover:bg-crimson transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5">
-                            {{ $librarySec?->button_text ?: 'Explore Library Programme' }} &rarr;
+                            {!! format_cms_text($librarySec?->button_text ?: 'Explore Library Programme') !!} &rarr;
                         </a>
                         <a href="{{ url('/gallery?album=famoyinka-library') }}" 
                            class="inline-flex items-center justify-center px-6 py-3.5 rounded-full text-sm font-semibold border border-[var(--border)] bg-[var(--surface)] text-[var(--heading)] hover:border-maroon hover:text-maroon dark:hover:border-mint dark:hover:text-mint transition-all duration-200">
@@ -543,21 +543,21 @@
                 <div class="lg:col-span-6 p-8 sm:p-12 flex flex-col justify-center space-y-6">
                     <div>
                         <span class="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-bold bg-mint/20 text-emerald-800 dark:text-emerald-300">
-                            {{ $featSec?->subheadline ?: 'Featured Project' }}
+                            {!! format_cms_text($featSec?->subheadline ?: 'Featured Project') !!}
                         </span>
                         <h3 class="text-2xl sm:text-3xl font-extrabold text-[var(--heading)] leading-snug mt-3">
-                            {{ $featSec?->headline ?: 'Digital Infrastructure & Literacy in Ijero-Ekiti' }}
+                            {!! format_cms_text($featSec?->headline ?: 'Digital Infrastructure & Literacy in Ijero-Ekiti') !!}
                         </h3>
                     </div>
 
                     <p class="text-[var(--text)] leading-relaxed text-base">
-                        {{ $featSec?->body_text ?: 'Establishing a well-equipped computer laboratory and a resourceful library at Dzuels Foundation, providing children with access to practical computer training, coding skills, reading materials, and a supportive learning environment. To date, over 500 students have benefited from these learning opportunities.' }}
+                        {!! format_cms_text($featSec?->body_text ?: 'Establishing a well-equipped computer laboratory and a resourceful library at Dzuels Foundation, providing children with access to practical computer training, coding skills, reading materials, and a supportive learning environment. To date, over 500 students have benefited from these learning opportunities.') !!}
                     </p>
 
                     <div class="flex flex-wrap items-center gap-4 pt-2">
                         <a href="{{ $featSec?->button_url ?: url('/programmes/ijero-digital-literacy') }}" 
                            class="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-semibold bg-maroon text-white hover:bg-crimson transition-all duration-200 shadow-md">
-                            {{ $featSec?->button_text ?: 'Learn More About Project' }}
+                            {!! format_cms_text($featSec?->button_text ?: 'Learn More About Project') !!}
                         </a>
                         <a href="{{ url('/get-involved') }}" 
                            class="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-semibold border border-[var(--border)] text-[var(--text-strong)] hover:border-maroon transition-all duration-200">
@@ -642,15 +642,15 @@
     <section class="py-20 lg:py-28 text-white text-center relative overflow-hidden bg-radial from-crimson/40 via-maroon to-[#2B0203]">
         <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-                {{ $ctaSec?->headline ?: 'You too can make a difference' }}
+                {!! format_cms_text($ctaSec?->headline ?: 'You too can make a difference') !!}
             </h2>
             <p class="text-base sm:text-lg text-[var(--accent-cream)] max-w-2xl mx-auto leading-relaxed">
-                {{ $ctaSec?->body_text ?: 'Whether through individual, family or corporate sponsorship, volunteer mentorship, financial donations or legacy giving, your partnership empowers the next generation.' }}
+                {!! format_cms_text($ctaSec?->body_text ?: 'Whether through individual, family or corporate sponsorship, volunteer mentorship, financial donations or legacy giving, your partnership empowers the next generation.') !!}
             </p>
             <div class="flex flex-wrap items-center justify-center gap-4 pt-4">
                 <a href="{{ $ctaSec?->button_url ?: url('/donate') }}" 
                    class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-bold bg-white text-maroon hover:bg-[var(--accent-cream)] transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer">
-                    {{ $ctaSec?->button_text ?: 'Make a Donation' }}
+                    {!! format_cms_text($ctaSec?->button_text ?: 'Make a Donation') !!}
                 </a>
                 <a href="{{ url('/get-involved') }}" 
                    class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-semibold border-2 border-white/80 text-white hover:bg-white/10 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer">

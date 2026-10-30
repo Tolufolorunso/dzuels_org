@@ -124,6 +124,15 @@ class PageController extends Controller
             'meta_data.photos.*.image' => ['nullable', 'string', 'max:255'],
             'meta_data.photos.*.label' => ['nullable', 'string', 'max:100'],
             'meta_data.photos.*.alt' => ['nullable', 'string', 'max:255'],
+            'meta_data.milestones' => ['nullable', 'array'],
+            'meta_data.milestones.*.value' => ['nullable', 'string', 'max:50'],
+            'meta_data.milestones.*.label' => ['nullable', 'string', 'max:100'],
+            'meta_data.badge' => ['nullable', 'array'],
+            'meta_data.badge.kicker' => ['nullable', 'string', 'max:100'],
+            'meta_data.badge.title' => ['nullable', 'string', 'max:255'],
+            'meta_data.badge.location' => ['nullable', 'string', 'max:100'],
+            'meta_data.bullets' => ['nullable', 'array'],
+            'meta_data.bullets.*' => ['nullable', 'string', 'max:255'],
         ]);
 
         $pageSection = PageSection::firstOrNew([

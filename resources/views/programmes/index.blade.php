@@ -45,15 +45,15 @@
 
             <div class="max-w-3xl space-y-4">
                 <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--accent-cream)]/20 text-[var(--accent-cream)] border border-[var(--accent-cream)]/30 backdrop-blur-xs">
-                    {{ $heroSec?->subheadline ?: 'Impact In Action' }}
+                    {!! format_cms_text($heroSec?->subheadline ?: 'Impact In Action') !!}
                 </span>
                 
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
-                    {{ $heroSec?->headline ?: 'Our Impact Programmes' }}
+                    {!! format_cms_text($heroSec?->headline ?: 'Our Impact Programmes') !!}
                 </h1>
 
                 <p class="text-lg sm:text-xl text-white/90 leading-relaxed max-w-2xl pt-2">
-                    {{ $heroSec?->body_text ?: 'Empowering Nigerian children, teachers, and schools through grassroots literacy campaigns, digital labs, and STEM innovation showcases.' }}
+                    {!! format_cms_text($heroSec?->body_text ?: 'Empowering Nigerian children, teachers, and schools through grassroots literacy campaigns, digital labs, and STEM innovation showcases.') !!}
                 </p>
             </div>
         </div>
@@ -121,13 +121,13 @@
                 <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                     <div class="lg:col-span-8 space-y-4">
                         <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--accent-cream)]/20 text-[var(--accent-cream)] border border-[var(--accent-cream)]/30 backdrop-blur-xs">
-                            {{ $flagshipSec?->subheadline ?: '★ Annual Flagship Festival' }}
+                            {!! format_cms_text($flagshipSec?->subheadline ?: '★ Annual Flagship Festival') !!}
                         </div>
                         <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
-                            {{ $flagshipSec?->headline ?: 'Ijero Tech Day (ITD)' }}
+                            {!! format_cms_text($flagshipSec?->headline ?: 'Ijero Tech Day (ITD)') !!}
                         </h2>
                         <p class="text-base sm:text-lg text-cream/90 leading-relaxed max-w-2xl">
-                            {{ $flagshipSec?->body_text ?: 'Our premier annual gathering celebrating student innovation, robotics showcases, youth hackathons, and high-impact tech industry mentorship in Ijero-Ekiti.' }}
+                            {!! format_cms_text($flagshipSec?->body_text ?: 'Our premier annual gathering celebrating student innovation, robotics showcases, youth hackathons, and high-impact tech industry mentorship in Ijero-Ekiti.') !!}
                         </p>
                         <div class="flex flex-wrap items-center gap-3 pt-2">
                             <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-white/10 text-white border border-white/15">
@@ -141,7 +141,7 @@
                     <div class="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-3 justify-center items-start lg:items-end">
                         <a href="{{ url($flagshipSec?->button_url ?: route('events.show', 'ijero-tech-day-2026')) }}" 
                            class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full text-sm font-bold bg-[var(--accent-cream)] text-maroon hover:bg-white transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer w-full sm:w-auto text-center">
-                            <span>{{ $flagshipSec?->button_text ?: 'Explore Tech Day Flagship' }}</span>
+                            <span>{!! format_cms_text($flagshipSec?->button_text ?: 'Explore Tech Day Flagship') !!}</span>
                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                             </svg>
@@ -164,14 +164,14 @@
             <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
                 <div>
                     <span class="text-xs font-bold uppercase tracking-widest text-crimson dark:text-mint">
-                        {{ $catalogSec?->subheadline ?: 'Intervention Catalog' }}
+                        {!! format_cms_text($catalogSec?->subheadline ?: 'Intervention Catalog') !!}
                     </span>
                     <h2 class="text-3xl font-extrabold text-[var(--heading)] tracking-tight mt-1">
-                        {{ $catalogSec?->headline ?: 'Continuous Educational Initiatives' }}
+                        {!! format_cms_text($catalogSec?->headline ?: 'Continuous Educational Initiatives') !!}
                     </h2>
                 </div>
                 <p class="text-sm text-[var(--text-muted)] max-w-md">
-                    {{ $catalogSec?->body_text ?: 'Explore our continuous projects supporting classrooms, libraries, digital hubs, and young scholars.' }}
+                    {!! format_cms_text($catalogSec?->body_text ?: 'Explore our continuous projects supporting classrooms, libraries, digital hubs, and young scholars.') !!}
                 </p>
             </div>
 
@@ -243,21 +243,21 @@
 
         <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
             <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-[var(--accent-cream)]/20 text-[var(--accent-cream)] border border-[var(--accent-cream)]/30 backdrop-blur-xs">
-                {{ $ctaSec?->subheadline ?: 'Empower a Classroom' }}
+                {!! format_cms_text($ctaSec?->subheadline ?: 'Empower a Classroom') !!}
             </span>
 
             <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
-                {{ $ctaSec?->headline ?: 'Help Us Expand These Transformative Initiatives' }}
+                {!! format_cms_text($ctaSec?->headline ?: 'Help Us Expand These Transformative Initiatives') !!}
             </h2>
 
             <p class="text-base sm:text-lg text-white/90 max-w-2xl mx-auto leading-relaxed">
-                {{ $ctaSec?->body_text ?: 'Your partnership provides desktop computers, school books, scholarship grants, and expert mentorship to children who need it most.' }}
+                {!! format_cms_text($ctaSec?->body_text ?: 'Your partnership provides desktop computers, school books, scholarship grants, and expert mentorship to children who need it most.') !!}
             </p>
 
             <div class="flex flex-wrap items-center justify-center gap-4 pt-4">
                 <a href="{{ url($ctaSec?->button_url ?: '/donate') }}" 
                    class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-bold bg-white text-maroon hover:bg-[var(--accent-cream)] transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer">
-                    {{ $ctaSec?->button_text ?: 'Sponsor an Initiative' }}
+                    {!! format_cms_text($ctaSec?->button_text ?: 'Sponsor an Initiative') !!}
                 </a>
                 <a href="{{ url('/get-involved') }}" 
                    class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-semibold border-2 border-white/80 text-white hover:bg-white/10 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer">
