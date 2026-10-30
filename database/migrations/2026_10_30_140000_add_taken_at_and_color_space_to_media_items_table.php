@@ -1,0 +1,29 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('media_items', function (Blueprint $table) {
+            $table->timestamp('taken_at')->nullable()->after('height');
+            $table->string('color_space', 50)->nullable()->after('taken_at');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('media_items', function (Blueprint $table) {
+            $table->dropColumn(['taken_at', 'color_space']);
+        });
+    }
+};

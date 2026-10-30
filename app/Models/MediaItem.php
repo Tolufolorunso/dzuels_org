@@ -24,6 +24,8 @@ class MediaItem extends Model
         'mime_type',
         'width',
         'height',
+        'taken_at',
+        'color_space',
         'title',
         'caption',
         'alt_text',
@@ -32,6 +34,22 @@ class MediaItem extends Model
         'is_public',
         'gallery_album_id',
         'gallery_photo_id',
+    ];
+
+    /**
+     * The accessors to append to the model's array and JSON form.
+     *
+     * @var list<string>
+     */
+    protected $appends = [
+        'image_url',
+        'formatted_size',
+        'dimensions',
+        'aspect_ratio',
+        'formatted_taken_at',
+        'capture_date_formatted',
+        'color_space_badge',
+        'formatted_date',
     ];
 
     /**
@@ -45,6 +63,7 @@ class MediaItem extends Model
             'file_size' => 'integer',
             'width' => 'integer',
             'height' => 'integer',
+            'taken_at' => 'datetime',
             'year' => 'integer',
             'is_public' => 'boolean',
             'gallery_album_id' => 'integer',
@@ -105,6 +124,66 @@ class MediaItem extends Model
         }
 
         return 'Auto';
+    }
+
+    /**
+     * Approximate aspect ratio (e.g. 16:9, 4:3, 1:1, 3:2).
+     */
+    public function getAspectRatioAttribute(): string
+    {
+        if (! $this->width || ! $this->height) {
+            return 'Auto';
+        }
+
+        $ratio = $this->width / $this->height;
+
+        if (abs($ratio - 16 / 9) < 0.08) {
+            return '16:9';
+        }
+        if (abs($ratio - 4 / 3) < 0.08) {
+            return '4:3';
+        }
+        if (abs($ratio - 3 / 2) < 0.08) {
+            return '3:2';
+        }
+        if (abs($ratio - 1.0) < 0.05) {
+            return '1:1';
+        }
+        if (abs($ratio - 9 / 16) < 0.08) {
+            return '9:16 (Portrait)';
+        }
+        if (abs($ratio - 3 / 4) < 0.08) {
+            return '3:4 (Portrait)';
+        }
+        if (abs($ratio - 2 / 3) < 0.08) {
+            return '2:3 (Portrait)';
+        }
+
+        return number_format($ratio, 2).':1';
+    }
+
+    /**
+     * Formatted capture date and time (e.g. "Oct 3, 2026, 10:15 AM").
+     */
+    public function getFormattedTakenAtAttribute(): ?string
+    {
+        return $this->taken_at ? $this->taken_at->format('M d, Y, h:i A') : null;
+    }
+
+    /**
+     * Short display capture date (e.g. "Oct 3, 2026").
+     */
+    public function getCaptureDateFormattedAttribute(): string
+    {
+        return $this->taken_at ? $this->taken_at->format('M d, Y') : 'Unknown';
+    }
+
+    /**
+     * Resolved color space badge string (default: sRGB).
+     */
+    public function getColorSpaceBadgeAttribute(): string
+    {
+        return $this->color_space ?: 'sRGB';
     }
 
     /**
@@ -245,12 +324,16 @@ class MediaItem extends Model
     {
         return match ($sort) {
             'oldest' => $query->orderBy('created_at', 'asc')->orderBy('id', 'asc'),
+            'captured_desc' => $query->orderByRaw('taken_at IS NULL, taken_at DESC')->orderBy('created_at', 'desc')->orderBy('id', 'desc'),
+            'captured_asc' => $query->orderByRaw('taken_at IS NULL, taken_at ASC')->orderBy('created_at', 'asc')->orderBy('id', 'asc'),
             'year_desc' => $query->orderByRaw('year IS NULL, year DESC')->orderBy('created_at', 'desc')->orderBy('id', 'desc'),
             'year_asc' => $query->orderByRaw('year IS NULL, year ASC')->orderBy('created_at', 'asc')->orderBy('id', 'asc'),
             'name_asc' => $query->orderBy('filename', 'asc'),
             'name_desc' => $query->orderBy('filename', 'desc'),
             'size_asc' => $query->orderBy('file_size', 'asc'),
             'size_desc' => $query->orderBy('file_size', 'desc'),
+            'dimensions_desc' => $query->orderByRaw('(COALESCE(width, 0) * COALESCE(height, 0)) DESC')->orderBy('created_at', 'desc')->orderBy('id', 'desc'),
+            'dimensions_asc' => $query->orderByRaw('(COALESCE(width, 0) * COALESCE(height, 0)) ASC')->orderBy('created_at', 'asc')->orderBy('id', 'asc'),
             default => $query->orderBy('created_at', 'desc')->orderBy('id', 'desc'),
         };
     }

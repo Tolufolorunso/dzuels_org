@@ -7,6 +7,8 @@ use App\Models\GalleryAlbum;
 use App\Models\GalleryPhoto;
 use App\Models\MediaItem;
 use App\Services\ImageOptimizerService;
+use App\Services\MediaMetadataExtractor;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -30,6 +32,10 @@ class MediaLibraryController extends Controller
         $yearFilter = $request->query('year', 'all');
         $visibility = $request->query('visibility', 'all');
         $sort = $request->query('sort', 'newest');
+        $perPage = (int) $request->query('per_page', 80);
+        if (! in_array($perPage, [80, 150, 250, 500], true)) {
+            $perPage = 80;
+        }
 
         $query = MediaItem::query()
             ->search($search)
@@ -39,7 +45,7 @@ class MediaLibraryController extends Controller
             ->byVisibility($visibility)
             ->ordered($sort);
 
-        $mediaItems = $query->paginate(24)->withQueryString();
+        $mediaItems = $query->paginate($perPage)->withQueryString();
 
         // Calculate library metrics
         $totalCount = MediaItem::count();
@@ -83,6 +89,8 @@ class MediaLibraryController extends Controller
             'currentYear' => $yearFilter,
             'currentVisibility' => $visibility,
             'currentSort' => $sort,
+            'currentPerPage' => $perPage,
+            'availablePerPage' => [80, 150, 250, 500],
             'effectiveMaxUploadSize' => ini_get('upload_max_filesize') ?: '16M',
         ]);
     }
@@ -135,7 +143,7 @@ class MediaLibraryController extends Controller
     /**
      * Handle single or batch drag-and-drop file uploads into the library.
      */
-    public function upload(Request $request, ImageOptimizerService $optimizer): JsonResponse
+    public function upload(Request $request, ImageOptimizerService $optimizer, MediaMetadataExtractor $extractor): JsonResponse
     {
         if ($failureMessage = $this->getUploadFailureMessage($request)) {
             return response()->json([
@@ -187,6 +195,10 @@ class MediaLibraryController extends Controller
         $createdItems = [];
 
         foreach ($uploadedFiles as $file) {
+            // Extract raw EXIF metadata from original upload before GD processing
+            $rawPath = $file->getRealPath();
+            $originalMeta = $rawPath ? $extractor->extract($rawPath) : [];
+
             $optimizedPath = $optimizer->optimize(
                 $file,
                 'uploads/media',
@@ -216,13 +228,18 @@ class MediaLibraryController extends Controller
                 $itemYear = (int) $yearMatches[1];
             }
 
+            $takenAt = $originalMeta['taken_at'] ?? null;
+            $colorSpace = $originalMeta['color_space'] ?? 'sRGB';
+
             $item = MediaItem::create([
                 'filename' => basename($optimizedPath),
                 'file_path' => $optimizedPath,
-                'file_size' => $fileSize,
+                'file_size' => $fileSize ?: ($originalMeta['file_size'] ?? 0),
                 'mime_type' => $mimeType,
-                'width' => $dimensions[0] ?? null,
-                'height' => $dimensions[1] ?? null,
+                'width' => $dimensions[0] ?? ($originalMeta['width'] ?? null),
+                'height' => $dimensions[1] ?? ($originalMeta['height'] ?? null),
+                'taken_at' => $takenAt,
+                'color_space' => $colorSpace,
                 'title' => $humanTitle,
                 'caption' => null,
                 'alt_text' => $humanTitle,
@@ -242,6 +259,10 @@ class MediaLibraryController extends Controller
                 'alt_text' => $item->alt_text,
                 'formatted_size' => $item->formatted_size,
                 'dimensions' => $item->dimensions,
+                'aspect_ratio' => $item->aspect_ratio,
+                'taken_at' => $item->taken_at?->toIso8601String(),
+                'formatted_taken_at' => $item->formatted_taken_at,
+                'color_space' => $item->color_space,
                 'date_formatted' => $item->formatted_date,
                 'source_type' => $item->source_type,
                 'year' => $item->year,
@@ -377,7 +398,7 @@ class MediaLibraryController extends Controller
     }
 
     /**
-     * Update metadata (title, caption, alt_text, gallery_album_id, year, is_public) for a media item.
+     * Update metadata (title, caption, alt_text, gallery_album_id, year, taken_at, is_public) for a media item.
      */
     public function update(Request $request, MediaItem $mediaItem): JsonResponse|RedirectResponse
     {
@@ -387,6 +408,7 @@ class MediaLibraryController extends Controller
             'alt_text' => ['nullable', 'string', 'max:500'],
             'gallery_album_id' => ['nullable', 'integer', 'exists:gallery_albums,id'],
             'year' => ['nullable', 'integer', 'min:2000', 'max:2100'],
+            'taken_at' => ['nullable', 'date'],
             'is_public' => ['nullable', 'boolean'],
         ]);
 
@@ -394,10 +416,29 @@ class MediaLibraryController extends Controller
             $validated['source_type'] = $validated['gallery_album_id'] ? 'gallery' : 'general';
         }
 
+        if (array_key_exists('taken_at', $validated)) {
+            if (! empty($validated['taken_at'])) {
+                $takenAt = Carbon::parse($validated['taken_at']);
+                $validated['taken_at'] = $takenAt;
+                $validated['year'] = $takenAt->year;
+            } else {
+                $validated['taken_at'] = null;
+            }
+        }
+
         $mediaItem->update($validated);
 
-        if (array_key_exists('is_public', $validated) && $mediaItem->gallery_photo_id) {
-            GalleryPhoto::where('id', $mediaItem->gallery_photo_id)->update(['is_public' => (bool) $validated['is_public']]);
+        if ($mediaItem->gallery_photo_id) {
+            $photoUpdates = [];
+            if (array_key_exists('is_public', $validated)) {
+                $photoUpdates['is_public'] = (bool) $validated['is_public'];
+            }
+            if (isset($validated['year'])) {
+                $photoUpdates['year'] = $validated['year'];
+            }
+            if (! empty($photoUpdates)) {
+                GalleryPhoto::where('id', $mediaItem->gallery_photo_id)->update($photoUpdates);
+            }
         }
 
         if ($request->wantsJson()) {
@@ -433,6 +474,123 @@ class MediaLibraryController extends Controller
         }
 
         return back()->with('success', 'Media item permanently removed from library.');
+    }
+
+    /**
+     * Perform bulk operations (assign_album, set_visibility, update_date, delete) across multiple media items.
+     */
+    public function bulkAction(Request $request): JsonResponse|RedirectResponse
+    {
+        $validated = $request->validate([
+            'action' => ['required', 'string', 'in:assign_album,set_visibility,update_date,delete'],
+            'media_ids' => ['required', 'array', 'min:1'],
+            'media_ids.*' => ['integer', 'exists:media_items,id'],
+            'gallery_album_id' => ['nullable'],
+            'is_public' => ['nullable', 'boolean'],
+            'taken_at' => ['nullable', 'date'],
+            'year' => ['nullable', 'integer', 'min:2000', 'max:2035'],
+        ]);
+
+        $mediaIds = $validated['media_ids'];
+        $action = $validated['action'];
+        $affected = 0;
+
+        switch ($action) {
+            case 'assign_album':
+                $albumId = ! empty($validated['gallery_album_id']) ? (int) $validated['gallery_album_id'] : null;
+                $album = $albumId ? GalleryAlbum::find($albumId) : null;
+                $sourceType = $album ? 'gallery' : 'general';
+
+                $affected = MediaItem::whereIn('id', $mediaIds)->update([
+                    'gallery_album_id' => $albumId,
+                    'source_type' => $sourceType,
+                ]);
+
+                $message = $album
+                    ? "Successfully assigned {$affected} photo(s) to collection '{$album->title}'."
+                    : "Successfully unassigned {$affected} photo(s) from collections.";
+                break;
+
+            case 'set_visibility':
+                $isPublic = $request->boolean('is_public');
+                $affected = MediaItem::whereIn('id', $mediaIds)->update([
+                    'is_public' => $isPublic,
+                ]);
+
+                $linkedPhotoIds = MediaItem::whereIn('id', $mediaIds)
+                    ->whereNotNull('gallery_photo_id')
+                    ->pluck('gallery_photo_id')
+                    ->all();
+
+                if (! empty($linkedPhotoIds)) {
+                    GalleryPhoto::whereIn('id', $linkedPhotoIds)->update(['is_public' => $isPublic]);
+                }
+
+                $label = $isPublic ? 'Public in Gallery' : 'Archive (Hidden from Public Gallery)';
+                $message = "Successfully marked {$affected} photo(s) as {$label}.";
+                break;
+
+            case 'update_date':
+                $updates = [];
+                $takenAt = ! empty($validated['taken_at']) ? Carbon::parse($validated['taken_at']) : null;
+                $year = ! empty($validated['year']) ? (int) $validated['year'] : ($takenAt?->year ?? null);
+
+                if ($takenAt !== null) {
+                    $updates['taken_at'] = $takenAt;
+                }
+                if ($year !== null) {
+                    $updates['year'] = $year;
+                }
+
+                if (! empty($updates)) {
+                    $affected = MediaItem::whereIn('id', $mediaIds)->update($updates);
+
+                    if (isset($updates['year'])) {
+                        $linkedPhotoIds = MediaItem::whereIn('id', $mediaIds)
+                            ->whereNotNull('gallery_photo_id')
+                            ->pluck('gallery_photo_id')
+                            ->all();
+
+                        if (! empty($linkedPhotoIds)) {
+                            GalleryPhoto::whereIn('id', $linkedPhotoIds)->update(['year' => $updates['year']]);
+                        }
+                    }
+                }
+
+                $dateLabel = $takenAt ? $takenAt->format('d M Y') : "Year {$year}";
+                $message = "Successfully updated date to '{$dateLabel}' across {$affected} photo(s).";
+                break;
+
+            case 'delete':
+                $items = MediaItem::whereIn('id', $mediaIds)->get();
+                foreach ($items as $item) {
+                    $filePath = $item->file_path;
+                    if (str_starts_with($filePath, 'uploads/') && File::exists(public_path($filePath))) {
+                        @unlink(public_path($filePath));
+                    }
+
+                    if ($item->gallery_photo_id) {
+                        GalleryPhoto::where('id', $item->gallery_photo_id)->delete();
+                    }
+
+                    $item->delete();
+                    $affected++;
+                }
+
+                $message = "Successfully deleted {$affected} photo(s).";
+                break;
+        }
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'action' => $action,
+                'affected' => $affected,
+                'message' => $message,
+            ]);
+        }
+
+        return back()->with('success', $message);
     }
 
     /**
@@ -504,6 +662,10 @@ class MediaLibraryController extends Controller
                 'alt_text' => $item->alt_text,
                 'formatted_size' => $item->formatted_size,
                 'dimensions' => $item->dimensions,
+                'aspect_ratio' => $item->aspect_ratio,
+                'taken_at' => $item->taken_at?->toIso8601String(),
+                'formatted_taken_at' => $item->formatted_taken_at,
+                'color_space' => $item->color_space ?: 'sRGB',
                 'date_formatted' => $item->formatted_date,
                 'source_type' => $item->source_type,
                 'year' => $item->year,

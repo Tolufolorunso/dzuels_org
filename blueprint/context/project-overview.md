@@ -1,6 +1,6 @@
 # Dzuels Educational Foundation - Project Overview
 
-<!-- blueprint:source-hash 58a04c705f8fb9ba8395f647d53ac4d5f22085199a699688610ca6942b83e62b -->
+<!-- blueprint:source-hash 5d783cfb8b8cd73aa52f89650db452fa03caf0e04a505723797fa51cb8811e2a -->
 
 > Rebuild of dzuelsfoundation.org as a modern, high-trust, mobile-first Laravel web application powering education support, digital literacy, and community welfare in Nigeria.
 
@@ -10,11 +10,12 @@ Dzuels Educational Foundation is a Nigerian charity (founded June 2015, register
 
 The web application was rebuilt from the ground up to establish an authentic, high-performance, mobile-first platform for donors, volunteers, event attendees, and beneficiaries.
 
-- **Milestones 1–10 (Completed & Shipped):** Overhauled platform across 32 features: WCAG 2.2 AA accessibility, responsive design, brand asset suite, ITD overhaul, server-rendered lightbox, WordPress-style Page CMS, multi-tier RBAC (`super_admin`, `editor`, `support`), MySQL export tooling, hotline updates, hero overlays, dynamic contact CMS, dynamic partners strip, resilient media pipeline with GD fallback, multi-photo bulk uploader, dynamic site logo in settings, Givebutter U.S. donations, authentic 6 Impact Causes CMS, $\le 180\text{ KB}$ WebP optimization engine, dynamic 4-photo Famoyinka Library CMS, Get Involved overhaul, universal media picker `<x-admin.media-picker>`, Central Media Hub (`/admin/media`), dynamic media collections, multimodal Gemini AI content assistant, server compression, and full Schema.org structured data suite.
-- **Milestone 11 (Completed & Shipped):** Events Architecture, Tech Day Flagship Showcase & Media Hub Overhaul across Features 33–35: multi-criteria sorting and year filter chips (`2024`, `2025`, `2026`) in Media Hub, Tech Day separation from `/programmes` with 301 permanent redirects, multi-year showcase for 2024 (Inaugural), 2025 (2nd Edition), and 2026 (AI Empowerment Edition), full ingestion and WebP optimization ($\le 180\text{ KB}$) of 1,854 photos from `gallery/` and 132 photos from `final/`, production database SQL dump refresh (`dzuels_database.sql` with 25 tables and 4,434 rows), and deployment manifest synchronization.
+- **Milestones 1–10 (Completed & Shipped):** Core Platform, Layout, CMS, Authentication, SEO, Image Optimization, Famoyinka Library, Central Media Hub, Dynamic Collections, Givebutter U.S. donations, and Gemini Multimodal AI Assistant.
+- **Milestone 11 (Completed & Shipped):** Events Architecture, Tech Day Flagship Showcase & Media Hub Overhaul across Features 33–35: multi-criteria sorting and year filter chips (`2024`, `2025`, `2026`) in Media Hub, Tech Day separation from `/programmes` with 301 redirects, multi-year showcase for 2024 (Inaugural), 2025 (2nd Edition), and 2026 (AI Empowerment Edition), full ingestion and WebP optimization ($\le 180\text{ KB}$) of 1,854 photos from `gallery/` and 132 photos from `final/`, production database SQL dump refresh (`dzuels_database.sql` with 25 tables and 4,434 rows), and deployment manifest synchronization.
 - **Milestone 12 (Completed & Shipped):** Production UI & Experience Polish, Media Visibility Control & Brand Corrections across Features 36–38: Ijero Tech Day brand alignment, media gallery visibility toggles, anti-flash public gallery performance (`x-cloak`, fixed 4:3 aspect containers), dynamic event date status computation (`is_past`, `is_future`, `is_today`, `status_label`), Flutterwave removal from `/donate` with elevated GTBank 1-click transfer and Givebutter U.S. giving, and balanced centered intake layout on `/get-involved`.
 - **Milestone 13 (Completed & Shipped):** Giving channel correction (purged mock wire accounts, added "Why Donate" stewardship card), Tech Day event show page centered layout overhaul, and Pages CMS full content parity across all public pages with visibility toggles and section reordering (Features 39–40).
-- **Milestone 14: Institutional Copy Corrections, Pages CMS Modular Overhaul, Tech Day Event Redesign & Deep Media Hub Metadata (Active Target, Features 41–44):** Historical accuracy corrections (foundation established computer lab and library at Dzuels Foundation in Ijero-Ekiti benefiting 500+ students, trained 30 teachers; did not equip public schools) and 4 exact institutional copy replacements; new `Transformational leadership (TRANSCOMM)` programme; Pages CMS modular component architecture (About page archetype) with inline text styling tags (`[accent]`, `[crimson]`, `[mint]`, `[bold]`) and 1-click editor buttons; Tech Day event show page redesign aligned with Homepage UI structure; and Central Media Hub deep metadata (capture timestamp, color space, file properties), configurable per-page pagination (50–150), sorting, and interactive zoom controls.
+- **Milestone 14 (Completed & Shipped):** Historical accuracy corrections (foundation established computer lab and library at Dzuels Foundation in Ijero-Ekiti benefiting 500+ students, trained 30 teachers; did not equip public schools) and 4 exact institutional copy replacements; new `Transformational leadership (TRANSCOMM)` programme; Pages CMS modular component architecture with inline text styling tags (`[accent]`, `[crimson]`, `[mint]`, `[bold]`) and 1-click editor buttons; Tech Day event show page redesign aligned with Homepage UI structure; and Central Media Hub deep EXIF metadata (capture timestamp, color space, file properties), pagination, sorting, and interactive zoom controls (Features 41–44).
+- **Milestone 15: Unified Central Media Architecture, Event & Programme Photo Galleries, High-Capacity Media Hub & Stewardship Truthfulness (Active Target, Features 45–47):** Unify all site imagery through the Central Media Hub with universal upload optimization ($\le 180\text{ KB}$ WebP) and registration in `media_items`; expand Media Hub pagination to 80–500 photos per page with bulk tools and full calendar date editing (`taken_at`: Day, Month, Year); overhaul gallery album photo management to default to the central picker; add multi-photo gallery management to events and programmes with public lightbox viewing; dynamically align the Homepage ITD showcase to reflect completed event status with highlights; and conduct a complete site-wide purge of "Zero Administrative Deductions" and "equips public school computer labs".
 
 ## Users
 
@@ -23,8 +24,8 @@ The web application was rebuilt from the ground up to establish an authentic, hi
 - **Event Participants & Schools:** Students and educators attending Ijero Tech Day (ITD), reading competitions, spelling bees, essay contests, and girls in tech initiatives.
 - **Beneficiaries, Parents & Students:** Community members accessing literacy resources, activities, and the Famoyinka Memorial Children's Library.
 - **Foundation Staff (Role-Based Admin Users):**
-  - **Super Admin:** Full platform control, managing staff accounts, AI configuration and Gemini API keys, role permissions, global settings (logo, multi-phone lines, Givebutter link, hours/timezone), media library collections, deletions, and database exports.
-  - **Editor / Content Manager:** Accessing the Central Media Library to toggle gallery visibility, curate collections, upload and organize photos, update living page content, toggle and reorder page sections, manage programmes, events, sponsors, partner logos, and generate copy with the Gemini AI assistant.
+  - **Super Admin:** Full platform control, managing staff accounts, AI configuration and Gemini API keys, role permissions, global settings (logo, multi-phone lines, Givebutter link, hours/timezone), media library collections, bulk photo operations, deletions, and database exports.
+  - **Editor / Content Manager:** Accessing the Central Media Library to toggle gallery visibility, curate collections, upload and organize photos, update living page content, manage event/programme photo galleries, toggle and reorder page sections, manage programmes, events, sponsors, partner logos, and generate copy with the Gemini AI assistant.
   - **Support / Viewer:** Reading incoming contact enquiries, volunteer submissions, and partner proposals.
 
 ## Usage model
@@ -36,33 +37,15 @@ The web application was rebuilt from the ground up to establish an authentic, hi
 
 ## Features
 
-### Milestones 1–10 Features (Completed & Shipped)
+### Milestones 1–14 Features (Completed & Shipped)
 
-1–32. Core Platform, Layout, CMS, Authentication, SEO, Image Optimization, Famoyinka Library, Media Hub, Dynamic Collections, and Gemini AI Assistant. *(Completed & Shipped)*
+1–44. Core Platform, Layout, CMS, Authentication, SEO, Image Optimization, Famoyinka Library, Media Hub, Dynamic Collections, Gemini AI Assistant, Tech Day Flagship Showcase, Giving Channels, Modular Pages CMS, Institutional Facts, and Deep EXIF Metadata. *(Completed & Shipped)*
 
-### Milestone 11 Features (Completed & Shipped)
+### Milestone 15 Features (Active Target)
 
-33. **Media Hub sorting, year filtering & universal photo picker overhaul** - Multi-criteria sorting and quick year chips (`2024`, `2025`, `2026`) in Media Hub and modal picker. *(Completed & Shipped)*
-34. **Tech Day event architecture, multi-year showcase (2024, 2025, 2026) & programme separation** - Separation of Tech Day from `/programmes` with 301 redirects, multi-year festival edition switching, and curated 132-photo ingestion from `final/`. *(Completed & Shipped)*
-35. **Media integration, production SQL database export & launch verification** - Full 1,854-photo ingestion from `gallery/`, brand asset compression ($\le 180\text{ KB}$ WebP), fresh `dzuels_database.sql` export (25 tables, 4,434 rows), and launch readiness verification (0 failures). *(Completed & Shipped)*
-
-### Milestone 12 Features (Completed & Shipped)
-
-36. **Ijero Tech Day brand correction, Media visibility controls & universal picker overhaul** - Brand naming alignment from "Innovation and Tech Day" to "Ijero Tech Day" (ITD); Media Hub public gallery visibility toggles and active "Used on Website" / "Displayed in Gallery" indicators; and universal media picker availability across all library photos. *(Completed & Shipped)*
-37. **Public Gallery anti-flash performance & Tech Day event UI overhaul with dynamic date status & SEO** - Elimination of photo loading flashes on `/gallery` with `x-cloak` and curated display; dynamic event date status computation (`is_past`, `is_future`, `is_today`, `status_label`); and festival typography with rich Schema.org Event JSON-LD. *(Completed & Shipped)*
-38. **Public page UI redesign for `/donate` (Flutterwave removal) and `/get-involved` (balanced, centered layout)** - Flutterwave removal from `/donate` while elevating GTBank 1-click transfer and Givebutter U.S. giving in a 4-channel grid; and redesign of `/get-involved` into a balanced, centered layout with distinct pathway cards. *(Completed & Shipped)*
-
-### Milestone 13 Features (Completed & Shipped)
-
-39. **Giving channel correction (remove mock wires, add "Why Donate") & Tech Day event show page centered UI overhaul** - Purged mock Domiciliary wire accounts and Swift code from `/donate`, replacing them with an authoritative "Why Donate to Our Cause" card highlighting 100% direct learner impact, zero administrative deductions, CAC legal standing, and tangible outcomes; and redesigned the Tech Day event show page (`/events/ijero-tech-day-[year]`) into a centered, balanced festival experience with centered hero metrics, edition switcher pills, countdown timer, and balanced narrative and milestones cards. *(Completed & Shipped)*
-40. **Pages CMS overhaul: dynamic public content parity, visibility toggles & section reordering** - Added `is_active` to `page_sections` with admin toggle switches and move up/down sort controls; and synchronized CMS sections and seeders across `/about`, `/donate`, `/programmes`, `/contact`, and `/get-involved` with the exact living content the public sees. *(Completed & Shipped)*
-
-### Milestone 14 Features (Active Target)
-
-41. **Institutional fact corrections, living copy updates & Transformational Leadership (TRANSCOMM) programme** - Correct historical statements across seeders and public templates (foundation did not equip public schools; established computer lab and resourceful library at Dzuels Foundation in Ijero-Ekiti benefiting 500+ students, and trained 30 teachers); apply 4 exact institutional copy updates across views and seeders; add and seed new programme `Transformational leadership (TRANSCOMM)`; and synchronize baseline metrics across `SettingSeeder`, `ImpactStatsService`, and public statistics.
-42. **Pages CMS modular component architecture & universal inline text styling** - Overhaul `/admin/pages/{page}` based on real page archetypes (such as `/about` with Hero, Story with 3 stats & floating badge, 6 Approach Pillars, Famoyinka Library with 4 feature bullets, Governance section intros, and CTA banner); store structured component sub-items in `page_sections.meta_data` JSON with dedicated admin repeater inputs; implement safe inline text styling tags (`[accent]text[/accent]`, `[crimson]text[/crimson]`, `[mint]text[/mint]`, `[bold]text[/bold]`, etc.) parsed via helper `format_cms_text()` with 1-click styling helper buttons in the CMS editor; and connect public page Blade templates to parse and render styled CMS text.
-43. **Ijero Tech Day event show page redesign (Homepage UI layout alignment)** - Redesign `/events/ijero-tech-day-[year]` to mirror the visual structure, balance, and rhythm of the Homepage UI; full-bleed rich hero with dark burgundy/navy gradient, decorative pattern overlay, dynamic status pill ("Upcoming Flagship" vs "Past Festival"), and edition switcher pills (`2024`, `2025`, `2026`); floating 4-metric banner matching homepage style (`-mt-12 relative z-20 mx-auto max-w-6xl shadow-xl rounded-2xl bg-white border border-stone-200 p-6 grid grid-cols-2 lg:grid-cols-4 gap-6`); 2-column balanced story & media section; 3-column milestone celebration card; full-width interactive agenda & schedule timeline; and full-bleed radial maroon CTA section matching homepage CTA.
-44. **Central Media Hub deep metadata, pagination, sorting & zoom controls** - Add `taken_at` (timestamp, nullable) and `color_space` (string, nullable) to `media_items` table via migration; extract exact capture timestamp (`taken_at`), color space (sRGB, Adobe RGB), file type (JPEG, PNG, RAW/DNG, WebP), file size, and pixel dimensions ($W \times H$) from EXIF data; backfill existing media files with extracted EXIF metadata; display comprehensive photo metadata on photo cards and via an interactive inspector modal in `/admin/media`; provide configurable per-page pagination selector (`50`, `80`, `100`, `120`, `150`, default: `50`); multi-criteria sorting by capture date/time, upload date/time, file size, dimensions, and title; and interactive photo grid zoom controls (compact, normal, large, extra-large) to inspect images clearly.
+45. **Central Media Hub unification, high-capacity pagination (80–500), bulk management & calendar date metadata** - Expand Media Hub (`/admin/media`) pagination selector to `80`, `150`, `250`, and `500` photos per page (default: `80`); add full calendar capture date editing (`taken_at`: Day, Month, Year) in photo edit modals, keeping `year` in sync automatically and enabling manual correction of misdated photos; implement multi-select bulk operations (bulk assign to albums/collections, bulk assign to events or programmes, bulk toggle public gallery visibility, bulk update date/year, and bulk delete); and enforce the universal pipeline rule that every photo uploaded anywhere on the platform is automatically optimized ($\le 180\text{ KB}$ WebP) and immediately registered into `media_items`.
+46. **Universal photo picker integration for Gallery Albums, Events & Programmes with public lightbox showcase** - Overhaul `/admin/gallery/{album}/photos` so the default interface selects existing photos from the Central Media Hub, with direct uploading as a secondary option; add multi-photo gallery management to `/admin/events/{id}/edit` and `/admin/programmes/{id}/edit` powered by the central media picker and direct-to-hub upload fallback; and render attached event and programme photos on public `/events/{slug}` and `/programmes/{slug}` pages in a responsive photo grid with the existing interactive lightbox viewer.
+47. **Homepage Flagship Event status dynamic alignment & site-wide institutional copy corrections** - Redesign Homepage Section 8 to eliminate hardcoded upcoming copy and dynamically reflect the event's completed status ("Recent Flagship Event • Highlights") with active links to the event showcase and gallery; purge "Zero Administrative Deductions" and false claims about the Board funding all admin overhead from `/donate`, replacing with grounded stewardship transparency; and perform a comprehensive site-wide purge replacing all lingering claims of "equips public school computer labs" across views, controllers, seeders, and SQL dumps with the verified fact that Dzuels Foundation equipped its own computer lab and library at Dzuels Foundation in Ijero-Ekiti (500+ students benefited) and urgently needs support to expand.
 
 ### Deferred Ideas (Non-Roadmap)
 
@@ -78,22 +61,24 @@ The web application was rebuilt from the ground up to establish an authentic, hi
 ### MediaItem / Unified Asset Catalog
 - `id` (bigint, PK), `filename` (string), `file_path` (string), `file_size` (integer), `mime_type` (string), `width` (integer, nullable), `height` (integer, nullable), `taken_at` (timestamp, nullable), `color_space` (string, nullable), `title` (string, nullable), `caption` (text, nullable), `alt_text` (text, nullable), `source_type` (string), `year` (integer, nullable), `is_public` (boolean), `gallery_album_id` (bigint, FK, nullable), `gallery_photo_id` (bigint, FK, nullable), `timestamps`
 
+### Event, EventMedia & EventSponsor
+- `events`: `id`, `title`, `slug`, `summary`, `description`, `objective`, `event_date`, `venue`, `banner_image`, `schedule` (json), `is_registration_open`, `sort_order`, `is_active`, `timestamps`
+- `event_media` / event photos: `id`, `event_id` (FK), `media_item_id` (FK), `sort_order` (integer), `timestamps`
+- `event_sponsors`: `id`, `event_id` (FK), `name`, `logo_path`, `tier`, `website_url`, `sort_order`, `timestamps`
+
+### Programme & ProgrammeMedia
+- `programmes`: `id` (bigint, PK), `title` (string), `slug` (string, unique), `summary` (text), `body` (longText), `cover_image` (string, nullable), `partner_name` (string, nullable), `sort_order` (integer), `is_featured` (boolean), `timestamps`
+- `programme_media` / programme photos: `id`, `programme_id` (FK), `media_item_id` (FK), `sort_order` (integer), `timestamps`
+
 ### Page & PageSection (Dynamic CMS)
 - `id` (bigint, PK), `page_key` (string), `section_key` (string), `headline` (string, nullable), `subheadline` (string, nullable), `body_text` (text, nullable), `image_path` (string, nullable), `button_text` (string, nullable), `button_url` (string, nullable), `meta_data` (json, nullable), `sort_order` (integer), `is_active` (boolean), `timestamps`
 
-### Event & EventSponsor
-- `events`: `id`, `title`, `slug`, `summary`, `description`, `objective`, `event_date`, `venue`, `banner_image`, `schedule` (json), `is_registration_open`, `sort_order`, `is_active`, `timestamps`
-- `event_sponsors`: `id`, `event_id` (FK), `name`, `logo_path`, `tier`, `website_url`, `sort_order`, `timestamps`
+### GalleryAlbum & GalleryPhoto
+- `gallery_albums`: `id`, `title`, `slug`, `kicker`, `description`, `cover_image`, `sort_order`, `is_active`, `timestamps`
+- `gallery_photos`: `id`, `gallery_album_id` (FK), `media_item_id` (FK, nullable), `image_path`, `caption`, `alt_text`, `year` (integer, nullable), `sort_order`, `is_public` (boolean), `timestamps`
 
 ### Setting
 - `id` (bigint, PK), `key` (string, unique) - `gemini_api_key`, `gemini_model`, `site_logo`, `google_site_verification`, `givebutter_url`, `contact_phone_1` through `contact_phone_5`, `contact_working_hours`, `contact_timezone`, impact numbers, banking, registration, `value` (text, nullable), `type` (text, integer, json, boolean), `timestamps`
-
-### Programme
-- `id` (bigint, PK), `title` (string), `slug` (string, unique), `summary` (text), `body` (longText), `cover_image` (string, nullable), `partner_name` (string, nullable), `sort_order` (integer), `is_featured` (boolean), `timestamps`
-
-### GalleryAlbum & GalleryPhoto
-- `gallery_albums`: `id`, `title`, `slug`, `kicker`, `description`, `cover_image`, `sort_order`, `is_active`, `timestamps`
-- `gallery_photos`: `id`, `gallery_album_id` (FK), `image_path`, `caption`, `alt_text`, `year` (integer, nullable), `sort_order`, `is_public` (boolean), `timestamps`
 
 ### TeamMember & Partner
 - `team_members`: `id`, `name`, `role`, `group` (trustee, management, advisor), `field`, `bio`, `photo`, `linkedin_url`, `sort_order`, `is_active`, `timestamps`
@@ -108,7 +93,7 @@ The web application was rebuilt from the ground up to establish an authentic, hi
 
 - **Backend:** Laravel 12 on PHP 8.3 / 8.4, MariaDB 10.3+ / MySQL 8.0+ in development and production (`server161.web-hosting.com`), Eloquent ORM.
 - **AI Integration:** Google Gemini REST API via native Laravel `Http` client (`GeminiService`), zero external dependencies, multimodal vision support.
-- **Image Optimization & Upload Pipeline:** Native PHP GD (`imagewebp`, `imagecopyresampled`) with zero external package dependencies. Strict iterative optimization loop enforcing <= 180 KB WebP output.
+- **Image Optimization & Upload Pipeline:** Native PHP GD (`imagewebp`, `imagecopyresampled`) with zero external package dependencies. Strict iterative optimization loop enforcing <= 180 KB WebP output with universal Media Hub registration.
 - **Admin Panel:** Tailored administrative dashboard at `/admin` with role-based authorization (Super Admin, Editor, Support).
 - **Frontend Templates:** Blade server-side templates with modular components.
 - **Styling:** Tailwind CSS v4 (`@tailwindcss/vite`) using CSS tokens. Strict zero-horizontal-overflow rules with `max-w-full`.

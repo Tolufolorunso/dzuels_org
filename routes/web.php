@@ -96,6 +96,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('/media/{mediaItem}', [MediaLibraryController::class, 'update'])->name('media.update');
         Route::post('/media/{mediaItem}/toggle-visibility', [MediaLibraryController::class, 'toggleVisibility'])->name('media.toggle-visibility');
         Route::delete('/media/{mediaItem}', [MediaLibraryController::class, 'destroy'])->name('media.destroy');
+        Route::post('/media/bulk-action', [MediaLibraryController::class, 'bulkAction'])->name('media.bulk-action');
         Route::post('/media/bulk-delete', [MediaLibraryController::class, 'bulkDestroy'])->name('media.bulk-destroy');
         Route::post('/media/bulk-visibility', [MediaLibraryController::class, 'bulkVisibility'])->name('media.bulk-visibility');
 

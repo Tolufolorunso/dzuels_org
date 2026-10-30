@@ -11,10 +11,12 @@ use App\Models\GalleryAlbum;
 use App\Models\GalleryPhoto;
 use App\Models\MediaItem;
 use App\Services\ImageOptimizerService;
+use App\Services\MediaMetadataExtractor;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -222,7 +224,7 @@ class GalleryAlbumController extends Controller
     /**
      * Upload photos to a gallery album.
      */
-    public function uploadPhotos(StoreGalleryPhotoRequest $request, GalleryAlbum $album): RedirectResponse
+    public function uploadPhotos(StoreGalleryPhotoRequest $request, GalleryAlbum $album, MediaMetadataExtractor $extractor): RedirectResponse
     {
         $uploadedCount = 0;
         $failedCount = 0;
@@ -237,7 +239,7 @@ class GalleryAlbumController extends Controller
 
         $caption = $request->input('caption');
         $altText = $request->input('alt_text') ?: $album->title;
-        $year = $request->input('year');
+        $inputYear = $request->input('year');
 
         foreach ($files as $file) {
             if (! $file || ! $file->isValid()) {
@@ -247,6 +249,10 @@ class GalleryAlbumController extends Controller
             }
 
             try {
+                // Extract raw EXIF metadata before GD optimization
+                $rawPath = $file->getRealPath();
+                $originalMeta = $rawPath ? $extractor->extract($rawPath) : [];
+
                 $optimizedPath = $this->optimizer->optimize(
                     $file,
                     'uploads/gallery/photos',
@@ -256,12 +262,41 @@ class GalleryAlbumController extends Controller
                 );
 
                 $maxSortOrder++;
-                $album->photos()->create([
+                $photoYear = $inputYear ?: ($originalMeta['taken_at']?->year ?? null);
+
+                $photo = $album->photos()->create([
                     'image_path' => $optimizedPath,
                     'caption' => $caption,
                     'alt_text' => $altText,
-                    'year' => $year,
+                    'year' => $photoYear,
                     'sort_order' => $maxSortOrder,
+                    'is_public' => true,
+                ]);
+
+                // Register directly into Central Media Library (media_items)
+                $fullPath = public_path($optimizedPath);
+                $fileSize = File::exists($fullPath) ? File::size($fullPath) : 0;
+                $dimensions = @getimagesize($fullPath);
+                $origName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $humanTitle = Str::title(str_replace(['-', '_'], ' ', $origName));
+
+                MediaItem::create([
+                    'filename' => basename($optimizedPath),
+                    'file_path' => $optimizedPath,
+                    'file_size' => $fileSize ?: ($originalMeta['file_size'] ?? 0),
+                    'mime_type' => 'image/webp',
+                    'width' => $dimensions[0] ?? ($originalMeta['width'] ?? null),
+                    'height' => $dimensions[1] ?? ($originalMeta['height'] ?? null),
+                    'taken_at' => $originalMeta['taken_at'] ?? null,
+                    'color_space' => $originalMeta['color_space'] ?? 'sRGB',
+                    'title' => $caption ?: $humanTitle,
+                    'caption' => $caption,
+                    'alt_text' => $altText,
+                    'source_type' => 'gallery',
+                    'year' => $photoYear,
+                    'gallery_album_id' => $album->id,
+                    'gallery_photo_id' => $photo->id,
+                    'is_public' => true,
                 ]);
 
                 $uploadedCount++;
@@ -322,6 +357,7 @@ class GalleryAlbumController extends Controller
             @unlink(public_path($photo->image_path));
         }
 
+        MediaItem::where('gallery_photo_id', $photo->id)->delete();
         $photo->delete();
 
         return redirect()->route('admin.gallery.photos', $album)
@@ -345,6 +381,7 @@ class GalleryAlbumController extends Controller
             if ($photo->image_path && str_starts_with($photo->image_path, 'uploads/') && file_exists(public_path($photo->image_path))) {
                 @unlink(public_path($photo->image_path));
             }
+            MediaItem::where('gallery_photo_id', $photo->id)->delete();
             $photo->delete();
             $deletedCount++;
         }

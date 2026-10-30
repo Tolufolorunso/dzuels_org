@@ -28,7 +28,7 @@ class StoreGalleryPhotoRequest extends FormRequest
             'photo' => ['required_without:photos', 'image', 'mimes:jpeg,png,jpg,webp,gif', 'max:10240'],
             'caption' => ['nullable', 'string', 'max:255'],
             'alt_text' => ['nullable', 'string', 'max:255'],
-            'year' => ['nullable', 'string', 'max:10'],
+            'year' => ['nullable', 'max:10'],
         ];
     }
 
