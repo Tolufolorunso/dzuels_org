@@ -32,9 +32,9 @@ class HomepageTest extends TestCase
         $response->assertSeeText('Become a Volunteer');
 
         // Impact Statistics Band
-        $response->assertSeeText('Ekiti students in ICT training');
+        $response->assertSeeText('Ekiti students in computer lab & coding training');
         $response->assertSeeText('Ekiti students in literacy intervention');
-        $response->assertSeeText('Schools Supported');
+        $response->assertSeeText('Teachers Trained in Digital Skills');
 
         // Who We Are Section
         $response->assertSeeText('Who We Are');
@@ -118,9 +118,9 @@ class HomepageTest extends TestCase
         $response = $this->get('/');
 
         $response->assertOk();
-        $response->assertSee('165');
+        $response->assertSee('500');
         $response->assertSee('591');
-        $response->assertSee('15');
+        $response->assertSee('30');
     }
 
     public function test_homepage_contains_working_links_to_key_pages(): void

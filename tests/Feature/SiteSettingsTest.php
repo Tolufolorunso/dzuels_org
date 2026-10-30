@@ -34,9 +34,9 @@ class SiteSettingsTest extends TestCase
         $response = $this->actingAs($this->admin)->get('/admin/settings');
 
         $response->assertOk();
-        $response->assertSee('165');
+        $response->assertSee('500');
         $response->assertSee('591');
-        $response->assertSee('15');
+        $response->assertSee('30');
         $response->assertSee('0450072850');
         $response->assertSee('+234 904 249 3883');
         $response->assertSee('info@dzuelsfoundation.org');

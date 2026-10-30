@@ -31,9 +31,9 @@ class ImpactStatsService
         }
 
         return [
-            'ict_students' => (int) Setting::get('stat_ict_students', 165),
+            'ict_students' => (int) Setting::get('stat_ict_students', 500),
             'literacy_students' => (int) Setting::get('stat_literacy_students', 591),
-            'schools_supported' => (int) Setting::get('stat_schools_supported', 15),
+            'schools_supported' => (int) Setting::get('stat_schools_supported', 30),
             'source' => 'manual',
         ];
     }

@@ -24,7 +24,7 @@ class SettingSeeder extends Seeder
             // Verified Impact Statistics
             [
                 'key' => 'stat_ict_students',
-                'value' => '165',
+                'value' => '500',
                 'type' => 'integer',
                 'group' => 'impact',
             ],
@@ -36,7 +36,7 @@ class SettingSeeder extends Seeder
             ],
             [
                 'key' => 'stat_schools_supported',
-                'value' => '15',
+                'value' => '30',
                 'type' => 'integer',
                 'group' => 'impact',
             ],

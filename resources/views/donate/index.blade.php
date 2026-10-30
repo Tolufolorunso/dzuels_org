@@ -329,7 +329,7 @@
                                     <span class="text-base text-emerald-600 dark:text-mint font-bold shrink-0">✓</span>
                                     <div>
                                         <strong class="text-xs font-bold text-[var(--heading)] block">CAC Certified Non-Profit Standing</strong>
-                                        <p class="text-[11px] text-[var(--text-muted)] leading-relaxed mt-0.5">Incorporated with Nigeria's Corporate Affairs Commission with 10 years of audited community service, 165+ coding students, and 15 partner schools.</p>
+                                        <p class="text-[11px] text-[var(--text-muted)] leading-relaxed mt-0.5">Incorporated with Nigeria's Corporate Affairs Commission with 10 years of audited community service, over 500 students benefited through our learning lab & library, and 30 teachers trained.</p>
                                     </div>
                                 </div>
 

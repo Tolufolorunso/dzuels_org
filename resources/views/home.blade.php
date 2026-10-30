@@ -58,12 +58,12 @@
                 <div class="flex flex-col gap-2 pt-4 first:pt-0 md:pt-0 md:px-6 first:md:pl-0">
                     <div class="flex items-baseline gap-2">
                         <span class="text-4xl sm:text-5xl font-black text-[var(--heading)] tracking-tight">
-                            {{ number_format($stats['ict_students'] ?? 165) }}
+                            {{ number_format($stats['ict_students'] ?? 500) }}
                         </span>
                         <span class="text-sm font-bold text-mint font-sans">+</span>
                     </div>
                     <span class="text-sm sm:text-base font-medium text-[var(--text)]">
-                        Ekiti students in ICT training
+                        Ekiti students in computer lab & coding training
                     </span>
                     <div class="w-full bg-[var(--border-subtle)] h-1.5 rounded-full overflow-hidden mt-3">
                         <div class="bg-mint h-full rounded-full w-[85%]"></div>
@@ -86,16 +86,16 @@
                     </div>
                 </div>
 
-                {{-- Stat 3: Schools Supported --}}
+                {{-- Stat 3: Teachers Trained --}}
                 <div class="flex flex-col gap-2 pt-6 md:pt-0 md:px-6 last:md:pr-0">
                     <div class="flex items-baseline gap-2">
                         <span class="text-4xl sm:text-5xl font-black text-[var(--heading)] tracking-tight">
-                            {{ number_format($stats['schools_supported'] ?? 15) }}
+                            {{ number_format($stats['schools_supported'] ?? 30) }}
                         </span>
                         <span class="text-sm font-bold text-amber-500 font-sans">+</span>
                     </div>
                     <span class="text-sm sm:text-base font-medium text-[var(--text)]">
-                        Schools Supported
+                        Teachers Trained in Digital Skills
                     </span>
                     <div class="w-full bg-[var(--border-subtle)] h-1.5 rounded-full overflow-hidden mt-3">
                         <div class="bg-[var(--accent-cream)] dark:bg-amber-400 h-full rounded-full w-[75%]"></div>
@@ -298,10 +298,10 @@
                     <span>🌟</span> {{ $causeSec?->subheadline ?: 'Our 6 Impact Causes' }}
                 </span>
                 <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[var(--heading)] tracking-tight">
-                    {{ $causeSec?->headline ?: 'Holistic support for youth & community development' }}
+                    {{ $causeSec?->headline ?: 'Programs that Bridge the Opportunity Divide' }}
                 </h2>
                 <p class="text-[var(--text-muted)] text-base sm:text-lg leading-relaxed">
-                    {{ $causeSec?->body_text ?: 'We combine direct education sponsorship with practical skills, advocacy, family stability, transformative leadership, and community health.' }}
+                    {{ $causeSec?->body_text ?: 'From digital hubs in Ijero-Ekiti to annual literacy contest, and much more in between, our causes are designed to uplift communities from the ground up.' }}
                 </p>
 
                 {{-- Foundational Tagline Banner (from cause.jpg) --}}
@@ -551,7 +551,7 @@
                     </div>
 
                     <p class="text-[var(--text)] leading-relaxed text-base">
-                        {{ $featSec?->body_text ?: 'Free literacy interventions and digital skills training for teachers and students in Ijero-Ekiti, Southwest Nigeria, in active partnership with the Information Technology Seed Development Initiative (SeedDev).' }}
+                        {{ $featSec?->body_text ?: 'Establishing a well-equipped computer laboratory and a resourceful library at Dzuels Foundation, providing children with access to practical computer training, coding skills, reading materials, and a supportive learning environment. To date, over 500 students have benefited from these learning opportunities.' }}
                     </p>
 
                     <div class="flex flex-wrap items-center gap-4 pt-2">
@@ -645,7 +645,7 @@
                 {{ $ctaSec?->headline ?: 'You too can make a difference' }}
             </h2>
             <p class="text-base sm:text-lg text-[var(--accent-cream)] max-w-2xl mx-auto leading-relaxed">
-                {{ $ctaSec?->body_text ?: "Whether by sponsoring a child's tuition, volunteering your skills, or partnering with our training labs, your support creates lasting change." }}
+                {{ $ctaSec?->body_text ?: 'Whether through individual, family or corporate sponsorship, volunteer mentorship, financial donations or legacy giving, your partnership empowers the next generation.' }}
             </p>
             <div class="flex flex-wrap items-center justify-center gap-4 pt-4">
                 <a href="{{ $ctaSec?->button_url ?: url('/donate') }}" 

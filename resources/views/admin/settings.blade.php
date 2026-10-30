@@ -100,18 +100,18 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
                         <label for="stat_ict_students" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
-                            Students in ICT Training
+                            Students in ICT & Lab Training
                         </label>
                         <input 
                             id="stat_ict_students" 
                             type="number" 
                             name="stat_ict_students" 
                             min="0"
-                            value="{{ old('stat_ict_students', $settings['stat_ict_students'] ?? 165) }}" 
+                            value="{{ old('stat_ict_students', $settings['stat_ict_students'] ?? 500) }}" 
                             required 
                             class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon focus:border-transparent transition-all"
                         >
-                        <p class="text-[11px] text-stone-500 mt-1">Verified baseline: 165 students</p>
+                        <p class="text-[11px] text-stone-500 mt-1">Verified baseline: 500+ students</p>
                     </div>
 
                     <div>
@@ -132,18 +132,18 @@
 
                     <div>
                         <label for="stat_schools_supported" class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
-                            Schools Supported
+                            Teachers Trained in Digital Skills
                         </label>
                         <input 
                             id="stat_schools_supported" 
                             type="number" 
                             name="stat_schools_supported" 
                             min="0"
-                            value="{{ old('stat_schools_supported', $settings['stat_schools_supported'] ?? 15) }}" 
+                            value="{{ old('stat_schools_supported', $settings['stat_schools_supported'] ?? 30) }}" 
                             required 
                             class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-maroon focus:border-transparent transition-all"
                         >
-                        <p class="text-[11px] text-stone-500 mt-1">Verified baseline: 15 schools</p>
+                        <p class="text-[11px] text-stone-500 mt-1">Verified baseline: 30 teachers trained</p>
                     </div>
                 </div>
 

@@ -566,16 +566,16 @@
                             <h3 class="text-xl font-bold text-[var(--heading)] mb-3">Institutional Collaboration & Track Record</h3>
                             <div class="grid grid-cols-2 gap-2.5 mb-4">
                                 <div class="p-3 rounded-xl bg-[var(--bg)] border border-[var(--border)] text-center">
-                                    <span class="text-xl font-black text-maroon dark:text-[var(--accent-cream)] block">165+</span>
-                                    <span class="text-[10px] text-[var(--text-muted)] font-medium">ICT Students Trained</span>
+                                    <span class="text-xl font-black text-maroon dark:text-[var(--accent-cream)] block">500+</span>
+                                    <span class="text-[10px] text-[var(--text-muted)] font-medium">Students Benefited</span>
                                 </div>
                                 <div class="p-3 rounded-xl bg-[var(--bg)] border border-[var(--border)] text-center">
                                     <span class="text-xl font-black text-maroon dark:text-[var(--accent-cream)] block">591+</span>
                                     <span class="text-[10px] text-[var(--text-muted)] font-medium">Literacy Learners</span>
                                 </div>
                                 <div class="p-3 rounded-xl bg-[var(--bg)] border border-[var(--border)] text-center">
-                                    <span class="text-xl font-black text-maroon dark:text-[var(--accent-cream)] block">15</span>
-                                    <span class="text-[10px] text-[var(--text-muted)] font-medium">Supported Schools</span>
+                                    <span class="text-xl font-black text-maroon dark:text-[var(--accent-cream)] block">30</span>
+                                    <span class="text-[10px] text-[var(--text-muted)] font-medium">Teachers Trained</span>
                                 </div>
                                 <div class="p-3 rounded-xl bg-[var(--bg)] border border-[var(--border)] text-center">
                                     <span class="text-xl font-black text-maroon dark:text-[var(--accent-cream)] block">10+</span>

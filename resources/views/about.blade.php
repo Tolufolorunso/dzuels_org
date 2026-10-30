@@ -90,7 +90,7 @@
                         </p>
 
                         <p class="text-base sm:text-lg text-[var(--text)] leading-relaxed">
-                            Over the last ten years, our programs have operated directly within public and community schools in Ekiti State and beyond. We believe every child deserves the tools, dignity, and encouragement to pursue knowledge without the burden of unpaid tuition fees or missing textbooks.
+                            Over the last ten years, our programs have operated through our well-equipped computer lab and library facility in Ijero-Ekiti, alongside direct educational interventions across communities in Ekiti State. We believe every child deserves the tools, dignity, and encouragement to pursue knowledge without the burden of unpaid tuition fees or missing textbooks.
                         </p>
 
                         <p class="text-base sm:text-lg text-[var(--text)] leading-relaxed">
@@ -113,8 +113,8 @@
                             <span class="text-xs sm:text-sm font-medium text-[var(--text-muted)]">Students Trained</span>
                         </div>
                         <div class="p-4 rounded-2xl bg-[var(--surface)] border border-[var(--border)] shadow-xs col-span-2 sm:col-span-1">
-                            <span class="block text-2xl sm:text-3xl font-black text-crimson dark:text-mint">15+</span>
-                            <span class="text-xs sm:text-sm font-medium text-[var(--text-muted)]">Schools Supported</span>
+                            <span class="block text-2xl sm:text-3xl font-black text-crimson dark:text-mint">30+</span>
+                            <span class="text-xs sm:text-sm font-medium text-[var(--text-muted)]">Teachers Trained</span>
                         </div>
                     </div>
                 </div>
