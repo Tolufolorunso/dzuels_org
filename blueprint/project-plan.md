@@ -6,25 +6,43 @@ Dzuels Educational Foundation website rebuild (https://dzuelsfoundation.org), bu
 
 Dzuels Educational Foundation is a Nigerian charity, founded on 22 June 2015 and registered the same year. It provides education support and skills acquisition for indigent Nigerian children and youth, creates awareness of social vices and mitigating measures, and feeds poor families, among other social responsibilities. Its current work includes free literacy support and digital skills training for teachers and students in Ijero-Ekiti (Ekiti State, Southwest Nigeria), plus yearly flagship events such as Ijero Tech Day (ITD), an Essay Competition, a Reading Competition, a Spelling Bee, and Girls in Tech Day, alongside the Famoyinka Memorial Children's Library and WDADA Community Outreach.
 
-### Milestones 1–12 (Completed & Shipped in Production, Features 1–38)
+### Milestones 1–13 (Completed & Shipped in Production, Features 1–40)
 The foundation's platform has been successfully built, hardened, and deployed to live production (`https://dzf.dzuelsfoundation.org/`):
 - **Milestones 1–10 (Shipped):** Core Web Platform, Brand Identity, MariaDB root SQL dump, Media Hub, Resilient GD image pipeline (strict <= 180 KB WebP), Givebutter U.S. donations, Universal Media Picker, and Gemini Multimodal AI Assistant.
 - **Milestone 11 (Shipped):** Media Hub multi-criteria sorting and year filters, Tech Day separation from `/programmes`, curated 132-photo ingestion from `final/`, multi-year event showcase (2024, 2025, 2026), full 1,854-photo gallery archive ingestion, refreshed `dzuels_database.sql` (25 tables, 4,434 rows), and launch readiness check (0 errors).
 - **Milestone 12 (Shipped):** Ijero Tech Day brand alignment, media gallery visibility toggles, anti-flash public gallery performance (`x-cloak`, fixed 4:3 aspect containers), dynamic event date status computation (`is_past`, `is_future`, `is_today`, `status_label`), Flutterwave removal from `/donate` with elevated GTBank 1-click copy and Givebutter U.S. giving, and balanced centered intake layout on `/get-involved`.
+- **Milestone 13 (Shipped):** Giving channel correction (purged mock wire accounts, added "Why Donate" stewardship card), Tech Day event show page centered layout overhaul, and Pages CMS full content parity across all public pages with visibility toggles and section reordering.
 
-### Milestone 13: Giving Stewardship, Tech Day Event UI Centering & Pages CMS Parity (Active Target)
-- **Giving Channel Correction & "Why Donate to Our Cause"**:
-  - Remove all unverified Domiciliary account numbers (USD, GBP, EUR) and SWIFT code (`GTBINGLA`) from `/donate`.
-  - Replace Channel 3 in the giving grid with an authoritative "Why Donate to Our Cause" stewardship card (100% direct learner impact, zero administrative deductions, CAC legal standing, verified student track record, and transparent donor updates).
-- **Tech Day Event Show Page Centering (`/events/ijero-tech-day-[year]`)**:
-  - Eliminate the left-heavy layout bias.
-  - Center the hero typography, kicker badges, 4-stat festival metric bar, edition switcher pills, and countdown timer (`max-w-4xl mx-auto text-center`).
-  - Center the wide 16:9 banner container (`max-w-5xl mx-auto`).
-  - Redesign narrative, agenda timeline, authentic photo gallery, milestone celebration summary, and sponsor cards into a balanced, centered layout.
-- **Pages CMS Public Content Parity, Visibility Controls & Section Reordering**:
-  - Add `is_active` (boolean, default: `true`) to `page_sections` via migration.
-  - Add one-click visibility toggle switches (`Visible on Public Page` / `Hidden`) and sort controls (up/down and sort order inputs) in `/admin/pages/{page}`.
-  - Align `PageSection` seeders and Blade templates across `/about`, `/donate`, `/programmes`, `/contact`, and `/get-involved` with the exact living content public visitors see, supporting dynamic editing, reordering, and section toggling with graceful fallbacks.
+### Milestone 14: Institutional Copy Corrections, Pages CMS Modular Overhaul, Tech Day Event Redesign & Deep Media Hub Metadata (Active Target, Features 41–44)
+- **Institutional Fact Corrections, Copy Updates & Transformational Leadership (TRANSCOMM) Programme (Feature 41)**:
+  - Correct historical facts: Dzuels Foundation did not equip public schools; it established a well-equipped computer laboratory and resourceful library at Dzuels Foundation in Ijero-Ekiti (over 500 students benefited), and trained 30 teachers.
+  - Apply exact institutional copy replacements across seeders and public views:
+    1. `"Holistic support for youth & community development"` -> `"Programs that Bridge the Opportunity Divide"`
+    2. `"We combine direct education sponsorship with skills acquisition, advocacy, family stability, transformative leadership, and community health."` -> `"From digital hubs in Ijero-Ekiti to annual literacy contest, and much more in between, our causes are designed to uplift communities from the ground up."`
+    3. `"Establishing modern computer laboratories and solar-powered learning facilities in public schools across Ijero-Ekiti, equipping over 165 students with practical coding and computer skills."` -> `"Establishing a well-equipped computer laboratory and a resourceful library at Dzuels Foundation, providing children with access to practical computer training, coding skills, reading materials, and a supportive learning environment. To date, over 500 students have benefited from these learning opportunities."`
+    4. `"Whether through corporate sponsorship, volunteer mentoring, or financial donations, your partnership empowers the next generation."` -> `"Whether through individual, family or corporate sponsorship, volunteer mentorship, financial donations or legacy giving, your partnership empowers the next generation."`
+  - Catalogue and seed new programme: `Transformational leadership (TRANSCOMM)`.
+  - Update verified baseline metrics: 500+ students benefited, 30 teachers trained.
+- **Pages CMS Modular Component Overhaul & Universal Inline Text Styling (Feature 42)**:
+  - Architectural overhaul of Pages CMS editor (`/admin/pages/{page}`) based on real-world page archetypes (e.g. `/about` with Hero, Story with 3 stats & floating badge, 6 Approach Pillars, Famoyinka Library with 4 feature bullets, Governance section intros, and CTA banner).
+  - Use `page_sections.meta_data` JSON for structured component-specific sub-items (Pillars array, Library feature bullets, Story stat callouts) with dedicated admin item repeaters/sub-forms.
+  - Implement a lightweight, secure inline text styling syntax (`[accent]text[/accent]`, `[crimson]text[/crimson]`, `[mint]text[/mint]`, `[bold]text[/bold]`, `[italic]text[/italic]`, `[underline]text[/underline]`) powered by a safe Blade/PHP parser (`format_cms_text()`), equipped with 1-click styling helper buttons in the CMS editor.
+  - Connect all public page Blade templates to parse and render styled CMS text.
+- **Ijero Tech Day Event Show Page Redesign (Homepage UI Layout Alignment) (Feature 43)**:
+  - Redesign `/events/ijero-tech-day-[year]` to mirror the visual structure, balance, and rhythm of the Homepage UI.
+  - Full-bleed rich hero with dark burgundy/navy gradient, decorative pattern overlay, dynamic status pill ("Upcoming Flagship" vs "Past Festival"), and edition switcher pills (`2024`, `2025`, `2026`).
+  - Floating 4-metric banner matching homepage style (`-mt-12 relative z-20 mx-auto max-w-6xl shadow-xl rounded-2xl bg-white border border-stone-200 p-6 grid grid-cols-2 lg:grid-cols-4 gap-6`).
+  - 2-column balanced story & media section (narrative and focus areas on one side, curated photography with offset border accent on the other, mirroring the homepage Who We Are section).
+  - 3-column milestone celebration card (mirrors DRNICER values / Impact Causes layout on homepage).
+  - Full-width interactive agenda & schedule timeline with clear stage/track styling.
+  - Full-bleed radial maroon CTA section ("Partner with ITD" / "Register for Tech Day") matching homepage CTA.
+- **Central Media Hub Deep Metadata, Pagination, Sorting & Zoom Controls (Feature 44)**:
+  - Database migration: Add `taken_at` (timestamp, nullable) and `color_space` (string, nullable, e.g. "sRGB", "Adobe RGB") to `media_items` table.
+  - EXIF extractor in `MediaLibraryController` and upload pipeline: Extract exact capture timestamp (`taken_at`), color space, file type (JPEG, PNG, RAW/DNG, WebP), file size, and pixel dimensions ($W \times H$). Retroactively backfill existing media items from disk.
+  - Display comprehensive metadata on photo cards and via an interactive inspector modal in `/admin/media`.
+  - Configurable per-page pagination selector: `50`, `80`, `100`, `120`, `150` photos per page (default: `50`).
+  - Advanced multi-column sorting: By capture date/time, upload date/time, file size, dimensions, and title.
+  - Grid zoom / sizing controls: Interactive thumbnail resizing (compact, normal, large, extra-large) to inspect images clearly.
 
 ## 2. Users - Who is this for?
 
@@ -39,23 +57,43 @@ The foundation's platform has been successfully built, hardened, and deployed to
 
 ## 3. Features & Milestones
 
-### Milestones 1–12 (Shipped, Features 1–38)
-Features 1–38 fully completed, tested, and shipped in production.
+### Milestones 1–13 (Shipped, Features 1–40)
+Features 1–40 fully completed, tested, and shipped in production.
 
-### Milestone 13: Giving Stewardship, Tech Day Event UI Centering & Pages CMS Parity (Active Target, Features 39–40)
-- 39. **Giving channel correction (remove mock wires, add "Why Donate") & Tech Day event show page centered UI overhaul**:
-  - Purge mock Domiciliary wire accounts and Swift code from `/donate`, replacing them with an authoritative "Why Donate to Our Cause" card highlighting 100% direct learner impact, zero administrative deductions, CAC legal standing, and tangible outcomes.
-  - Redesign the Tech Day event show page (`/events/ijero-tech-day-[year]`) from its left-flushed layout into a centered, balanced festival experience with centered hero metrics, edition switcher pills, countdown timer, and balanced narrative and milestones cards.
-- 40. **Pages CMS overhaul: dynamic public content parity, visibility toggles & section reordering**:
-  - Add `is_active` to `page_sections` with admin toggle switches and move up/down sort controls.
-  - Synchronize CMS sections and seeders across `/about`, `/donate`, `/programmes`, `/contact`, and `/get-involved` with the exact living content the public sees, enabling dynamic editing, reordering, and section show/hide.
+### Milestone 14: Institutional Copy Corrections, Pages CMS Modular Overhaul, Tech Day Event Redesign & Deep Media Hub Metadata (Active Target, Features 41–44)
+- 41. **Institutional fact corrections, living copy updates & Transformational Leadership (TRANSCOMM) programme**:
+  - Correct historical records across seeders and public templates: establish that Dzuels Foundation did not equip public schools, but rather established a computer lab and library at Dzuels Foundation (500+ students benefited) and trained 30 teachers.
+  - Apply the 4 exact institutional copy updates across public views and seeders.
+  - Add and seed new programme: `Transformational leadership (TRANSCOMM)`.
+  - Synchronize baseline metrics across `SettingSeeder`, `ImpactStatsService`, and public statistics.
+- 42. **Pages CMS modular component architecture & universal inline text styling**:
+  - Overhaul `/admin/pages/{page}` based on real page archetypes (e.g. `/about` with Hero, Story with 3 stats & floating badge, 6 Approach Pillars, Famoyinka Library with 4 feature bullets, Governance section intros, and CTA banner).
+  - Store structured component sub-items in `page_sections.meta_data` JSON with dedicated admin repeater inputs.
+  - Implement safe inline text styling tags (`[accent]text[/accent]`, `[crimson]text[/crimson]`, `[mint]text[/mint]`, `[bold]text[/bold]`, etc.) parsed via helper `format_cms_text()` with 1-click styling helper buttons in the CMS editor.
+  - Update public page Blade views to parse and render styled CMS text.
+- 43. **Ijero Tech Day event show page redesign (Homepage UI layout alignment)**:
+  - Redesign `/events/ijero-tech-day-[year]` using the Homepage UI as design sample.
+  - Full-bleed rich hero with dark burgundy/navy gradient, decorative pattern overlay, dynamic status pill ("Upcoming Flagship" vs "Past Festival"), and edition switcher pills (`2024`, `2025`, `2026`).
+  - Floating 4-metric banner matching homepage style (`-mt-12 relative z-20 mx-auto max-w-6xl shadow-xl rounded-2xl bg-white border border-stone-200 p-6 grid grid-cols-2 lg:grid-cols-4 gap-6`).
+  - 2-column balanced story & media section (narrative and focus areas on one side, curated photography with offset border accent on the other, mirroring the homepage Who We Are section).
+  - 3-column milestone celebration card (mirrors DRNICER values / Impact Causes layout on homepage).
+  - Full-width interactive agenda & schedule timeline with clear stage/track styling.
+  - Full-bleed radial maroon CTA section ("Partner with ITD" / "Register for Tech Day") matching homepage CTA.
+- 44. **Central Media Hub deep metadata, pagination, sorting & zoom controls**:
+  - Add `taken_at` (timestamp, nullable) and `color_space` (string, nullable) to `media_items` table via migration.
+  - Extract exact capture timestamp (`taken_at`), color space (sRGB, Adobe RGB), file type (JPEG, PNG, RAW/DNG, WebP), file size, and pixel dimensions ($W \times H$) from EXIF data.
+  - Backfill existing media files with extracted EXIF metadata.
+  - Display comprehensive photo metadata on photo cards and via an interactive inspector modal in `/admin/media`.
+  - Provide configurable per-page pagination selector: `50`, `80`, `100`, `120`, `150` photos per page (default: `50`).
+  - Multi-criteria sorting: capture date/time (newest/oldest), upload date/time, file size, dimensions, and title.
+  - Interactive photo grid zoom controls (compact, normal, large, extra-large) to inspect images clearly.
 
 ## 4. Data - What are we storing?
 
 - **settings**: `gemini_api_key`, `gemini_model`, `site_logo`, `google_site_verification`, `givebutter_url`, `contact_phone_1` through `contact_phone_5`, `office_hours`, `office_timezone`, impact numbers, banking, and registration.
 - **gallery_albums / collections**: id, title, slug, kicker, description, cover_image, sort_order, is_active, timestamps.
 - **gallery_photos**: id, gallery_album_id, image_path, caption, alt_text, year, sort_order, is_public, timestamps.
-- **media_items**: id, filename, file_path, file_size, mime_type, width, height, title, caption, alt_text, source_type, gallery_photo_id, is_public, timestamps.
+- **media_items**: id, filename, file_path, file_size, mime_type, width, height, taken_at, color_space, title, caption, alt_text, source_type, gallery_photo_id, is_public, timestamps.
 - **events**: id, title, slug, summary, description, event_date, end_date, venue, theme, objective, banner_image, schedule, is_registration_open, is_active, sort_order, timestamps.
 - **page_sections**: id, page_key, section_key, headline, subheadline, body_text, image_path, button_text, button_url, meta_data, sort_order, is_active, timestamps.
 - **programmes**, **partners**, **users**, **event_sponsors**, **team_members**, **contact_messages**, **volunteer_applications**, **partner_enquiries**.
