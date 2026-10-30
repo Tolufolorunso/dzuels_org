@@ -543,7 +543,7 @@
                             <ul class="space-y-3 text-xs sm:text-sm text-[var(--text-muted)]">
                                 <li class="flex items-start gap-2.5">
                                     <span class="text-emerald-500 font-bold shrink-0">✓</span>
-                                    <span><strong>Direct Classroom Mentorship:</strong> Teach coding, reading, and digital problem-solving directly to public school students.</span>
+                                    <span><strong>Direct Classroom Mentorship:</strong> Teach coding, reading, and digital problem-solving directly to community students at our learning center.</span>
                                 </li>
                                 <li class="flex items-start gap-2.5">
                                     <span class="text-emerald-500 font-bold shrink-0">✓</span>

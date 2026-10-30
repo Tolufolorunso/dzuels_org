@@ -65,7 +65,7 @@
                 </h1>
 
                 <p class="mt-6 text-lg sm:text-xl text-[var(--text-muted)] max-w-2xl mx-auto leading-relaxed">
-                    {!! format_cms_text($heroSec?->body_text ?: "Help us bridge Nigeria's digital divide. 100% of public contributions directly equip community computer labs, sponsor youth literacy tournaments, and provide educational materials in Ijero-Ekiti and rural public schools.") !!}
+                    {!! format_cms_text($heroSec?->body_text ?: "Help us bridge Nigeria's digital divide. 100% of public contributions directly sustain our community computer lab and library, sponsor youth literacy tournaments, and provide educational materials at Dzuels Foundation in Ijero-Ekiti.") !!}
                 </p>
 
                 {{-- Trust Badges Strip --}}
@@ -313,15 +313,15 @@
                                     <span class="text-base text-emerald-600 dark:text-mint font-bold shrink-0">✓</span>
                                     <div>
                                         <strong class="text-xs font-bold text-[var(--heading)] block">100% Direct Learner Benefit</strong>
-                                        <p class="text-[11px] text-[var(--text-muted)] leading-relaxed mt-0.5">Every Naira and Dollar received directly equips public school computer labs, procures curriculum textbooks, or funds student literacy prizes.</p>
+                                        <p class="text-[11px] text-[var(--text-muted)] leading-relaxed mt-0.5">Every Naira and Dollar received directly sustains our computer lab and library at Dzuels Foundation in Ijero-Ekiti, procures curriculum textbooks, or funds student literacy prizes.</p>
                                     </div>
                                 </div>
 
                                 <div class="flex items-start gap-3">
                                     <span class="text-base text-emerald-600 dark:text-mint font-bold shrink-0">✓</span>
                                     <div>
-                                        <strong class="text-xs font-bold text-[var(--heading)] block">Zero Administrative Deductions</strong>
-                                        <p class="text-[11px] text-[var(--text-muted)] leading-relaxed mt-0.5">Foundation administrative overhead, office leases, and staffing are funded independently by our Board of Trustees. Public donations are never eaten by admin fees.</p>
+                                        <strong class="text-xs font-bold text-[var(--heading)] block">Transparent Stewardship & Direct Impact</strong>
+                                        <p class="text-[11px] text-[var(--text-muted)] leading-relaxed mt-0.5">We maintain strict financial accountability and transparent reporting. Contributions directly fund learning center facilities, student workshops, and direct educational supplies without wasteful overhead.</p>
                                     </div>
                                 </div>
 

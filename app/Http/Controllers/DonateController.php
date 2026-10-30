@@ -40,8 +40,8 @@ class DonateController extends Controller
             ],
             [
                 'amount' => '₦50,000',
-                'title' => 'School Lab Terminal',
-                'description' => 'Helps maintain and equip community school computer workstations with offline learning software.',
+                'title' => 'Community Lab Terminal',
+                'description' => 'Helps maintain and equip computer workstations at our Ijero-Ekiti learning center with offline educational software.',
                 'badge' => 'Infrastructure',
             ],
             [
@@ -68,7 +68,7 @@ class DonateController extends Controller
             [
                 'percentage' => 20,
                 'title' => 'Classroom Books & Learning Gear',
-                'description' => 'Direct distribution of textbooks, STEM kits, school uniforms, and instructional materials to public schools.',
+                'description' => 'Direct distribution of textbooks, STEM kits, school uniforms, and instructional materials to underprivileged students and community schools.',
                 'icon' => '📚',
             ],
             [

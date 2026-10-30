@@ -34,7 +34,8 @@ class GivingChannelCorrectionAndTechDayEventCenteredUiTest extends TestCase
         $response->assertSeeText('Why Donate to Our Cause');
         $response->assertSeeText('measurable learning opportunities for indigent children in Ekiti State');
         $response->assertSeeText('100% Direct Learner Benefit');
-        $response->assertSeeText('Zero Administrative Deductions');
+        $response->assertDontSeeText('Zero Administrative Deductions');
+        $response->assertSeeText('Transparent Stewardship & Direct Impact');
         $response->assertSeeText('CAC Certified Non-Profit Standing');
         $response->assertSeeText('Verified Progress & Photo Updates');
 

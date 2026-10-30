@@ -51,7 +51,8 @@ class DonateAndGetInvolvedUiRedesignTest extends TestCase
         // 4. Why Donate to Our Cause (Direct Stewardship & Impact Guarantee)
         $response->assertSeeText('Why Donate to Our Cause');
         $response->assertSeeText('100% Direct Learner Benefit');
-        $response->assertSeeText('Zero Administrative Deductions');
+        $response->assertDontSeeText('Zero Administrative Deductions');
+        $response->assertSeeText('Transparent Stewardship & Direct Impact');
         $response->assertSeeText('CAC Certified Non-Profit Standing');
         $response->assertSeeText('Verified Progress & Photo Updates');
 

@@ -1,6 +1,6 @@
 # Dzuels Educational Foundation - Project Overview
 
-<!-- blueprint:source-hash 5d783cfb8b8cd73aa52f89650db452fa03caf0e04a505723797fa51cb8811e2a -->
+<!-- blueprint:source-hash b8fed4ba7368b8ea5e3f80ebb9091641b5569748213fb669b776228eb47e0071 -->
 
 > Rebuild of dzuelsfoundation.org as a modern, high-trust, mobile-first Laravel web application powering education support, digital literacy, and community welfare in Nigeria.
 

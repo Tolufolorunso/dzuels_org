@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use App\Models\PageSection;
 use App\Models\Partner;
 use App\Services\ImpactStatsService;
@@ -25,11 +26,18 @@ class HomeController extends Controller
 
         $latestPosts = collect();
 
+        try {
+            $flagshipEvent = Event::where('slug', 'ijero-tech-day-2026')->first();
+        } catch (\Throwable) {
+            $flagshipEvent = null;
+        }
+
         return view('home', [
             'stats' => $stats,
             'sections' => $sections,
             'partners' => $partners,
             'latestPosts' => $latestPosts,
+            'flagshipEvent' => $flagshipEvent,
         ]);
     }
 }

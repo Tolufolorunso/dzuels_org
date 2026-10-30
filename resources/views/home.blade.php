@@ -570,31 +570,65 @@
     </section>
     @endif
 
-    {{-- 8. Upcoming Event Callout / Teaser --}}
+    {{-- 8. Flagship Event Callout / Teaser (Dynamic Status) --}}
+    @php
+        $flagship = $flagshipEvent ?? null;
+        $isConcluded = $flagship ? $flagship->is_past : (now()->parse('2026-10-17 08:00:00')->isPast());
+        $isToday = $flagship ? $flagship->is_today : (now()->toDateString() === '2026-10-17');
+        $dateFormatted = $flagship && $flagship->event_date ? $flagship->event_date->format('M j, Y') : 'Oct 17, 2026';
+        $eventSlug = $flagship?->slug ?? 'ijero-tech-day-2026';
+        $eventTitle = $flagship?->title ?? 'Ijero Tech-Day 2026 (ITD 2026)';
+        $eventTheme = $flagship?->theme ?? 'Learning Today, Creating Tomorrow';
+        $eventSummary = $flagship?->summary ?: 'Empowering 300 children with practical AI tools across 10 rotating batches of 30, inside interactive labs and garden booths, plus 22 cohort graduate certificates at AAoJ Memorial Learning Center.';
+    @endphp
     <section class="py-16 sm:py-20 bg-[var(--bg)] transition-colors">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="rounded-3xl p-8 sm:p-12 bg-linear-to-r from-maroon to-crimson text-white shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8">
                 <div class="space-y-3">
                     <div class="flex flex-wrap items-center gap-2">
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[var(--accent-cream)]/20 text-[var(--accent-cream)] border border-[var(--accent-cream)]/30">
-                            Upcoming Flagship Event • Oct 17, 2026
-                        </span>
+                        @if ($isToday)
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[var(--accent-cream)]/20 text-[var(--accent-cream)] border border-[var(--accent-cream)]/30">
+                                Happening Today • {{ $dateFormatted }}
+                            </span>
+                        @elseif ($isConcluded)
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[var(--accent-cream)]/20 text-[var(--accent-cream)] border border-[var(--accent-cream)]/30">
+                                Recent Flagship Event • {{ $dateFormatted }}
+                            </span>
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white/20 text-white border border-white/30">
+                                Highlights
+                            </span>
+                        @else
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[var(--accent-cream)]/20 text-[var(--accent-cream)] border border-[var(--accent-cream)]/30">
+                                Upcoming Flagship Event • {{ $dateFormatted }}
+                            </span>
+                        @endif
                         <span class="text-xs font-semibold text-[var(--accent-cream)] italic">
-                            "Learning Today, Creating Tomorrow"
+                            "{{ $eventTheme }}"
                         </span>
                     </div>
                     <h3 class="text-2xl sm:text-3xl font-extrabold text-white">
-                        Ijero Tech-Day 2026 (ITD 2026)
+                        {{ $eventTitle }}
                     </h3>
                     <p class="text-white/90 text-sm sm:text-base max-w-xl leading-relaxed">
-                        Empowering 300 children with practical AI tools across 10 rotating batches of 30, inside interactive labs and garden booths, plus 22 cohort graduate certificates at AAoJ Memorial Learning Center.
+                        {{ $eventSummary }}
                     </p>
                 </div>
-                <div class="shrink-0">
-                    <a href="{{ url('/events/ijero-tech-day-2026') }}" 
-                       class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-sm font-bold bg-white text-maroon hover:bg-[var(--accent-cream)] transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
-                        Register to Attend &rarr;
-                    </a>
+                <div class="shrink-0 flex flex-col sm:flex-row items-center gap-3">
+                    @if ($isConcluded)
+                        <a href="{{ url('/events/' . $eventSlug) }}" 
+                           class="w-full sm:w-auto inline-flex items-center justify-center px-7 py-3.5 rounded-full text-sm font-bold bg-white text-maroon hover:bg-[var(--accent-cream)] transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 text-center">
+                            Explore Event Highlights &rarr;
+                        </a>
+                        <a href="{{ url('/events/' . $eventSlug . '#photo-gallery') }}" 
+                           class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-full text-sm font-bold bg-white/10 text-white hover:bg-white/20 border border-white/30 transition-all duration-200 text-center">
+                            View Photo Gallery &rarr;
+                        </a>
+                    @else
+                        <a href="{{ url('/events/' . $eventSlug) }}" 
+                           class="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-sm font-bold bg-white text-maroon hover:bg-[var(--accent-cream)] transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+                            Register to Attend &rarr;
+                        </a>
+                    @endif
                 </div>
             </div>
         </div>
